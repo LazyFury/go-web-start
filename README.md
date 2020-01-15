@@ -1,9 +1,9 @@
-# go-echo-demo
-go语言 学习 demo
+# Go-echo-demo
+Go语言 学习 demo
 
 ## go语言入门
 推荐这个 https://tour.golang.org/welcome/2 还没看完 嘿嘿
-go语言在线练习场，讲解很细
+Go语言在线练习场，讲解很细
 
 ##  web框架
 简单看了写基础我就来搞这个了，这个项目也是一个web实践
@@ -33,7 +33,7 @@ go语言在线练习场，讲解很细
     
 ```
 
-#  关于这个项目
+#  📃关于这个项目
 
 ```go
 .
@@ -78,3 +78,88 @@ go语言在线练习场，讲解很细
     ├── time.go //时间格式化  以及  链接数据库是自动格式化的一个 结构体
     └── util.go //暂无内容--
 ```
+
+## 🦊杂项 遇到的一些小问题
+
+### 时间戳格式化
+```go
+    var timeLayout string = "2006年01月02日 15:04:05"
+    t := time.Now()
+    t.Format(timeLayout)
+
+    //这里 2006 01 02 15 04 05 必须是固定的才能解析到正确的时间
+    //我在 util/time.go 内实现了一个简单的方法以使用 y-m-d h:i:s 来格式化时间 主要还是因为懒得记
+    //  Format 也提供了很多的默认layout，默认layou英文支持做的好一些，中文的显示自定义的layout满足需求
+```
+
+### 数据库存取时间类型
+
+#### time.Time 类型解析显示不正确
+
+```go 
+
+// LocalTime 继承time.Time类型
+type LocalTime struct {
+	time.Time
+}
+// 自定义的 layout
+var timeLayout string = "2006年01月02日 15:04:05"
+
+// MarshalJSON json格式化时间的方法
+// 在网上搜到的方式是格式化为时间戳的  不符合我的需求，这个方法是从 time源代码里找到的,直接修改默认 layout为自定义即可
+func (t LocalTime) MarshalJSON() ([]byte, error) {
+	if y := t.Year(); y < 0 || y >= 10000 {
+		// RFC 3339 is clear that years are 4 digits exactly.
+		// See golang.org/issue/4556#c15 for more discussion.
+		return nil, errors.New("Time.MarshalJSON: year outside of range [0,9999]")
+	}
+	b := make([]byte, 0, len(timeLayout)+2)
+	b = append(b, '"')
+	b = t.AppendFormat(b, timeLayout)
+	b = append(b, '"')
+	return b, nil
+}
+
+
+//下边两个方法是gorm需要,不需要修改，如果没有使用 gorm则不需要
+// Value Value
+func (t LocalTime) Value() (driver.Value, error) {
+	var zeroTime time.Time
+	if t.Time.UnixNano() == zeroTime.UnixNano() {
+		return nil, nil
+	}
+	return t.Time, nil
+}
+
+// Scan Scan
+func (t *LocalTime) Scan(v interface{}) error {
+	value, ok := v.(time.Time)
+	if ok {
+		*t = LocalTime{Time: value}
+		return nil
+	}
+	return fmt.Errorf("can not convert %v to timestamp", v)
+}
+```
+
+####   存取时间的时候相差8小时
+```go
+//DataBase 数据库配置 username:password@host/database_name?param
+DataBase string = "root:2568597007suke@(localhost:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai"
+
+//charset=utf8mb4 数据库编码
+//parseTime=true    自动解析时间
+//loc=Asia%2fShanghai  默认亚洲时间，数据库存储 detatime 默认为utc时区 也就是会比国内早8个小时
+```
+
+####    查询数据时 隐藏某些隐私字段
+gorm:"-" 在保存数据的时候会忽略 查询是同样显示
+
+```go
+    //暂时的解决方案是声明两个模型，在查询时仅显示必要字段
+    //由于gorm使用结构名 + s  例如 users articles 默认为约定表名，所以声明另外的模型是需要在查询数据只指定 标定 gorm.Table("users")
+```
+
+##  ⚠️暂未解决的问题
+
+### ！gorm 更新 或者 添加删除字段后 查询影响的数据行数一直为0，因此无法知道是否更新成功 或者 保存数据成功
