@@ -94,7 +94,7 @@ Go语言在线练习场，讲解很细
 
 ### 数据库存取时间类型
 
-#### time.Time 类型解析显示不正确
+#### gorm 时间类型自定义解析格式
 
 ```go 
 
@@ -148,7 +148,7 @@ func (t *LocalTime) Scan(v interface{}) error {
 DataBase string = "root:2568597007suke@(localhost:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai"
 
 //charset=utf8mb4 数据库编码
-//parseTime=true    自动解析时间
+//parseTime=true    自动解析时间 time.Time 类型解析显示不正确  z100:h1223 之类的一个字符串
 //loc=Asia%2fShanghai  默认亚洲时间，数据库存储 detatime 默认为utc时区 也就是会比国内早8个小时
 ```
 
