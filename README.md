@@ -152,7 +152,7 @@ DataBase string = "root:2568597007suke@(localhost:3306)/test?charset=utf8mb4&par
 //loc=Asia%2fShanghai  默认亚洲时间，数据库存储 detatime 默认为utc时区 也就是会比国内早8个小时
 ```
 
-####   查询数据时 隐藏某些隐私字段
+####    查询数据时 隐藏某些隐私字段
 gorm:"-" 在保存数据的时候会忽略 查询是同样显示
 
 ```go
