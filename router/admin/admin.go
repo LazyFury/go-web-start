@@ -1,13 +1,17 @@
 package admin
 
 import (
-	"main/modal"
 	"main/router/admin/user"
 	"main/util"
 	"strconv"
 
 	"github.com/labstack/echo"
 )
+
+// User User
+type User struct {
+	Name string
+}
 
 // Init 初始化
 func Init(app *echo.Echo, baseURL string) {
@@ -24,16 +28,8 @@ func Init(app *echo.Echo, baseURL string) {
 		}
 		return util.JSON(c, "hello", "", newCode)
 	})
-
-	app.POST(baseURL+"/delUser", func(c echo.Context) error {
-		user := new(modal.User)
-
-		if err := c.Bind(user); err != nil {
-			return util.JSONErr(c, err, "参数错误")
-		}
-
-		user.DelUser()
-		return util.JSONSuccess(c, "", "删除成功")
+	app.GET(baseURL+"/test", func(c echo.Context) error {
+		return util.JSON(c, "", "", 1)
 	})
 }
 

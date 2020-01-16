@@ -30,4 +30,25 @@ var api = [{
         },
         headers:'{"Content-Type": "application/json"}'
     }
+},
+{
+    url: "/admin/user/delUser", //用户列表
+    config: {
+        method: "POST",
+        body: {
+            id:"119"
+        },
+        headers:'{"Content-Type": "application/json"}'
+    }
+}
+,
+{
+    url: "/admin/user/repeatOfName", //用户列表
+    config: {
+        method: "GET",
+        body: {
+            name:"sukeai"
+        },
+        headers:'{"Content-Type": "application/json"}'
+    }
 }]

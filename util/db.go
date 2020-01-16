@@ -2,16 +2,20 @@ package util
 
 import (
 	"fmt"
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
+
+	// "github.com/jinzhu/gorm"
 	"main/config"
-	"time"
 )
 
 // DB DB
-var DB = getDB()
+var DB *gorm.DB
 
-func getDB() *gorm.DB {
+// InitDB InitDB
+func InitDB() *gorm.DB {
 	t := time.Now().Format("2006年01-02 15:04:05")
 	fmt.Printf("数据库链接>>>>>>>> %s", t)
 	db, err := gorm.Open("mysql", config.DataBase)
@@ -19,6 +23,27 @@ func getDB() *gorm.DB {
 		panic(err)
 	}
 	db.LogMode(true)
-	// defer db.Close()
 	return db
+}
+
+// DataBaselimit  获取所有用户列表
+func DataBaselimit(limit int, page int, model interface{}, list interface{}, table string) map[string]interface{} {
+	db := DB
+	// 用户列表
+	// users := []model{}
+	// 初始化数据库对象
+	userModal := db.Table(table).Model(model)
+	// 总数
+	var count int
+	// 绑定总数
+	userModal.Count(&count)
+	// 查询绑定用户列表
+	userModal.Offset(limit*(page-1)).Limit(limit).Find(list).Order("name", false)
+
+	return map[string]interface{}{
+		"count":    count,
+		"list":     list,
+		"pageSize": limit,
+		"page":     page,
+	}
 }

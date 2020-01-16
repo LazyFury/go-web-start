@@ -15,6 +15,8 @@ import (
 func main() {
 	e := echo.New() //echo实例
 
+	util.DB = util.InitDB() //初始化数据链接
+	defer util.DB.Close()   //退出时释放链接
 	// fmt.Println(time.Now().In(cstZone).Format("01-02-2006 15:04:05"))
 
 	e.Pre(middleware.RemoveTrailingSlash())
@@ -24,8 +26,6 @@ func main() {
 	e.Use(middleware.CORS())   //跨域
 
 	// 模版
-	// filenames, _ := filepath.Glob("template/error/*.html")
-	// e.Logger.Fatal(filenames)
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(template.ParseGlob("template/*.html")),
 	}
@@ -37,7 +37,7 @@ func main() {
 	e.Static("/static", "static")
 	e.Static("/h5", "h5")
 	// 请求信息
-	e.GET("requestInfo", requestInfo)
+	// e.GET("requestInfo", requestInfo)
 
 	// 注册路由
 	router.Start(e)
@@ -45,7 +45,6 @@ func main() {
 	// 启动服务
 	e.Logger.Fatal(e.Start(":8080"))
 
-	defer util.DB.Close()
 }
 
 // requestInfo
