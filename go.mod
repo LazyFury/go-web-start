@@ -6,11 +6,14 @@ require (
 	github.com/GoAdminGroup/go-admin v1.1.6
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gogf/gf v1.11.2 // indirect
 	github.com/howeyc/fsnotify v0.9.0 // indirect
 	github.com/jinzhu/gorm v1.9.12
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0 // indirect
+	github.com/lib/pq v1.2.0
 	github.com/mattn/go-isatty v0.0.11 // indirect
+	github.com/mattn/go-sqlite3 v2.0.1+incompatible
 	github.com/pilu/config v0.0.0-20131214182432-3eb99e6c0b9a // indirect
 	github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 // indirect
 	github.com/valyala/fasttemplate v1.1.0 // indirect

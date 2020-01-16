@@ -80,3 +80,21 @@ function highLight(json){
             return '<span class="' + cls + '">' + match + '</span>';
         });
 }
+
+let list = {
+    title:"基础服务",
+    list:[
+        {
+            name:"标题",
+            value:"阿斯顿哈看电话卡等哈看得见啊等哈说"
+        },
+        {
+            name:"标题",
+            value:"阿斯顿哈看电话卡等哈看得见啊等哈说"
+        },
+        {
+            name:"标题",
+            value:"阿斯顿哈看电话卡等哈看得见啊等哈说"
+        }
+    ]
+}
