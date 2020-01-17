@@ -23,8 +23,12 @@ func main() {
 
 	e.Use(middleware.Gzip())   //gzip压缩
 	e.Use(middleware.Logger()) //日志
-	e.Use(middleware.CORS())   //跨域
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*", "https://labstack.net"},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	})) //跨域
 
+	// e.Use(util.JWT())
 	// 模版
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(template.ParseGlob("template/*.html")),
@@ -40,7 +44,8 @@ func main() {
 	// e.GET("requestInfo", requestInfo)
 
 	// 注册路由
-	router.Start(e)
+	g := e.Group("")
+	router.Start(g)
 
 	// 启动服务
 	e.Logger.Fatal(e.Start(":8080"))

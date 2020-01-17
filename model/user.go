@@ -11,6 +11,7 @@ type User struct {
 	ID         string         `json:"id"`
 	Password   string         `json:"password"`
 	Name       string         `json:"name" gorm:"unique"`
+	Email      string         `json:"email"`
 	IP         string         `json:"ip"`
 	Ua         string         `json:"ua"`
 	CreateTime util.LocalTime `json:"create_time"`
@@ -20,8 +21,8 @@ type User struct {
 
 // SearchUser	 SearchUser
 type searchUser struct {
-	ID string `json:"id"`
-	// Password   string    `json:"password" gorm:"-"`
+	ID         string         `json:"id"`
+	Email      string         `json:"email"`
 	Name       string         `json:"name"`
 	IP         string         `json:"ip"`
 	Ua         string         `json:"ua"`

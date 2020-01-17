@@ -1,12 +1,13 @@
+let headers = '{"Content-Type": "application/json","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1NzkyMjgzODIsImlkIjoxLCJuYmYiOjE1NzkyMjgzODIsInVzZXJuYW1lIjoic3VrZSJ9.sKZrJ1bTDIxoL03SsGgkuozYzqweKcUGOLt9waDyEpA"}'
 var api = [{
     url: "/admin/user/list", //用户列表
     config: {
         method: "GET",
         body: {
             page:1,
-            limit:10
+            limit:10,
         },
-        headers:'{"Content-Type": "application/json"}'
+        headers
     }
 },
 {
@@ -15,9 +16,9 @@ var api = [{
         method: "POST",
         body: {
             name:"sukeai",
-            password:"sukeaiz"
+            password:"sukeaiz",
         },
-        headers:'{"Content-Type": "application/json"}'
+        headers
     }
 },
 {
@@ -26,9 +27,10 @@ var api = [{
         method: "POST",
         body: {
             name:"sukdajsd",
-            id:"119"
+            id:"208",
+            email:"2568597007@qq.com"
         },
-        headers:'{"Content-Type": "application/json"}'
+        headers
     }
 },
 {
@@ -38,7 +40,7 @@ var api = [{
         body: {
             id:"119"
         },
-        headers:'{"Content-Type": "application/json"}'
+        headers
     }
 }
 ,
@@ -49,6 +51,17 @@ var api = [{
         body: {
             name:"sukeai"
         },
-        headers:'{"Content-Type": "application/json"}'
+        headers
+    }
+}
+,
+{
+    url: "/admin/user/repeatOfEmail", //用户列表
+    config: {
+        method: "GET",
+        body: {
+            email:"2568597007@qq.com"
+        },
+        headers
     }
 }]

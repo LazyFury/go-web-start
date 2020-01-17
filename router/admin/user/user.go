@@ -10,14 +10,27 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Init chushih
-func Init(app *echo.Echo, baseURL string) {
-	baseURL += "/user"
-	app.GET(baseURL+"/list", allUser)
-	app.POST(baseURL+"/addUser", addUser)
-	app.POST(baseURL+"/updateUser", updateUser)
-	app.POST(baseURL+"/delUser", delUser)
-	app.GET(baseURL+"/repeatOfName", repeatOfName)
+// Init 初始化
+func Init(g *echo.Group) {
+	baseURL := "/user"
+	user := g.Group(baseURL)
+	user.GET("/list", allUser)
+	user.POST("/addUser", addUser)
+	user.POST("/updateUser", updateUser)
+	user.POST("/delUser", delUser)
+	user.GET("/repeatOfName", repeatOfName)
+	user.GET("/repeatOfEmail", repeatOfEmail)
+}
+func repeatOfEmail(c echo.Context) error {
+	user := new(model.User)
+	email := c.QueryParam("email")
+	user.Email = email
+	result, err := user.Find()
+	if err != nil {
+		return util.JSON(c, result, "邮箱已被使用,尝试找回密码或者使用其他邮箱", -1)
+	}
+
+	return util.JSONSuccess(c, result, "没有重复")
 }
 
 func repeatOfName(c echo.Context) error {
@@ -42,7 +55,7 @@ func addUser(c echo.Context) error {
 
 	req := c.Request()
 	ua := req.UserAgent()
-	ip := req.RemoteAddr
+	ip := util.ClientIP(c)
 	user.IP = ip
 	user.Ua = ua
 	user.CreateTime = util.LocalTime{time.Now()}
@@ -56,6 +69,7 @@ func addUser(c echo.Context) error {
 	}
 	return util.JSONSuccess(c, 1, msg)
 }
+
 func allUser(c echo.Context) error {
 	limit, err := strconv.Atoi(c.QueryParam("limit"))
 	if err != nil {
