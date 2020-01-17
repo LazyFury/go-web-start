@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -39,11 +40,12 @@ func DataBaselimit(limit int, page int, model interface{}, list interface{}, tab
 	userModal.Count(&count)
 	// 查询绑定用户列表
 	userModal.Offset(limit*(page-1)).Limit(limit).Find(list).Order("name", false)
-
+	pageCount := float64(count) / float64(limit)
 	return map[string]interface{}{
-		"count":    count,
-		"list":     list,
-		"pageSize": limit,
-		"page":     page,
+		"count":     count,
+		"list":      list,
+		"pageSize":  limit,
+		"pageNow":   page,
+		"pageCount": math.Ceil(pageCount),
 	}
 }

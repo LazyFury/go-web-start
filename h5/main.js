@@ -1,4 +1,4 @@
-let baseUrl = "/api"
+let baseUrl = ""
 // Vue.component('VueJsonPretty',VueJsonPretty)
 var app = new Vue({
     el: '#app',

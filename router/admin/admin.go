@@ -14,13 +14,15 @@ type User struct {
 }
 
 // Init 初始化
-func Init(app *echo.Echo, baseURL string) {
-	baseURL += "/admin"
-	user.Init(app, baseURL)
+func Init(app *echo.Group) {
+	baseURL := "/admin"
 
-	app.GET(baseURL+"", index)
+	admin := app.Group(baseURL, util.AdminJWT)
+	user.Init(admin)
 
-	app.GET(baseURL+"/err", func(c echo.Context) error {
+	admin.GET("", index)
+
+	admin.GET("/err", func(c echo.Context) error {
 		code := c.QueryParam("code")
 		newCode, err := strconv.Atoi(code)
 		if err != nil {
@@ -28,7 +30,7 @@ func Init(app *echo.Echo, baseURL string) {
 		}
 		return util.JSON(c, "hello", "", newCode)
 	})
-	app.GET(baseURL+"/test", func(c echo.Context) error {
+	admin.GET("/test", func(c echo.Context) error {
 		return util.JSON(c, "", "", 1)
 	})
 }
