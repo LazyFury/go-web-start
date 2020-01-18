@@ -1,6 +1,7 @@
 package util
 
 import (
+	"math/rand"
 	"strings"
 
 	"github.com/labstack/echo"
@@ -30,4 +31,15 @@ func ClientIP(c echo.Context) string {
 	}
 
 	return strings.TrimSpace(r.RemoteAddr)
+}
+
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+// RandStringBytes 随机字符串
+func RandStringBytes(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	return string(b)
 }

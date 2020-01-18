@@ -1,6 +1,8 @@
 package admin
 
 import (
+	"main/model"
+	"main/router/admin/login"
 	"main/router/admin/user"
 	"main/util"
 	"strconv"
@@ -17,11 +19,13 @@ type User struct {
 func Init(app *echo.Group) {
 	baseURL := "/admin"
 
-	admin := app.Group(baseURL, util.AdminJWT)
-	user.Init(admin)
+	login.Init(app)                            //登陆页面
+	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价 检测登陆
+	user.Init(admin)                           // 用户模块
 
-	admin.GET("", index)
+	admin.GET("", index) //首页
 
+	//json 测试
 	admin.GET("/err", func(c echo.Context) error {
 		code := c.QueryParam("code")
 		newCode, err := strconv.Atoi(code)
@@ -30,11 +34,13 @@ func Init(app *echo.Group) {
 		}
 		return util.JSON(c, "hello", "", newCode)
 	})
+	//测试
 	admin.GET("/test", func(c echo.Context) error {
 		return util.JSON(c, "", "", 1)
 	})
 }
 
 func index(c echo.Context) error {
-	return util.JSONSuccess(c, "", "管理后台")
+	uid := c.Request().Header.Get("uid") //获取用户uid
+	return util.JSONSuccess(c, &model.User{ID: uid}, "管理后台")
 }

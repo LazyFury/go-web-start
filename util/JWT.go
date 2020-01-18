@@ -9,8 +9,9 @@ import (
 	"github.com/labstack/echo"
 )
 
-type userInfo struct {
-	ID   uint64 `json:"id"`
+// UserInfo jwt UserInfo type
+type UserInfo struct {
+	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -28,9 +29,10 @@ func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) 
 	if err != nil {
 		return JSON(c, err, "登陆失效!", -101)
 	}
-	if user.ID == 0 {
+	if user.ID == "" {
 		return JSON(c, nil, "登陆失效!", -101)
 	}
+	c.Request().Header.Add("uid", user.ID)
 	return next(c)
 }
 
@@ -82,13 +84,14 @@ func getToken(c echo.Context) (token string) {
 }
 
 // CreateToken 创建token
-func CreateToken(user *userInfo) (tokenstr string, err error) {
+func CreateToken(user *UserInfo) (tokenstr string, err error) {
 	//自定义claim
 	claim := jwt.MapClaims{
 		"id":       user.ID,
 		"username": user.Name,
-		"nbf":      time.Now().Unix(),
-		"iat":      time.Now().Unix(),
+		"nbf":      time.Now().Unix(),            //指定时间之前 token不可用
+		"iat":      time.Now().Unix(),            //签发时间
+		"exp":      time.Now().Unix() + 60*60*24, //过期时间
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokenstr, err = token.SignedString([]byte(SECRET))
@@ -104,8 +107,8 @@ func secret() jwt.Keyfunc {
 }
 
 //ParseToken 解密token
-func parseToken(tokenss string) (user *userInfo, err error) {
-	user = &userInfo{}
+func parseToken(tokenss string) (user *UserInfo, err error) {
+	user = &UserInfo{}
 	token, err := jwt.Parse(tokenss, secret())
 	if err != nil {
 		err = errors.New("解析token出错")
@@ -122,8 +125,10 @@ func parseToken(tokenss string) (user *userInfo, err error) {
 		return
 	}
 
-	user.ID = uint64(claim["id"].(float64))
+	user.ID = claim["id"].(string) // uint64(claim["id"].(float64))
 	user.Name = claim["username"].(string)
-	fmt.Println(user)
+
+	exp := int64(claim["exp"].(float64))
+	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(timeLayout))
 	return
 }

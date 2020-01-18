@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"main/model"
 	"main/util"
+	"main/util/sha"
 	"strconv"
 	"time"
 
@@ -25,24 +26,24 @@ func repeatOfEmail(c echo.Context) error {
 	user := new(model.User)
 	email := c.QueryParam("email")
 	user.Email = email
-	result, err := user.Find()
+	err := user.Find()
 	if err != nil {
-		return util.JSON(c, result, "邮箱已被使用,尝试找回密码或者使用其他邮箱", -1)
-	}
+		return util.JSONSuccess(c, nil, "没有重复")
 
-	return util.JSONSuccess(c, result, "没有重复")
+	}
+	return util.JSON(c, nil, "邮箱已被使用,尝试找回密码或者使用其他邮箱", -1)
+
 }
 
 func repeatOfName(c echo.Context) error {
 	user := new(model.User)
 	name := c.QueryParam("name")
 	user.Name = name
-	result, err := user.Find()
+	err := user.Find()
 	if err != nil {
-		return util.JSON(c, result, "", -1002)
+		return util.JSONSuccess(c, nil, "没有重复")
 	}
-
-	return util.JSONSuccess(c, result, "没有重复")
+	return util.JSON(c, nil, "用户名已存在", -1002)
 }
 
 func addUser(c echo.Context) error {
@@ -53,13 +54,15 @@ func addUser(c echo.Context) error {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
+	user.Password = sha.EnCode(user.Password)
+
 	req := c.Request()
 	ua := req.UserAgent()
 	ip := util.ClientIP(c)
 	user.IP = ip
 	user.Ua = ua
-	user.CreateTime = util.LocalTime{time.Now()}
-	user.LoginTime = util.LocalTime{time.Now()}
+	user.CreateTime = util.LocalTime{Time: time.Now()}
+	user.LoginTime = util.LocalTime{Time: time.Now()}
 	user.Status = 1
 
 	fmt.Println(user)
@@ -92,13 +95,13 @@ func updateUser(c echo.Context) error {
 		return util.JSONErr(c, err, "获取数据失败")
 	}
 
-	result, err := u.UpdateUser(u.ID, u)
+	err := u.UpdateUser(u.ID, u)
 
 	if err != nil {
-		return util.JSONErr(c, result, fmt.Sprintf("%s", err))
+		return util.JSONErr(c, err, "更新失败")
 	}
 
-	return util.JSONSuccess(c, result, "保存成功")
+	return util.JSONSuccess(c, nil, "保存成功")
 }
 
 func delUser(c echo.Context) error {
