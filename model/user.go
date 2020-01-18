@@ -6,7 +6,7 @@ import (
 	"main/util"
 )
 
-// User User
+// User 用户更新
 type User struct {
 	ID         string         `json:"id"`
 	Password   string         `json:"password"`
@@ -19,7 +19,7 @@ type User struct {
 	Status     int            `json:"status"`
 }
 
-// SearchUser	 SearchUser
+// SearchUser	 用户列表显示
 type searchUser struct {
 	ID         string         `json:"id"`
 	Email      string         `json:"email"`
@@ -31,13 +31,23 @@ type searchUser struct {
 	Status     int            `json:"status"`
 }
 
+// WechatOauth 微信用户登陆
+type WechatOauth struct {
+	UID          int    `json:"uid"`
+	AccessToken  string `json:"access_token"`
+	ExpiresIn    int64  `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
+	Openid       string `json:"openid"`
+	Scope        string `json:"scope"`
+}
+
 // Find 查找用户
-func (u *User) Find() (interface{}, error) {
+func (u *User) Find() error {
 	db := util.DB
 	if db.Where(u).First(u).RecordNotFound() {
-		return "", nil
+		return errors.New("用户不存在")
 	}
-	return nil, errors.New("用户名已存在")
+	return nil
 }
 
 // GetAllUser  获取所有用户列表
@@ -46,19 +56,20 @@ func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
 }
 
 // UpdateUser 更新用户
-func (u *User) UpdateUser(id string, data *User) (string, error) {
+func (u *User) UpdateUser(id string, data *User) error {
 	db := util.DB
-	if db.First(&User{ID: id}).RecordNotFound() {
-		return "", errors.New("数据不存在")
+	err := u.Find()
+	if err != nil {
+		return err
 	}
 	row := db.Model(&User{ID: id}).Updates(data)
 	if row.Error != nil {
-		return "", row.Error
+		return row.Error
 	}
 	if row.RowsAffected <= 0 {
-		return "", errors.New("没有更改")
+		return errors.New("没有更改")
 	}
-	return "", nil
+	return nil
 }
 
 // AddUser 添加用户

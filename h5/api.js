@@ -1,5 +1,15 @@
-let headers = '{"Content-Type": "application/json","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1NzkyMjgzODIsImlkIjoxLCJuYmYiOjE1NzkyMjgzODIsInVzZXJuYW1lIjoic3VrZSJ9.sKZrJ1bTDIxoL03SsGgkuozYzqweKcUGOLt9waDyEpA"}'
+let headers = '{"Content-Type": "application/json"}'
 var api = [{
+    url: "/admin/login", //用户列表
+    config: {
+        method: "GET",
+        body: {
+           username:"qwe",
+           password:"123456"
+        },
+        headers
+    }
+},{
     url: "/admin/user/list", //用户列表
     config: {
         method: "GET",

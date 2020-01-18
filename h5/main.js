@@ -9,8 +9,12 @@ var app = new Vue({
             urlList: api,
             current:0,
             result: '{}',
-            time:""
+            time:"",
+            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzkzMjk0ODIsImlhdCI6MTU3OTI0MzA4MiwiaWQiOiIzMTEiLCJuYmYiOjE1NzkyNDMwODIsInVzZXJuYW1lIjoicXdlIn0.ZNkhdYCAwwVWTb0wXxBl0A06I2iUAEBcuT_33IepPLE"
         }
+    },
+    onLoad(){
+        this.time = new Date().toString()
     },
     methods: {
         send({url, config}) {
@@ -30,6 +34,7 @@ var app = new Vue({
             // 转换headers 
             if (conf.headers) {
                 conf.headers = JSON.parse(conf.headers)
+                conf.headers = Object.assign(conf.headers,{token:this.token})
             }
             console.log(conf)
 
