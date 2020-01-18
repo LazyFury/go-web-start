@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <video id="video" controls style="width: 800px;height:420px"></video>
+    <script src="//cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
+    <script type="text/javascript">
+        var video = document.getElementById("video");
+        var videoSrcHls =
+            "http://127.0.0.1:8080/video";
+
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrcHls);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                // video.play();
+            });
+        }
+    </script>
+</body>
+
+</html>
