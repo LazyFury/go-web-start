@@ -1,4 +1,4 @@
-module goechodemo
+module suke-go-test
 
 go 1.13
 

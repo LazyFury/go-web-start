@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache git make musl-dev go
+RUN apk add --no-cache go
 
 # Configure Go
 ENV GOROOT /usr/lib/go
@@ -9,9 +9,13 @@ ENV PATH /go/bin:$PATH
 
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
+
 # Install Glide
-RUN go get -u github.com/Masterminds/glide/...
 
-WORKDIR $GOPATH
-
-CMD [""]
+WORKDIR  /run-server
+# RUN git clone https://github.com/Treblex/go-echo-demo
+WORKDIR  /run-server/go-echo-demo
+COPY . .
+RUN go build -o main
+EXPOSE 8080
+ENTRYPOINT ["./main"]

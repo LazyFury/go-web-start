@@ -2,9 +2,9 @@ package user
 
 import (
 	"fmt"
-	"goechodemo/model"
-	"goechodemo/util"
-	"goechodemo/util/sha"
+	"suke-go-test/model"
+	"suke-go-test/util"
+	"suke-go-test/util/sha"
 	"strconv"
 	"time"
 

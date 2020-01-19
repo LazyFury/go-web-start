@@ -9,7 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	// "github.com/jinzhu/gorm"
-	"goechodemo/config"
+	"suke-go-test/config"
 )
 
 // DB DB
