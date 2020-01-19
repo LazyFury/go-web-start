@@ -1,9 +1,9 @@
 package router
 
 import (
-	"main/router/admin"
-	"main/router/wechat"
-	"main/util"
+	"goechodemo/router/admin"
+	"goechodemo/router/wechat"
+	"goechodemo/util"
 	"net/http"
 	"os"
 

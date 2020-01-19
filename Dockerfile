@@ -1,12 +1,17 @@
-FROM golang:latest
+FROM alpine:latest
 
-WORKDIR /usr/src/app
-COPY . .
+RUN apk add --no-cache git make musl-dev go
 
-#go构建可执行文件
-RUN go build .
-#暴露端口
-EXPOSE 80
-#最终运行docker的命令
-ENTRYPOINT  ["./dist/main-linux"]
+# Configure Go
+ENV GOROOT /usr/lib/go
+ENV GOPATH /go
+ENV PATH /go/bin:$PATH
 
+RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
+
+# Install Glide
+RUN go get -u github.com/Masterminds/glide/...
+
+WORKDIR $GOPATH
+
+CMD [""]

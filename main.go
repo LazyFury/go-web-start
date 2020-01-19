@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"goechodemo/router"
+	"goechodemo/util"
 	"html/template"
-	"main/router"
-	"main/util"
 	"net/http"
 	"strings"
 
