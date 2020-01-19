@@ -1,11 +1,11 @@
 package router
 
 import (
-	"goechodemo/router/admin"
-	"goechodemo/router/wechat"
-	"goechodemo/util"
 	"net/http"
 	"os"
+	"suke-go-test/router/admin"
+	"suke-go-test/router/wechat"
+	"suke-go-test/util"
 
 	"github.com/labstack/echo"
 )

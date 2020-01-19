@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
-	"goechodemo/util"
+	"suke-go-test/util"
 )
 
 // User 用户更新

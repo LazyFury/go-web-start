@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"goechodemo/router"
-	"goechodemo/util"
+	"suke-go-test/router"
+	"suke-go-test/util"
 	"html/template"
 	"net/http"
 	"strings"

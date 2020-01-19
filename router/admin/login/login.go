@@ -2,9 +2,9 @@ package login
 
 import (
 	"github.com/labstack/echo"
-	"goechodemo/model"
-	"goechodemo/util"
-	"goechodemo/util/sha"
+	"suke-go-test/model"
+	"suke-go-test/util"
+	"suke-go-test/util/sha"
 	"time"
 	"fmt"
 )

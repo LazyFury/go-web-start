@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"goechodemo/model"
-	"goechodemo/router/admin/login"
-	"goechodemo/router/admin/user"
-	"goechodemo/util"
+	"suke-go-test/model"
+	"suke-go-test/router/admin/login"
+	"suke-go-test/router/admin/user"
+	"suke-go-test/util"
 	"strconv"
 
 	"github.com/labstack/echo"
