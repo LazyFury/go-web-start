@@ -74,4 +74,35 @@ var api = [{
         },
         headers
     }
+}
+,
+{
+    url: "/wechat/jsApiConfig", //用户列表
+    config: {
+        method: "GET",
+        body: {
+            url:"http://abadboy.cn"
+        },
+        headers
+    }
+}
+,
+{
+    url: "/wechat/wechat_redirect", //用户列表
+    config: {
+        method: "GET",
+        body: {},
+        headers
+    }
+}
+,
+{
+    url: "/wechat/login", //用户列表
+    config: {
+        method: "GET",
+        body: {
+            code:"http://abadboy.cn"
+        },
+        headers
+    }
 }]

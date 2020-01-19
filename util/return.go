@@ -11,11 +11,17 @@ type returnJSON struct {
 }
 
 var (
+	Success int= 1
+	Error int= -1
+	Logout int =-100
+	LogTimeOut int= -101
+	
 	// 自定义错误码
 	errCode map[int]string = map[int]string{
-		// 1开头 系统内部
+		// 正常
 		1:    "请求成功",
 		-1:   "请求错误,仅提示类型，应该返回错误原因，需要操作的设置另外的错误码",
+		// 登陆
 		-100: "用户未登陆",
 		-101: "用户登陆超时",
 

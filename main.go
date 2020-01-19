@@ -15,9 +15,8 @@ import (
 func main() {
 	e := echo.New() //echo实例
 
-	util.DB = util.InitDB() //初始化数据链接
+	util.DB = util.InitDB() //初始化数据链接 不知道为什么 main 大写暴露的变量不能全局调用
 	defer util.DB.Close()   //退出时释放链接
-	// fmt.Println(time.Now().In(cstZone).Format("01-02-2006 15:04:05"))
 
 	e.Pre(middleware.RemoveTrailingSlash())
 
@@ -72,7 +71,7 @@ func httpErrorHandler(err error, c echo.Context) {
 	req := c.Request()
 	reqAccept := strings.Split(req.Header.Get("Accept"), ",")[0]
 	if reqAccept == "text/html" {
-		c.Logger().Error(c.Render(http.StatusOK, "error.html", map[string]interface{}{
+		c.Logger().Error(c.Render(code, "error.html", map[string]interface{}{
 			"msg":  msg,
 			"code": code,
 		}))

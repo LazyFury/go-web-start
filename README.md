@@ -170,4 +170,24 @@ row := db.Model(&User{ID: id}).Updates(data)
 row.RowsAffected
 ```
 
+###  go get 安装完包之后不能使用命令后直接执行
+path 设置错误
+```sh
+# //go mod需要开启
+export GO111MODULE=on 
+# //指定代理
+export GOPROXY=https://goproxy.cn; 
+# goroot  go环境所在目录  系统包
+export GOROOT=/usr/local/go	
+# 安装的package所在目录  自己定义，修改目录之后需要重新安装package
+export GOPATH=~/gowork
+# 将GOPATH/bin 加入全局path之后 自定义安装的package就可以全局运行了 fresh govender
+export PATH=$GOPATH/bin:$GOPATH:$PATH
+
+```
+
+###	web开发时自动重启项目
+[https://github.com/gravityblast/fresh](https://github.com/gravityblast/fresh)
+看起来像是检查ctrl s 的时候重新编译文件并执行，文件没有修改的时候也会触发重启
+
 ##  ⚠️暂未解决的问题
