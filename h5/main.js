@@ -10,7 +10,7 @@ var app = new Vue({
             current:0,
             result: '{}',
             time:"",
-            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1NzkzMjk0ODIsImlhdCI6MTU3OTI0MzA4MiwiaWQiOiIzMTEiLCJuYmYiOjE1NzkyNDMwODIsInVzZXJuYW1lIjoicXdlIn0.ZNkhdYCAwwVWTb0wXxBl0A06I2iUAEBcuT_33IepPLE"
+            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk0NDI0MjEsImlhdCI6MTU3OTM1NjAyMSwiaWQiOiIzMTEiLCJuYmYiOjE1NzkzNTYwMjEsInVzZXJuYW1lIjoicXdlIn0.BFdRjp-ahj2gtOqnXypY9DRjWRPupvTy8DadziikUWU "
         }
     },
     onLoad(){
@@ -54,17 +54,24 @@ var app = new Vue({
     }
 })
 
-
+/**
+ * 拼接url
+ * @param {*} obj 
+ */
 function getUrl(obj){
     let arr = Object.keys(obj)
     let result = '?'
-    for(i=0;i<arr.length;i++){
+    for(let i=0;i<arr.length;i++){
         result += `${arr[i]}=${obj[arr[i]]}`
         if(i<arr.length-1){
             result += `&`
         }
     }
     return result
+}
+
+function t(){
+   
 }
 
 function highLight(json){

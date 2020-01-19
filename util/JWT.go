@@ -27,10 +27,10 @@ var AdminJWT echo.MiddlewareFunc = baseJWT(adminCheckToken)
 func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
 	user, err := parseToken(tokenString)
 	if err != nil {
-		return JSON(c, err, "登陆失效!", -101)
+		return JSON(c, err, "登陆失效!", LogTimeOut)
 	}
 	if user.ID == "" {
-		return JSON(c, nil, "登陆失效!", -101)
+		return JSON(c, nil, "登陆失效!", LogTimeOut)
 	}
 	c.Request().Header.Add("uid", user.ID)
 	return next(c)
@@ -42,7 +42,7 @@ var UserJWT echo.MiddlewareFunc = baseJWT(userCheckToken)
 // CheckToken 检查token可用
 func userCheckToken(next echo.HandlerFunc, c echo.Context, token string) error {
 	if token != "312" {
-		return JSON(c, nil, "登陆失效!", -101)
+		return JSON(c, nil, "登陆失效!", LogTimeOut)
 	}
 	return next(c)
 }
@@ -58,7 +58,7 @@ func baseJWT(callback func(next echo.HandlerFunc, c echo.Context, token string) 
 				return callback(next, c, token)
 			}
 
-			return JSON(c, nil, "请先登陆!", -100)
+			return JSON(c, nil, "请先登陆!", Logout)
 		}
 	}
 }
