@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"main/model"
-	"main/util"
+	"goechodemo/model"
+	"goechodemo/util"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -19,13 +19,13 @@ var (
 	appid     string = "wx8bddf23d9228626d"
 	appsecret string = "0f28c6ea02973d1719a3312e17f38501"
 	// 拼接微信登陆请求
-	loginUrl string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
+	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
 	// 跳转微信登陆授权页
-	wechatRedirectUrl string = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+	wechatRedirectURL string = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
 	// AccessToken 授权请求
-	accessTokenUrl string = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
+	accessTokenURL string = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
 	// jsapi_ticket授权请求
-	jsAPITicketUrl string = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
+	jsAPITicketURL string = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
 	// AccessToken 全局 AccessToken
 	AccessToken *tokenType = &tokenType{}
 	// JsAPI 全局jsAPITicket
@@ -46,7 +46,7 @@ func login(c echo.Context) (err error) {
 		return util.JSONErr(c, nil, "code不可空")
 	}
 
-	url := fmt.Sprintf(loginUrl, appid, appsecret, code)
+	url := fmt.Sprintf(loginURL, appid, appsecret, code)
 	res, err := http.Get(url)
 	if err != nil {
 		return util.JSONErr(c, err, "登陆失败,请求微信服务器失败")
@@ -74,7 +74,7 @@ func wechatRedirect(c echo.Context) (err error) {
 	// host := c.Request().Host
 	redirectURI := host + "/wechat/login"
 	redirectURI = url.PathEscape(redirectURI)
-	urlStr := fmt.Sprintf(wechatRedirectUrl, appid, redirectURI)
+	urlStr := fmt.Sprintf(wechatRedirectURL, appid, redirectURI)
 	return util.JSONSuccess(c, urlStr, "")
 }
 func jsAPIConfig(c echo.Context) error {
@@ -130,7 +130,7 @@ func (t *tokenType) getAccessToken() (token string, err error) {
 // access_token 向微信服务器发送请求
 func (t *tokenType) sendAccessTokenReq() (err error) {
 	fmt.Printf(">>>>重启请求微信服务器,获取微信 access_token>>>>")
-	url := fmt.Sprintf(accessTokenUrl, appid, appsecret)
+	url := fmt.Sprintf(accessTokenURL, appid, appsecret)
 	res, err := http.Get(url)
 
 	if err != nil {
@@ -165,7 +165,7 @@ func (j *jsAPITicket) getJsAPITicket(token string) (ticket string, err error) {
 }
 func (j *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
 	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket>>>>")
-	url := fmt.Sprintf(jsAPITicketUrl, token)
+	url := fmt.Sprintf(jsAPITicketURL, token)
 	res, err := http.Get(url)
 
 	if err != nil {

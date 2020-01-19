@@ -2,9 +2,9 @@ package login
 
 import (
 	"github.com/labstack/echo"
-	"main/model"
-	"main/util"
-	"main/util/sha"
+	"goechodemo/model"
+	"goechodemo/util"
+	"goechodemo/util/sha"
 	"time"
 	"fmt"
 )

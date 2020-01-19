@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"main/model"
-	"main/router/admin/login"
-	"main/router/admin/user"
-	"main/util"
+	"goechodemo/model"
+	"goechodemo/router/admin/login"
+	"goechodemo/router/admin/user"
+	"goechodemo/util"
 	"strconv"
 
 	"github.com/labstack/echo"
