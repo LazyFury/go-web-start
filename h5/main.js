@@ -10,7 +10,7 @@ var app = new Vue({
             current:0,
             result: '{}',
             time:"",
-            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk0NDI0MjEsImlhdCI6MTU3OTM1NjAyMSwiaWQiOiIzMTEiLCJuYmYiOjE1NzkzNTYwMjEsInVzZXJuYW1lIjoicXdlIn0.BFdRjp-ahj2gtOqnXypY9DRjWRPupvTy8DadziikUWU "
+            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk1NzczMzQsImlhdCI6MTU3OTQ5MDkzNCwiaWQiOiIzMTEiLCJuYmYiOjE1Nzk0OTA5MzQsInVzZXJuYW1lIjoicXdlIn0.49xkfs7mxwFg_cmNbu_agQpp7Je41d8eYxQQFpy4ztg"
         }
     },
     onLoad(){
@@ -78,18 +78,21 @@ function highLight(json){
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
             var cls = 'number';
+            let copy = false
             if (/^"/.test(match)) {
                 if (/:$/.test(match)) {
                     cls = 'key';
                 } else {
                     cls = 'string';
+                    copy = true
                 }
             } else if (/true|false/.test(match)) {
                 cls = 'boolean';
             } else if (/null/.test(match)) {
                 cls = 'null';
             }
-            return '<span class="' + cls + '">' + match + '</span>';
+            let before = copy ?'<a href="javascript:;">拷贝</a>':''
+            return before+ '<span class="' + cls + '">' + match + '</span>';
         });
 }
 

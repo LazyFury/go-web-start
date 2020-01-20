@@ -33,6 +33,7 @@ type searchUser struct {
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
+	ID string	`json:"id"`
 	UID          int    `json:"uid"`
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int64  `json:"expires_in"`
@@ -58,7 +59,9 @@ func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
 // UpdateUser 更新用户
 func (u *User) UpdateUser(id string, data *User) error {
 	db := util.DB
-	err := u.Find()
+	// 使用id查找用户
+	user := &User{ID:id}
+	err := user.Find()
 	if err != nil {
 		return err
 	}

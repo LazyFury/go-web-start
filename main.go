@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"suke-go-test/router"
-	"suke-go-test/util"
 	"html/template"
 	"net/http"
 	"strings"
+	"suke-go-test/config"
+	"suke-go-test/router"
+	"suke-go-test/util"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -15,8 +16,8 @@ import (
 func main() {
 	e := echo.New() //echo实例
 
-	util.DB = util.InitDB() //初始化数据链接 不知道为什么 main 大写暴露的变量不能全局调用
-	defer util.DB.Close()   //退出时释放链接
+	util.DB = util.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
+	defer util.DB.Close()                      //退出时释放链接
 
 	e.Pre(middleware.RemoveTrailingSlash())
 
@@ -43,8 +44,8 @@ func main() {
 	// e.GET("requestInfo", requestInfo)
 
 	// 注册路由
-	g := e.Group("")
-	router.Start(g)
+
+	router.Start(e)
 
 	// 启动服务
 	e.Logger.Fatal(e.Start(":8080"))
