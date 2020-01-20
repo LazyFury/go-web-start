@@ -1,11 +1,11 @@
 package admin
 
 import (
+	"strconv"
 	"suke-go-test/model"
 	"suke-go-test/router/admin/login"
 	"suke-go-test/router/admin/user"
 	"suke-go-test/util"
-	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -19,12 +19,13 @@ type User struct {
 func Init(app *echo.Group) {
 	baseURL := "/admin"
 
-	login.Init(app)                            //登陆页面
-	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价 检测登陆
+	login.Init(app) //登陆页面
+
+	//admin之下 检测登陆权限
+	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价
 	user.Init(admin)                           // 用户模块
 
 	admin.GET("", index) //首页
-
 	//json 测试
 	admin.GET("/err", func(c echo.Context) error {
 		code := c.QueryParam("code")

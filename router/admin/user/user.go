@@ -2,10 +2,10 @@ package user
 
 import (
 	"fmt"
+	"strconv"
 	"suke-go-test/model"
 	"suke-go-test/util"
 	"suke-go-test/util/sha"
-	"strconv"
 	"time"
 
 	"github.com/labstack/echo"
@@ -92,13 +92,13 @@ func updateUser(c echo.Context) error {
 	fmt.Println(req.Header.Get("Content-Type"))
 
 	if err := c.Bind(u); err != nil {
-		return util.JSONErr(c, err, "获取数据失败")
+		return util.JSONErr(c, err, "参数错误")
 	}
 
 	err := u.UpdateUser(u.ID, u)
 
 	if err != nil {
-		return util.JSONErr(c, err, "更新失败")
+		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
 	}
 
 	return util.JSONSuccess(c, nil, "保存成功")

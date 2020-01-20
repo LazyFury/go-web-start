@@ -105,4 +105,14 @@ var api = [{
         },
         headers
     }
+},
+{
+    url: "/wechat/info", //用户列表
+    config: {
+        method: "GET",
+        body: {
+            id:"6"
+        },
+        headers
+    }
 }]
