@@ -22,7 +22,7 @@ func Init(app *echo.Group) {
 	login.Init(app) //登陆页面
 
 	//admin之下 检测登陆权限
-	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价
+	admin := app.Group(baseURL) //util.AdminJWT//注册admin的中间价
 	user.Init(admin)                           // 用户模块
 
 	admin.GET("", index) //首页
