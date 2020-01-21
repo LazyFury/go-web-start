@@ -15,10 +15,10 @@ var (
 	Success int = 1
 	// Error 返回码 失败
 	Error int = -1
-	// Logout 返回码 为登陆
-	Logout int = -100
+	// Logout 返回码 为登陆 int类型1000 在js会呗识别为1
+	Logout int = -101
 	// LogTimeOut 返回码 登陆超时
-	LogTimeOut int = -101
+	LogTimeOut int = -102
 
 	// 自定义错误码
 	errCode map[int]string = map[int]string{
@@ -26,8 +26,8 @@ var (
 		1:  "请求成功",
 		-1: "请求错误,仅提示类型，应该返回错误原因，需要操作的设置另外的错误码",
 		// 登陆
-		-100: "用户未登陆",
-		-101: "用户登陆超时",
+		-101: "用户未登陆",
+		-102: "用户登陆超时",
 
 		// 需要客户端指定操作
 		-1002: "用户名已存在,请尝试其他",

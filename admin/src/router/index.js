@@ -26,9 +26,9 @@ const router = new Router({
     {
       path:"/",
       component:{
-        template:"<div>1</div>",
+        template:"<div></div>",
         beforeCreate(){
-          window.location.hash = "#/welcome"
+          router.push('/welcome')
         }
       }
     },
@@ -50,8 +50,8 @@ const router = new Router({
       component:{
         template:"<div></div>",
         created(){
-          console.log('hello nofund')
-          window.location.hash = "#/404"
+          console.log('没有找到页面')
+          router.push('/404')
         }
       }
     }

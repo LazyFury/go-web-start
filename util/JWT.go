@@ -11,8 +11,8 @@ import (
 
 // UserInfo jwt UserInfo type
 type UserInfo struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   float64 `json:"id"`
+	Name string  `json:"name"`
 }
 
 const (
@@ -29,10 +29,10 @@ func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) 
 	if err != nil {
 		return JSON(c, err, "登陆失效!", LogTimeOut)
 	}
-	if user.ID == "" {
+	if user.ID == 0 {
 		return JSON(c, nil, "登陆失效!", LogTimeOut)
 	}
-	c.Request().Header.Add("uid", user.ID)
+	c.Set("user", user)
 	return next(c)
 }
 
@@ -125,7 +125,7 @@ func parseToken(tokenss string) (user *UserInfo, err error) {
 		return
 	}
 
-	user.ID = claim["id"].(string) // uint64(claim["id"].(float64))
+	user.ID = claim["id"].(float64) // uint64(claim["id"].(float64))
 	user.Name = claim["username"].(string)
 
 	exp := int64(claim["exp"].(float64))

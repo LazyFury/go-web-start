@@ -1,27 +1,26 @@
 package login
 
 import (
+	"fmt"
 	"github.com/labstack/echo"
 	"suke-go-test/model"
 	"suke-go-test/util"
 	"suke-go-test/util/sha"
 	"time"
-	"fmt"
 )
-
 
 // Init 初始化
 func Init(g *echo.Group) {
 	baseURL := "/admin/login"
 	login := g.Group(baseURL)
 	login.GET("", doLogin)
-	login.GET("/reg",reg)
+	login.GET("/reg", reg)
 }
-func reg(c echo.Context) (err error)  {
+func reg(c echo.Context) (err error) {
 	user := new(model.User)
 
-	if err=c.Bind(user);err!=nil{
-		return util.JSONErr(c,nil,"参数错误")
+	if err = c.Bind(user); err != nil {
+		return util.JSONErr(c, nil, "参数错误")
 	}
 	// 密码
 	user.Password = sha.EnCode(user.Password)
@@ -62,7 +61,7 @@ func doLogin(c echo.Context) error {
 	if err == nil {
 		password := sha.EnCode(password)
 		if user.Password == password {
-			jwtUser := util.UserInfo{ID: user.ID, Name: user.Name}
+			jwtUser := util.UserInfo{ID: float64(user.ID), Name: user.Name}
 
 			str, _ := util.CreateToken(&jwtUser)
 
