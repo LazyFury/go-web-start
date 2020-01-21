@@ -2,7 +2,6 @@ package admin
 
 import (
 	"strconv"
-	"suke-go-test/model"
 	"suke-go-test/router/admin/login"
 	"suke-go-test/router/admin/user"
 	"suke-go-test/util"
@@ -22,7 +21,7 @@ func Init(app *echo.Group) {
 	login.Init(app) //登陆页面
 
 	//admin之下 检测登陆权限
-	admin := app.Group(baseURL) //util.AdminJWT//注册admin的中间价
+	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价
 	user.Init(admin)                           // 用户模块
 
 	admin.GET("", index) //首页
@@ -42,6 +41,6 @@ func Init(app *echo.Group) {
 }
 
 func index(c echo.Context) error {
-	uid := c.Request().Header.Get("uid") //获取用户uid
-	return util.JSONSuccess(c, &model.User{ID: uid}, "管理后台")
+	user := c.Get("user")
+	return util.JSONSuccess(c, user, "管理后台")
 }

@@ -9,8 +9,11 @@ Vue.config.productionTip = false
 
 
 import util from './util/util'
-
 Vue.prototype.$util = util
+
+import api from './server/api'
+Vue.prototype.api = api
+
 
 Vue.use(Antd)
 /* eslint-disable no-new */

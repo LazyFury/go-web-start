@@ -21,7 +21,29 @@ func Init(g *echo.Group) {
 	user.POST("/delUser", delUser)
 	user.GET("/repeatOfName", repeatOfName)
 	user.GET("/repeatOfEmail", repeatOfEmail)
+	user.POST("/frozen", frozen)
 }
+
+func frozen(c echo.Context) error {
+	u := new(model.User)
+
+	if err := c.Bind(&u); err != nil {
+		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
+	}
+
+	db := util.DB
+	row := db.Model(&model.User{ID: u.ID}).Update("status", u.Status)
+	if row.Error != nil {
+		return util.JSONErr(c, nil, "操作失败")
+	}
+
+	if u.Status == 0 {
+		return util.JSONSuccess(c, nil, "冻结用户")
+	}
+
+	return util.JSONSuccess(c, nil, "解冻用户")
+}
+
 func repeatOfEmail(c echo.Context) error {
 	user := new(model.User)
 	email := c.QueryParam("email")

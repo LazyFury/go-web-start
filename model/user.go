@@ -8,7 +8,7 @@ import (
 
 // User 用户更新
 type User struct {
-	ID         string         `json:"id"`
+	ID         int            `json:"id"`
 	Password   string         `json:"password"`
 	Name       string         `json:"name" gorm:"unique"`
 	Email      string         `json:"email"`
@@ -21,7 +21,7 @@ type User struct {
 
 // SearchUser	 用户列表显示
 type searchUser struct {
-	ID         string         `json:"id"`
+	ID         int            `json:"id"`
 	Email      string         `json:"email"`
 	Name       string         `json:"name"`
 	IP         string         `json:"ip"`
@@ -33,7 +33,7 @@ type searchUser struct {
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
-	ID string	`json:"id"`
+	ID           string `json:"id"`
 	UID          int    `json:"uid"`
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int64  `json:"expires_in"`
@@ -57,10 +57,12 @@ func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
 }
 
 // UpdateUser 更新用户
-func (u *User) UpdateUser(id string, data *User) error {
+func (u *User) UpdateUser(id int, data *User) error {
 	db := util.DB
+
+	// uid, _ := strconv.Atoi(id)
 	// 使用id查找用户
-	user := &User{ID:id}
+	user := &User{ID: id}
 	err := user.Find()
 	if err != nil {
 		return err
