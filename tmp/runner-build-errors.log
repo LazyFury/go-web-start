@@ -1,2 +1,0 @@
-# suke-go-test
-./main.go:12:2: imported and not used: "github.com/spf13/viper"
