@@ -191,3 +191,13 @@ export PATH=$GOPATH/bin:$GOPATH:$PATH
 看起来像是检查ctrl s 的时候重新编译文件并执行，文件没有修改的时候也会触发重启
 
 ##  ⚠️暂未解决的问题
+
+## 环境设置 
+```
+export GO111MODULE=on GOPROXY=https://goproxy.cn;
+export GOROOT=/usr/local/go
+export GOPATH=~/gowork
+
+export PATH=$GOPATH/bin:$GOPATH:$PATH
+
+```
