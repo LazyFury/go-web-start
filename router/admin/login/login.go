@@ -19,8 +19,13 @@ func Init(g *echo.Group) {
 func reg(c echo.Context) (err error) {
 	user := new(model.User)
 
-	if err = c.Bind(user); err != nil {
-		return util.JSONErr(c, nil, "参数错误")
+	user.Name = c.QueryParam("username")
+	if user.Name == "" {
+		return util.JSONErr(c, nil, "用户名不可空")
+	}
+	user.Password = c.QueryParam("password")
+	if user.Password == "" {
+		return util.JSONErr(c, nil, "用户密码不可空")
 	}
 	// 密码
 	user.Password = sha.EnCode(user.Password)
