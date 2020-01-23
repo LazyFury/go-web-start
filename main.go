@@ -27,7 +27,6 @@ func main() {
 		AllowOrigins: []string{"*", "https://labstack.net"},
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
 	})) //跨域
-
 	// e.Use(util.JWT())
 	// 模版
 	renderer := &util.TemplateRenderer{
