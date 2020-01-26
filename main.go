@@ -40,7 +40,6 @@ func main() {
 	// e.GET("requestInfo", requestInfo)
 
 	// 注册路由
-
 	router.Start(e)
 
 	// 启动服务

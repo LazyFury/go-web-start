@@ -69,13 +69,17 @@ func login(c echo.Context) (err error) {
 	wechatUser := model.WechatOauth{Openid: wechatLogin.Openid}
 	if db.Find(&wechatUser).RecordNotFound() {
 		//新建用户
-		db.Create(&wechatLogin)
-		if wechatLogin.UID == 0 {
-
+		err = db.Create(&wechatLogin).Error
+		if err != nil {
+			return util.JSONErr(c, err, "创建微信账号失败")
 		}
 		return util.JSON(c, wechatLogin, "请先绑定账号", -102)
 	}
-	db.First(&wechatUser).Updates(&wechatLogin)
+	err = db.First(&wechatUser).Updates(&wechatLogin).Error
+
+	if err != nil {
+		return util.JSONErr(c, err, "更新状态失败")
+	}
 
 	return util.JSONSuccess(c, wechatLogin, "登陆成功")
 }
