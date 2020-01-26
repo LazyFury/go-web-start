@@ -10,7 +10,7 @@ var app = new Vue({
             current:0,
             result: '{}',
             time:"",
-            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk3OTcwMTIsImlhdCI6MTU3OTcxMDYxMiwiaWQiOjI0MSwibmJmIjoxNTc5NzEwNjEyLCJ1c2VybmFtZSI6InN1a2UifQ.DBOeIo4e3tnUSzSdeZINuMSYaNmx_QhZB7cfg8CjfHI"
+            token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Nzk5NTUwMjQsImlhdCI6MTU3OTg2ODYyNCwiaWQiOjI0MSwibmJmIjoxNTc5ODY4NjI0LCJ1c2VybmFtZSI6InN1a2UifQ.9d8g03QvbAMK4YcYdaYLDyuRJJo7qdz93QtpWC4Mfdg"
         }
     },
     onLoad(){
