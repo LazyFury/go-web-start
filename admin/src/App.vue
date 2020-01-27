@@ -11,7 +11,7 @@
 import layout from '@/layout/layout.vue'
 
 // 无需默认layout的页面
-let noLayoutList = ['/login/login']
+let noLayoutList = ['/login/login','/api/list']
 export default {
   name: 'App',
   components: {

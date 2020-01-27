@@ -1,7 +1,7 @@
 import action from './action'
 import {message} from 'ant-design-vue'
 
-let ignoreCode = ["请求成功"]
+let ignoreCode = [""]
 // 错误码拦截
 let errCode = {
     '1':(res)=>{

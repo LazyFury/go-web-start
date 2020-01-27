@@ -7,11 +7,11 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false
 
-
+// 工具
 import util from './util/util'
 Vue.prototype.$util = util
-
-import api from './server/api'
+// api 
+import {api} from './server/api'
 Vue.prototype.api = api
 
 
