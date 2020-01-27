@@ -39,4 +39,6 @@ const api = {
     }
 }
 
-export default api
+export {
+    api,http
+}
