@@ -33,7 +33,7 @@ type searchUser struct {
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
-	ID           string `json:"id"`
+	ID           int    `json:"id" gorm:"PRIMARY_KEY;AUTO_INCREMENT;NOT NULL;UNIQUE"`
 	UID          int    `json:"uid"`
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int64  `json:"expires_in"`
@@ -44,7 +44,7 @@ type WechatOauth struct {
 
 // Find 查找用户
 func (u *User) Find() error {
-	db := util.DB
+	db := DB
 	if db.Where(u).First(u).RecordNotFound() {
 		return errors.New("用户不存在")
 	}
@@ -53,12 +53,12 @@ func (u *User) Find() error {
 
 // GetAllUser  获取所有用户列表
 func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
-	return util.DataBaselimit(limit, page, &searchUser{}, &[]searchUser{}, "users")
+	return DataBaselimit(limit, page, &searchUser{}, &[]searchUser{}, "users")
 }
 
 // UpdateUser 更新用户
 func (u *User) UpdateUser(id int, data *User) error {
-	db := util.DB
+	db := DB
 
 	// uid, _ := strconv.Atoi(id)
 	// 使用id查找用户
@@ -79,7 +79,7 @@ func (u *User) UpdateUser(id int, data *User) error {
 
 // AddUser 添加用户
 func (u *User) AddUser() (string, error) {
-	db := util.DB
+	db := DB
 
 	fmt.Println(u)
 	db.NewRecord(u) // => 主键为空返回`true`
@@ -98,7 +98,7 @@ func (u *User) AddUser() (string, error) {
 
 // DelUser 删除用户
 func (u *User) DelUser() (interface{}, error) {
-	db := util.DB
+	db := DB
 	// db.Delete(u)
 	row := db.Exec("DELETE FROM `users` WHERE `id` = ?", u.ID)
 	if row.Error != nil {

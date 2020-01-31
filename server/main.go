@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 	"suke-go-test/config"
+	"suke-go-test/model"
 	"suke-go-test/router"
 	"suke-go-test/util"
 
@@ -14,12 +15,12 @@ import (
 )
 
 func main() {
-	e := echo.New()                            //echo实例
-	util.DB = util.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
-	defer util.DB.Close()                      //退出时释放链接
-	e.Pre(middleware.RemoveTrailingSlash())    //删除url反斜杠
-	e.Use(middleware.Gzip())                   //gzip压缩
-	e.Use(middleware.Logger())                 //日志
+	e := echo.New()                              //echo实例
+	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
+	defer model.DB.Close()                       //退出时释放链接
+	e.Pre(middleware.RemoveTrailingSlash())      //删除url反斜杠
+	e.Use(middleware.Gzip())                     //gzip压缩
+	e.Use(middleware.Logger())                   //日志
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*", "https://labstack.net"},
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},

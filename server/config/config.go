@@ -14,7 +14,8 @@ type configType struct {
 	// 数据库链接
 	Mysql string `json:"mysql"`
 	// 网站根目录
-	BaseURL string `json:"baseURL"`
+	BaseURL     string `json:"baseURL"`
+	TablePrefix string `json:"tablePrefix"`
 }
 
 // ReadConfig 读取配置 初始化时运行 绑定为全局变量
