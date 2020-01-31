@@ -1,13 +1,13 @@
-package util
+package model
 
 import (
 	"fmt"
 	"math"
+	"suke-go-test/config"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
-	// "github.com/jinzhu/gorm"
 )
 
 // DB DB
@@ -16,12 +16,18 @@ var DB *gorm.DB
 // InitDB InitDB
 func InitDB(DataBaseConfig string) *gorm.DB {
 	t := time.Now().Format("2006年01-02 15:04:05")
-	fmt.Printf("数据库链接>>>>>>>> %s", t)
+	fmt.Printf("数据库链接>>>>>>>> %s \n", t)
 	db, err := gorm.Open("mysql", DataBaseConfig)
 	if err != nil {
 		panic(err)
 	}
+
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		return config.Global.TablePrefix + "_" + defaultTableName
+	}
+
 	db.LogMode(true)
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{})
 	return db
 }
 

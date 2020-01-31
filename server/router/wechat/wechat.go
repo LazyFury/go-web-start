@@ -48,40 +48,25 @@ func login(c echo.Context) (err error) {
 		return util.JSONErr(c, nil, "code不可空")
 	}
 
-	// 请求微信服务器
-	url := fmt.Sprintf(loginURL, appid, appsecret, code)
-	res, err := http.Get(url)
-	if err != nil {
-		return util.JSONErr(c, err, "登陆失败,请求微信服务器失败")
+	// 请求微信登陆返回信息
+	wechatLogin, msg := sendCodeToWechatServer(code, &model.WechatOauth{})
+	if msg != "" {
+		return util.JSONErr(c, nil, msg)
 	}
-	// 绑定微信登陆返回信息
-	wechatLogin := &model.WechatOauth{}
-	if err = json.NewDecoder(res.Body).Decode(wechatLogin); err != nil {
-		return util.JSONErr(c, err, "登陆失败,解码失败")
-	}
-	// 数据获取失败
-	if wechatLogin.ExpiresIn == 0 {
-		return util.JSONErr(c, nil, "code无效，请尝试重新获取")
-	}
-	// 过期时间
+	// 更新过期时间
 	wechatLogin.ExpiresIn += time.Now().Unix()
-	db := util.DB
-	wechatUser := model.WechatOauth{Openid: wechatLogin.Openid}
-	if db.Find(&wechatUser).RecordNotFound() {
-		//新建用户
-		err = db.Create(&wechatLogin).Error
-		if err != nil {
-			return util.JSONErr(c, err, "创建微信账号失败")
-		}
-		return util.JSON(c, wechatLogin, "请先绑定账号", -102)
+	// 查询微信用户数据库表
+	wechatUser, msg, errCode := wechatDoLogin(wechatLogin.Openid, wechatLogin)
+	if errCode == 0 {
+		errCode = 1 //成功的返回码
 	}
-	err = db.First(&wechatUser).Updates(&wechatLogin).Error
-
-	if err != nil {
-		return util.JSONErr(c, err, "更新状态失败")
+	if msg != "" {
+		return util.JSON(c, wechatUser, msg, errCode)
 	}
+	// 如果uid存在则查询用户 返回用户信息 生产jwt token
+	// ...
 
-	return util.JSONSuccess(c, wechatLogin, "登陆成功")
+	return util.JSONSuccess(c, wechatUser, "登陆成功")
 }
 
 // 拉去微信用户信息绑定数据类型
@@ -98,9 +83,13 @@ type wechatUserType struct {
 // 获取微信用户信息  是否关注
 func userInfo(c echo.Context) (err error) {
 	wechatID := c.QueryParam("id")
-	user := model.WechatOauth{ID: wechatID}
+	newID, err := strconv.Atoi(wechatID)
+	if err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+	user := model.WechatOauth{ID: newID}
 
-	db := util.DB
+	db := model.DB
 	if db.Find(&user).RecordNotFound() {
 		return util.JSONErr(c, err, "未找到用户")
 	}

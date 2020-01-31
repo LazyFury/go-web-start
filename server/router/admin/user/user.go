@@ -31,7 +31,7 @@ func frozen(c echo.Context) error {
 		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
 	}
 
-	db := util.DB
+	db := model.DB
 	row := db.Model(&model.User{ID: u.ID}).Update("status", u.Status)
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "操作失败")
