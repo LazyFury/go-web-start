@@ -37,12 +37,18 @@
       :closable="true"
       @close="onClose"
       :visible="visible"
-    >hello</a-drawer>
+    >
+      <add-param @save="addParamSave"></add-param>
+    </a-drawer>
   </div>
 </template>
 
 <script>
+import AddParam from "./AddParam";
 export default {
+  components: {
+    AddParam
+  },
   name: "edit-data",
   props: {
     list: {
@@ -80,6 +86,11 @@ export default {
       console.log(e, i);
       this.tmpList[i].value = e;
       this.$emit("update", this.tmpList);
+    },
+    addParamSave(e) {
+      this.visible = false;
+      console.log(e);
+      this.tmpList.push(e);
     }
   }
 };

@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"suke-go-test/config"
 	"suke-go-test/util"
 )
 
@@ -53,7 +54,7 @@ func (u *User) Find() error {
 
 // GetAllUser  获取所有用户列表
 func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
-	return DataBaselimit(limit, page, &searchUser{}, &[]searchUser{}, "users")
+	return DataBaselimit(limit, page, &searchUser{}, &[]searchUser{}, config.Global.TablePrefix+"_users")
 }
 
 // UpdateUser 更新用户

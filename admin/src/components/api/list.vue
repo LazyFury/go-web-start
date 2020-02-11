@@ -4,7 +4,7 @@
       添加API
       <a-icon type="plus" />
     </a-button>
-    <a-menu mode="inline">
+    <a-menu mode="inline" style="height:calc(100vh - 140px);overflow-y:auto;overflow-x:hidden;">
       <a-sub-menu v-for="(sub,index) in list" :key="index">
         <span slot="title">{{sub.name}}</span>
         <a-menu-item v-for="(item,i) in sub.list" @click="change(item)" :key="i">{{item.name}}</a-menu-item>
@@ -33,7 +33,7 @@
           >
             <add-cate></add-cate>
           </a-drawer>
-
+          <a-card style="margin-top:10px">{{addConfig}}</a-card>
           <!-- 配置 -->
           <config v-model="addConfig"></config>
           <a-button type="primary" @click="save" style="margin-left:20px">save</a-button>
@@ -125,6 +125,9 @@ export default {
     },
     save() {
       console.log(this.addConfig);
+      this.list[0].list.push(JSON.parse(JSON.stringify(this.addConfig)));
+      console.log(this.list);
+      this.onClose();
     }
   }
 };

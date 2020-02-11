@@ -9,4 +9,12 @@ type API struct {
 	gorm.Model
 	Name string `json:"name"`
 	Data string `json:"data"`
+	Cid  string `json:"cid"`
+}
+
+// APICate api分类
+type APICate struct {
+	gorm.Model
+	Name string `json:"name"`
+	Desc string `json:"desc"`
 }

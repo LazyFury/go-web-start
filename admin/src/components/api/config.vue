@@ -1,6 +1,10 @@
 <template>
   <div class="config">
     <a-col class="line">
+      <label for>接口名称:</label>
+      <a-input placeholder="Basic usage" v-model="result.name" />
+    </a-col>
+    <a-col class="line">
       <label for>请求地址:</label>
       <a-input placeholder="Basic usage" v-model="result.url" />
     </a-col>

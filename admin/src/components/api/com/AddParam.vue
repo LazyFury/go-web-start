@@ -1,10 +1,20 @@
 <template>
   <a-form :form="form" @submit="handleSubmit">
-    <a-form-item label="分类名称" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+    <a-form-item label="参数名" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
       <a-input v-decorator="['key', { rules: [{ required: true, message: '请选择key名称!' }] }]" />
     </a-form-item>
-    <a-form-item label="分类描述" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+    <a-form-item label="默认值" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
       <a-input v-decorator="['value', { rules: [{ required: true, message: '请选择默认值!' }] }]" />
+    </a-form-item>
+    <a-form-item label="类型" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
+      <a-select
+        v-decorator="['type', { rules: [{ required: true, message: '请选择默认值!' }],initialValue: 'string' }]"
+        style="width: 120px"
+      >
+        <a-select-option value="string">string</a-select-option>
+        <a-select-option value="number">number</a-select-option>
+        <!-- <a-select-option value="disabled" disabled>Disabled</a-select-option> -->
+      </a-select>
     </a-form-item>
     <a-form-item label="提示名称" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }">
       <a-input v-decorator="['name', { rules: [{ required: true, message: '请输入提示名称!' }] }]" />
