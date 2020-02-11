@@ -1,7 +1,10 @@
 package util
 
-import "github.com/labstack/echo"
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/labstack/echo"
+)
 
 // Return 公共返回类型
 type returnJSON struct {

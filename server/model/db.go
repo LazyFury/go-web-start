@@ -27,7 +27,7 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{})
 	return db
 }
 

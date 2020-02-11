@@ -14,19 +14,19 @@
     </a-row>
     <a-row class="line">
       <label for>headers</label>
-     <edit-data v-model="result.headers">{{item}}</edit-data>
+      <edit-data v-model="result.headers">{{item}}</edit-data>
     </a-row>
-
   </div>
 </template>
 
 <script>
 import { http } from "../../server/api";
-import method from '../../components/api/com/method'
-import editData from './com/data'
+import method from "../../components/api/com/method";
+import editData from "./com/data";
 export default {
-  components:{
-    method,editData
+  components: {
+    method,
+    editData
   },
   props: {
     item: {
@@ -37,12 +37,12 @@ export default {
       deep: true
     }
   },
-  data(){
+  data() {
     return {
-      result:{}
-    }
+      result: {}
+    };
   },
-  computed: {  },
+  computed: {},
   model: {
     prop: "item",
     event: "update"
@@ -50,20 +50,20 @@ export default {
   watch: {
     // 数据变动
     result: function(newVal, oldVal) {
-      console.log("我是子组件，现在的值为：" , newVal);
+      console.log("我是子组件，现在的值为：", newVal);
       this.$emit("update", newVal);
     },
     // props 更新
     item: function(newVal, oldVal) {
-      this.result = newVal
+      this.result = newVal;
     }
   },
   methods: {
     handleChange(value) {
-      this.update( { method: value })
+      this.update({ method: value });
     },
-    update(data={}){
-      let result = {...this.result,...data};
+    update(data = {}) {
+      let result = { ...this.result, ...data };
       this.result = result;
       this.$emit("update", result);
     }
@@ -85,6 +85,6 @@ export default {
   font-weight: bold;
   background: #eee;
   padding: 0 8px;
-  line-height:24px
+  line-height: 24px;
 }
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div >
+    <div>
       <table>
         <tbody>
           <tr v-for="(item, index) in tmpList" :key="index">
-            <td width='60'>
+            <td width="60">
               <span for>{{item.name}}</span>
             </td>
             <td>
@@ -21,13 +21,23 @@
             </td>
           </tr>
           <tr>
-            <a-button>添加参数
-              <a-icon type='plus'></a-icon>
+            <a-button @click="showDrawer">
+              添加参数
+              <a-icon type="plus"></a-icon>
             </a-button>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <a-drawer
+      title="添加API参数"
+      placement="left"
+      width="500"
+      :closable="true"
+      @close="onClose"
+      :visible="visible"
+    >hello</a-drawer>
   </div>
 </template>
 
@@ -46,7 +56,8 @@ export default {
   },
   data() {
     return {
-      tmpList: []
+      tmpList: [],
+      visible: false
     };
   },
   watch: {
@@ -59,6 +70,12 @@ export default {
     }
   },
   methods: {
+    onClose() {
+      this.visible = false;
+    },
+    showDrawer() {
+      this.visible = true;
+    },
     onChange(e, i) {
       console.log(e, i);
       this.tmpList[i].value = e;

@@ -9,14 +9,21 @@
       </template>
 
       <div slot="result" style="padding:20px">
-        <div style="background:#fff;padding:20px;margin-bottom:20px">
-          
-          <a-button type="primary" @click="Send(item)" html-type="submit">发送请求</a-button>
-        </div>
-        <h2>response：</h2>
-        <pre class="result" v-html="result"></pre>
+        <a-card class="card">
+          <div style="background:#eee">
+            <a-button type="primary" @click="Send(item)" html-type="submit">发送请求</a-button>
+            <span>{{baseURL}}{{item.url||""}}</span>
+          </div>
+        </a-card>
+
+        <h2>Config:</h2>
+        <a-card class="card">{{item}}</a-card>
+
+        <h2>Response:</h2>
+        <a-card>
+          <pre class="result" v-html="result"></pre>
+        </a-card>
       </div>
-      
     </layout>
   </div>
 </template>
@@ -27,10 +34,13 @@ import layout from "../../components/api/layout";
 import list from "../../components/api/list";
 import config from "../../components/api/config";
 import axios from "axios";
+import globalConfig from "../../config";
+let { baseURL } = globalConfig;
 let http = axios.create({
-  baseURL: "http://0.0.0.0:8080"
+  baseURL
 });
 
+import "./clipBoard";
 export default {
   components: {
     layout,
@@ -39,12 +49,16 @@ export default {
   },
   data() {
     return {
+      baseURL,
       title: "hello api!",
       item: {},
       result: "{}"
     };
   },
   methods: {
+    clipBoardText() {
+      console.log("test");
+    },
     listCheck(item) {
       console.log(item);
       this.item = item;
@@ -59,9 +73,9 @@ export default {
       let data = this.getData(body);
       headers = this.getData(headers);
 
-      if(!(data || headers)){
-        this.$message.info("参数错误")
-        return
+      if (!(data || headers || url)) {
+        this.$message.info("参数错误");
+        return;
       }
 
       let option = { data, headers, method, params: data, url };
@@ -75,11 +89,11 @@ export default {
           return res;
         })
         .catch(err => {
-          // 异常http码 
+          // 异常http码
           return err.response;
         })
         .then(res => {
-          return res.data
+          return res.data;
         })
         .then(res => {
           console.log(res);
@@ -93,8 +107,8 @@ export default {
         });
     },
     getData(list) {
-      if(!list || list.length==0){
-        return false
+      if (!list || list.length == 0) {
+        return false;
       }
       let obj = {};
       console.log(list);
@@ -109,6 +123,9 @@ export default {
 </script>
 
 <style >
+.card {
+  margin-bottom: 10px;
+}
 pre {
   outline: 1px solid #ccc;
   padding: 5px;

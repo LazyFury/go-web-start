@@ -1,7 +1,8 @@
 <template>
   <div>
-    <a-button type="primary" html-type="submit" @click="showDrawer" style="margin:20px;width:80%">添加API
-    <a-icon type="plus" />
+    <a-button type="primary" html-type="submit" @click="showDrawer" style="margin:20px;width:80%">
+      添加API
+      <a-icon type="plus" />
     </a-button>
     <a-menu mode="inline">
       <a-sub-menu v-for="(sub,index) in list" :key="index">
@@ -11,33 +12,51 @@
     </a-menu>
 
     <template>
-  <div>
-    <a-drawer
-      title="添加API"
-      placement="left"
-      width='500'
-      :closable="true"
-      @close="onClose"
-      :visible="visible"
-    >
-      <config v-model="addConfig"></config>
-      <a-button type='primary' @click="save" style="margin-left:20px">save</a-button>
-    </a-drawer>
-  </div>
-</template>
+      <div>
+        <a-drawer
+          title="添加API"
+          placement="left"
+          width="500"
+          :closable="true"
+          @close="onClose"
+          :visible="visible"
+        >
+          <!-- api分类 -->
+          <a-button @click="visible1=true">添加分类</a-button>
+          <a-drawer
+            title="添加API分类"
+            placement="left"
+            width="500"
+            :closable="true"
+            @close="onClose1"
+            :visible="visible1"
+          >
+            <add-cate></add-cate>
+          </a-drawer>
+
+          <!-- 配置 -->
+          <config v-model="addConfig"></config>
+          <a-button type="primary" @click="save" style="margin-left:20px">save</a-button>
+        </a-drawer>
+      </div>
+    </template>
   </div>
 </template>
 
+
 <script>
-import config from './config'
+import config from "./config";
+import AddCate from "./com/AddCate";
 export default {
-  components:{
-    config
+  components: {
+    config,
+    AddCate
   },
   data() {
     return {
-       visible: false,
-       addConfig:{},
+      visible: false,
+      visible1: false,
+      addConfig: {},
       list: [
         {
           name: "微信相关API",
@@ -90,20 +109,23 @@ export default {
       ]
     };
   },
-  
+
   methods: {
     change(item) {
       this.$emit("change", item);
     },
     showDrawer() {
-        this.visible = true;
-      },
-      onClose() {
-        this.visible = false;
-      },
-      save(){
-        console.log(this.addConfig)
-      }
+      this.visible = true;
+    },
+    onClose() {
+      this.visible = false;
+    },
+    onClose1() {
+      this.visible1 = false;
+    },
+    save() {
+      console.log(this.addConfig);
+    }
   }
 };
 </script>

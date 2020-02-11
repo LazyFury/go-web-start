@@ -5,7 +5,9 @@ import (
 	"os"
 	"suke-go-test/config"
 	"suke-go-test/router/admin"
+	"suke-go-test/router/api"
 	"suke-go-test/router/wechat"
+	"suke-go-test/router/ws"
 	"suke-go-test/util"
 
 	"github.com/labstack/echo"
@@ -23,6 +25,8 @@ func Start(e *echo.Echo) {
 	// 项目页面
 	admin.Init(g)
 	wechat.Init(g)
+	api.Init(g)
+	ws.Init(g)
 
 	// 入口
 	index := g
