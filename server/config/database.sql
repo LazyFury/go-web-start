@@ -31,7 +31,7 @@ CREATE TABLE `test_api_cates` (
   `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_test_api_cates_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `test_api_cates` (
 
 LOCK TABLES `test_api_cates` WRITE;
 /*!40000 ALTER TABLE `test_api_cates` DISABLE KEYS */;
-INSERT INTO `test_api_cates` VALUES (1,'2020-02-12 17:26:43','2020-02-13 09:43:21',NULL,'微信配置API',''),(2,'2020-02-12 17:30:52','2020-02-13 09:22:09','2020-02-13 09:22:09','后台用户管理1','');
+INSERT INTO `test_api_cates` VALUES (1,'2020-02-12 17:26:43','2020-02-13 13:53:32',NULL,'微信配置API(test)',''),(2,'2020-02-12 17:30:52','2020-02-13 09:22:09','2020-02-13 09:22:09','后台用户管理1',''),(3,'2020-02-13 10:10:13','2020-02-13 10:10:13',NULL,'后台用户管理','asd'),(4,'2020-02-13 10:10:54','2020-02-13 13:56:31',NULL,'【后台】文章管理 😄',''),(5,'2020-02-13 10:11:11','2020-02-13 10:11:11',NULL,'da s','阿斯顿'),(6,'2020-02-13 10:12:10','2020-02-13 14:40:53',NULL,'test api','');
 /*!40000 ALTER TABLE `test_api_cates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,7 +61,7 @@ CREATE TABLE `test_apis` (
   `cid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_test_apis_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,7 +70,7 @@ CREATE TABLE `test_apis` (
 
 LOCK TABLES `test_apis` WRITE;
 /*!40000 ALTER TABLE `test_apis` DISABLE KEYS */;
-INSERT INTO `test_apis` VALUES (1,'2020-02-12 18:13:36','2020-02-12 18:41:34','2020-02-12 18:41:34','微信','{\"body\":[{\"key\":\"阿斯顿\",\"value\":\"的\",\"type\":\"string\",\"name\":\"的\"},{\"key\":\"url\",\"value\":\"asd\",\"type\":\"string\",\"name\":\"asd \"}],\"header\":[],\"name\":\"微信\",\"url\":\"wechat/jsApiConfig\",\"method\":\"GET\"}','1'),(2,'2020-02-12 18:23:44','2020-02-12 18:41:41','2020-02-12 18:41:41','测试','{\"name\":\"测试\",\"url\":\"test\",\"method\":\"GET\"}','2'),(3,'2020-02-12 18:24:36','2020-02-13 09:09:32','2020-02-13 09:09:32','测试','{\"name\":\"测试\",\"url\":\"test\",\"method\":\"GET\"}','2'),(4,'2020-02-13 09:14:14','2020-02-13 09:14:19','2020-02-13 09:14:19','asdad','{\"name\":\"asdad\",\"url\":\"asd\",\"method\":\"GET\"}','2'),(5,'2020-02-13 09:15:43','2020-02-13 09:15:43',NULL,'asd','{\"name\":\"asd\",\"url\":\"as\",\"method\":\"GET\"}','2'),(6,'2020-02-13 09:22:23','2020-02-13 09:31:01','2020-02-13 09:31:01','asd','{\"body\":[],\"header\":[],\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(7,'2020-02-13 09:31:58','2020-02-13 09:32:02','2020-02-13 09:32:02','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"POST\"}','1'),(8,'2020-02-13 09:32:37','2020-02-13 09:32:41','2020-02-13 09:32:41','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(9,'2020-02-13 09:33:39','2020-02-13 09:33:44','2020-02-13 09:33:44','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(10,'2020-02-13 09:39:09','2020-02-13 09:39:09',NULL,'asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1');
+INSERT INTO `test_apis` VALUES (1,'2020-02-12 18:13:36','2020-02-12 18:41:34','2020-02-12 18:41:34','微信','{\"body\":[{\"key\":\"阿斯顿\",\"value\":\"的\",\"type\":\"string\",\"name\":\"的\"},{\"key\":\"url\",\"value\":\"asd\",\"type\":\"string\",\"name\":\"asd \"}],\"header\":[],\"name\":\"微信\",\"url\":\"wechat/jsApiConfig\",\"method\":\"GET\"}','1'),(2,'2020-02-12 18:23:44','2020-02-12 18:41:41','2020-02-12 18:41:41','测试','{\"name\":\"测试\",\"url\":\"test\",\"method\":\"GET\"}','2'),(3,'2020-02-12 18:24:36','2020-02-13 09:09:32','2020-02-13 09:09:32','测试','{\"name\":\"测试\",\"url\":\"test\",\"method\":\"GET\"}','2'),(4,'2020-02-13 09:14:14','2020-02-13 09:14:19','2020-02-13 09:14:19','asdad','{\"name\":\"asdad\",\"url\":\"asd\",\"method\":\"GET\"}','2'),(5,'2020-02-13 09:15:43','2020-02-13 09:15:43',NULL,'asd','{\"name\":\"asd\",\"url\":\"as\",\"method\":\"GET\"}','2'),(6,'2020-02-13 09:22:23','2020-02-13 09:31:01','2020-02-13 09:31:01','asd','{\"body\":[],\"header\":[],\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(7,'2020-02-13 09:31:58','2020-02-13 09:32:02','2020-02-13 09:32:02','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"POST\"}','1'),(8,'2020-02-13 09:32:37','2020-02-13 09:32:41','2020-02-13 09:32:41','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(9,'2020-02-13 09:33:39','2020-02-13 09:33:44','2020-02-13 09:33:44','asd','{\"name\":\"asd\",\"url\":\"asd\",\"method\":\"GET\"}','1'),(10,'2020-02-13 09:39:09','2020-02-13 14:39:00',NULL,'jsSDK授权','{\"body\":[{\"key\":\"asd\",\"value\":\"asd\",\"type\":\"string\",\"name\":\"asd\"}],\"header\":[],\"name\":\"jsSDK授权\",\"url\":\"wechat/jsApiConfig\",\"method\":\"GET\",\"headers\":[{\"key\":\"sd\",\"value\":\"dsa\",\"type\":\"string\",\"name\":\"d\"}]}','1'),(11,'2020-02-13 10:12:53','2020-02-13 13:54:54',NULL,'阿斯顿','{\"body\":[{\"key\":\"asd\",\"value\":\"sd\",\"type\":\"string\",\"name\":\"d\"}],\"header\":[],\"name\":\"阿斯顿\",\"url\":\"阿斯顿\",\"method\":\"POST\"}','6'),(12,'2020-02-13 10:15:22','2020-02-13 13:49:47',NULL,'微信登陆','{\"body\":[{\"key\":\"阿斯顿\",\"value\":\"都是\",\"type\":\"string\",\"name\":\"速度\"}],\"header\":[],\"name\":\"微信登陆\",\"url\":\"wechat/wechat_redirect\",\"method\":\"GET\"}','1'),(13,'2020-02-13 13:55:10','2020-02-13 13:55:10',NULL,'ad','{\"name\":\"ad\",\"url\":\"dssdd\",\"method\":\"GET\"}','4');
 /*!40000 ALTER TABLE `test_apis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +119,7 @@ CREATE TABLE `test_users` (
   `status` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +128,7 @@ CREATE TABLE `test_users` (
 
 LOCK TABLES `test_users` WRITE;
 /*!40000 ALTER TABLE `test_users` DISABLE KEYS */;
-INSERT INTO `test_users` VALUES (1,'6c3e89a67a57','suke','','[::1]:59624','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36','2020-02-11 11:45:32','2020-02-11 11:45:32',1);
+INSERT INTO `test_users` VALUES (1,'6c3e89a67a57','suke','','[::1]:59624','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36','2020-02-11 11:45:32','2020-02-11 11:45:32',1),(2,'6c3e89a67a57','sukea','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:15','2020-02-13 11:18:15',1),(3,'6c3e89a67a57','suk23ea','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:21','2020-02-13 11:18:21',1),(4,'6c3e89a67a57','43223','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:24','2020-02-13 11:18:24',1),(5,'6c3e89a67a57','asdadadfdda','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:28','2020-02-13 11:18:28',1),(6,'6c3e89a67a57','啊的叫啊叫大会','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:32','2020-02-13 11:18:32',1),(7,'6c3e89a67a57','啊的叫啊jd 大会','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:35','2020-02-13 11:18:35',1),(8,'6c3e89a67a57','fasds会','','127.0.0.1:49701','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36','2020-02-13 11:18:40','2020-02-13 11:18:40',1);
 /*!40000 ALTER TABLE `test_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -171,4 +171,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-13 10:07:49
+-- Dump completed on 2020-02-13 14:41:35

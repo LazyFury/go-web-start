@@ -87,7 +87,7 @@ func (u *User) AddUser() (string, error) {
 	row := db.Create(u)
 
 	if row.Error != nil {
-		return "添加失败", row.Error
+		return "添加失败", nil
 	}
 
 	if row.RowsAffected <= 0 {

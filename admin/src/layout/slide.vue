@@ -12,7 +12,7 @@
         </router-link>
       </a-menu-item>
       <a-menu-item key="2">
-        <router-link to="/api/list">
+        <router-link to="/api/list?isDev=true">
           <a-icon type="bar-chart" />接口列表
         </router-link>
       </a-menu-item>

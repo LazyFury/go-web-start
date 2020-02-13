@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"strconv"
@@ -96,16 +97,16 @@ func cateAPI(c echo.Context)(err error){
 }
 func allAPI(c echo.Context)(err error){
 	cate := model.APICate{}
-	//db := model.DB
+	db := model.DB
 	res, msg, err := cate.GetAll()
 	if err != nil {
 		return util.JSONErr(c, err, msg)
 	}
-	//type result struct{
-	//	model.APICate
-	//	List []model.API `json:"list"`
-	//}
-	//var arr []result
+	type result struct{
+		model.APICate
+		List []model.API `json:"list"`
+	}
+	var arr []result
 
 	//子查询绑定 未成功
 	//Query := fmt.Sprintf("left join test_apis on test_apis.cid=test_api_cates.id")
@@ -114,18 +115,18 @@ func allAPI(c echo.Context)(err error){
 	//fmt.Printf("%+v\n",arr)
 
 	//循环查询绑定 性能不好
-	//for i,item:=range res{
-	//	fmt.Println(i,item)
-	//	cid := strconv.FormatUint(uint64(item.ID),10)
-	//	var list []model.API
-	//	db.Where(&model.API{Cid:cid}).Find(&list)
-	//
-	//	arr = append(arr, result{
-	//		APICate: item,
-	//		List:   list,
-	//	})
-	//}
-	return util.JSONSuccess(c,res,"获取成功")
+	for i,item:=range res{
+		fmt.Println(i,item)
+		cid := strconv.FormatUint(uint64(item.ID),10)
+		var list []model.API
+		db.Where(&model.API{Cid:cid}).Find(&list)
+
+		arr = append(arr, result{
+			APICate: item,
+			List:   list,
+		})
+	}
+	return util.JSONSuccess(c,arr,"获取成功")
 }
 
 func delAPICate(c echo.Context) (err error){

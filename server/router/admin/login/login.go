@@ -46,7 +46,7 @@ func reg(c echo.Context) (err error) {
 	if err != nil {
 		return util.JSONErr(c, err, msg)
 	}
-	return util.JSONSuccess(c, 1, msg)
+	return util.JSONSuccess(c, nil, msg)
 }
 
 func doLogin(c echo.Context) error {

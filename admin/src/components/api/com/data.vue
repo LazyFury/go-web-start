@@ -1,45 +1,33 @@
 <template>
   <div>
     <div>
-      <table>
-        <tbody>
-          <tr v-for="(item, index) in tmpList" :key="index">
-            <td width="40">
-              <span for>{{item.name}}</span>
-            </td>
-            <td>
-              <template v-if="item.type=='number'">
-                <a-input-number
-                  id="inputNumber"
-                  v-model="item.value"
-                  @change="onChange($event,index)"
-                />
-              </template>
-              <template v-else>
-                <a-input v-model="item.value"></a-input>
-              </template>
-            </td>
-          </tr>
-          <tr>
-            <a-button @click="showDrawer">
-              添加参数
-              <a-icon type="plus"></a-icon>
-            </a-button>
-          </tr>
-        </tbody>
-      </table>
+      <div class="row config-line" v-for="(item, index) in tmpList" :key="index">
+        <div width class="title hide-text-1">
+          <span for>{{item.name}}</span>
+        </div>
+        <div style="flex:1;margin:0 10px;">
+          <template v-if="item.type=='number'">
+            <a-input-number id="inputNumber" v-model="item.value" @change="onChange($event,index)" />
+          </template>
+          <template v-else>
+            <a-input v-model="item.value"></a-input>
+          </template>
+        </div>
+        <div v-if="$isDev">
+          <a href="javascript:;" @click="editLine(index)">编辑</a>
+          /
+          <a href="javascript:;" @click="delLine(index)">删除</a>
+        </div>
+      </div>
+      <div>
+        <a-button @click="showDrawer" v-if="$isDev">
+          添加参数
+          <a-icon type="plus"></a-icon>
+        </a-button>
+      </div>
     </div>
 
-    <a-drawer
-      title="添加API参数"
-      placement="left"
-      width="500"
-      :closable="true"
-      @close="onClose"
-      :visible="visible"
-    >
-      <add-param @save="addParamSave"></add-param>
-    </a-drawer>
+    <add-param ref="addParam" @save="addParamSave"></add-param>
   </div>
 </template>
 
@@ -63,7 +51,8 @@ export default {
   data() {
     return {
       tmpList: [],
-      visible: false
+      visible: false,
+      isAdd: true //1 add 0 edit
     };
   },
   watch: {
@@ -76,25 +65,66 @@ export default {
     }
   },
   methods: {
-    onClose() {
-      this.visible = false;
-    },
     showDrawer() {
-      this.visible = true;
+      this.$refs.addParam.show();
     },
     onChange(e, i) {
       console.log(e, i);
       this.tmpList[i].value = e;
       this.$emit("update", this.tmpList);
     },
-    addParamSave(e) {
-      this.visible = false;
-      console.log(e);
-      this.tmpList.push(e);
+    addParamSave(values) {
+      console.log(values);
+
+      if (!this.isAdd) {
+        this.tmpList.splice(this.ChooseIndex, 1);
+      }
+
+      let { key } = values;
+      console.log(key);
+      for (let i = 0; i < this.tmpList.length; i++) {
+        const element = this.tmpList[i];
+        if (key == element.key) {
+          this.$message.info("不可使用重复的参数Key");
+          return;
+        }
+      }
+
+      this.tmpList.push(values);
+      this.isAdd = true;
+    },
+    delLine(i) {
+      this.tmpList.splice(i, 1);
+    },
+    editLine(i) {
+      this.ChooseIndex = i;
+      this.isAdd = false;
+      this.$refs.addParam.show(this.tmpList[i]);
     }
   }
 };
 </script>
 
 <style>
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.config-line {
+  margin: 8px 0;
+  background: #eee;
+  padding: 4px 10px;
+}
+.config-line .title {
+  flex: 0 0 80px;
+}
+
+.hide-text-1 {
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+}
 </style>

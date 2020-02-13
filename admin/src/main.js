@@ -32,6 +32,7 @@ Promise.prototype.done = function (onFulfilled, onRejected) {
     });
 };
 
+Vue.prototype.$isDev = false
 
 Vue.use(Antd)
 /* eslint-disable no-new */

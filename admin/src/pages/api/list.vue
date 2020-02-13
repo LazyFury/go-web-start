@@ -10,13 +10,23 @@
         <div style="padding:20px;width:400px">
           <a-card style="margin-bottom:10px">
             <label for class="label">修改分类名称 （分类ID:{{item.cate.ID}}）</label>
-            <a-input @blur="SaveCate" placeholder="分类名称" v-model="item.cate.name"></a-input>
+            <a-input
+              @blur="SaveCate"
+              :disabled="!$isDev"
+              placeholder="分类名称"
+              v-model="item.cate.name"
+            ></a-input>
             <!-- <a-button type="danger" style="margin-top:10px" @click="DelCate(item.cate.ID)">删除分类</a-button> -->
           </a-card>
           <a-card>
             <config v-model="item.data"></config>
-            <a-button type="primary" @click="UpdateConfig">更新配置</a-button>
-            <a-button type="danger" style="margin-left:10px" @click="delAPI(item.ID)">删除API</a-button>
+            <a-button v-if="$isDev" type="primary" @click="UpdateConfig">更新配置</a-button>
+            <a-button
+              v-if="$isDev"
+              type="danger"
+              style="margin-left:10px"
+              @click="delAPI(item.ID)"
+            >删除API</a-button>
           </a-card>
         </div>
       </template>
@@ -29,12 +39,14 @@
           </div>
         </a-card>
 
-        <h2>Config:</h2>
-        <a-card class="card">{{item}}</a-card>
-
         <h2>Response:</h2>
         <a-card>
-          <pre class="result" v-html="result"></pre>
+          <pre class="result" style="max-height:400px;overflow-y:auto;" v-html="result"></pre>
+        </a-card>
+
+        <h2>Config:</h2>
+        <a-card class="card">
+          <config-notice :data="item && item.data"></config-notice>
         </a-card>
       </div>
     </layout>
@@ -72,19 +84,22 @@ import highLight from "./highlight";
 import layout from "../../components/api/layout";
 import list from "../../components/api/list";
 import config from "../../components/api/config";
+import ConfigNotice from "../../components/api/com/data-notice";
 import axios from "axios";
 import globalConfig from "../../config";
 let { baseURL } = globalConfig;
 let http = axios.create({
   baseURL
 });
-
+import Vue from "vue";
 import "./clipBoard";
+import { GetParam } from "../../util/util";
 export default {
   components: {
     layout,
     config,
-    list
+    list,
+    ConfigNotice
   },
   data() {
     return {
@@ -99,6 +114,12 @@ export default {
       },
       result: "{}"
     };
+  },
+  mounted() {
+    let { isDev = "" } = this.$util.GetParam();
+    isDev = Boolean(isDev);
+    console.log(isDev);
+    Vue.prototype.$isDev = isDev;
   },
   methods: {
     clipBoardText() {

@@ -1,6 +1,12 @@
 <template>
   <div style>
-    <a-button type="primary" html-type="submit" @click="showDrawer" style="margin:20px;width:80%">
+    <a-button
+      type="primary"
+      v-if="$isDev"
+      html-type="submit"
+      @click="showDrawer"
+      style="margin:20px;width:80%"
+    >
       添加API
       <a-icon type="plus" />
     </a-button>
@@ -88,21 +94,21 @@ export default {
     titleClick(e, index) {
       console.log(e);
       let { ID: cid } = this.list[index];
-      this.api.api.cate
-        .api({ cid })
-        .then(res => {
-          this.list[index]["list"] = res.data;
-        })
-        .catch(err => {
-          this.list[index]["list"] = [{ name: "加载失败" }];
-        });
+      // this.api.api.cate
+      //   .api({ cid })
+      //   .then(res => {
+      //     this.list[index]["list"] = res.data;
+      //   })
+      //   .catch(err => {
+      //     this.list[index]["list"] = [{ name: "加载失败" }];
+      //   });
     },
     init() {
       Promise.all([
         this.api.api.api.all().then(res => {
           console.log(res.data);
           this.list = res.data.map(x => {
-            x["list"] = [];
+            // x["list"] = [];
             return x;
           });
         })
