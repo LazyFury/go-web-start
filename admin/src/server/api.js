@@ -42,7 +42,8 @@ const api = {
             add: data => get("/api/addCate", { data }),
             save: data => get("/api/apiCateSave", { data }),
             GetAll: data => get("/api/apiCateAll", { data }),
-            del: data => get("/api/delApiCate", { data })
+            del: data => get("/api/delApiCate", { data }),
+            api: data => get('/api/cateApi', { data })
         },
         api: {
             add: data => get('/api/addApi', { data }),

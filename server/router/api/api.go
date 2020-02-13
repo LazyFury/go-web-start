@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"strconv"
@@ -22,6 +21,7 @@ func Init(g *echo.Group) {
 	api.GET("/apiSave",apiSave)
 	api.GET("/delApi",delAPI)
 	api.GET("/delApiCate",delAPICate)
+	api.GET("/cateApi",cateAPI)
 }
 func delAPI(c echo.Context)(err error){
 	id := c.QueryParam("id")
@@ -73,35 +73,59 @@ func apiSave(c echo.Context)(err error){
 	return util.JSONSuccess(c,nil,"保存成功")
 }
 
+func cateAPI(c echo.Context)(err error){
+	cid := c.QueryParam("cid")
+	if cid == ""{
+		return util.JSONErr(c,nil,"ID不可空")
+	}
+	//newid,_ := strconv.Atoi(cid)
+	api := model.API{Cid:string(cid)}
+
+	db := model.DB
+
+	var arr  []model.API
+	row := db.Where(&api).Find(&arr)
+	if row.Error!=nil{
+		return  util.JSONErr(c,row.Error,"查询失败")
+	}
+	//if row.RowsAffected<=0{
+	//	return util.JSONSuccess(c,nil,"")
+	//}
+
+	return util.JSONSuccess(c,arr,"")
+}
 func allAPI(c echo.Context)(err error){
 	cate := model.APICate{}
-	db := model.DB
+	//db := model.DB
 	res, msg, err := cate.GetAll()
 	if err != nil {
 		return util.JSONErr(c, err, msg)
 	}
-	type result struct{
-		model.APICate
-		List []model.API `json:"list"`
-	}
-	var arr []result
+	//type result struct{
+	//	model.APICate
+	//	List []model.API `json:"list"`
+	//}
+	//var arr []result
 
+	//子查询绑定 未成功
 	//Query := fmt.Sprintf("left join test_apis on test_apis.cid=test_api_cates.id")
 	//res := db.Table(model.TableName("api_cates")).Select("*").Joins(Query).Scan(&arr)
 	//fmt.Printf("%+v\n\n>>>>\n",res)
 	//fmt.Printf("%+v\n",arr)
-	for i,item:=range res{
-		fmt.Println(i,item)
-		cid := strconv.FormatUint(uint64(item.ID),10)
-		var list []model.API
-		db.Where(&model.API{Cid:cid}).Find(&list)
 
-		arr = append(arr, result{
-			APICate: item,
-			List:   list,
-		})
-	}
-	return util.JSONSuccess(c,arr,"获取成功")
+	//循环查询绑定 性能不好
+	//for i,item:=range res{
+	//	fmt.Println(i,item)
+	//	cid := strconv.FormatUint(uint64(item.ID),10)
+	//	var list []model.API
+	//	db.Where(&model.API{Cid:cid}).Find(&list)
+	//
+	//	arr = append(arr, result{
+	//		APICate: item,
+	//		List:   list,
+	//	})
+	//}
+	return util.JSONSuccess(c,res,"获取成功")
 }
 
 func delAPICate(c echo.Context) (err error){

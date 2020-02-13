@@ -5,7 +5,7 @@
       <a-icon type="plus" />
     </a-button>
     <a-menu mode="inline" style="height:calc(100vh - 140px);overflow-y:auto;overflow-x:hidden;">
-      <a-sub-menu v-for="(sub,index) in list" :key="index">
+      <a-sub-menu v-for="(sub,index) in list" :key="index" @titleClick="titleClick($event,index)">
         <span slot="title">{{sub.name}}</span>
         <a-menu-item
           v-for="(item,i) in sub.list"
@@ -29,7 +29,7 @@
           <a-button @click="visible1=true" type="primary">添加分类</a-button>
           <label for>选择分类:</label>
           <a-select style="width: 120px" @change="handleAPICateChange">
-            <a-select-option v-for="cate in cateList" :key="cate.ID" :value="cate.ID">{{cate.name}}</a-select-option>
+            <a-select-option v-for="(cate,index) in cateList" :key="index">{{cate.name}}</a-select-option>
           </a-select>
 
           <a-drawer
@@ -85,11 +85,26 @@ export default {
     this.init();
   },
   methods: {
+    titleClick(e, index) {
+      console.log(e);
+      let { ID: cid } = this.list[index];
+      this.api.api.cate
+        .api({ cid })
+        .then(res => {
+          this.list[index]["list"] = res.data;
+        })
+        .catch(err => {
+          this.list[index]["list"] = [{ name: "加载失败" }];
+        });
+    },
     init() {
       Promise.all([
         this.api.api.api.all().then(res => {
           console.log(res.data);
-          this.list = res.data;
+          this.list = res.data.map(x => {
+            x["list"] = [];
+            return x;
+          });
         })
       ]);
     },
@@ -103,8 +118,8 @@ export default {
       console.log("click");
     },
     handleAPICateChange(i) {
-      console.log(this.cateList[i - 1]);
-      this.currentCate = this.cateList[i - 1];
+      console.log(this.cateList[i]);
+      this.currentCate = this.cateList[i];
     },
     change(item, cate) {
       let data = {};

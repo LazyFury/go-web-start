@@ -4,7 +4,7 @@
       <table>
         <tbody>
           <tr v-for="(item, index) in tmpList" :key="index">
-            <td width="60">
+            <td width="40">
               <span for>{{item.name}}</span>
             </td>
             <td>
