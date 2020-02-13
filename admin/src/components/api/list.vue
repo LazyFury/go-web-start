@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style>
     <a-button type="primary" html-type="submit" @click="showDrawer" style="margin:20px;width:80%">
       添加API
       <a-icon type="plus" />
@@ -7,7 +7,11 @@
     <a-menu mode="inline" style="height:calc(100vh - 140px);overflow-y:auto;overflow-x:hidden;">
       <a-sub-menu v-for="(sub,index) in list" :key="index">
         <span slot="title">{{sub.name}}</span>
-        <a-menu-item v-for="(item,i) in sub.list" @click="change(item)" :key="i">{{item.name}}</a-menu-item>
+        <a-menu-item
+          v-for="(item,i) in sub.list"
+          @click="change(item,sub)"
+          :key="index+'_'+i"
+        >{{item.name||'没有'}}</a-menu-item>
       </a-sub-menu>
     </a-menu>
 
@@ -22,7 +26,12 @@
           :visible="visible"
         >
           <!-- api分类 -->
-          <a-button @click="visible1=true">添加分类</a-button>
+          <a-button @click="visible1=true" type="primary">添加分类</a-button>
+          <label for>选择分类:</label>
+          <a-select style="width: 120px" @change="handleAPICateChange">
+            <a-select-option v-for="cate in cateList" :key="cate.ID" :value="cate.ID">{{cate.name}}</a-select-option>
+          </a-select>
+
           <a-drawer
             title="添加API分类"
             placement="left"
@@ -31,12 +40,15 @@
             @close="onClose1"
             :visible="visible1"
           >
-            <add-cate></add-cate>
+            <add-cate @save="cateSave"></add-cate>
           </a-drawer>
-          <a-card style="margin-top:10px">{{addConfig}}</a-card>
+          <a-card style="margin-top:10px;margin-bottom:10px">
+            <div>{{currentCate}}</div>
+            <div>{{addConfig}}</div>
+          </a-card>
           <!-- 配置 -->
           <config v-model="addConfig"></config>
-          <a-button type="primary" @click="save" style="margin-left:20px">save</a-button>
+          <a-button type="primary" @click="save" style="margin-left:0px;padding:0 20px">save</a-button>
         </a-drawer>
       </div>
     </template>
@@ -57,77 +69,86 @@ export default {
       visible: false,
       visible1: false,
       addConfig: {},
-      list: [
-        {
-          name: "微信相关API",
-          key: 1,
-          list: [
-            {
-              name: "微信jsapiConfig授权",
-              url: "/wechat/jsApiConfig",
-              headers: [
-                {
-                  name: "Content-Type",
-                  key: "Content-Type",
-                  value: "application/json",
-                  type: "string"
-                }
-              ],
-              body: [
-                {
-                  name: "网址",
-                  key: "url",
-                  value: "http://baidu.com",
-                  type: "string"
-                }
-              ],
-              method: "GET"
-            },
-            {
-              name: "123",
-              url: "/wechat/wecj12at",
-              headers: [
-                {
-                  name: "Content-Type",
-                  key: "Content-Type",
-                  value: "application/json",
-                  type: "string"
-                }
-              ],
-              body: [
-                {
-                  name: "ID",
-                  key: "id",
-                  value: 1,
-                  type: "number"
-                }
-              ],
-              method: "GET"
-            }
-          ]
-        }
-      ]
+      cateList: [{ name: "请选择" }],
+      currentCate: null,
+      list: []
     };
   },
-
+  watch: {
+    visible(val) {
+      if (val) {
+        this.GetCate();
+      }
+    }
+  },
+  mounted() {
+    this.init();
+  },
   methods: {
-    change(item) {
-      this.$emit("change", item);
+    init() {
+      Promise.all([
+        this.api.api.api.all().then(res => {
+          console.log(res.data);
+          this.list = res.data;
+        })
+      ]);
+    },
+    GetCate() {
+      return this.api.api.cate.GetAll().then(res => {
+        this.cateList = res.data;
+        return res.data;
+      });
+    },
+    loadAPI() {
+      console.log("click");
+    },
+    handleAPICateChange(i) {
+      console.log(this.cateList[i - 1]);
+      this.currentCate = this.cateList[i - 1];
+    },
+    change(item, cate) {
+      let data = {};
+      try {
+        data = JSON.parse(item.data);
+      } catch (err) {
+        console.error("API配置内容解析错误 err:" + err);
+      }
+      let { ID, name } = cate;
+      this.$emit("change", {
+        ...item,
+        data: { body: [], header: [], ...data },
+        cate: { ID, name }
+      });
     },
     showDrawer() {
       this.visible = true;
     },
     onClose() {
       this.visible = false;
+      this.init();
     },
     onClose1() {
       this.visible1 = false;
     },
     save() {
+      if (!this.currentCate) {
+        this.$message.error("请选择分类先");
+        return;
+      }
       console.log(this.addConfig);
-      this.list[0].list.push(JSON.parse(JSON.stringify(this.addConfig)));
-      console.log(this.list);
-      this.onClose();
+      this.api.api.api
+        .add({
+          name: this.addConfig.name,
+          data: JSON.stringify(this.addConfig),
+          cid: this.currentCate.ID
+        })
+        .then(res => {
+          this.onClose();
+        });
+    },
+    cateSave() {
+      this.GetCate();
+      this.onClose1();
     }
   }
 };

@@ -9,7 +9,8 @@ import (
 )
 
 //发送code换取微信登陆信息
-func sendCodeToWechatServer(code string, wechat *model.WechatOauth) (result *model.WechatOauth, msg string) {
+func sendCodeToWechatServer(code string) (result *model.WechatOauth, msg string) {
+	wechat := &model.WechatOauth{}
 	url := fmt.Sprintf(loginURL, appid, appsecret, code)
 	result = wechat
 	res, err := http.Get(url)

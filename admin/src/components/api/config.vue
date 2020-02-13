@@ -77,8 +77,8 @@ export default {
 
 <style>
 .config {
-  padding: 20px;
-  min-width: 300px;
+  /* padding: 20px; */
+  /* min-width: 300px; */
 }
 .line {
   padding-bottom: 10px;

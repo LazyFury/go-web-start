@@ -33,7 +33,7 @@ func (t *tokenType) getAccessToken() (token string, err error) {
 
 // access_token 向微信服务器发送请求
 func (t *tokenType) sendAccessTokenReq() (err error) {
-	fmt.Printf(">>>>重启请求微信服务器,获取微信 access_token>>>>")
+	fmt.Printf(">>>>重启请求微信服务器,获取微信 access_token>>>>\n")
 	url := fmt.Sprintf(accessTokenURL, appid, appsecret)
 	res, err := http.Get(url)
 

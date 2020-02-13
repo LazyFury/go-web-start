@@ -34,6 +34,22 @@ const api = {
         del(data) {
             return post('/admin/user/delUser', { data })
         }
+    },
+
+
+    api: {
+        cate: {
+            add: data => get("/api/addCate", { data }),
+            save: data => get("/api/apiCateSave", { data }),
+            GetAll: data => get("/api/apiCateAll", { data }),
+            del: data => get("/api/delApiCate", { data })
+        },
+        api: {
+            add: data => get('/api/addApi', { data }),
+            all: data => get("/api/allApi", { data }),
+            save: data => get("/api/apiSave", { data }),
+            del: data => get("/api/delApi", { data })
+        }
     }
 }
 

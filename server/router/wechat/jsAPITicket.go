@@ -30,7 +30,7 @@ func (j *jsAPITicket) getJsAPITicket(token string) (ticket string, err error) {
 	return
 }
 func (j *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
-	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket>>>>")
+	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket>>>>\n")
 	url := fmt.Sprintf(jsAPITicketURL, token)
 	res, err := http.Get(url)
 

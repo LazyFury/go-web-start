@@ -49,7 +49,7 @@ func login(c echo.Context) (err error) {
 	}
 
 	// 请求微信登陆返回信息
-	wechatLogin, msg := sendCodeToWechatServer(code, &model.WechatOauth{})
+	wechatLogin, msg := sendCodeToWechatServer(code)
 	if msg != "" {
 		return util.JSONErr(c, nil, msg)
 	}
