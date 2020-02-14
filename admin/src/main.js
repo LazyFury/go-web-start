@@ -6,34 +6,21 @@ import router from './router'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 Vue.config.productionTip = false
-
 // 工具
 import util from './util/util'
-Vue.prototype.$util = util
 // api 
 import { api } from './server/api'
+import './util/prototype'
+import custom_plugin from './util/plugin'
+import store from './util/store';
+
+// import './util/test'
+
+Vue.prototype.$util = util
 Vue.prototype.api = api
-
-Promise.prototype.finally = function (callback) {
-  let P = this.constructor;
-  return this.then(
-    value => P.resolve(callback()).then(() => value),
-    reason =>
-      P.resolve(callback()).then(() => {
-        throw reason;
-      })
-  );
-};
-Promise.prototype.done = function (onFulfilled, onRejected) {
-  this.then(onFulfilled, onRejected)
-    .catch(function (reason) {
-      // 抛出一个全局错误
-      setTimeout(() => { throw reason }, 0);
-    });
-};
-
+Vue.prototype.$store = store
 Vue.prototype.$isDev = false
-
+Vue.use(custom_plugin)
 Vue.use(Antd)
 /* eslint-disable no-new */
 new Vue({

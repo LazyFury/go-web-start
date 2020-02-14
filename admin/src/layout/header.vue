@@ -4,8 +4,9 @@
       <a-col :span="12">
         <a-row>
           <a-col>
-            <router-link to="/" class="logo"> </router-link>
+            <router-link to="/" class="logo"></router-link>
           </a-col>
+
           <a-col :span="4">
             <a-menu
               theme="dark"
@@ -18,7 +19,7 @@
                 <router-link to="/">
                   <a-icon type="home"></a-icon>
                   首页</router-link
-                ></a-menu-item> -->
+              ></a-menu-item>-->
             </a-menu>
           </a-col>
         </a-row>
@@ -33,11 +34,15 @@
         >
           <!-- <a-menu-item key="1">首页</a-menu-item> -->
           <a-menu-item key="2">
-            消息通知（1）<a-badge dot>
-      <a-icon type="notification" />
-    </a-badge>
-             </a-menu-item>
-          <a-menu-item key="3">管理员设置<a-icon type="down" /></a-menu-item>
+            消息通知（1） {{$store.state.name}}
+            <a-badge dot>
+              <a-icon type="notification" />
+            </a-badge>
+          </a-menu-item>
+          <a-menu-item key="3">
+            管理员设置
+            <a-icon type="down" />
+          </a-menu-item>
           <a-avatar icon="user" />
         </a-menu>
       </a-col>

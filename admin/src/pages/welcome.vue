@@ -1,34 +1,31 @@
 <template>
   <div class="hello">
     <div>
-       <strong>
-      <code style="font-size:20px">{{ msg }}</code>
-    </strong>
+      <strong>
+        <code style="font-size:20px">{{ msg }}{{name}}</code>
+      </strong>
     </div>
-    <hr>
+    <hr />
     <a-row :gutter="16" class="card">
-      <a-col :span="6"
-        >
+      <a-col :span="6">
         <a-card title="新用户">
           <a-statistic title="Feedback" :value="1128" style="margin-right: 50px">
-          <template v-slot:suffix>
-            <a-icon type="like" />
-          </template> </a-statistic
-      >
+            <template v-slot:suffix>
+              <a-icon type="like" />
+            </template>
+          </a-statistic>
         </a-card>
-        </a-col>
-      <a-col :span="6"
-        >
+      </a-col>
+      <a-col :span="6">
         <a-card title="订单量">
           <a-statistic title="Unmerged" :value="93" valueClass="demo-class">
-        <template v-slot:suffix>
-          <span> / 100</span>
-        </template>
-      </a-statistic>
+            <template v-slot:suffix>
+              <span>/ 100</span>
+            </template>
+          </a-statistic>
         </a-card>
-        </a-col>
-      <a-col :span="6"
-        >
+      </a-col>
+      <a-col :span="6">
         <a-card title="交易额">
           <a-statistic
             title="Feedback"
@@ -43,14 +40,14 @@
             </template>
           </a-statistic>
         </a-card>
-        </a-col>
-      <a-col :span="6"
-        >
-        <a-card title="月流水"><a-statistic title="Feedback" :value="'$1128.00'" style="margin-right: 50px">
-          <template v-slot:suffix>
-          </template> </a-statistic
-      ></a-card>
-        </a-col>
+      </a-col>
+      <a-col :span="6">
+        <a-card title="月流水">
+          <a-statistic title="Feedback" :value="'$1128.00'" style="margin-right: 50px">
+            <template v-slot:suffix></template>
+          </a-statistic>
+        </a-card>
+      </a-col>
     </a-row>
   </div>
 </template>
@@ -61,6 +58,19 @@ export default {
   name: "HelloWorld",
   components: {
     Button
+  },
+  computed: {
+    name() {
+      return this.$store.state;
+    }
+  },
+  created() {
+    // console.log(this.$custom.store);
+    // this.$store.set("name", "hello");
+    window.vue = this;
+    setTimeout(() => {
+      this.$store.set("name", "test");
+    }, 2000);
   },
   data() {
     return {
