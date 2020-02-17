@@ -83,8 +83,8 @@ type wechatUserType struct {
 // 获取微信用户信息  是否关注
 func userInfo(c echo.Context) (err error) {
 	wechatID := c.QueryParam("uid")
-	if wechatID == ""{
-		return  util.JSONErr(c,nil,"用户id不可空")
+	if wechatID == "" {
+		return util.JSONErr(c, nil, "用户id不可空")
 	}
 	newID, err := strconv.Atoi(wechatID)
 	if err != nil {

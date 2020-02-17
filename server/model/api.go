@@ -11,11 +11,12 @@ type API struct {
 	Data string `json:"data" gorm:"type:longtext;"`
 	Cid  string `json:"cid"`
 }
+
 //添加API
-func (a *API)Add()(msg string,err error){
+func (a *API) Add() (msg string, err error) {
 	db := DB
 	//db.NewRecord(c)
-	if err = db.Create(a).Error; err != nil{
+	if err = db.Create(a).Error; err != nil {
 		msg = "添加失败"
 		return
 	}
@@ -35,7 +36,7 @@ type APICate struct {
 func (c *APICate) Add() (msg string, err error) {
 	db := DB
 	//db.NewRecord(c)
-	if err = db.Create(c).Error; err != nil{
+	if err = db.Create(c).Error; err != nil {
 		msg = "添加失败"
 		return
 	}
@@ -43,10 +44,11 @@ func (c *APICate) Add() (msg string, err error) {
 	msg = "添加成功"
 	return
 }
+
 //获取API分类
-func (c *APICate)GetAll()(result []APICate,msg string,err error){
+func (c *APICate) GetAll() (result []APICate, msg string, err error) {
 	db := DB
-	if db.Find(&result).Error != nil{
+	if db.Find(&result).Error != nil {
 		msg = "查询失败"
 		return
 	}
@@ -54,10 +56,10 @@ func (c *APICate)GetAll()(result []APICate,msg string,err error){
 	return
 }
 
-func (c *APICate)Save()(msg string,err error){
+func (c *APICate) Save() (msg string, err error) {
 	db := DB
 
-	if err = db.Save(&c).Error; err != nil{
+	if err = db.Save(&c).Error; err != nil {
 		msg = "保存失败"
 		return
 	}

@@ -27,7 +27,7 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{},&APICate{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{})
 	return db
 }
 
@@ -55,7 +55,7 @@ func DataBaselimit(limit int, page int, model interface{}, list interface{}, tab
 }
 
 //TableName 拼接默认表名
-func TableName(str string )(result string){
-	result = config.Global.TablePrefix +"_"+ str
+func TableName(str string) (result string) {
+	result = config.Global.TablePrefix + "_" + str
 	return result
 }
