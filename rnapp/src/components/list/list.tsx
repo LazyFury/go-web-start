@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { userRequest } from '../../hooks/useRequest';
-import { View, Text, FlatList, TouchableHighlight, StyleSheet, RefreshControl, Image } from 'react-native';
+import { View, Text, FlatList, RefreshControl } from 'react-native';
 import DefaultItem from './defaultItem';
 import style from './style';
 
@@ -11,7 +11,6 @@ export default function List(props) {
     let { data, error, loading } = userRequest({
         api: "http://baidu.com"
     })
-
     let [state, setState] = useState(false)
 
     if (error) return <View><Text>something ornw</Text></View>

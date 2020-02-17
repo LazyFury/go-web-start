@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Button, StatusBar, SafeAreaView } from 'react-native';
 import List from "./src/components/list/list"
-
-export default function App() {
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+function Home() {
   return (
-    <SafeAreaView style={{ backgroundColor: "#eee", flex: 1 }
-    }>
+    <SafeAreaView style={{ backgroundColor: "#eee", flex: 1 }}>
       <StatusBar></StatusBar>
       <View>
         {/* <Button title='返回' onPress={() => { }} ></Button> */}
@@ -14,6 +14,16 @@ export default function App() {
       <List name='列表标题'></List>
       <Text style={styles.tabbar}>Tabbar</Text>
     </SafeAreaView >
+  )
+}
+let Stack = createStackNavigator()
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
