@@ -19,6 +19,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* testTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* testTests.m */; };
 		44EC00C633DE322A0B59BC73 /* libPods-test.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F87F1B99A46FE4F40E416788 /* libPods-test.a */; };
 		6E46818EBF36948E50A5BE2E /* libPods-test-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AF91248F65B1C0D3F8CCEE0 /* libPods-test-tvOSTests.a */; };
+		BA646FD023FE82FC003D72AB /* CalendarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA646FCF23FE82FC003D72AB /* CalendarManager.m */; };
 		F6A9128608B8FBDFA7445398 /* libPods-testTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 77C14209E4B4E1BB151E9E40 /* libPods-testTests.a */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,8 @@
 		45856796BB3628C6575D955D /* Pods-testTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-testTests.debug.xcconfig"; path = "Target Support Files/Pods-testTests/Pods-testTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6DC3255552839F504E3DB6AA /* Pods-test-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-test-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-test-tvOSTests/Pods-test-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		77C14209E4B4E1BB151E9E40 /* libPods-testTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-testTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA646FCF23FE82FC003D72AB /* CalendarManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CalendarManager.m; sourceTree = "<group>"; };
+		BA646FD123FE8308003D72AB /* CalendarManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CalendarManager.h; sourceTree = "<group>"; };
 		E7E6C3A8B608F7D65CBFF7F1 /* libPods-test-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-test-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -125,6 +128,7 @@
 		13B07FAE1A68108700A75B9A /* test */ = {
 			isa = PBXGroup;
 			children = (
+				BA646FCE23FE8120003D72AB /* CalendarManager */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -182,6 +186,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BA646FCE23FE8120003D72AB /* CalendarManager */ = {
+			isa = PBXGroup;
+			children = (
+				BA646FCF23FE82FC003D72AB /* CalendarManager.m */,
+				BA646FD123FE8308003D72AB /* CalendarManager.h */,
+			);
+			name = CalendarManager;
+			sourceTree = "<group>";
+		};
 		D3C1747216B3BEA660522502 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,7 +207,6 @@
 				45856796BB3628C6575D955D /* Pods-testTests.debug.xcconfig */,
 				1AFB0E15050677925AA5E14F /* Pods-testTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -308,6 +320,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -530,6 +543,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				BA646FD023FE82FC003D72AB /* CalendarManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

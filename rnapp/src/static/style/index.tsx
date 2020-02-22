@@ -9,13 +9,13 @@ let divFakeLine = {
 
 const globalStyle = StyleSheet.create({
     row: {
-        // flex: 1,
+        display: 'flex',
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
     },
     col: {
-        // flex: 1,
+        display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center"

@@ -5,17 +5,19 @@
  * @format
  * @flow
  */
+import React from 'react'
 import 'react-native-gesture-handler'
 
+import { NavigationContainer } from '@react-navigation/native';
 
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import Router from './src/router/router'
 
-import router from './src/router/router'
+function App() {
+    return (
+        <NavigationContainer>
+            <Router></Router>
+        </NavigationContainer>
+    )
+}
 
-
-const AppNavigator = createStackNavigator({
-    ...router
-});
-
-export default createAppContainer(AppNavigator);
+export default App;
