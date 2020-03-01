@@ -76,4 +76,5 @@ func httpErrorHandler(err error, c echo.Context) {
 	}
 	// 如果是ajax
 	c.Logger().Error(util.JSONBase(c, nil, msg, code, code))
+	// c.Logger().Error(util.JSONBase)
 }
