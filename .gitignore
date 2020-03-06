@@ -1,4 +1,4 @@
-dist/
+dist/*
 *.mov
 *.m3u8
 *.ts
@@ -18,3 +18,7 @@ expo/ios
 expo/android
 # macOS
 .DS_Store
+dist/
+tmp/*
+main
+*.out
