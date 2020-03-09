@@ -30,19 +30,21 @@ func main() {
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(template.ParseGlob("template/*.html")),
 	}
+
 	e.Renderer = renderer
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
-
+	e.GET("/hello", func(c echo.Context) error {
+		return c.HTML(http.StatusOK, "hello world!")
+	})
 	// 静态目录
 	e.Static("/static", "static")
 	e.Static("/h5", "h5")
 	// 请求信息
-	// e.GET("requestInfo", requestInfo)
-
+	e.GET("requestInfo", requestInfo)
 	// 注册路由
 	router.Start(e)
-
+	// router.Start(e)
 	// 启动服务
 	e.Logger.Fatal(e.Start(":8080"))
 
