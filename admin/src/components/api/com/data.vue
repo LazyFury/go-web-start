@@ -13,14 +13,14 @@
             <a-input v-model="item.value"></a-input>
           </template>
         </div>
-        <div v-if="$isDev">
+        <div v-if="$store.state.isDev">
           <a href="javascript:;" @click="editLine(index)">编辑</a>
           /
           <a href="javascript:;" @click="delLine(index)">删除</a>
         </div>
       </div>
       <div>
-        <a-button @click="showDrawer" v-if="$isDev">
+        <a-button @click="showDrawer" v-if="$store.state.isDev">
           添加参数
           <a-icon type="plus"></a-icon>
         </a-button>

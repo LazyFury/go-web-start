@@ -2,11 +2,11 @@
   <div class="config">
     <a-col class="line">
       <label for>接口名称:</label>
-      <a-input placeholder="Basic usage" :disabled="!$isDev" v-model="result.name" />
+      <a-input placeholder="Basic usage" :disabled="!$store.state.isDev" v-model="result.name" />
     </a-col>
     <a-col class="line">
       <label for>请求地址:</label>
-      <a-input placeholder="Basic usage" :disabled="!$isDev" v-model="result.url" />
+      <a-input placeholder="Basic usage" :disabled="!$store.state.isDev" v-model="result.url" />
     </a-col>
     <a-row class="line">
       <label for>请求方式:</label>

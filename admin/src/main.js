@@ -9,7 +9,9 @@ Vue.config.productionTip = false
 // 工具
 import util from './util/util'
 // api 
-import { api } from './server/api'
+import {
+  api
+} from './server/api'
 import './util/prototype'
 import custom_plugin from './util/plugin'
 import store from './util/store';
@@ -19,13 +21,15 @@ import store from './util/store';
 Vue.prototype.$util = util
 Vue.prototype.api = api
 Vue.prototype.$store = store
-Vue.prototype.$isDev = false
+// Vue.prototype.$isDev = false
 Vue.use(custom_plugin)
 Vue.use(Antd)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })

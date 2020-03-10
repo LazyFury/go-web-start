@@ -2,7 +2,7 @@
   <div style>
     <a-button
       type="primary"
-      v-if="$isDev"
+      v-if="$store.state.isDev"
       html-type="submit"
       @click="showDrawer"
       style="margin:20px;width:80%"

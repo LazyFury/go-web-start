@@ -12,7 +12,7 @@
             <label for class="label">修改分类名称 （分类ID:{{item.cate.ID}}）</label>
             <a-input
               @blur="SaveCate"
-              :disabled="!$isDev"
+              :disabled="!$store.state.isDev"
               placeholder="分类名称"
               v-model="item.cate.name"
             ></a-input>
@@ -20,9 +20,9 @@
           </a-card>
           <a-card>
             <config v-model="item.data"></config>
-            <a-button v-if="$isDev" type="primary" @click="UpdateConfig">更新配置</a-button>
+            <a-button v-if="$store.state.isDev" type="primary" @click="UpdateConfig">更新配置</a-button>
             <a-button
-              v-if="$isDev"
+              v-if="$store.state.isDev"
               type="danger"
               style="margin-left:10px"
               @click="delAPI(item.ID)"
@@ -117,9 +117,9 @@ export default {
   },
   mounted() {
     let { isDev = "" } = this.$util.GetParam();
-    isDev = Boolean(isDev);
-    console.log(isDev);
-    Vue.prototype.$isDev = isDev;
+    isDev = Boolean(Number(isDev));
+    console.log(this.$store);
+    this.$store.set("isDev", isDev);
   },
   methods: {
     clipBoardText() {
