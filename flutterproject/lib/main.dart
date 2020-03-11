@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutterproject/count/count.dart';
+// import 'package:flutterproject/count/count.dart';
 import 'package:flutterproject/item.dart';
+import 'package:flutterproject/page/detail.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,8 +10,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      home: Home(title: "HOme TiTLE"),
-      theme: ThemeData(primaryColor: Colors.green),
+      home: Home(title: "App 标题栏"),
+      theme: ThemeData(primaryColor: Colors.yellow),
       title: "APP",
     );
   }
@@ -54,13 +55,15 @@ class HomeState extends State<Home> {
         drawer: drawer2,
         body: Column(
           children: <Widget>[
-            Container(
-              child: buildSwiper(),
-              height: 150,
-            ),
-            Container(child: Count(count: count)),
+            // Container(child: Count(count: count)),
             Expanded(
-              child: listView(5),
+              child: listView(
+                  5,
+                  Container(
+                    child: buildSwiper(),
+                    height: 150,
+                  ),
+                  Text('footer')),
             )
           ],
         ));
@@ -81,13 +84,26 @@ class HomeState extends State<Home> {
         layout: SwiperLayout.DEFAULT);
   }
 
-  ListView listView(int n) {
-    var list = new List<String>.generate(n, (i) => "imtendn $i");
-
+  ListView listView(int n, Widget header, Widget footer) {
+    var list = new List<String>.generate(n, (i) => "列表子项标题第 $i 个");
+    list.add('list_footer');
+    list.insert(0, 'header');
+    print(list);
     return ListView.builder(
-        itemCount: n,
+        itemCount: n + 2,
         itemBuilder: (BuildContext context, int index) {
-          return Item(click: () {}, name: list[index]);
+          if (index == 0 && list[0] == 'header') {
+            return header;
+          }
+          if (list[index] == 'list_footer') {
+            return footer;
+          }
+          return Item(
+              click: () {
+                Navigator.push(context,
+                    new MaterialPageRoute(builder: (context) => Detail()));
+              },
+              name: list[index]);
         });
   }
 
@@ -95,7 +111,7 @@ class HomeState extends State<Home> {
   FlatButton leading() {
     return FlatButton(
       onPressed: () {},
-      child: Icon(Icons.history, color: Colors.white),
+      child: Icon(Icons.history, color: Colors.black),
     );
   }
 
@@ -103,8 +119,11 @@ class HomeState extends State<Home> {
   List<Widget> actions(BuildContext context) {
     return <Widget>[
       FlatButton(
-        onPressed: () {},
-        child: Text('data'),
+        onPressed: () {
+          Navigator.push(
+              context, new MaterialPageRoute(builder: (context) => Detail()));
+        },
+        child: Text('Tabbar 按钮1'),
       ),
     ];
   }

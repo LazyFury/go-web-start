@@ -12,11 +12,11 @@ class Item extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: children(),
+          children: children(context),
         ));
   }
 
-  List<Widget> children() {
+  List<Widget> children(BuildContext context) {
     return <Widget>[
       Text('data'),
       Row(
@@ -28,7 +28,10 @@ class Item extends StatelessWidget {
             print("hello world button!");
             click();
           },
-          child: Text('data'))
+          child: Text(
+            'data',
+            style: Theme.of(context).textTheme.caption,
+          ))
     ];
   }
 }

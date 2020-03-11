@@ -98,11 +98,11 @@ func addUser(c echo.Context) error {
 func allUser(c echo.Context) error {
 	limit, err := strconv.Atoi(c.QueryParam("limit"))
 	if err != nil {
-		return util.JSONErr(c, "", "分页参数不正确")
+		limit = 10
 	}
 	page, err := strconv.Atoi(c.QueryParam("page"))
 	if err != nil {
-		return util.JSONErr(c, "", "分页页码不正确")
+		page = 1
 	}
 	user := model.User{}
 	return util.JSONSuccess(c, user.GetAllUser(limit, page), "")
