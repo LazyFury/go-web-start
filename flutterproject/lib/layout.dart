@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/utils/color.dart';
 import 'package:flutterproject/utils/statusBar.dart';
 
 class Layout extends StatefulWidget {
-  const Layout({Key key, this.title = '', this.child, this.isTabbar = false})
-      : super(key: key);
+  const Layout({
+    Key key,
+    this.title = '',
+    this.child,
+    this.isTabbar = false,
+  }) : super(key: key);
   final String title;
   final Widget child;
   final bool isTabbar;
@@ -12,13 +17,6 @@ class Layout extends StatefulWidget {
 }
 
 class LayoutState extends State<Layout> {
-  tabbarWidget() {
-    if (widget.isTabbar) {
-      return Tabbar(context: context);
-    }
-    return Row();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +24,11 @@ class LayoutState extends State<Layout> {
     );
   }
 
+  // 主体内容区
   Column body() {
     return Column(
       children: <Widget>[
-        Navbar(context: context),
+        navbar(),
         Expanded(
           child: widget.child,
         ),
@@ -37,71 +36,75 @@ class LayoutState extends State<Layout> {
       ],
     );
   }
-}
 
-class Tabbar extends StatelessWidget {
-  const Tabbar({
-    Key key,
-    @required this.context,
-  }) : super(key: key);
-
-  final BuildContext context;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      DecoratedBox(
-          decoration: BoxDecoration(color: Colors.white),
-          child: Container(
-            height: 50,
-          )),
-      // 状态栏
-      DecoratedBox(
-        decoration: BoxDecoration(color: Colors.white10),
-        child: Container(
-          height: bottomBarHeight(context),
-          width: double.infinity,
-          child: Row(
-            children: <Widget>[Text(bottomBarHeight(context).toString())],
-          ),
-        ),
-      ),
-    ]);
+  // 是否显示tabbar
+  tabbarWidget() {
+    if (widget.isTabbar) {
+      return tabbar();
+    }
+    return Row();
   }
-}
 
-class Navbar extends StatelessWidget {
-  const Navbar({
-    Key key,
-    @required this.context,
-  }) : super(key: key);
+  // 是否显示返回按钮
+  Widget getBackButton() {
+    if (ModalRoute.of(context).canPop) {
+      return BackButton(color: CustomTheme.primaryTextColor);
+    }
+    return Row();
+  }
 
-  final BuildContext context;
-
-  @override
-  Widget build(BuildContext context) {
+  // navbar
+  Widget navbar() {
     return Column(children: <Widget>[
       // 状态栏
-      DecoratedBox(
-        decoration: BoxDecoration(color: Colors.deepOrange[600]),
-        child: Container(
-          height: statusBarHeight(context),
-        ),
-      ),
+      safaStatusBar(),
       // navbar
       DecoratedBox(
-        decoration: BoxDecoration(color: Colors.deepOrange[500]),
+        decoration: BoxDecoration(color: CustomTheme.primaryColor),
         child: Container(
           height: 50,
           width: double.infinity,
           child: Row(
             children: <Widget>[
+              getBackButton(),
               Text(statusBarHeight(context).toString()),
-              Text(Navigator.canPop(context).toString())
+              Text(Navigator.canPop(context).toString()),
             ],
           ),
         ),
       )
     ]);
+  }
+
+// tabbar
+  Widget tabbar() {
+    return Column(children: <Widget>[
+      DecoratedBox(
+        decoration: BoxDecoration(color: Colors.blueGrey),
+        child: Container(
+          height: 50,
+        ),
+      ),
+      // 状态栏
+      safeBottom(),
+    ]);
+  }
+
+  // 全面屏手机 底部安全位置
+  DecoratedBox safeBottom() => safeBox(height: bottomBarHeight(context));
+
+  // 顶部状态安全位置
+  DecoratedBox safaStatusBar({Color color}) => safeBox(
+        height: statusBarHeight(context),
+        color: color != null ? color : CustomTheme.primaryColor,
+      );
+
+  DecoratedBox safeBox({double height, Color color = Colors.white}) {
+    return DecoratedBox(
+      decoration: BoxDecoration(color: color),
+      child: Container(
+        height: height,
+      ),
+    );
   }
 }
