@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -5,6 +8,7 @@ import 'package:flutterproject/components/list.dart';
 import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/server/Http.dart';
 
 import 'layout.dart';
 
@@ -18,19 +22,75 @@ class Home extends StatefulWidget {
 }
 
 class HomeStatus extends State<Home> {
+  int current = 0;
+
+  void getInfo() async {
+    var c = HttpClient();
+    var uri = Uri(
+      scheme: 'http',
+      host: 'go.abadboy.cn',
+      path: '/admin/login',
+    );
+    var req = await c.postUrl(uri);
+    req.headers.add('token', 'value');
+    req.add(utf8.encode({'name': "suke"}.toString()));
+    var res = await req.close();
+    print(await res.transform(Utf8Decoder()).join());
+    print(uri.toString());
+    Http.get().then((res) => {print(res)});
+  }
+
+  initState() {
+    super.initState();
+    getInfo();
+  }
+
+  Widget pages() {
+    List<Widget> pageList = [
+      homePage(),
+      page('info'),
+      page('hotel'),
+      page('user'),
+    ];
+    return pageList[current];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
           Expanded(
-            child: homePage(),
+            child: pages(),
           ),
           Column(
-            children: <Widget>[Tabbar(), safeBottom(context)],
+            children: <Widget>[
+              Tabbar(
+                onChange: (i) {
+                  setState(() {
+                    current = i;
+                  });
+                },
+              ),
+              safeBottom(context, color: Colors.grey[100])
+            ],
           )
         ],
       ),
+    );
+  }
+
+  Column page(String title) {
+    return Column(
+      children: <Widget>[
+        safeStatusBar(context, color: Colors.white),
+        Expanded(
+          child: Row(
+            children: <Widget>[Text(title, style: TextStyle(fontSize: 30))],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ),
+        ),
+      ],
     );
   }
 
@@ -89,6 +149,14 @@ class HomeStatus extends State<Home> {
                     child: InkWell(
                       onTap: () {
                         print('inkwell');
+                        Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (BuildContext context) => Layout(
+                                      child: Column(
+                                        children: <Widget>[Text("detail")],
+                                      ),
+                                    )));
                       },
                       borderRadius: new BorderRadius.circular(25.0),
                       child: Container(

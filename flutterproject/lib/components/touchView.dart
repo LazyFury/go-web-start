@@ -15,7 +15,7 @@ class TouchViewState extends State<TouchView> {
   double opacity = 1.0;
 
   updateOpacity(double o) {
-    print(o);
+    // print(o);
     setState(() {
       opacity = o;
     });
@@ -28,14 +28,14 @@ class TouchViewState extends State<TouchView> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: (e) {
-          updateOpacity(0.5);
+          updateOpacity(0.8);
         },
         onTapCancel: () {
           updateOpacity(1.0);
         },
         onTapUp: (e) {},
         onTap: () {
-          Timer(Duration(milliseconds: 200), () {
+          Timer(Duration(milliseconds: 50), () {
             updateOpacity(1.0);
           });
           if (widget.onTap != null) {

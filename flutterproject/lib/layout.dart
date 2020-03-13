@@ -46,7 +46,7 @@ class LayoutState extends State<Layout> {
   Widget navbar() {
     return Column(children: <Widget>[
       // 状态栏
-      safaStatusBar(),
+      safeStatusBar(context),
       // navbar
       DecoratedBox(
         decoration: BoxDecoration(color: CustomTheme.primaryColor),
@@ -64,22 +64,19 @@ class LayoutState extends State<Layout> {
       )
     ]);
   }
-
-  // 顶部状态安全位置
-  DecoratedBox safaStatusBar({Color color}) => safeBox(
-        height: statusBarHeight(context),
-        color: color != null ? color : CustomTheme.primaryColor,
-      );
 }
 
+// 顶部状态安全位置
+DecoratedBox safeStatusBar(context, {Color color}) => safeBox(
+    height: statusBarHeight(context),
+    color: color != null ? color : CustomTheme.primaryColor);
 // 全面屏手机 底部安全位置
-DecoratedBox safeBottom(context) => safeBox(height: bottomBarHeight(context));
+DecoratedBox safeBottom(context, {Color color}) => safeBox(
+    height: bottomBarHeight(context),
+    color: color != null ? color : CustomTheme.primaryColor);
 
 DecoratedBox safeBox({double height, Color color = Colors.white}) {
   return DecoratedBox(
-    decoration: BoxDecoration(color: color),
-    child: Container(
-      height: height,
-    ),
-  );
+      decoration: BoxDecoration(color: color),
+      child: Container(height: height));
 }
