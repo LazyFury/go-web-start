@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/page/home.dart';
 import 'package:flutterproject/utils/color.dart';
+
+import 'App.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +14,6 @@ class MyApp extends StatelessWidget {
       title: "APP",
       home: Home(),
       theme: ThemeData(primaryColor: CustomTheme.primaryColor),
-      themeMode: ThemeMode.light,
     );
   }
 }

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/components/list.dart';
 import 'package:flutterproject/components/swiper.dart';
+import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/components/touchView.dart';
 
-import '../layout.dart';
+import 'layout.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -19,8 +20,23 @@ class Home extends StatefulWidget {
 class HomeStatus extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: homePage(),
+          ),
+          Column(
+            children: <Widget>[Tabbar(), safeBottom(context)],
+          )
+        ],
+      ),
+    );
+  }
+
+// homePage
+  Layout homePage() {
     return Layout(
-      isTabbar: true,
       child: Column(
         children: <Widget>[
           // Text('data'),
