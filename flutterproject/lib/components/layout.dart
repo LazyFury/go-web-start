@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'components/navbar.dart';
+
+import 'navbar.dart';
 
 class Layout extends StatefulWidget {
   const Layout({

@@ -21,17 +21,18 @@ Widget navbar(context, {String title: "标题"}) {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      title,
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
-                      softWrap: true,
-                    ),
-                  ],
+                child: Container(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                  ),
                 ),
               ),
             ),

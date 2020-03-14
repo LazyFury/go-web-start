@@ -11,8 +11,8 @@ import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/server/Http.dart';
 
+import 'components/layout.dart';
 import 'components/safeMode.dart';
-import 'layout.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -124,7 +124,7 @@ class HomeStatus extends State<Home> {
               child: listView(
                   n: 6,
                   item: (info) => buildItem(info),
-                  header: Container(child: buildSwiper(), height: 150),
+                  header: Container(child: buildSwiper(), height: 180),
                   footer: Text('footer')),
             ),
           ),

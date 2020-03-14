@@ -6,13 +6,13 @@ Swiper buildSwiper() {
     itemCount: 3,
     itemBuilder: (BuildContext context, int index) {
       return Image.network(
-        "http://via.placeholder.com/350x150",
-        fit: BoxFit.fill,
+        "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm.jpg",
+        fit: BoxFit.cover,
       );
     },
     pagination: new SwiperPagination(),
     control: new SwiperControl(),
-    itemWidth: 300,
+    // itemWidth: 300,
     layout: SwiperLayout.DEFAULT,
   );
 }
