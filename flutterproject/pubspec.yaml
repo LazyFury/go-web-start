@@ -20,6 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   # video_player:
+  # statusbar:
   flutter_swiper:
   flutter_easyrefresh: ^2.1.0
   http: ">=0.11.3+12"

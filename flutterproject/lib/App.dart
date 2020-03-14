@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/components/list.dart';
 import 'package:flutterproject/components/swiper.dart';
@@ -10,6 +11,7 @@ import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/server/Http.dart';
 
+import 'components/safeMode.dart';
 import 'layout.dart';
 
 class Home extends StatefulWidget {
@@ -57,46 +59,59 @@ class HomeStatus extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: pages(),
-          ),
-          Column(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: Material(
+        color: Colors.transparent,
+        child: DecoratedBox(
+          decoration: BoxDecoration(color: Colors.grey[100]),
+          child: Column(
             children: <Widget>[
-              Tabbar(
-                onChange: (i) {
-                  setState(() {
-                    current = i;
-                  });
-                },
+              Expanded(
+                child: pages(),
               ),
-              safeBottom(context, color: Colors.grey[100])
+              Column(
+                children: <Widget>[
+                  Tabbar(
+                    onChange: (i) {
+                      setState(() {
+                        current = i;
+                      });
+                    },
+                  ),
+                  safeBottom(context, color: Colors.white)
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
 
-  Column page(String title) {
-    return Column(
-      children: <Widget>[
-        safeStatusBar(context, color: Colors.white),
-        Expanded(
-          child: Row(
-            children: <Widget>[Text(title, style: TextStyle(fontSize: 30))],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ),
+  Widget page(String title) {
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.dark,
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            safeStatusBar(context, color: Colors.white),
+            Expanded(
+              child: Row(
+                children: <Widget>[Text(title, style: TextStyle(fontSize: 30))],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
 // homePage
   Layout homePage() {
     return Layout(
+      title: "首页",
       child: Column(
         children: <Widget>[
           // Text('data'),
@@ -153,6 +168,7 @@ class HomeStatus extends State<Home> {
                             context,
                             new MaterialPageRoute(
                                 builder: (BuildContext context) => Layout(
+                                      title: "详情页详情页详情页详情页详情页详情页详情页",
                                       child: Column(
                                         children: <Widget>[Text("detail")],
                                       ),

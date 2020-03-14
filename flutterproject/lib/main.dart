@@ -3,7 +3,9 @@ import 'package:flutterproject/utils/color.dart';
 
 import 'App.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   MyApp({Key key}) : super(key: key);
