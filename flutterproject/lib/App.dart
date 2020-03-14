@@ -10,6 +10,7 @@ import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/server/Http.dart';
+import 'package:flutterproject/utils/color.dart';
 
 import 'components/layout.dart';
 import 'components/safeMode.dart';
@@ -91,20 +92,33 @@ class HomeStatus extends State<Home> {
 
   Widget page(String title) {
     return AnnotatedRegion(
-      value: SystemUiOverlayStyle.dark,
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            safeStatusBar(context, color: Colors.white),
-            Expanded(
-              child: Row(
-                children: <Widget>[Text(title, style: TextStyle(fontSize: 30))],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-            ),
-          ],
+      value: SystemUiOverlayStyle.light,
+      child: Column(children: <Widget>[
+        Container(
+          height: 200,
+          decoration: BoxDecoration(color: CustomTheme.primaryColor),
+          child: Stack(
+            alignment: Alignment.center,
+            fit: StackFit.expand,
+            children: <Widget>[
+              Image.network(
+                  "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm.jpg",
+                  fit: BoxFit.cover),
+              Positioned(
+                child: safeStatusBar(context, color: Colors.transparent),
+                top: 0,
+                left: 0,
+                right: 0,
+              )
+            ],
+          ),
         ),
-      ),
+        Expanded(
+          child: Column(children: <Widget>[
+            Text(title, style: TextStyle(fontSize: 80)),
+          ]),
+        )
+      ]),
     );
   }
 
