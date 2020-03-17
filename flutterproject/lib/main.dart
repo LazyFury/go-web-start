@@ -4,7 +4,11 @@ import 'package:flutterproject/utils/color.dart';
 import 'App.dart';
 
 void main() {
-  runApp(MyApp());
+  Global.init().then((e) => runApp(MyApp()));
+}
+
+class Global {
+  static Future init() async {}
 }
 
 class MyApp extends StatelessWidget {
