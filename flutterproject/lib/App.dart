@@ -4,27 +4,23 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutterproject/components/list.dart';
-import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/tabbar.dart';
-import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/page/tabbar/home.dart';
 import 'package:flutterproject/server/Http.dart';
 import 'package:flutterproject/utils/color.dart';
 
-import 'components/layout.dart';
 import 'components/safeMode.dart';
 
-class Home extends StatefulWidget {
-  const Home({
+class App extends StatefulWidget {
+  const App({
     Key key,
   }) : super(key: key);
 
   @override
-  HomeStatus createState() => HomeStatus();
+  AppStatus createState() => AppStatus();
 }
 
-class HomeStatus extends State<Home> {
+class AppStatus extends State<App> {
   int current = 0;
 
   void getInfo() async {
@@ -45,12 +41,12 @@ class HomeStatus extends State<Home> {
 
   initState() {
     super.initState();
-    getInfo();
+    // getInfo();
   }
 
   Widget pages() {
     List<Widget> pageList = [
-      homePage(),
+      Home(),
       page('info'),
       page('hotel'),
       page('user'),
@@ -60,31 +56,28 @@ class HomeStatus extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle.light,
-      child: Material(
-        color: Colors.transparent,
-        child: DecoratedBox(
-          decoration: BoxDecoration(color: Colors.grey[100]),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: pages(),
-              ),
-              Column(
-                children: <Widget>[
-                  Tabbar(
-                    onChange: (i) {
-                      setState(() {
-                        current = i;
-                      });
-                    },
-                  ),
-                  safeBottom(context, color: Colors.white)
-                ],
-              )
-            ],
-          ),
+    return Material(
+      color: Colors.transparent,
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: Colors.grey[100]),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: pages(),
+            ),
+            Column(
+              children: <Widget>[
+                Tabbar(
+                  onChange: (i) {
+                    setState(() {
+                      current = i;
+                    });
+                  },
+                ),
+                safeBottom(context, color: Colors.white)
+              ],
+            )
+          ],
         ),
       ),
     );
@@ -121,99 +114,4 @@ class HomeStatus extends State<Home> {
       ]),
     );
   }
-
-// homePage
-  Layout homePage() {
-    return Layout(
-      title: "首页",
-      child: Column(
-        children: <Widget>[
-          // Text('data'),
-          Expanded(
-            child: EasyRefresh(
-              onRefresh: () async {
-                print('onrefresh');
-              },
-              // onLoad: () async {},
-              child: listView(
-                  n: 6,
-                  item: (info) => buildItem(info),
-                  header: Container(child: buildSwiper(), height: 180),
-                  footer: Text('footer')),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildItem(info) => TouchView(
-        onTap: () {
-          print('object');
-        },
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "hello world",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        Text(info.toString()),
-                      ],
-                    ),
-                  ),
-                  Ink(
-                    decoration: new BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.all(new Radius.circular(99)),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        print('inkwell');
-                        Navigator.push(
-                            context,
-                            new MaterialPageRoute(
-                                builder: (BuildContext context) => Layout(
-                                      title: "详情页详情页详情页详情页详情页详情页详情页",
-                                      child: Column(
-                                        children: <Widget>[Text("detail")],
-                                      ),
-                                    )));
-                      },
-                      borderRadius: new BorderRadius.circular(25.0),
-                      child: Container(
-                        width: 80,
-                        height: 30,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'data',
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 1,
-              child: DecoratedBox(
-                  decoration: BoxDecoration(color: Colors.grey[200])),
-            )
-          ],
-        ),
-      );
 }

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'navbar.dart';
 
 class Layout extends StatefulWidget {
-  const Layout({
-    Key key,
-    this.title = '',
-    this.child,
-  }) : super(key: key);
   final String title;
   final Widget child;
+  final Widget navbar;
+  final SystemUiOverlayStyle statusMode;
+  const Layout(
+      {Key key,
+      this.title = '',
+      @required this.child,
+      this.navbar,
+      this.statusMode})
+      : super(key: key);
+
   @override
   LayoutState createState() => LayoutState();
 }
@@ -17,9 +23,15 @@ class Layout extends StatefulWidget {
 class LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.grey[100],
-      child: body(),
+    return Center(
+      child: Material(
+        color: Colors.grey[100],
+        child: AnnotatedRegion(
+            value: widget.statusMode != null
+                ? widget.statusMode
+                : SystemUiOverlayStyle.light,
+            child: body()),
+      ),
     );
   }
 
@@ -27,11 +39,15 @@ class LayoutState extends State<Layout> {
   Column body() {
     return Column(
       children: <Widget>[
-        navbar(context, title: widget.title),
+        makeNavbar(),
         Expanded(
           child: widget.child,
         )
       ],
     );
   }
+
+  Widget makeNavbar() => widget.navbar != null
+      ? widget.navbar
+      : Container(child: navbar(context, title: widget.title));
 }
