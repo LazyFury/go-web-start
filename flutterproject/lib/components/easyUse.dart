@@ -38,8 +38,11 @@ Widget networkImage(String src) {
                 margin: EdgeInsets.only(top: 10),
                 child: Text(loadingProgress.expectedTotalBytes != null
                     ? "加载中..." +
-                        (loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes)
+                        ((loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes *
+                                        100)
+                                    .toInt() /
+                                100)
                             .toString() +
                         "%"
                     : ""),

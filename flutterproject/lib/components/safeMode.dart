@@ -16,3 +16,5 @@ Container safeBox({double height, Color color = Colors.white}) {
       decoration: BoxDecoration(color: color),
       child: Container(height: height));
 }
+
+screenSize(context) => MediaQuery.of(context).size;

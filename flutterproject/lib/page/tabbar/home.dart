@@ -4,6 +4,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/components/easyUse.dart';
 import 'package:flutterproject/components/layout.dart';
 import 'package:flutterproject/components/list.dart';
+import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/page/tabbar/HomeComponents.dart';
@@ -15,6 +16,11 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   @override
+  initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Layout(
       title: "Home",
@@ -25,19 +31,58 @@ class HomeState extends State<Home> {
           Expanded(
             child: EasyRefresh(
               onRefresh: () async {},
-              child: listView(
-                  n: 1,
-                  item: (e) {
-                    return Text('data');
-                  },
-                  header: header(),
-                  footer: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[Text('Home')],
-                  )),
+              onLoad: () async {
+                print('onload');
+              },
+              child: Column(
+                children: <Widget>[
+                  Container(child: header()),
+                  partation(height: 1),
+                  Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Center(
+                        child: Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children:
+                              List<Widget>.generate(10, (index) => item()),
+                        ),
+                      ))
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget item() {
+    return TouchView(
+      onTap: () {
+        Navigator.push(context, new MaterialPageRoute(builder: (context) {
+          return Layout(
+              title: "商品详情",
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[Text("detail")],
+              ));
+        }));
+      },
+      child: Container(
+        width: (screenSize(context).width - 50) / 2,
+        decoration: BoxDecoration(color: Colors.white),
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: (screenSize(context).width - 50) / 2,
+              child: networkImage(
+                  'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngd21e5584e9c3b6891bb3df0be5ec52c4735705db31f63d4ecf566db18e7150b2'),
+            ),
+            Text('data'),
+          ],
+        ),
       ),
     );
   }
@@ -55,7 +100,7 @@ class HomeState extends State<Home> {
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Center(
               child: Wrap(
-                spacing: 20,
+                spacing: 10,
                 runSpacing: 10,
                 alignment: WrapAlignment.start,
                 runAlignment: WrapAlignment.start,
@@ -119,10 +164,8 @@ class HomeState extends State<Home> {
             child: Container(
               height: 100,
               width: double.infinity,
-              child: Image.network(
-                'http://wx1.sinaimg.cn/mw600/007Xv5XOgy1gcz8jttrsvj31400u0x6p.jpg',
-                fit: BoxFit.cover,
-              ),
+              child: networkImage(
+                  'http://wx1.sinaimg.cn/mw600/007Xv5XOgy1gcz8jttrsvj31400u0x6p.jpg'),
             ),
           ),
           partation(),
@@ -148,19 +191,26 @@ class HomeState extends State<Home> {
 
   Widget menuIcon({@required AssetImage image, @required String text}) =>
       TouchView(
+        onTap: () {
+          print(MediaQuery.of(context));
+        },
         child: Container(
           decoration: BoxDecoration(color: Colors.transparent),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image(image: image, width: 50, height: 50),
+              Container(
+                child: Image(image: image, width: 50, height: 50),
+                height: 50,
+                width: 50,
+              ),
               Text(text,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 12))
             ],
           ),
-          width: (375 - 60) / 5,
+          width: (screenSize(context).width - 80) / 5,
         ),
       );
 }

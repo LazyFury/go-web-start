@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterproject/components/easyUse.dart';
 import 'package:flutterproject/components/tabbar.dart';
 import 'package:flutterproject/page/tabbar/home.dart';
 import 'package:flutterproject/server/Http.dart';
@@ -94,9 +95,8 @@ class AppStatus extends State<App> {
             alignment: Alignment.center,
             fit: StackFit.expand,
             children: <Widget>[
-              Image.network(
-                  "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm.jpg",
-                  fit: BoxFit.cover),
+              networkImage(
+                  "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm.jpg"),
               Positioned(
                 child: safeStatusBar(context, color: Colors.transparent),
                 top: 0,
