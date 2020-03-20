@@ -8,6 +8,7 @@ import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/page/tabbar/HomeComponents.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -64,9 +65,9 @@ class HomeState extends State<Home> {
         Navigator.push(context, new MaterialPageRoute(builder: (context) {
           return Layout(
               title: "商品详情",
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[Text("detail")],
+              child: WebView(
+                initialUrl: "http://baidu.com", //JS执行模式 是否允许JS执行
+                javascriptMode: JavascriptMode.unrestricted,
               ));
         }));
       },
@@ -191,9 +192,7 @@ class HomeState extends State<Home> {
 
   Widget menuIcon({@required AssetImage image, @required String text}) =>
       TouchView(
-        onTap: () {
-          print(MediaQuery.of(context));
-        },
+        onTap: () async {},
         child: Container(
           decoration: BoxDecoration(color: Colors.transparent),
           child: Column(
