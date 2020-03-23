@@ -12,7 +12,7 @@ type API struct {
 	Cid  string `json:"cid"`
 }
 
-//添加API
+//Add 添加API
 func (a *API) Add() (msg string, err error) {
 	db := DB
 	//db.NewRecord(c)
@@ -28,8 +28,9 @@ func (a *API) Add() (msg string, err error) {
 // APICate api分类
 type APICate struct {
 	gorm.Model
-	Name string `json:"name"`
-	Desc string `json:"desc"`
+	Name    string `json:"name"`
+	Desc    string `json:"desc"`
+	BaseURL string `json:"baseUrl"`
 }
 
 // Add 添加分类
@@ -45,7 +46,7 @@ func (c *APICate) Add() (msg string, err error) {
 	return
 }
 
-//获取API分类
+//GetAll 获取API分类
 func (c *APICate) GetAll() (result []APICate, msg string, err error) {
 	db := DB
 	if db.Find(&result).Error != nil {
@@ -56,6 +57,7 @@ func (c *APICate) GetAll() (result []APICate, msg string, err error) {
 	return
 }
 
+// Save d
 func (c *APICate) Save() (msg string, err error) {
 	db := DB
 

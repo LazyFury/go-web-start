@@ -18,18 +18,20 @@ type User struct {
 	CreateTime util.LocalTime `json:"create_time"`
 	LoginTime  util.LocalTime `json:"login_time"`
 	Status     int            `json:"status"`
+	AddTime    util.NumberTime
 }
 
 // SearchUser	 用户列表显示
 type searchUser struct {
-	ID         int            `json:"id"`
-	Email      string         `json:"email"`
-	Name       string         `json:"name"`
-	IP         string         `json:"ip"`
-	Ua         string         `json:"ua"`
-	CreateTime util.LocalTime `json:"create_time"`
-	LoginTime  util.LocalTime `json:"login_time"`
-	Status     int            `json:"status"`
+	ID         int             `json:"id"`
+	Email      string          `json:"email"`
+	Name       string          `json:"name"`
+	IP         string          `json:"ip"`
+	Ua         string          `json:"ua"`
+	CreateTime util.LocalTime  `json:"createTime"`
+	LoginTime  util.LocalTime  `json:"loginTime"`
+	Status     int             `json:"status"`
+	AddTime    util.NumberTime `json:"AddTime"`
 }
 
 // WechatOauth 微信用户登陆

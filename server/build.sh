@@ -24,13 +24,18 @@ do
   esac  
   shift  
 done
-echo CGO_ENABLED=0 GOOS=$GOOS GOARCH=amd64 go build -o $TempDir/$File
-eval CGO_ENABLED=0 GOOS=$GOOS GOARCH=amd64 go build -o $TempDir/$File
+
+export CGO_ENABLED=1
+export GOARCH=amd64
+
+echo  GOOS=$GOOS   go build -o $TempDir/$File
+eval  GOOS=$GOOS   go build -o $TempDir/$File
 
 
 # 拷贝静态资源和配置文件
 echo ' - 拷贝配置文件...'
 cp -r config/config.json $TempDir/config/config.json
+cp -r config/database.db $TempDir/config/database.db
 echo ' - 拷贝前端目录...'
 cp -r h5/* $TempDir/h5
 echo ' - 拷贝资源文件...'

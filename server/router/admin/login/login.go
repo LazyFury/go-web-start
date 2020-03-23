@@ -2,11 +2,12 @@ package login
 
 import (
 	"fmt"
-	"github.com/labstack/echo"
 	"suke-go-test/model"
 	"suke-go-test/util"
 	"suke-go-test/util/sha"
 	"time"
+
+	"github.com/labstack/echo"
 )
 
 // Init 初始化
@@ -38,6 +39,7 @@ func reg(c echo.Context) (err error) {
 	// 更新时间
 	user.CreateTime = util.LocalTime{Time: time.Now()}
 	user.LoginTime = util.LocalTime{Time: time.Now()}
+	user.AddTime = util.NumberTime{Time: time.Now()}
 	// 状态可用
 	user.Status = 1
 

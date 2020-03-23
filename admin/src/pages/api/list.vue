@@ -144,6 +144,9 @@ export default {
         return;
       }
 
+      //   let baseURL = "http://192.168.0.145:8080";
+      //   url = baseURL + url;
+
       let option = { data, headers, method, params: data, url };
       if (method == "POST") {
         delete option.params;

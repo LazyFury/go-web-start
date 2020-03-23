@@ -9,12 +9,14 @@ import (
 	"suke-go-test/model"
 	"suke-go-test/router"
 	"suke-go-test/util"
+	"time"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
+	time.LoadLocation("local")
 	e := echo.New()                              //echo实例
 	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
 	defer model.DB.Close()                       //退出时释放链接
