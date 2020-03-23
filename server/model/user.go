@@ -28,8 +28,8 @@ type searchUser struct {
 	Name       string          `json:"name"`
 	IP         string          `json:"ip"`
 	Ua         string          `json:"ua"`
-	CreateTime util.LocalTime  `json:"createTime"`
-	LoginTime  util.LocalTime  `json:"loginTime"`
+	CreateTime util.LocalTime  `json:"create_time"`
+	LoginTime  util.LocalTime  `json:"login_time"`
 	Status     int             `json:"status"`
 	AddTime    util.NumberTime `json:"AddTime"`
 }
