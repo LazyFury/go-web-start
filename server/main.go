@@ -23,6 +23,7 @@ func main() {
 	e.Pre(middleware.RemoveTrailingSlash())      //删除url反斜杠
 	e.Use(middleware.Gzip())                     //gzip压缩
 	e.Use(middleware.Logger())                   //日志
+	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*", "https://labstack.net"},
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},

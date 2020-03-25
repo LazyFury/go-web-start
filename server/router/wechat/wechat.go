@@ -2,7 +2,6 @@ package wechat
 
 import (
 	"crypto/sha1"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -11,6 +10,7 @@ import (
 	"suke-go-test/util"
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -56,10 +56,7 @@ func login(c echo.Context) (err error) {
 	// 更新过期时间
 	wechatLogin.ExpiresIn += time.Now().Unix()
 	// 查询微信用户数据库表
-	wechatUser, msg, errCode := wechatDoLogin(wechatLogin.Openid, wechatLogin)
-	if errCode == 0 {
-		errCode = 1 //成功的返回码
-	}
+	wechatUser, msg, errCode := wechatDoLogin(wechatLogin)
 	if msg != "" {
 		return util.JSON(c, wechatUser, msg, errCode)
 	}
@@ -69,20 +66,9 @@ func login(c echo.Context) (err error) {
 	return util.JSONSuccess(c, wechatUser, "登陆成功")
 }
 
-// 拉去微信用户信息绑定数据类型
-type wechatUserType struct {
-	Nickname   string `json:"nickname"`
-	Sex        int    `json:"sex"`
-	Headimgurl string `json:"headimgurl"`
-	Province   string `json:"province"`
-	City       string `json:"city"`
-	Country    string `json:"country"`
-	Unionid    string `json:"unionid"`
-}
-
 // 获取微信用户信息  是否关注
 func userInfo(c echo.Context) (err error) {
-	wechatID := c.QueryParam("uid")
+	wechatID := c.QueryParam("id")
 	if wechatID == "" {
 		return util.JSONErr(c, nil, "用户id不可空")
 	}
@@ -90,30 +76,28 @@ func userInfo(c echo.Context) (err error) {
 	if err != nil {
 		return util.JSONErr(c, err, "参数错误")
 	}
-	user := model.WechatOauth{ID: newID}
+	if newID < 1 {
+		return util.JSONErr(c, nil, "用户id不可为空")
+	}
+	user := model.WechatOauth{Model: gorm.Model{ID: uint(newID)}}
 
 	db := model.DB
 	if db.Find(&user).RecordNotFound() {
 		return util.JSONErr(c, err, "未找到用户")
 	}
 	// token := user.AccessToken
-	openID := user.Openid
-	token, err := AccessToken.getAccessToken()
-	if err != nil {
-		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
-	}
-	url := fmt.Sprintf(wechatUserInfoCgi, token, openID)
-	// return util.JSONSuccess(c, url, "")
-	res, err := http.Get(url)
-	if err != nil {
-		return util.JSONErr(c, err, "拉去用户信息失败")
+	if time.Now().Unix()-user.CreatedAt.Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
+		info, msg := updateWechatInfo(&user, false)
+		if msg != "" {
+			return util.JSONErr(c, nil, msg)
+		}
+		info.CreatedAt = time.Now()
+		info.UpdatedAt = time.Now()
+
+		db.Model(&user).Updates(&info)
 	}
 
-	u := wechatUserType{}
-	if err = json.NewDecoder(res.Body).Decode(&u); err != nil {
-		return util.JSONErr(c, nil, "请求微信服务器失败")
-	}
-	return util.JSONSuccess(c, u, "获取成功")
+	return util.JSONSuccess(c, user, "获取成功")
 }
 
 // 换取微信网页登陆授权链接
@@ -123,11 +107,16 @@ func wechatRedirect(c echo.Context) (err error) {
 		host = "https://"
 	}
 	host += c.Request().Host
-	host = "http://wechat.abadboy.cn"
 	redirectURI := host + "/wechat/login"
+
+	callbackURL := c.QueryParam("callback")
+	if callbackURL != "" {
+		redirectURI = callbackURL
+	}
+
 	redirectURI = url.PathEscape(redirectURI)
 	urlStr := fmt.Sprintf(wechatRedirectURL, appid, redirectURI)
-	return util.JSONSuccess(c, urlStr, "")
+	return c.Redirect(http.StatusMovedPermanently, urlStr)
 }
 
 // 换取微信分享 jsapi授权
@@ -145,7 +134,7 @@ func jsAPIConfig(c echo.Context) error {
 	if err != nil {
 		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
 	}
-	noncestr := util.RandStringBytes(16)
+	noncestr := util.RandStringBytes(32)
 	timestamp := time.Now().Unix()
 
 	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%d&url=%s", ticket, noncestr, timestamp, url)
@@ -155,11 +144,11 @@ func jsAPIConfig(c echo.Context) error {
 
 	sign := fmt.Sprintf("%x", h.Sum(nil))
 	return util.JSONSuccess(c, map[string]string{
-		"noncestr":  noncestr,
+		"nonceStr":  noncestr,
 		"timestamp": strconv.FormatInt(timestamp, 10),
 		"url":       url,
 		"rawString": str,
 		"signature": sign,
-		"appid":     appid,
+		"appId":     appid,
 	}, "请求成功")
 }

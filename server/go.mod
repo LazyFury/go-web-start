@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	// github.com/fsnotify/fsnotify v1.4.7
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gorilla/websocket v1.4.2
 	// github.com/gorilla/websocket v1.4.1 // indirect
 	// github.com/gravityblast/fresh v0.0.0-20190826141211-0fa698148017 // indirect
 	// github.com/howeyc/fsnotify v0.9.0 // indirect

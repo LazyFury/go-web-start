@@ -8,6 +8,9 @@
 
 <body>
     <p id="output"></p>
+
+    <input type="text" id='input'>
+    <button onclick="send()">发送</button>
     <script>
         var loc = window.location;
         var uri = 'ws:';
@@ -24,9 +27,15 @@
             var out = document.getElementById('output');
             out.innerHTML += evt.data + '<br>';
         }
-        setInterval(function () {
-            ws.send('Hello, Server!');
-        }, 1000);
+
+
+        function send() {
+            let val = input.value
+            if (!val) {
+                alert("请输入内容...")
+            }
+            ws.send(val);
+        }
     </script>
 </body>
 

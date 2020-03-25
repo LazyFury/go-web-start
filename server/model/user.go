@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"suke-go-test/config"
 	"suke-go-test/util"
+
+	"github.com/jinzhu/gorm"
 )
 
 // User 用户更新
@@ -32,17 +34,26 @@ type searchUser struct {
 	LoginTime  util.LocalTime  `json:"login_time"`
 	Status     int             `json:"status"`
 	AddTime    util.NumberTime `json:"AddTime"`
+	Bool       bool
 }
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
-	ID           int    `json:"id" gorm:"PRIMARY_KEY;AUTO_INCREMENT;NOT NULL;UNIQUE"`
+	gorm.Model
 	UID          int    `json:"uid"`
 	AccessToken  string `json:"access_token"`
 	ExpiresIn    int64  `json:"expires_in"`
 	RefreshToken string `json:"refresh_token"`
 	Openid       string `json:"openid"`
 	Scope        string `json:"scope"`
+	Nickname     string `json:"nickname"`
+	Sex          int    `json:"sex"`
+	Headimgurl   string `json:"headimgurl"`
+	Province     string `json:"province"`
+	City         string `json:"city"`
+	Country      string `json:"country"`
+	Unionid      string `json:"unionid"`
+	Subscribe    int    `json:"subscribe"`
 }
 
 // Find 查找用户
@@ -56,7 +67,7 @@ func (u *User) Find() error {
 
 // GetAllUser  获取所有用户列表
 func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
-	return DataBaselimit(limit, page, &searchUser{}, &[]searchUser{}, config.Global.TablePrefix+"_users")
+	return DataBaselimit(limit, page, map[string]interface{}{"status": 0}, &[]searchUser{}, config.Global.TablePrefix+"_users")
 }
 
 // UpdateUser 更新用户
