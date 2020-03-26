@@ -4,6 +4,7 @@ import (
 	"EK-Server/model"
 	"EK-Server/util"
 	"errors"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -21,7 +22,13 @@ func Init(g *echo.Group) {
 }
 
 func add(c echo.Context) error {
-	good := &model.Goods{Title: "default 标题"}
+	price := c.QueryParam("price")
+	priceInt, err := strconv.ParseFloat(price, 64)
+	if err != nil {
+		return util.JSONErr(c, nil, "价格错误")
+	}
+
+	good := &model.Goods{Title: "default 标题", Price: priceInt}
 	db := model.DB
 
 	db.NewRecord(good) // => 主键为空返回`true`
