@@ -1,11 +1,11 @@
 package wechat
 
 import (
+	"EK-Server/model"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
-	"suke-go-test/model"
 )
 
 //发送code换取微信登陆信息

@@ -1,13 +1,14 @@
 package api
 
 import (
+	"EK-Server/model"
+	"EK-Server/util"
 	"fmt"
+	"strconv"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
-	"strconv"
-	"suke-go-test/model"
-	"suke-go-test/util"
-	"time"
 )
 
 // Init Init

@@ -1,4 +1,4 @@
-module suke-go-test
+module EK-Server
 
 go 1.13
 

@@ -1,14 +1,14 @@
 package main
 
 import (
+	"EK-Server/config"
+	"EK-Server/model"
+	"EK-Server/router"
+	"EK-Server/util"
 	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
-	"suke-go-test/config"
-	"suke-go-test/model"
-	"suke-go-test/router"
-	"suke-go-test/util"
 	"time"
 
 	"github.com/labstack/echo"

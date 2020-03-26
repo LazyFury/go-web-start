@@ -15,10 +15,10 @@ var (
 
 // Init Init
 func Init(g *echo.Group) {
-	baseURL := "ws"
-	app := g.Group(baseURL)
+	// baseURL := "ws"
+	// app := g.Group(baseURL)
 
-	app.GET("", hello)
+	// app.GET("", hello)
 }
 
 func hello(c echo.Context) (err error) {

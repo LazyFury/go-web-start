@@ -1,11 +1,11 @@
 package user
 
 import (
+	"EK-Server/model"
+	"EK-Server/util"
+	"EK-Server/util/sha"
 	"fmt"
 	"strconv"
-	"suke-go-test/model"
-	"suke-go-test/util"
-	"suke-go-test/util/sha"
 	"time"
 
 	"github.com/labstack/echo"

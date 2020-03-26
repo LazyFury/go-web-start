@@ -1,14 +1,16 @@
 package router
 
 import (
+	"EK-Server/config"
+	"EK-Server/router/admin"
+	"EK-Server/router/api"
+	"EK-Server/router/home"
+	"EK-Server/router/product"
+	"EK-Server/router/wechat"
+	"EK-Server/router/ws"
+	"EK-Server/util"
 	"net/http"
 	"os"
-	"suke-go-test/config"
-	"suke-go-test/router/admin"
-	"suke-go-test/router/api"
-	"suke-go-test/router/wechat"
-	"suke-go-test/router/ws"
-	"suke-go-test/util"
 
 	"github.com/labstack/echo"
 )
@@ -27,18 +29,19 @@ func Start(e *echo.Echo) {
 	wechat.Init(g)
 	api.Init(g)
 	ws.Init(g)
-
+	home.Init(g)
+	product.Init(g)
 	// 入口
 	index := g
 
 	index.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "hello world！")
-	}, util.UserJWT)
+	})
 
 	index.GET("/video", func(c echo.Context) (err error) {
 		video, err := os.Open("./static/hello.m3u8")
 		if err != nil {
-			return util.JSONErr(c, err, "未找到文件")
+			return util.JSONErr(c, nil, "未找到文件")
 		}
 		defer video.Close()
 		return c.Stream(http.StatusOK, "application/x-mpegURL", video)

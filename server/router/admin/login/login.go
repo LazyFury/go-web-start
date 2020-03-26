@@ -1,10 +1,10 @@
 package login
 
 import (
+	"EK-Server/model"
+	"EK-Server/util"
+	"EK-Server/util/sha"
 	"fmt"
-	"suke-go-test/model"
-	"suke-go-test/util"
-	"suke-go-test/util/sha"
 	"time"
 
 	"github.com/labstack/echo"

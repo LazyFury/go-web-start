@@ -1,10 +1,11 @@
 package admin
 
 import (
+	"EK-Server/router/admin/login"
+	"EK-Server/router/admin/product"
+	"EK-Server/router/admin/user"
+	"EK-Server/util"
 	"strconv"
-	"suke-go-test/router/admin/login"
-	"suke-go-test/router/admin/user"
-	"suke-go-test/util"
 
 	"github.com/labstack/echo"
 )
@@ -23,6 +24,7 @@ func Init(app *echo.Group) {
 	//admin之下 检测登陆权限
 	admin := app.Group(baseURL, util.AdminJWT) //注册admin的中间价
 	user.Init(admin)                           // 用户模块
+	product.Init(admin)
 
 	admin.GET("", index) //首页
 	//json 测试

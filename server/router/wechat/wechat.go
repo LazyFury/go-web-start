@@ -1,13 +1,13 @@
 package wechat
 
 import (
+	"EK-Server/model"
+	"EK-Server/util"
 	"crypto/sha1"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
-	"suke-go-test/model"
-	"suke-go-test/util"
 	"time"
 
 	"github.com/jinzhu/gorm"

@@ -1,9 +1,9 @@
 package model
 
 import (
+	"EK-Server/config"
 	"fmt"
 	"math"
-	"suke-go-test/config"
 	"time"
 
 	// _ 数据库驱动
@@ -29,12 +29,12 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{})
 	return db
 }
 
 // DataBaselimit  获取所有用户列表
-func DataBaselimit(limit int, page int, model interface{}, list interface{}, table string) map[string]interface{} {
+func DataBaselimit(limit int, page int, model interface{}, list interface{}, table string, Order string) map[string]interface{} {
 	db := DB
 	// 用户列表
 	// users := []model{}
@@ -45,7 +45,7 @@ func DataBaselimit(limit int, page int, model interface{}, list interface{}, tab
 	// 绑定总数
 	userModal.Count(&count)
 	// 查询绑定用户列表
-	userModal.Offset(limit*(page-1)).Limit(limit).Find(list).Order("name", false)
+	userModal.Offset(limit * (page - 1)).Limit(limit).Order(Order).Find(list)
 	pageCount := float64(count) / float64(limit)
 	return map[string]interface{}{
 		"count":     count,
