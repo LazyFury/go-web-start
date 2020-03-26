@@ -7,8 +7,8 @@ import (
 	"time"
 
 	// _ 数据库驱动
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	// _ "github.com/go-sql-driver/mysql"
+	// _ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
 
@@ -19,7 +19,7 @@ var DB *gorm.DB
 func InitDB(DataBaseConfig string) *gorm.DB {
 	t := time.Now().Format("2006年01-02 15:04:05")
 	fmt.Printf("数据库链接>>>>>>>> %s \n", t)
-	db, err := gorm.Open("sqlite3", "config/database.db")
+	db, err := gorm.Open("mysql", DataBaseConfig)
 	if err != nil {
 		panic(err)
 	}

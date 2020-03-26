@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-sql-driver/mysql v1.4.1
 	// github.com/fsnotify/fsnotify v1.4.7
 	// github.com/go-sql-driver/mysql v1.5.0
 	github.com/gorilla/websocket v1.4.2
@@ -19,5 +20,5 @@ require (
 	// github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 // indirect
 	// github.com/spf13/viper v1.6.2
 	github.com/valyala/fasttemplate v1.1.0 // indirect
-	// golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
+// golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 )

@@ -14,7 +14,6 @@ func Init(g *echo.Group) {
 	product := g.Group(baseURL)
 
 	product.GET("", func(c echo.Context) error {
-
 		return util.JSONSuccess(c, nil, "hello")
 	})
 
