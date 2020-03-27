@@ -67,7 +67,7 @@ func (u *User) Find() error {
 
 // GetAllUser  获取所有用户列表
 func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
-	return DataBaselimit(limit, page, map[string]interface{}{"status": 0}, &[]searchUser{}, config.Global.TablePrefix+"_users", "")
+	return DataBaselimit(limit, page, map[string]interface{}{"status": 1}, &[]searchUser{}, config.Global.TablePrefix+"_users", "id desc")
 }
 
 // UpdateUser 更新用户
@@ -100,7 +100,7 @@ func (u *User) AddUser() (string, error) {
 	row := db.Create(u)
 
 	if row.Error != nil {
-		return "添加失败", nil
+		return "添加失败,用户已存在", nil
 	}
 
 	if row.RowsAffected <= 0 {

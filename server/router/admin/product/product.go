@@ -3,6 +3,7 @@ package product
 import (
 	"EK-Server/model"
 	"EK-Server/util"
+	"encoding/json"
 	"errors"
 	"math"
 
@@ -17,7 +18,7 @@ func Init(g *echo.Group) {
 	product.GET("", func(c echo.Context) error {
 		return util.JSONSuccess(c, nil, "admin")
 	})
-	product.GET("/add", add)
+	product.POST("/add", add)
 
 }
 
@@ -25,12 +26,12 @@ func add(c echo.Context) error {
 
 	good := &model.Goods{Title: "default 标题"}
 
-	if err := c.Bind(good); err != nil {
+	if err := json.NewDecoder(c.Request().Body).Decode(good); err != nil {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
 	money := math.Round(float64(good.Price)*100) / 100
-	good.Price = money
+	good.Price = util.Money(money)
 
 	db := model.DB
 
@@ -38,7 +39,7 @@ func add(c echo.Context) error {
 	row := db.Create(good)
 
 	if row.Error != nil {
-		return util.JSONErr(c, nil, "添加失败")
+		return util.JSONErr(c, row.Error, "添加失败")
 	}
 
 	if row.RowsAffected <= 0 {
