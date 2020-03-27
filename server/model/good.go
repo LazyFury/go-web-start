@@ -10,27 +10,42 @@ type (
 	//Goods 商品表
 	Goods struct {
 		gorm.Model
-		Title  string     `json:"title"`
-		Desc   string     `json:"desc"`
-		Cover  string     `json:"cover"`
-		Images util.Array `json:"images"`
-		Price  util.Money `json:"price"`
-		Count  int        `json:"count"`
+		Cid         int        `json:"cid"`
+		Title       string     `json:"title"`
+		Description string     `gorm:"type:MEDIUMTEXT" json:"description"`
+		Cover       string     `json:"cover"`
+		Images      util.Array `gorm:"type:MEDIUMTEXT" json:"images" `
+		Price       float64    `gorm:"not null" json:"price"`
+		Count       int        `json:"count"`
 	}
 
 	// GoodsList 商品展示表
 	GoodsList struct {
-		ID     int        `json:"id"`
-		Title  string     `json:"title"`
-		Desc   string     `json:"desc"`
-		Cover  string     `json:"cover"`
-		Images util.Array `json:"images"`
-		Price  util.Money `json:"price"`
-		Count  int        `json:"count"`
+		ID          int        `json:"id"`
+		Cid         int        `json:"cid"`
+		Title       string     `json:"title"`
+		Description string     `json:"description"`
+		Cover       string     `json:"cover"`
+		Images      util.Array `json:"images"`
+		Price       util.Money `json:"price"`
+		Count       int        `json:"count"`
 	}
 
 	//GoodsCate 商品分类表
 	GoodsCate struct {
 		gorm.Model
+		Name     string `json:"name"`
+		Desc     string `json:"desc"`
+		ParentID int    `json:"parent_id"` //上级
+		Cover    string `json:"cover"`     //封面
+		Icon     string `json:"icon"`      //图标
+	}
+	GoodsCateList struct {
+		ID       string `json:"id"`
+		Name     string `json:"name"`
+		Desc     string `json:"desc"`
+		ParentID int    `json:"parent_id"` //上级
+		Cover    string `json:"cover"`     //封面
+		Icon     string `json:"icon"`      //图标
 	}
 )

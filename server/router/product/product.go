@@ -1,9 +1,10 @@
 package product
 
 import (
-	"EK-Server/config"
 	"EK-Server/model"
 	"EK-Server/util"
+	"fmt"
+	"strings"
 
 	"github.com/labstack/echo"
 )
@@ -20,7 +21,36 @@ func Init(g *echo.Group) {
 	product.GET("/list", productList)
 }
 
+// PageParams PageParams
+type PageParams struct {
+	Page  int    `json:"page"`
+	Limit int    `json:"limit"`
+	Order string `json:"order"`
+}
+
 func productList(c echo.Context) error {
-	return util.JSONSuccess(c, model.DataBaselimit(10, 1, &model.Goods{}, &[]model.GoodsList{}, config.Global.TablePrefix+"_goods",
-		"id desc"), "")
+	page := PageParams{}
+
+	if err := c.Bind(&page); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	fmt.Println(page)
+
+	if page.Page == 0 {
+		page.Page = 1
+	}
+
+	if page.Limit == 0 {
+		page.Limit = 10
+	}
+	if page.Order != "" {
+		page.Order = strings.ReplaceAll(page.Order, "_", " ")
+		// page.Order = strings.ReplaceAll(page.Order, ",", " ")
+	} else {
+		page.Order = "id Desc"
+	}
+
+	return util.JSONSuccess(c, model.DataBaselimit(page.Limit, page.Page, &model.Goods{}, &[]model.GoodsList{}, "goods",
+		page.Order), "获取成功")
 }

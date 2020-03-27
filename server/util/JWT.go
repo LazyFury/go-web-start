@@ -1,8 +1,11 @@
 package util
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -65,13 +68,32 @@ func baseJWT(callback func(next echo.HandlerFunc, c echo.Context, token string) 
 
 // 获取token
 func getToken(c echo.Context) (token string) {
-
+	// token in GET url
 	token = c.QueryParam("token")
 	if token != "" {
 		return token
 	}
 
+	type tokenPostJSON struct {
+		Token string
+	}
 	r := c.Request()
+	// token in POST Body
+	t := tokenPostJSON{}
+
+	var bodyBytes []byte = make([]byte, 0)
+	if c.Request().Body != nil {
+		bodyBytes, _ = ioutil.ReadAll(r.Body)
+	}
+	r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+
+	err := json.Unmarshal(bodyBytes, &t)
+	if err == nil && t.Token != "" {
+		// fmt.Printf("拦截json  %v \n", t)
+		return t.Token
+	}
+	// token in header
+
 	token = r.Header.Get("token")
 	if token != "" {
 		return token
@@ -91,7 +113,7 @@ func CreateToken(user *UserInfo) (tokenstr string, err error) {
 		"username": user.Name,
 		"nbf":      time.Now().Unix(),            //指定时间之前 token不可用
 		"iat":      time.Now().Unix(),            //签发时间
-		"exp":      time.Now().Unix() + 60*60*24, //过期时间
+		"exp":      time.Now().Unix() + 60*60*24, //过期时间 24小时
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokenstr, err = token.SignedString([]byte(SECRET))

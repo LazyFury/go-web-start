@@ -1,7 +1,6 @@
 package model
 
 import (
-	"EK-Server/config"
 	"EK-Server/util"
 	"errors"
 	"fmt"
@@ -67,7 +66,7 @@ func (u *User) Find() error {
 
 // GetAllUser  获取所有用户列表
 func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
-	return DataBaselimit(limit, page, map[string]interface{}{"status": 1}, &[]searchUser{}, config.Global.TablePrefix+"_users", "id desc")
+	return DataBaselimit(limit, page, map[string]interface{}{"status": 1}, &[]searchUser{}, "users", "id desc")
 }
 
 // UpdateUser 更新用户

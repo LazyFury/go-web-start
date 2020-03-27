@@ -39,7 +39,7 @@ func DataBaselimit(limit int, page int, model interface{}, list interface{}, tab
 	// 用户列表
 	// users := []model{}
 	// 初始化数据库对象
-	userModal := db.Table(table).Where(model)
+	userModal := db.Table(config.Global.TablePrefix + "_" + table).Where(model)
 	// 总数
 	var count int
 	// 绑定总数
