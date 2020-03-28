@@ -41,6 +41,8 @@ type (
 		Icon     string `json:"icon"`      //图标
 		Level    int    `gorm:"DEFAULT:1" json:"level"`
 	}
+
+	// GoodsCateList  GoodsCateList
 	GoodsCateList struct {
 		ID       int    `json:"id"`
 		Name     string `json:"name"`

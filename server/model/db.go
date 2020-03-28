@@ -20,6 +20,7 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	t := time.Now().Format("2006年01-02 15:04:05")
 	fmt.Printf("数据库链接>>>>>>>> %s \n", t)
 	db, err := gorm.Open("mysql", DataBaseConfig)
+	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
 		panic(err)
 	}

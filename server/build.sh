@@ -25,7 +25,7 @@ do
   shift  
 done
 
-export CGO_ENABLED=1
+export CGO_ENABLED=0
 export GOARCH=amd64
 
 echo  GOOS=$GOOS   go build -o $TempDir/$File
