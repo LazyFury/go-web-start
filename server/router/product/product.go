@@ -29,7 +29,11 @@ type PageParams struct {
 }
 
 func productList(c echo.Context) error {
-	page := PageParams{}
+	type Param struct {
+		PageParams
+		Cid int `json:"cid"`
+	}
+	page := Param{}
 
 	if err := c.Bind(&page); err != nil {
 		return util.JSONErr(c, err, "参数错误")
@@ -51,6 +55,11 @@ func productList(c echo.Context) error {
 		page.Order = "id Desc"
 	}
 
-	return util.JSONSuccess(c, model.DataBaselimit(page.Limit, page.Page, &model.Goods{}, &[]model.GoodsList{}, "goods",
+	where := &model.Goods{}
+	if page.Cid > 0 {
+		where = &model.Goods{Cid: page.Cid}
+	}
+
+	return util.JSONSuccess(c, model.DataBaselimit(page.Limit, page.Page, where, &[]model.GoodsList{}, "goods",
 		page.Order), "获取成功")
 }

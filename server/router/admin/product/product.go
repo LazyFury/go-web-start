@@ -42,13 +42,13 @@ func add(c echo.Context) error {
 	}
 	// 查询分类是否存在
 	if good.Cid > 0 {
-		if empty := db.Find(&model.GoodsCate{Model: gorm.Model{ID: uint(good.Cid)}}).RecordNotFound(); empty {
+		if empty := db.First(&model.GoodsCate{Model: gorm.Model{ID: uint(good.Cid)}}).RecordNotFound(); empty {
 			return util.JSONErr(c, nil, "分类不存在")
 		}
 	}
 
 	money := math.Round(float64(good.Price)*100) / 100
-	good.Price = money
+	good.Price = util.Money(money)
 
 	db.NewRecord(good) // => 主键为空返回`true`
 	row := db.Create(good)

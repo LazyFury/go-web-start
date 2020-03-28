@@ -13,7 +13,7 @@ type returnJSON struct {
 	Data interface{} `json:"data"`
 }
 
-var (
+const (
 	// Success 返回码 成功
 	Success int = 1
 	// Error 返回码 失败
@@ -22,15 +22,18 @@ var (
 	Logout int = -101
 	// LogTimeOut 返回码 登陆超时
 	LogTimeOut int = -102
+)
+
+var (
 
 	// 自定义错误码
 	errCode map[int]string = map[int]string{
 		// 正常
-		1:  "请求成功",
-		-1: "请求错误,仅提示类型，应该返回错误原因，需要操作的设置另外的错误码",
+		Success: "请求成功",
+		Error:   "请求错误,仅提示类型，应该返回错误原因，需要操作的设置另外的错误码",
 		// 登陆
-		-101: "用户未登陆",
-		-102: "用户登陆超时",
+		Logout:     "用户未登陆",
+		LogTimeOut: "用户登陆超时",
 
 		// 需要客户端指定操作
 		-1002: "用户名已存在,请尝试其他",

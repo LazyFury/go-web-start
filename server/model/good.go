@@ -15,7 +15,7 @@ type (
 		Description string     `gorm:"type:MEDIUMTEXT" json:"description"`
 		Cover       string     `json:"cover"`
 		Images      util.Array `gorm:"type:MEDIUMTEXT" json:"images" `
-		Price       float64    `gorm:"not null" json:"price"`
+		Price       util.Money `gorm:"not null" json:"price"`
 		Count       int        `json:"count"`
 	}
 
@@ -39,13 +39,15 @@ type (
 		ParentID int    `json:"parent_id"` //上级
 		Cover    string `json:"cover"`     //封面
 		Icon     string `json:"icon"`      //图标
+		Level    int    `gorm:"DEFAULT:1" json:"level"`
 	}
 	GoodsCateList struct {
-		ID       string `json:"id"`
+		ID       int    `json:"id"`
 		Name     string `json:"name"`
 		Desc     string `json:"desc"`
 		ParentID int    `json:"parent_id"` //上级
 		Cover    string `json:"cover"`     //封面
 		Icon     string `json:"icon"`      //图标
+		Level    int    `json:"level"`
 	}
 )
