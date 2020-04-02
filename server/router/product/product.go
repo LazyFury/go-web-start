@@ -33,28 +33,18 @@ func productList(c echo.Context) error {
 		PageParams
 		Cid int `json:"cid"`
 	}
-	page := Param{}
+	page := Param{PageParams: PageParams{Page: 1, Limit: 10, Order: "id_desc"}}
 
 	if err := c.Bind(&page); err != nil {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
-	fmt.Println(page)
+	fmt.Printf("post json 参数：%v", page)
 
-	if page.Page == 0 {
-		page.Page = 1
-	}
-
-	if page.Limit == 0 {
-		page.Limit = 10
-	}
 	if page.Order != "" {
 		page.Order = strings.ReplaceAll(page.Order, "_", " ")
 		// page.Order = strings.ReplaceAll(page.Order, ",", " ")
-	} else {
-		page.Order = "id Desc"
 	}
-
 	where := &model.Goods{}
 	if page.Cid > 0 {
 		where = &model.Goods{Cid: page.Cid}

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/components/easyUse.dart';
 import 'package:flutterproject/components/layout.dart';
-import 'package:flutterproject/components/list.dart';
 import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/swiper.dart';
 import 'package:flutterproject/components/touchView.dart';
@@ -79,7 +78,8 @@ class HomeState extends State<Home> {
             Container(
               height: (screenSize(context).width - 50) / 2,
               child: networkImage(
-                  'https://lanhu.oss-cn-beijing.aliyuncs.com/SketchPngd21e5584e9c3b6891bb3df0be5ec52c4735705db31f63d4ecf566db18e7150b2'),
+                  'http://wx1.sinaimg.cn/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg',
+                  needLoading: true),
             ),
             Text('data'),
           ],
@@ -106,27 +106,7 @@ class HomeState extends State<Home> {
                 alignment: WrapAlignment.start,
                 runAlignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
-                children: <Widget>[
-                  menuIcon(
-                      image: AssetImage('static/image/camera.png'), text: '监控'),
-                  menuIcon(
-                      image: AssetImage('static/image/scan-fill.png'),
-                      text: '扫码'),
-                  menuIcon(
-                      image: AssetImage('static/image/chicken.png'),
-                      text: '复习鸡'),
-                  menuIcon(
-                      image: AssetImage('static/image/scan-fill.png'),
-                      text: '监控'),
-                  menuIcon(
-                      image: AssetImage('static/image/chicken.png'),
-                      text: '复习🐔'),
-                  menuIcon(
-                      image: AssetImage('static/image/camera.png'), text: '监控'),
-                  menuIcon(
-                      image: AssetImage('static/image/chicken.png'),
-                      text: '监控'),
-                ],
+                children: menuList(),
               ),
             ),
           ),
@@ -190,8 +170,16 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget menuIcon({@required AssetImage image, @required String text}) =>
-      TouchView(
+  List<Widget> menuList() {
+    return ['复习鸡', "挖掘鸡", "战斗鸡", "直升鸡", "攻击鸡", "航空母鸡"]
+        .map((e) => menuIcon(
+            image: networkImage(
+                "http://www.baidu.com/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg"),
+            text: e))
+        .toList();
+  }
+
+  Widget menuIcon({@required Image image, @required String text}) => TouchView(
         onTap: () async {},
         child: Container(
           decoration: BoxDecoration(color: Colors.transparent),
@@ -199,7 +187,7 @@ class HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                child: Image(image: image, width: 50, height: 50),
+                child: image,
                 height: 50,
                 width: 50,
               ),

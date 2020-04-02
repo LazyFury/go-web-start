@@ -4,6 +4,7 @@ import (
 	"EK-Server/config"
 	"EK-Server/model"
 	"EK-Server/util"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -59,7 +60,10 @@ func add(c echo.Context) error {
 	if err := c.Bind(cate); err != nil {
 		return util.JSONErr(c, err, "参数错误")
 	}
-
+	cate.Name = strings.Trim(cate.Name, " ") //过滤空格
+	if cate.Name == "" {
+		return util.JSONErr(c, nil, "分类名称不可空")
+	}
 	// 查询分类是否存在
 	if cate.ParentID > 0 {
 		parent := &model.GoodsCate{Model: gorm.Model{ID: uint(cate.ParentID)}}

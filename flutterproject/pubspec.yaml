@@ -19,16 +19,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # video_player:
-  # statusbar:
   flutter_swiper:
-  flutter_easyrefresh: ^2.1.0
   http: ">=0.11.3+12"
   webview_flutter:
+  flutter_easyrefresh: ^2.1.0
+  # video_player:
+  # statusbar:
+  flutter_image:
+  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +57,8 @@ flutter:
     - static/image/camera.png
     - static/image/news-icon.png
     - static/image/farm.png
+    - static/image/empty.gif
+    - static/empty.png
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

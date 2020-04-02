@@ -19,24 +19,23 @@ class TabbarState extends State<Tabbar> {
   int current = 0;
 
   Row buildRow() {
-    List<Widget> list = [];
-
-    for (var i = 0; i < tabbars.length; i++) {
-      var item = tabbars[i];
-      list.add(
-        tabbarItem(
-          current == i,
-          i,
-          name: item['name'],
-          icon: item['icon'],
-        ),
-      );
-    }
-
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: list,
-    );
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: tabbars
+            .asMap()
+            .map((i, e) {
+              return MapEntry(
+                i,
+                tabbarItem(
+                  current == i,
+                  i,
+                  name: e['name'],
+                  icon: e['icon'],
+                ),
+              );
+            })
+            .values
+            .toList());
   }
 
   @override
@@ -44,13 +43,12 @@ class TabbarState extends State<Tabbar> {
     return Container(
       height: 54,
       child: DecoratedBox(
-        decoration: BoxDecoration(color: Colors.grey[200]),
+        decoration: BoxDecoration(color: Colors.white),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            buildRow(),
-          ],
-        ),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              buildRow(),
+            ]),
       ),
     );
   }
@@ -66,7 +64,11 @@ class TabbarState extends State<Tabbar> {
       },
       child: Column(
         children: <Widget>[
-          Icon(icon, color: color),
+          Icon(
+            icon,
+            color: color,
+            size: 24,
+          ),
           Text(
             name,
             style: TextStyle(color: color, fontSize: 16),

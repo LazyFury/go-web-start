@@ -9,8 +9,10 @@ Swiper buildSwiper() {
     itemBuilder: (BuildContext context, int index) {
       return Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
+        height: 180,
         child: networkImage(
-            "http://wx3.sinaimg.cn/mw600/b5259065gy1gcz507dabkj20hs0hsgn3.jpg?date=202003191210123"),
+            "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm_err.jpg",
+            needLoading: true),
       );
     },
     pagination: new SwiperPagination(),
