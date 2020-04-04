@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterproject/components/easyUse.dart';
-import 'package:flutterproject/components/tabbar.dart';
-import 'package:flutterproject/page/tabbar/home.dart';
-import 'package:flutterproject/utils/color.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'components/easyUse.dart';
+import 'components/tabbar.dart';
+import 'page/tabbar/cart.dart';
+import 'page/tabbar/cate.dart';
+import 'page/tabbar/home.dart';
+import 'server/server.dart';
 
 import 'components/safeMode.dart';
 
@@ -22,12 +25,12 @@ class AppStatus extends State<App> {
   int current = 0;
 
   void getInfo() {
-    // Http.get("admin_").then((res) {
-    //   print("请求成功");
-    //   print(res);
-    // }).catchError((err) {
-    //   print(err);
-    // });
+    Http.get("admin").then((res) {
+      print("请求成功");
+      print(res);
+    }).catchError((err) {
+      print(err);
+    });
   }
 
   initState() {
@@ -38,8 +41,8 @@ class AppStatus extends State<App> {
   Widget pages() {
     List<Widget> pageList = [
       Home(),
-      page('info'),
-      page('hotel'),
+      Cate(),
+      Cart(),
       page('user'),
     ];
     return pageList[current];
@@ -88,58 +91,65 @@ class AppStatus extends State<App> {
 
     return AnnotatedRegion(
       value: SystemUiOverlayStyle.light,
-      child: Column(children: <Widget>[
-        Container(
+      child: Column(
+        children: <Widget>[
+          Container(
             height: 200,
-            decoration: BoxDecoration(color: CustomTheme.primaryColor),
+            width: double.infinity,
             child: Stack(
-                alignment: Alignment.center,
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Positioned(
-                      child: networkImage(
-                        "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm.jpg",
+              children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  child: Column(
+                    children: <Widget>[
+                      safeStatusBar(context, color: Colors.blue),
+                      Container(
+                        decoration: BoxDecoration(color: Colors.blue),
+                        height: 100,
+                        width: double.infinity,
+                        child: Text(""),
                       ),
-                      top: 0,
-                      left: 0,
-                      right: 0),
-                  Center(
-                    child: Column(
-                      children: <Widget>[
-                        safeStatusBar(context, color: Colors.transparent),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                decoration: boxDecoration,
-                                height: 100,
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 20),
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  "hello world! there is a new flutter app demo positioned,let`s test it.cool! it`s runing!",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                      fontFamily: "Regular"),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.clip,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ])),
-        Expanded(
-          child: Column(children: <Widget>[
-            Text(title, style: TextStyle(fontSize: 80, fontFamily: "Regular")),
-          ]),
-        )
-      ]),
+                      safeStatusBar(context, color: Colors.transparent)
+                    ],
+                  ),
+                ),
+                Positioned(
+                    bottom: 10,
+                    left: 10,
+                    right: 10,
+                    child: Container(
+                      decoration: boxDecoration,
+                      height: 100,
+                      width: double.infinity,
+                      margin: EdgeInsets.all(20),
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "hello world! there is a new flutter app demo positioned,let`s test it.cool! it`s runing!",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontFamily: "Regular"),
+                        maxLines: 3,
+                        overflow: TextOverflow.clip,
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          Expanded(
+            child: EasyRefresh(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(title, style: TextStyle(fontSize: 80, fontFamily: "cao"))
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

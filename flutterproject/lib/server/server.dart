@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 Uri baseURIConfig({
   String scheme = "http",
   String userInfo,
-  String host = "go.aba_dboy.cn",
+  String host = "go.abadboy.cn",
   int port,
   String path = "",
   Iterable<String> pathSegments,

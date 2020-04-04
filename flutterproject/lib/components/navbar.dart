@@ -1,9 +1,10 @@
 // navbar
 import 'package:flutter/material.dart';
-import 'package:flutterproject/components/safeMode.dart';
-import 'package:flutterproject/utils/color.dart';
+import '../components/safeMode.dart';
+import '../utils/color.dart';
 
-Widget navbar(context, {String title: "标题"}) {
+Widget navbar(context,
+    {String title: "标题", List<Widget> leftButton, List<Widget> rightButton}) {
   return Column(children: <Widget>[
     // 状态栏
     safeStatusBar(context),
@@ -16,7 +17,9 @@ Widget navbar(context, {String title: "标题"}) {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            slideBox(context, children: [getBackButton(context)]),
+            slideBox(context,
+                children:
+                    leftButton != null ? leftButton : [getBackButton(context)]),
             // Text(statusBarHeight(context).toString()),
             Expanded(
               child: Padding(
@@ -36,7 +39,9 @@ Widget navbar(context, {String title: "标题"}) {
                 ),
               ),
             ),
-            slideBox(context, children: [Row()], isleft: false),
+            slideBox(context,
+                children: rightButton != null ? rightButton : [],
+                isleft: false),
           ],
         ),
       ),

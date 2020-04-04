@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterproject/components/touchView.dart';
+import '../components/touchView.dart';
 
 class Tabbar extends StatefulWidget {
   const Tabbar({Key key, this.onChange}) : super(key: key);
@@ -11,10 +11,10 @@ class Tabbar extends StatefulWidget {
 
 class TabbarState extends State<Tabbar> {
   List tabbars = [
-    {'name': 'home', 'icon': Icons.home},
-    {'name': 'info', 'icon': Icons.info},
-    {'name': 'hotal', 'icon': Icons.hotel},
-    {'name': 'user', 'icon': Icons.account_circle},
+    {'name': '首页', 'icon': Icons.home},
+    {'name': '分类', 'icon': Icons.receipt},
+    {'name': '购物车', 'icon': Icons.card_travel},
+    {'name': '我的', 'icon': Icons.account_circle},
   ];
   int current = 0;
 

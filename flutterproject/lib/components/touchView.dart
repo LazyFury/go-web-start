@@ -28,7 +28,7 @@ class TouchViewState extends State<TouchView> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: (e) {
-          updateOpacity(0.8);
+          updateOpacity(0.6);
         },
         onTapCancel: () {
           updateOpacity(1.0);

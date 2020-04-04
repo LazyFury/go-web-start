@@ -24,7 +24,7 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Layout(
       title: "Home",
-      navbar: searchBar(context),
+      navbar: searchBar(context, scan: true),
       statusMode: SystemUiOverlayStyle.dark,
       child: Column(
         children: <Widget>[
@@ -65,8 +65,8 @@ class HomeState extends State<Home> {
           return Layout(
               title: "商品详情",
               child: WebView(
-                initialUrl: "http://baidu.com", //JS执行模式 是否允许JS执行
-                javascriptMode: JavascriptMode.unrestricted,
+                initialUrl: "http://baidu.com",
+                javascriptMode: JavascriptMode.unrestricted, //JS执行模式 是否允许JS执行
               ));
         }));
       },
@@ -74,14 +74,31 @@ class HomeState extends State<Home> {
         width: (screenSize(context).width - 50) / 2,
         decoration: BoxDecoration(color: Colors.white),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               height: (screenSize(context).width - 50) / 2,
               child: networkImage(
-                  'http://wx1.sinaimg.cn/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg',
+                  'http://wx3.sinaimg.cn/mw600/44f2ef1bgy1gdg8mfzsfij21400u0qag.jpg',
                   needLoading: true),
             ),
-            Text('data'),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 6),
+                  child: Text(
+                    '测试商品标题测试商品标题测试商品标题',
+                    style: TextStyle(fontSize: 18),
+                    maxLines: 2,
+                  ),
+                ),
+                Text(
+                  "\¥123.09",
+                  style: TextStyle(color: Colors.red, fontSize: 24),
+                )
+              ],
+            ),
           ],
         ),
       ),
@@ -98,16 +115,15 @@ class HomeState extends State<Home> {
             height: 180,
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Center(
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.start,
-                children: menuList(),
-              ),
+            padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+            width: double.infinity,
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: menuList(),
             ),
           ),
           partation(height: 1),
@@ -171,7 +187,14 @@ class HomeState extends State<Home> {
   }
 
   List<Widget> menuList() {
-    return ['复习鸡', "挖掘鸡", "战斗鸡", "直升鸡", "攻击鸡", "航空母鸡"]
+    return [
+      '复习鸡',
+      "挖掘鸡",
+      "战斗鸡",
+      "直升鸡",
+      "攻击鸡",
+      "航空母鸡",
+    ]
         .map((e) => menuIcon(
             image: networkImage(
                 "http://www.baidu.com/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg"),
@@ -197,7 +220,7 @@ class HomeState extends State<Home> {
                   style: TextStyle(fontSize: 12))
             ],
           ),
-          width: (screenSize(context).width - 80) / 5,
+          width: (screenSize(context).width - 60) / 5,
         ),
       );
 }

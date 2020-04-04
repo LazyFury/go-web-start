@@ -1,8 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutterproject/library/NetImage.dart';
+import '../library/NetImage.dart';
 
 // 间隔
 Container partation({double height = 10, Color color}) => Container(
@@ -10,6 +7,28 @@ Container partation({double height = 10, Color color}) => Container(
         color: color != null ? color : Colors.grey[100],
       ),
       height: height,
+    );
+// 空数据组件
+Widget noData({double height = 100, String title = ""}) => Container(
+      height: height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: height > 240 ? height / 2 : height - 30,
+            child: Image(
+              image: AssetImage(
+                "static/image/noData.png",
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text(title),
+          )
+        ],
+      ),
     );
 
 /// 网络图片,设置了默认loadingBuilder和errBuilder
@@ -32,7 +51,7 @@ Widget networkImage(String src, {bool needLoading = false}) {
 }
 
 Widget errBuilder(BuildContext context, Object obj, StackTrace trace) {
-  print("no Image");
+  // print("no Image");
   return Image(
     image: AssetImage("static/image/empty.gif"),
     fit: BoxFit.cover,

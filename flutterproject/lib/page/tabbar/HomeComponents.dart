@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/touchView.dart';
-// import 'package:flutterproject/utils/color.dart';
+// import 'utils/color.dart';
 
-Widget searchBar(context) => Container(
+Widget searchBar(context, {bool scan = false}) => Container(
       decoration: BoxDecoration(
         color: Colors.white,
       ),
@@ -13,7 +13,7 @@ Widget searchBar(context) => Container(
           safeStatusBar(context, color: Colors.transparent),
           Container(
             height: 50,
-            padding: EdgeInsets.fromLTRB(20, 0, 30, 0),
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -27,12 +27,16 @@ Widget searchBar(context) => Container(
                   ],
                 ),
                 borderRadiusInput(),
-                TouchView(
-                  onTap: () {},
-                  child: Image(
-                      image: AssetImage('static/image/scan.png'),
-                      width: 20,
-                      height: 20),
+                Container(
+                  child: (scan
+                      ? TouchView(
+                          onTap: () {},
+                          child: Image(
+                              image: AssetImage('static/image/scan.png'),
+                              width: 20,
+                              height: 20),
+                        )
+                      : null),
                 )
               ],
             ),
