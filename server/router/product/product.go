@@ -18,7 +18,12 @@ func Init(g *echo.Group) {
 		return util.JSONSuccess(c, nil, "hello")
 	})
 
-	product.GET("/list", productList)
+	product.GET("/list", list)
+	product.GET("/detail", detail)
+}
+
+func detail(c echo.Context) error {
+	return util.JSONSuccess(c, nil, "")
 }
 
 // PageParams PageParams
@@ -28,7 +33,7 @@ type PageParams struct {
 	Order string `json:"order"`
 }
 
-func productList(c echo.Context) error {
+func list(c echo.Context) error {
 	type Param struct {
 		PageParams
 		Cid int `json:"cid"`

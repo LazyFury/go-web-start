@@ -134,6 +134,7 @@ func jsAPIConfig(c echo.Context) error {
 	if err != nil {
 		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
 	}
+
 	noncestr := util.RandStringBytes(32)
 	timestamp := time.Now().Unix()
 

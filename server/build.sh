@@ -42,4 +42,6 @@ echo ' - 拷贝资源文件...'
 cp -r static/* $TempDir/static
 echo ' - 拷贝模板文件...'
 cp -r template/* $TempDir/template
+echo ' - 创建日志目录...'
+mkdir $TempDir/log
 echo '完成...'

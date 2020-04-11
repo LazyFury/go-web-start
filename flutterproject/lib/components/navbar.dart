@@ -1,6 +1,6 @@
 // navbar
 import 'package:flutter/material.dart';
-import '../components/safeMode.dart';
+import 'package:flutterproject/components/safeMode.dart';
 import '../utils/color.dart';
 
 Widget navbar(context,

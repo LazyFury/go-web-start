@@ -1,16 +1,16 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+
 import 'components/easyUse.dart';
 import 'components/tabbar.dart';
+import 'components/safeMode.dart';
+
 import 'page/tabbar/cart.dart';
 import 'page/tabbar/cate.dart';
 import 'page/tabbar/home.dart';
-import 'server/server.dart';
 
-import 'components/safeMode.dart';
+import 'server/server.dart';
 
 class App extends StatefulWidget {
   const App({

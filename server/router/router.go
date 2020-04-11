@@ -1,6 +1,9 @@
 package router
 
 import (
+	"net/http"
+	"os"
+
 	"EK-Server/config"
 	"EK-Server/router/admin"
 	"EK-Server/router/api"
@@ -9,8 +12,6 @@ import (
 	"EK-Server/router/wechat"
 	"EK-Server/router/ws"
 	"EK-Server/util"
-	"net/http"
-	"os"
 
 	"github.com/labstack/echo"
 )

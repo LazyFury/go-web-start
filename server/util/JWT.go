@@ -30,7 +30,7 @@ var AdminJWT echo.MiddlewareFunc = baseJWT(adminCheckToken)
 func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
 	user, err := parseToken(tokenString)
 	if err != nil {
-		return JSON(c, err, "登陆失效!", LogTimeOut)
+		return JSON(c, nil, "登陆失效!", LogTimeOut)
 	}
 	if user.ID == 0 {
 		return JSON(c, nil, "登陆失效!", LogTimeOut)

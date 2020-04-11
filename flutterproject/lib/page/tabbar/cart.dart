@@ -6,6 +6,7 @@ import 'package:flutterproject/components/navbar.dart';
 import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/library/SlidingEventsStatus.dart';
+import 'package:flutterproject/utils/utils.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class Cart extends StatefulWidget {
 
 class CartStatue extends State<Cart> {
   bool isEdit = false;
+  bool canClose = true;
 
   List<Map<String, dynamic>> cartListData = [
     {"name": "购物车商品", "select": false},
@@ -29,9 +31,31 @@ class CartStatue extends State<Cart> {
     });
   }
 
+  @override
+  initState() {
+    super.initState();
+    // onPanDown 从父组件传到子组件，所以这里相应到要晚一点，重置方法需要加一点延时
+    eventBus.on<SlidingEventsBus>().listen((event) {
+      if (event.event == "inOperation") {
+        print("操作按钮");
+        setState(() {
+          canClose = false;
+        });
+      }
+    });
+  }
+
   // 重置侧滑部件
   resetAllSliding() {
-    eventBus.fire(new SlidingEventsBus("reset"));
+    Utils.setTimeout(Duration(milliseconds: 50), () {
+      if (canClose) {
+        print("全局重置$canClose");
+        eventBus.fire(new SlidingEventsBus("reset"));
+      }
+      setState(() {
+        canClose = true;
+      });
+    });
   }
 
   List guessYouloveItData = [];
@@ -40,7 +64,7 @@ class CartStatue extends State<Cart> {
     var textStyle = TextStyle(color: Colors.white, fontSize: 18);
     return GestureDetector(
       onPanDown: (e) {
-        // print(e);
+        resetAllSliding();
       },
       child: Layout(
         navbar: buildNavbar(context, textStyle),
@@ -92,6 +116,10 @@ class CartStatue extends State<Cart> {
   Widget cartItem(MapEntry<int, Map<String, dynamic>> e) {
     return SlidingEvents(
       height: 120,
+      leftChild:
+          SlidingBackground(child: Center(child: Text("collect")), width: 0),
+      rightChild:
+          SlidingBackground(child: Center(child: Text("delete")), width: 220),
       child: Container(
         width: screenSize(context).width,
         height: 120,

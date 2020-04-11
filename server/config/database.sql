@@ -41,7 +41,7 @@ CREATE TABLE `ek_server_api_cates` (
 
 LOCK TABLES `ek_server_api_cates` WRITE;
 /*!40000 ALTER TABLE `ek_server_api_cates` DISABLE KEYS */;
-INSERT INTO `ek_server_api_cates` VALUES (1,'2020-03-28 14:17:21','2020-03-28 14:17:21',NULL,'商品管理','商品管理',''),(2,'2020-03-28 14:17:31','2020-03-28 14:17:31',NULL,'用户管理','用户管理',''),(3,'2020-03-28 14:17:40','2020-03-28 14:17:40',NULL,'微信接口','微信接口','');
+INSERT INTO `ek_server_api_cates` VALUES (1,'2020-03-28 14:17:21','2020-03-31 17:54:50',NULL,'商品管理','',''),(2,'2020-03-28 14:17:31','2020-03-28 14:17:31',NULL,'用户管理','用户管理',''),(3,'2020-03-28 14:17:40','2020-03-28 14:17:40',NULL,'微信接口','微信接口','');
 /*!40000 ALTER TABLE `ek_server_api_cates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +62,7 @@ CREATE TABLE `ek_server_apis` (
   `cid` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_ek_server_apis_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `ek_server_apis` (
 
 LOCK TABLES `ek_server_apis` WRITE;
 /*!40000 ALTER TABLE `ek_server_apis` DISABLE KEYS */;
-INSERT INTO `ek_server_apis` VALUES (1,'2020-03-28 14:18:08','2020-03-28 14:57:39',NULL,'添加商品','{\"body\":[],\"header\":[],\"name\":\"添加商品\",\"url\":\"/admin/product/add\",\"method\":\"POST\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU0NjQ4MjcsImlhdCI6MTU4NTM3ODQyNywiaWQiOjEsIm5iZiI6MTU4NTM3ODQyNywidXNlcm5hbWUiOiJzdWtlIn0.D3GJwJNX-zL46UX83jLYqC2Wvu1r4ENqb7RLlS33hWU\",\"type\":\"string\"}]}','1'),(2,'2020-03-28 14:52:33','2020-03-28 14:53:05',NULL,'用户登陆','{\"body\":[{\"name\":\"username\",\"key\":\"username\",\"value\":\"suke\",\"type\":\"string\"},{\"name\":\"password\",\"key\":\"password\",\"value\":\"123456\",\"type\":\"string\"}],\"header\":[],\"name\":\"用户登陆\",\"url\":\"/admin/login\",\"method\":\"GET\"}','2'),(3,'2020-03-28 14:53:42','2020-03-28 14:53:42',NULL,'用户注册','{\"name\":\"用户注册\",\"url\":\"/admin/login/reg\",\"method\":\"GET\",\"body\":[{\"name\":\"username\",\"key\":\"username\",\"value\":\"suke\",\"type\":\"string\"},{\"name\":\"password\",\"key\":\"password\",\"value\":\"123456\",\"type\":\"string\"}]}','2'),(4,'2020-03-28 14:54:07','2020-03-28 14:54:42',NULL,'用户列表','{\"body\":[],\"header\":[],\"name\":\"用户列表\",\"url\":\"/admin/user/list\",\"method\":\"GET\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU0NjQ4MjcsImlhdCI6MTU4NTM3ODQyNywiaWQiOjEsIm5iZiI6MTU4NTM3ODQyNywidXNlcm5hbWUiOiJzdWtlIn0.D3GJwJNX-zL46UX83jLYqC2Wvu1r4ENqb7RLlS33hWU\",\"type\":\"string\"}]}','2'),(5,'2020-03-28 14:58:11','2020-03-28 14:58:11',NULL,'微信配置','{\"name\":\"微信配置\",\"url\":\"/wechat/jsApiConfig\",\"method\":\"GET\",\"body\":[{\"name\":\"url\",\"key\":\"url\",\"value\":\"123\",\"type\":\"string\"}]}','3');
+INSERT INTO `ek_server_apis` VALUES (1,'2020-03-28 14:18:08','2020-03-31 17:54:28',NULL,'添加商品','{\"body\":[],\"header\":[],\"name\":\"添加商品\",\"url\":\"/admin/product/add\",\"method\":\"POST\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU3MzQ4NDMsImlhdCI6MTU4NTY0ODQ0MywiaWQiOjEsIm5iZiI6MTU4NTY0ODQ0MywidXNlcm5hbWUiOiJzdWtlIn0.Z1TspgrcG92qpkg6MDmliKmHSr_EvCf-ugY3ijNkUfU\",\"type\":\"string\"}]}','1'),(2,'2020-03-28 14:52:33','2020-03-28 14:53:05',NULL,'用户登陆','{\"body\":[{\"name\":\"username\",\"key\":\"username\",\"value\":\"suke\",\"type\":\"string\"},{\"name\":\"password\",\"key\":\"password\",\"value\":\"123456\",\"type\":\"string\"}],\"header\":[],\"name\":\"用户登陆\",\"url\":\"/admin/login\",\"method\":\"GET\"}','2'),(3,'2020-03-28 14:53:42','2020-03-28 14:53:42',NULL,'用户注册','{\"name\":\"用户注册\",\"url\":\"/admin/login/reg\",\"method\":\"GET\",\"body\":[{\"name\":\"username\",\"key\":\"username\",\"value\":\"suke\",\"type\":\"string\"},{\"name\":\"password\",\"key\":\"password\",\"value\":\"123456\",\"type\":\"string\"}]}','2'),(4,'2020-03-28 14:54:07','2020-03-31 17:54:10',NULL,'用户列表','{\"body\":[],\"header\":[],\"name\":\"用户列表\",\"url\":\"/admin/user/list\",\"method\":\"GET\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU3MzQ4NDMsImlhdCI6MTU4NTY0ODQ0MywiaWQiOjEsIm5iZiI6MTU4NTY0ODQ0MywidXNlcm5hbWUiOiJzdWtlIn0.Z1TspgrcG92qpkg6MDmliKmHSr_EvCf-ugY3ijNkUfU\",\"type\":\"string\"}]}','2'),(5,'2020-03-28 14:58:11','2020-03-28 14:58:11',NULL,'微信配置','{\"name\":\"微信配置\",\"url\":\"/wechat/jsApiConfig\",\"method\":\"GET\",\"body\":[{\"name\":\"url\",\"key\":\"url\",\"value\":\"123\",\"type\":\"string\"}]}','3'),(6,'2020-03-31 17:55:48','2020-03-31 17:58:08',NULL,'添加分类','{\"body\":[{\"name\":\"parent_id\",\"key\":\"parent_id\",\"value\":1,\"type\":\"number\"},{\"name\":\"name\",\"key\":\"name\",\"value\":\"asd3\",\"type\":\"string\"}],\"header\":[],\"name\":\"添加分类\",\"url\":\"/admin/product/cate/add\",\"method\":\"POST\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU3MzQ4NDMsImlhdCI6MTU4NTY0ODQ0MywiaWQiOjEsIm5iZiI6MTU4NTY0ODQ0MywidXNlcm5hbWUiOiJzdWtlIn0.Z1TspgrcG92qpkg6MDmliKmHSr_EvCf-ugY3ijNkUfU\",\"type\":\"string\"}]}','1'),(7,'2020-03-31 17:56:47','2020-03-31 17:56:47',NULL,'分类列表','{\"name\":\"分类列表\",\"url\":\"/admin/product/cate/list\",\"method\":\"GET\",\"headers\":[{\"name\":\"token\",\"key\":\"token\",\"value\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODU3MzQ4NDMsImlhdCI6MTU4NTY0ODQ0MywiaWQiOjEsIm5iZiI6MTU4NTY0ODQ0MywidXNlcm5hbWUiOiJzdWtlIn0.Z1TspgrcG92qpkg6MDmliKmHSr_EvCf-ugY3ijNkUfU\",\"type\":\"string\"}]}','1');
 /*!40000 ALTER TABLE `ek_server_apis` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +154,7 @@ CREATE TABLE `ek_server_goods_cates` (
   `level` int(11) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `idx_ek_server_goods_cates_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -163,6 +163,7 @@ CREATE TABLE `ek_server_goods_cates` (
 
 LOCK TABLES `ek_server_goods_cates` WRITE;
 /*!40000 ALTER TABLE `ek_server_goods_cates` DISABLE KEYS */;
+INSERT INTO `ek_server_goods_cates` VALUES (1,'2020-03-31 17:56:22','2020-03-31 17:56:22',NULL,'','',0,'','',1),(2,'2020-03-31 17:57:39','2020-03-31 17:57:39',NULL,'asd','',0,'','',1),(3,'2020-03-31 17:58:05','2020-03-31 17:58:05',NULL,'asd3','',1,'','',2),(4,'2020-03-31 17:59:37','2020-03-31 17:59:37',NULL,' ','',1,'','',2),(5,'2020-03-31 18:02:34','2020-03-31 18:02:34',NULL,'-','',1,'','',2),(6,'2020-03-31 18:02:41','2020-03-31 18:02:41',NULL,'-*&/}}','',1,'','',2),(7,'2020-03-31 18:31:32','2020-03-31 18:31:32',NULL,'asd23','',1,'','',2);
 /*!40000 ALTER TABLE `ek_server_goods_cates` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +187,7 @@ CREATE TABLE `ek_server_users` (
   `add_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -248,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-29 20:48:14
+-- Dump completed on 2020-04-08 10:02:48
