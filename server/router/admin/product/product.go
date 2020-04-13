@@ -47,7 +47,7 @@ func add(c echo.Context) error {
 		}
 	}
 
-	money := math.Round(float64(good.Price)*100) / 100
+	money := math.Round(float64(good.Price)*100) / 100 //保留两位小数，接口输出文本是在marshajson的时候处理的
 	good.Price = util.Money(money)
 
 	db.NewRecord(good) // => 主键为空返回`true`

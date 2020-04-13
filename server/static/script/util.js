@@ -23,13 +23,14 @@ function curlGet(url,data,callback){
 }
 
 function getUrl(obj){
-    let arr = Object.keys(obj)
+    // let arr = Object.keys(obj)
     let result = '?'
-    for(i=0;i<arr.length;i++){
-        result += `${arr[i]}=${obj[arr[i]]}`
-        if(i<arr.length-1){
-            result += `&`
+    for (const k in obj) {
+        if (obj.hasOwnProperty(k)) {
+            const element = obj[k];
+             result += `${k}=${element}&`
         }
     }
+    result = result.substr(0,result.length-1)
     return result
 }
