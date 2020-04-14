@@ -36,6 +36,7 @@ class SlidingEvents extends StatefulWidget {
 class SlidingEventsStatus extends State<SlidingEvents> {
   double offset = 0;
   double target = 0;
+  bool onReset = false;
 
   double get leftTarget => widget.leftChild.width;
   double get rightTarget => widget.rightChild.width;
@@ -100,24 +101,26 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   }
 
   reset() {
-    double length = offset.abs();
-    int milliseconds = 20;
-    int step = (length / milliseconds).floor().toInt();
+    setState(() {
+      onReset = true;
 
-    Utils.setInterval(
-      Duration(milliseconds: milliseconds),
-      (t) {
-        setState(() {
+      double length = offset.abs();
+      int milliseconds = 20;
+      int step = (length / milliseconds).floor().toInt();
+
+      Utils.setInterval(
+        Duration(milliseconds: milliseconds),
+        (t) {
           offset += (offset > 0) ? -step : step;
-          // print(offset);
-        });
-        if (offset.abs() - step <= step) {
-          offset = 0;
-          t.cancel();
-          t = null;
-        }
-      },
-    );
+          if (offset.abs() - step <= step) {
+            offset = 0;
+            t.cancel();
+            t = null;
+            onReset = false;
+          }
+        },
+      );
+    });
   }
 
   showConfrim() {
@@ -137,8 +140,13 @@ class SlidingEventsStatus extends State<SlidingEvents> {
           offset += offset > 0 ? step : -step;
         });
         print("$offset > $leftTarget || $offset < $rightTarget");
-        if (offset > leftTarget || offset < -rightTarget && offset != 0) {
-          offset = offset > 0 ? leftTarget : -rightTarget;
+        if (leftToRight && offset >= leftTarget) {
+          offset = leftTarget;
+          t.cancel();
+          t = null;
+        }
+        if (rightToLeft && offset <= -rightTarget && offset != 0) {
+          offset = -rightTarget;
           t.cancel();
           t = null;
         }
@@ -170,6 +178,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   }
 
   void onPanUpdate(e) {
+    if (onReset) return;
     print("update:${e.localPosition.dx.toString()} target: $target ");
     var move = (e.localPosition.dx - target) * 0.75;
     setState(() {

@@ -118,8 +118,11 @@ class CartStatue extends State<Cart> {
       height: 120,
       leftChild:
           SlidingBackground(child: Center(child: Text("collect")), width: 0),
-      rightChild:
-          SlidingBackground(child: Center(child: Text("delete")), width: 220),
+      rightChild: SlidingBackground(
+          child: Container(
+              decoration: BoxDecoration(color: Colors.red),
+              child: Center(child: Text("delete"))),
+          width: 120),
       child: Container(
         width: screenSize(context).width,
         height: 120,
