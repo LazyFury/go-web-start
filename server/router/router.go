@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"EK-Server/config"
@@ -64,17 +65,22 @@ func upload(c echo.Context) error {
 	if err != nil {
 		return util.JSONErr(c, err, "上传错误")
 	}
-
 	pathExt := path.Ext(file.Filename)
-	acceptsExt := []string{"jpg", "png"}
-	index := -1
-	for i, item := range acceptsExt {
-		if pathExt == "."+item {
-			index = i
-		}
+	acceptsImgExt := []interface{}{"jpg", "png", "jpeg", "webp"}
+	acceptsVideoExt := []interface{}{"mov", "mp4", "avi"}
+	acceptsPdfExt := []interface{}{"pdf", "emu"}
+	folder := ""
+	if inArray(acceptsImgExt, strings.Trim(pathExt, ".")) > -1 {
+		folder = "image"
 	}
-	if index == -1 {
-		return util.JSONErr(c, nil, "文件不允许")
+	if inArray(acceptsVideoExt, strings.Trim(pathExt, ".")) > -1 {
+		folder = "video"
+	}
+	if inArray(acceptsPdfExt, strings.Trim(pathExt, ".")) > -1 {
+		folder = "pdf"
+	}
+	if folder == "" {
+		return util.JSONErr(c, nil, "文件不合法")
 	}
 
 	src, err := file.Open()
@@ -83,7 +89,7 @@ func upload(c echo.Context) error {
 	}
 	defer src.Close()
 
-	dir, err := getDir("./static/upload/", time.Now().Format("2006_01_02"))
+	dir, err := getDir("./static/upload/"+folder+"/", time.Now().Format("2006_01_02"))
 	if err != nil {
 		return util.JSONErr(c, err, "创建文件夹失败")
 	}
@@ -114,4 +120,14 @@ func getDir(path string, foderName string) (dir string, err error) {
 
 	dir = foder
 	return
+}
+
+func inArray(arr []interface{}, item interface{}) (index int) {
+	index = -1
+	for i, x := range arr {
+		if item == x {
+			index = i
+		}
+	}
+	return index
 }
