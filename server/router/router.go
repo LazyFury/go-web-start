@@ -66,19 +66,19 @@ func upload(c echo.Context) error {
 		return util.JSONErr(c, err, "上传错误") //未获取到文件流
 	}
 	pathExt := path.Ext(file.Filename)
-	acceptsImgExt := []interface{}{"jpg", "png", "jpeg", "webp"} //图片类型
-	acceptsVideoExt := []interface{}{"mov", "mp4", "avi"}        //视频类型
-	acceptsPdfExt := []interface{}{"pdf", "emu"}                 //其他文件类型
+	acceptsImgExt := []interface{}{"jpg", "png", "jpeg", "webp"}           //图片类型
+	acceptsVideoExt := []interface{}{"mov", "mp4", "avi"}                  //视频类型
+	acceptsOtherFileExt := []interface{}{"pdf", "zip", "rar", "gz", "txt"} //其他文件类型
 	folder := ""
 	// 如果符合类型，设定目录
-	if inArray(acceptsImgExt, strings.Trim(pathExt, ".")) > -1 {
+	if inArray(acceptsImgExt, strings.Trim(pathExt, ".")) {
 		folder = "image"
 	}
-	if inArray(acceptsVideoExt, strings.Trim(pathExt, ".")) > -1 {
+	if inArray(acceptsVideoExt, strings.Trim(pathExt, ".")) {
 		folder = "video"
 	}
-	if inArray(acceptsPdfExt, strings.Trim(pathExt, ".")) > -1 {
-		folder = "pdf"
+	if inArray(acceptsOtherFileExt, strings.Trim(pathExt, ".")) {
+		folder = "file"
 	}
 	// 如果不符合任何一种类型
 	if folder == "" {
@@ -131,12 +131,12 @@ func getDir(path string, foderName string) (dir string, err error) {
 }
 
 // 在数组中
-func inArray(arr []interface{}, item interface{}) (index int) {
-	index = -1
+func inArray(arr []interface{}, item interface{}) (inArr bool) {
+	index := -1
 	for i, x := range arr {
 		if item == x {
 			index = i
 		}
 	}
-	return index
+	return index > -1
 }

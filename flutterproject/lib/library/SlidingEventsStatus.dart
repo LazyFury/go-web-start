@@ -103,24 +103,28 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   reset() {
     setState(() {
       onReset = true;
-
-      double length = offset.abs();
-      int milliseconds = 20;
-      int step = (length / milliseconds).floor().toInt();
-
-      Utils.setInterval(
-        Duration(milliseconds: milliseconds),
-        (t) {
-          offset += (offset > 0) ? -step : step;
-          if (offset.abs() - step <= step) {
-            offset = 0;
-            t.cancel();
-            t = null;
-            onReset = false;
-          }
-        },
-      );
     });
+
+    double length = offset.abs();
+    int allSeconds = length.toInt();
+    int step = (length / allSeconds).floor().toInt();
+
+    Utils.setInterval(
+      Duration(milliseconds: 1),
+      (t) {
+        setState(() {
+          offset += (offset > 0) ? -step : step;
+        });
+        if (offset.abs() - step <= step) {
+          setState(() {
+            offset = 0;
+            onReset = false;
+          });
+          t.cancel();
+          t = null;
+        }
+      },
+    );
   }
 
   showConfrim() {
@@ -139,7 +143,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
         setState(() {
           offset += offset > 0 ? step : -step;
         });
-        print("$offset > $leftTarget || $offset < $rightTarget");
+        // print("$offset > $leftTarget || $offset < $rightTarget");
         if (leftToRight && offset >= leftTarget) {
           offset = leftTarget;
           t.cancel();
