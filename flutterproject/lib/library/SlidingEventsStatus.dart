@@ -101,13 +101,18 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   }
 
   reset() {
+    if (onReset) return;
     setState(() {
       onReset = true;
     });
 
     double length = offset.abs();
-    int allSeconds = length.toInt();
-    int step = (length / allSeconds).floor().toInt();
+    double milliseconds = length * 2;
+    double step = length / milliseconds;
+    if (step < 0.1) {
+      step = 0.1;
+    }
+    step = (step * 100).floor() / 100;
 
     Utils.setInterval(
       Duration(milliseconds: 1),
@@ -115,6 +120,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
         setState(() {
           offset += (offset > 0) ? -step : step;
         });
+        print('object $step $milliseconds');
         if (offset.abs() - step <= step) {
           setState(() {
             offset = 0;
@@ -134,11 +140,15 @@ class SlidingEventsStatus extends State<SlidingEvents> {
     } else {
       length = rightTarget - offset;
     }
-    int milliseconds = 20;
-    int step = (length / milliseconds).floor().toInt();
+    double milliseconds = length * 2;
+    double step = length / milliseconds;
+    if (step < 0.1) {
+      step = 0.1;
+    }
+    step = (step * 100).floor() / 100;
 
     Utils.setInterval(
-      Duration(milliseconds: milliseconds),
+      Duration(milliseconds: 1),
       (t) {
         setState(() {
           offset += offset > 0 ? step : -step;
@@ -159,7 +169,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   }
 
   void onPanEnd(e) {
-    if (offset > leftTarget * .6 || offset < rightTarget * .6) {
+    if (offset > leftTarget * .6 || offset < -rightTarget * .6) {
       showConfrim();
     } else {
       reset();
@@ -167,11 +177,8 @@ class SlidingEventsStatus extends State<SlidingEvents> {
   }
 
   void onPanStart(e) {
-    Utils.setTimeout(Duration(milliseconds: 0), () {
-      // print(e);
-      setState(() {
-        target = e.localPosition.dx;
-      });
+    setState(() {
+      target = e.localPosition.dx;
     });
   }
 
