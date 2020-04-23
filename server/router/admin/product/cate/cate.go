@@ -64,7 +64,7 @@ func add(c echo.Context) error {
 	if cate.Name == "" {
 		return util.JSONErr(c, nil, "分类名称不可空")
 	}
-	// 查询分类是否存在
+	// 查询分类是否存在 parentID为空时是一级分类
 	if cate.ParentID > 0 {
 		parent := &model.GoodsCate{Model: gorm.Model{ID: uint(cate.ParentID)}}
 		empty := db.First(parent).RecordNotFound()

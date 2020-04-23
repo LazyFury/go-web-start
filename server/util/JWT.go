@@ -92,12 +92,13 @@ func getToken(c echo.Context) (token string) {
 		// fmt.Printf("拦截json  %v \n", t)
 		return t.Token
 	}
-	// token in header
 
+	// token in header
 	token = r.Header.Get("token")
 	if token != "" {
 		return token
 	}
+	// Authorization in token
 	token = r.Header.Get("Authorization")
 	if token != "" {
 		return token

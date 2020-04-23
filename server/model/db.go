@@ -47,16 +47,16 @@ func DataBaselimit(limit int, page int, model interface{}, list interface{}, tab
 	userModal.Count(&count)
 	// 查询绑定用户列表
 	userModal.Offset(limit * (page - 1)).Limit(limit).Order(Order).Find(list)
-	pageCount := float64(count) / float64(limit)
+	pageCount := math.Ceil(float64(count) / float64(limit))
 	if list == nil {
 		list = []string{}
 	}
 	return map[string]interface{}{
 		"count":     count,
-		"list":      list,
 		"pageSize":  limit,
 		"pageNow":   page,
-		"pageCount": math.Ceil(pageCount),
+		"pageCount": pageCount,
+		"list":      list,
 	}
 }
 

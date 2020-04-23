@@ -74,7 +74,10 @@ class NetImage extends ImageProvider<NetImage> {
       Uint8List result = defaultImage;
       var img = Uri.parse(key.image);
       // print("请求图片资源：" + img.path);
-
+      chunkEvents.add(ImageChunkEvent(
+        cumulativeBytesLoaded: 0,
+        expectedTotalBytes: 100,
+      ));
       // 尝试请求网络资源
       var response = await Http.request("get", img, isFile: true).then((value) {
         print("图片加载成功:$img");

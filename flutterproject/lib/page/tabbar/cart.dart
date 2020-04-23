@@ -23,6 +23,10 @@ class CartStatue extends State<Cart> {
     {"name": "购物车商品", "select": false}
   ];
 
+  bool get selectAll => (() {
+        var list = cartListData.where((e) => e['select']).toList();
+        return list.length == cartListData.length;
+      })();
   void selectAllCart() {
     setState(() {
       for (int i = 0; i < cartListData.length; i++) {
@@ -116,13 +120,25 @@ class CartStatue extends State<Cart> {
   Widget cartItem(MapEntry<int, Map<String, dynamic>> e) {
     return SlidingEvents(
       height: 120,
-      leftChild:
-          SlidingBackground(child: Center(child: Text("collect")), width: 0),
-      rightChild: SlidingBackground(
+      leftChild: SlidingBackground(
+        child: TouchView(
           child: Container(
-              decoration: BoxDecoration(color: Colors.red),
-              child: Center(child: Text("delete"))),
-          width: 120),
+              decoration: BoxDecoration(color: Colors.black54),
+              child: Center(child: Text("collect"))),
+        ),
+        width: 100,
+      ),
+      rightChild: SlidingBackground(
+        child: TouchView(
+          child: Container(
+            decoration: BoxDecoration(color: Colors.red),
+            child: Center(
+              child: Text("delete"),
+            ),
+          ),
+        ),
+        width: 120,
+      ),
       child: Container(
         width: screenSize(context).width,
         height: 120,
@@ -214,7 +230,9 @@ class CartStatue extends State<Cart> {
   // 自定义Navbar
   Widget buildNavbar(BuildContext context, TextStyle textStyle) {
     return navbar(context, title: "购物车", leftButton: [
-      FlatButton(onPressed: selectAllCart, child: Text("全选", style: textStyle))
+      FlatButton(
+          onPressed: selectAllCart,
+          child: Text("${selectAll ? '全选' : '全不选'}", style: textStyle))
     ], rightButton: [
       FlatButton(
           onPressed: () {

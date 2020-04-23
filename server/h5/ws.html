@@ -12,7 +12,7 @@
     <input type="text" id='input'>
     <button onclick="send()">发送</button>
     <script>
-        var loc = window.location;
+       var loc = window.location;
         var uri = 'ws:';
         if (loc.protocol === 'https:') {
             uri = 'wss:';
@@ -22,18 +22,33 @@
         ws = new WebSocket(uri)
         ws.onopen = function () {
             console.log('Connected')
+            let id = window.localStorage.getItem('userId')   
+            let a = {hello:"asd",id}
+            send(JSON.stringify(a))
         }
         ws.onmessage = function (evt) {
             var out = document.getElementById('output');
+        
             out.innerHTML += evt.data + '<br>';
+
+            jsonStr = {}
+            try{
+                jsonStr = JSON.parse(evt.data)
+            }catch(err){
+
+            }      
+            let id = jsonStr.ID
+            console.log(jsonStr,id)
+            id && window.localStorage.setItem("userId",id)
+      
         }
 
 
-        function send() {
-            let val = input.value
-            if (!val) {
-                alert("请输入内容...")
+        function send(val) {
+            if(!val){
+                val = input.value
             }
+
             ws.send(val);
         }
     </script>
