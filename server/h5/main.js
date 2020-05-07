@@ -21,7 +21,7 @@ var app = new Vue({
             // 拷贝 否则删除属性的时候会影响 data 
             let conf = JSON.parse(JSON.stringify(config))
             // Get方式请求
-            let isGet = conf.method == "get"||conf.method == "GET"
+            let isGet = conf.method.toLowerCase() === "get"
             if (isGet){
                 // 拼接url参数 删除 body 
                 url += getUrl(conf.body)

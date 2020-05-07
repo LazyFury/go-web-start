@@ -19,7 +19,7 @@ type configType struct {
 }
 
 // ReadConfig 读取配置 初始化时运行 绑定为全局变量
-// 在我使用 ReadConfig 命名函数的时候 编辑器提示了错误， 函数应该和结构体保存一直的大写或者小写 以保证其他包的调用者可以使用这个函数
+// 在我使用 ReadConfig 命名函数的时候 编辑器提示了错误， 函数应该和结构体configType保存一直的大写或者小写 以保证其他包的调用者可以使用这个函数
 func readConfig() *configType {
 	f, err := os.Open("./config/config.json")
 	defer f.Close()

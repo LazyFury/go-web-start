@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	appid     string = "wx8bddf23d9228626d"
-	appsecret string = "0f28c6ea02973d1719a3312e17f38501"
+	appid     string = "wx5410d81bd4f6d965"               // "wx8bddf23d9228626d"
+	appsecret string = "ff630448cbd2b5dd7bf28ba7054eeeeb" //"0f28c6ea02973d1719a3312e17f38501"
 	// 拼接微信登陆请求
 	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
 	// 跳转微信登陆授权页
@@ -51,7 +51,7 @@ func login(c echo.Context) (err error) {
 	// 请求微信登陆返回信息
 	wechatLogin, msg := sendCodeToWechatServer(code)
 	if msg != "" {
-		return util.JSONErr(c, nil, msg)
+		return util.JSONErr(c, wechatLogin, msg)
 	}
 	// 更新过期时间
 	wechatLogin.ExpiresIn += time.Now().Unix()

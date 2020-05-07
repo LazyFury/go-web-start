@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -13,6 +14,9 @@ import (
 var (
 	upgrader = websocket.Upgrader{
 		HandshakeTimeout: time.Duration(10000),
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 )
 
@@ -30,7 +34,7 @@ func WsServer(c echo.Context) (err error) {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
 			log.Println("close:", err)
-			group.remove(ws) //SetCloseHandler 有点在safari延时
+			group.remove(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
 			break
 		}
 		info := Message{}
@@ -56,14 +60,13 @@ func WsServer(c echo.Context) (err error) {
 func readMessage(info Message, ws *websocket.Conn) {
 	var user = &Gamer{}
 	if !group.hasKey(ws) {
-		//更新链接 或者新建用户
+		//更新ws连接 或者新建用户
 		fmt.Println(userList)
 		if u, ok := userList[info.ID]; ok {
 			updateUser(u, ws)
 			user = u
 		} else {
 			user = createUser(ws)
-
 		}
 		return
 	}
