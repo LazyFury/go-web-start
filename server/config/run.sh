@@ -1,1 +1,0 @@
-docker run --rm  --name goserver  -v /Volumes/File/Project/go-echo-demo/server/dist:/root/app --link mysql:mysql -p 1234:8080 goserver:v2  ./linux-main;

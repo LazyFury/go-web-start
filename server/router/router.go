@@ -42,7 +42,7 @@ func Start(e *echo.Echo) {
 	index := g
 
 	index.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "hello world！")
+		return c.String(http.StatusOK, "hello world！docker got it")
 	})
 	index.POST("/upload", upload)
 	index.GET("/video", func(c echo.Context) (err error) {
