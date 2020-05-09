@@ -1,6 +1,7 @@
 package wechat
 
 import (
+	"EK-Server/config"
 	"EK-Server/model"
 	"EK-Server/util"
 	"crypto/sha1"
@@ -15,8 +16,8 @@ import (
 )
 
 var (
-	appid     string = "wx5410d81bd4f6d965"               // "wx8bddf23d9228626d"
-	appsecret string = "ff630448cbd2b5dd7bf28ba7054eeeeb" //"0f28c6ea02973d1719a3312e17f38501"
+	appid     string = config.Global.Wechat.Appid     // "wx5410d81bd4f6d965"               //
+	appsecret string = config.Global.Wechat.Appsecret //"ff630448cbd2b5dd7bf28ba7054eeeeb" //
 	// 拼接微信登陆请求
 	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
 	// 跳转微信登陆授权页

@@ -1,5 +1,9 @@
 {
     "mysql": "suke:@(mysql:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai",
     "baseURL": "/",
-    "tablePrefix": "ek_server"
+    "tablePrefix": "ek_server",
+    "wechat":{
+        "appid":"wx8bddf23d9228626d",
+        "appsecret": "0f28c6ea02973d1719a3312e17f38501"
+    }
 }
