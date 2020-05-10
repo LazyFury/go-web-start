@@ -2,8 +2,8 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: go get -u
-    command: go run ./main.go
+  - init: cd /workspace/go-echo-demo/server &&  go get -u
+    command: cd /workspace/go-echo-demo/server &&  go run ./main.go
 ports:
   - port: 8080
     onOpen: open-preview
