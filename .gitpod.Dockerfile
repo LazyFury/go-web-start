@@ -8,8 +8,6 @@ USER gitpod
 # RUN sudo apt-get -q update && #     sudo apt-get install -yq bastet && #     sudo rm -rf /var/lib/apt/lists/*
 #
 # More information: https://www.gitpod.io/docs/config-docker/
-RUN apk update
-RUN apk add --no-cache go
 # Configure Go
 ENV GOPATH /workspace/go
 ENV PATH $GOPATH/bin:$PATH
