@@ -2,7 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: cd /workspace/go-echo-demo/server &&  go get -u
+  - init: cd /workspace/go-echo-demo/server &&  go get -u && mysql < /workspace/ready.sql
     command: cd /workspace/go-echo-demo/server &&  go run ./main.go
 ports:
   - port: 8080
