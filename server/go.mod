@@ -20,9 +20,9 @@ require (
 	// github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 // indirect
 	// github.com/spf13/viper v1.6.2
 	github.com/valyala/fasttemplate v1.1.0 // indirect
-	golang.org/x/crypto v0.0.0-20200429183012-4b2356b1ed79 // indirect
+	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f // indirect
 	golang.org/x/sys v0.0.0-20200509044756-6aff5f38e54f // indirect
-	google.golang.org/appengine v1.6.6 // indirect
+	golang.org/x/text v0.3.2 // indirect
 // golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 )

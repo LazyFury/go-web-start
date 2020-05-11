@@ -38,12 +38,13 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
 	})) //跨域
 	// e.Use(util.JWT())
+	
 	// 模版
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(template.ParseGlob("template/*.html")),
 	}
-
-	e.Renderer = renderer
+	e.Renderer =  renderer
+	
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
 	e.GET("/hello", func(c echo.Context) error {
@@ -57,9 +58,9 @@ func main() {
 	// 注册路由
 	router.Start(e)
 	// router.Start(e)
+	
 	// 启动服务
 	e.Logger.Error(e.Start(":8080"))
-
 }
 
 // requestInfo
