@@ -42,6 +42,8 @@ func Start(e *echo.Echo) {
 	index := g
 
 	index.GET("/", func(c echo.Context) error {
+
+		fmt.Printf("hello world!")
 		return c.String(http.StatusOK, "hello world！docker got it")
 	})
 	index.POST("/upload", upload)

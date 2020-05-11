@@ -24,3 +24,4 @@ main
 *.out
 upload
 log
+__debug_bin
