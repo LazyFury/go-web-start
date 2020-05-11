@@ -59,6 +59,7 @@ func main() {
 	router.Start(e)
 	// router.Start(e)
 	fmt.Printf("hello world!")
+
 	// 启动服务
 	e.Logger.Error(e.Start(":8080"))
 }

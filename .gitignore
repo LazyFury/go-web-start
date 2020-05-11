@@ -22,6 +22,6 @@ dist/
 tmp/*
 main
 *.out
-upload
+*/static/upload
 log
 __debug_bin
