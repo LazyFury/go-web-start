@@ -81,7 +81,7 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 	defer src.Close() //函数结束时自动关闭文件
 
 	//创建文件夹
-	dir, err := getDir("./static/upload/"+folder+"/", time.Now().Format("2006_01_02"))
+	dir, err := util.GetDir("./static/upload/"+folder+"/", time.Now().Format("2006_01_02"))
 	if err != nil {
 		err = errors.New("创建文件夹失败")
 		return
@@ -106,19 +106,6 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 	}
 	// 拼接文件地址，不带协议头，方便处理http 到https升级 ， 其实也没找到协议头在哪儿，req对象里没有返回到空字符串
 	fileName = fmt.Sprintf("/%s", fileName)
-	return
-}
-
-// 创建文件夹
-func getDir(path string, foderName string) (dir string, err error) {
-	folder := filepath.Join(path, foderName)
-	if _, err = os.Stat(folder); os.IsNotExist(err) {
-		err = os.MkdirAll(folder, os.ModePerm)
-		if err != nil {
-			return
-		}
-	}
-	dir = folder
 	return
 }
 
