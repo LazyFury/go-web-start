@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -17,21 +16,15 @@ import (
 )
 
 func main() {
-	filename := "./log/" + time.Now().Format("2006_01_02") + ".log"
 
-	logfile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		panic(err)
-	}
-	// os.Stdout = logfile
-	os.Stderr = logfile
 	time.LoadLocation("local")
-	e := echo.New()                                                                //echo实例                                             //日志
-	model.DB = model.InitDB(config.Global.Mysql)                                   //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
-	defer model.DB.Close()                                                         //退出时释放链接
-	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
-	e.Use(middleware.Gzip())                                                       //gzip压缩
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
+	e := echo.New()                              //echo实例                                             //日志
+	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
+	defer model.DB.Close()                       //退出时释放链接
+	e.Pre(middleware.RemoveTrailingSlash())      //删除url反斜杠
+	e.Use(middleware.Gzip())                     //gzip压缩
+	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
+	e.Use(util.LogMiddleware())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*", "https://labstack.net"},
@@ -61,7 +54,7 @@ func main() {
 	fmt.Printf("hello world!")
 
 	// 启动服务
-	e.Logger.Error(e.Start(":8080"))
+	e.Logger.Debug(e.Start(":8080"))
 }
 
 // requestInfo

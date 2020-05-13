@@ -3,7 +3,6 @@ package game
 import (
 	"EK-Server/util"
 	"fmt"
-	"log"
 	"math/rand"
 
 	"github.com/gorilla/websocket"
@@ -63,7 +62,7 @@ func inArray(arr []interface{}, item interface{}) (inArr bool) {
 func Push() {
 	for {
 		c := <-broadcast
-		log.Print(c)
+		util.Logger.Print(c)
 		group.sendAll(c.Msg, c.UID)
 	}
 }
@@ -100,7 +99,7 @@ func (g *Gamer) send(data interface{}) (msg string, err error) {
 	}
 
 	if err != nil {
-		log.Println(err)
+		util.Logger.Println(err)
 		// safai 浏览器只能在这里检测到用户刷新页面断开
 		group.remove(g.Ws)
 	}
@@ -136,9 +135,11 @@ func (g Group) remove(ws *websocket.Conn) {
 
 // Message
 func (m *Message) toString() (str string) {
-	var tmp = `ws Message:{"id":%s,
+	var tmp = `ws Message:{
+					  "id":%s,
 					  "message":%s,
-					  "action":%s}
+					  "action":%s
+					}
 				`
 	return fmt.Sprintf(tmp, m.ID, m.Message, m.Action)
 }
