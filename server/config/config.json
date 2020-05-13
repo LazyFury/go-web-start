@@ -5,5 +5,6 @@
     "wechat": {
         "appid": "wx8bddf23d9228626d",
         "appsecret": "0f28c6ea02973d1719a3312e17f38501"
-    }
+    },
+    "port": 8080
 }
