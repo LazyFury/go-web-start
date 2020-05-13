@@ -22,6 +22,7 @@ type (
 		BaseURL     string `json:"baseURL"`
 		TablePrefix string `json:"tablePrefix"`
 		Wechat      wechat `json:"wechat"`
+		Port        int    `json:"port"`
 	}
 )
 

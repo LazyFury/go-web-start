@@ -50,11 +50,9 @@ func main() {
 	e.GET("requestInfo", requestInfo)
 	// 注册路由
 	router.Start(e)
-	// router.Start(e)
-	fmt.Printf("hello world!")
 
 	// 启动服务
-	e.Logger.Debug(e.Start(":8080"))
+	e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
 }
 
 // requestInfo
