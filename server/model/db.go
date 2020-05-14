@@ -24,14 +24,21 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
-
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return config.Global.TablePrefix + "_" + defaultTableName
 	}
 
 	db.LogMode(true)
 	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{})
+
 	return db
+}
+
+// PageParams PageParams
+type PageParams struct {
+	Page  int    `json:"page"`
+	Limit int    `json:"limit"`
+	Order string `json:"order"`
 }
 
 // DataBaselimit  获取所有用户列表

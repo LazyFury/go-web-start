@@ -11,6 +11,10 @@ import (
 	"github.com/labstack/echo"
 )
 
+var (
+	goods = model.Goods{}
+)
+
 // Init Init
 func Init(g *echo.Group) {
 	baseURL := "/product"
@@ -18,9 +22,7 @@ func Init(g *echo.Group) {
 
 	cate.Init(product)
 
-	product.GET("", func(c echo.Context) error {
-		return util.JSONSuccess(c, nil, "admin")
-	})
+	product.GET("/list", goods.List)
 	product.POST("/add", add)
 
 }

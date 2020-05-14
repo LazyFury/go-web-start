@@ -2,8 +2,11 @@ package model
 
 import (
 	"EK-Server/util"
+	"fmt"
+	"strings"
 
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo"
 )
 
 type (
@@ -53,3 +56,30 @@ type (
 		Level    int    `json:"level"`
 	}
 )
+
+//List 商品列表
+func (g Goods) List(c echo.Context) error {
+	type Param struct {
+		PageParams
+		Cid int `json:"cid"`
+	}
+	page := Param{PageParams: PageParams{Page: 1, Limit: 10, Order: "id_desc"}}
+
+	if err := c.Bind(&page); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	fmt.Printf("post json 参数：%v", page)
+
+	if page.Order != "" {
+		page.Order = strings.ReplaceAll(page.Order, "_", " ")
+		// page.Order = strings.ReplaceAll(page.Order, ",", " ")
+	}
+	where := &Goods{}
+	if page.Cid > 0 {
+		where = &Goods{Cid: page.Cid}
+	}
+
+	return util.JSONSuccess(c, DataBaselimit(page.Limit, page.Page, where, &[]GoodsList{}, "goods",
+		page.Order), "获取成功")
+}
