@@ -112,8 +112,8 @@ func (u *User) AddUser() (string, error) {
 // DelUser 删除用户
 func (u *User) DelUser() (interface{}, error) {
 	db := DB
-	// db.Delete(u)
-	row := db.Exec("DELETE FROM `users` WHERE `id` = ?", u.ID)
+	row := db.Delete(u)
+	// row := db.Exec("DELETE FROM "+config.Global.TablePrefix+"`users` WHERE `id` = ?", u.ID)
 	if row.Error != nil {
 		return row.Error, errors.New("删除失败")
 	}

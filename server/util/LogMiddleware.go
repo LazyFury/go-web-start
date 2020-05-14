@@ -142,7 +142,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 					}
 					return buf.WriteString(id)
 				case "remote_ip":
-					return buf.WriteString(c.RealIP())
+					return buf.WriteString(ClientIP(c))
 				case "host":
 					return buf.WriteString(req.Host)
 				case "uri":
