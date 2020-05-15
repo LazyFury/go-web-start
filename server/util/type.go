@@ -56,7 +56,7 @@ func (t *LocalTime) Scan(v interface{}) error {
 	return fmt.Errorf("can not convert %v to timestamp", v)
 }
 
-// NumberTime NumberTime
+// NumberTime 时间戳
 type NumberTime struct {
 	time.Time
 }

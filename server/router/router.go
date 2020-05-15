@@ -60,7 +60,7 @@ func Start(e *echo.Echo) {
 	})
 
 	index.GET("/👌", func(c echo.Context) error {
-		return util.JSONSuccess(c, nil, "")
+		return util.JSONSuccess(c, nil, "👌")
 	})
 
 }

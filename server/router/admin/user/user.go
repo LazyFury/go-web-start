@@ -3,12 +3,15 @@ package user
 import (
 	"EK-Server/model"
 	"EK-Server/util"
-	"EK-Server/util/sha"
 	"fmt"
 	"strconv"
-	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
+)
+
+var (
+	users = &model.User{}
 )
 
 // Init 初始化
@@ -16,7 +19,7 @@ func Init(g *echo.Group) {
 	baseURL := "/user"
 	user := g.Group(baseURL)
 	user.GET("/list", allUser)
-	user.POST("/addUser", addUser)
+	user.POST("/addUser", users.RegController)
 	user.POST("/updateUser", updateUser)
 	user.POST("/delUser", delUser)
 	user.GET("/repeatOfName", repeatOfName)
@@ -32,7 +35,7 @@ func frozen(c echo.Context) error {
 	}
 
 	db := model.DB
-	row := db.Model(&model.User{ID: u.ID}).Update("status", u.Status)
+	row := db.Model(&model.User{Model: gorm.Model{ID: u.ID}}).Update("status", u.Status)
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "操作失败")
 	}
@@ -68,33 +71,6 @@ func repeatOfName(c echo.Context) error {
 	return util.JSON(c, nil, "用户名已存在", -1002)
 }
 
-func addUser(c echo.Context) error {
-
-	user := new(model.User)
-
-	if err := c.Bind(user); err != nil {
-		return util.JSONErr(c, err, "参数错误")
-	}
-
-	user.Password = sha.EnCode(user.Password)
-
-	req := c.Request()
-	ua := req.UserAgent()
-	ip := util.ClientIP(c)
-	user.IP = ip
-	user.Ua = ua
-	user.CreateTime = util.LocalTime{Time: time.Now()}
-	user.LoginTime = util.LocalTime{Time: time.Now()}
-	user.Status = 1
-
-	fmt.Println(user)
-	msg, err := user.AddUser()
-	if err != nil {
-		return util.JSONErr(c, err, msg)
-	}
-	return util.JSONSuccess(c, 1, msg)
-}
-
 func allUser(c echo.Context) error {
 	limit, err := strconv.Atoi(c.QueryParam("limit"))
 	if err != nil {
@@ -109,7 +85,7 @@ func allUser(c echo.Context) error {
 }
 
 func updateUser(c echo.Context) error {
-	u := new(model.User)
+	u := &model.User{}
 	req := c.Request()
 	fmt.Println(req.Header.Get("Content-Type"))
 
