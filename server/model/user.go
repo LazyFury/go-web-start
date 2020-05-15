@@ -2,38 +2,37 @@ package model
 
 import (
 	"EK-Server/util"
+	"EK-Server/util/sha"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
+	"github.com/labstack/echo"
 )
 
 // User 用户更新
 type User struct {
-	ID         int            `json:"id"`
-	Password   string         `json:"password"`
-	Name       string         `json:"name" gorm:"unique"`
-	Email      string         `json:"email"`
-	IP         string         `json:"ip"`
-	Ua         string         `json:"ua"`
-	CreateTime util.LocalTime `json:"create_time"`
-	LoginTime  util.LocalTime `json:"login_time"`
-	Status     int            `json:"status"`
-	AddTime    util.NumberTime
+	gorm.Model
+	Password  string         `json:"password"`
+	Name      string         `json:"name" gorm:"unique"`
+	Email     string         `json:"email"`
+	IP        string         `json:"ip"`
+	Ua        string         `json:"ua"`
+	LoginTime util.LocalTime `json:"login_time"`
+	Status    int            `json:"status"`
+	IsAdmin   bool           `json:"isAdmin"`
 }
 
 // SearchUser	 用户列表显示
 type searchUser struct {
-	ID         int             `json:"id"`
-	Email      string          `json:"email"`
-	Name       string          `json:"name"`
-	IP         string          `json:"ip"`
-	Ua         string          `json:"ua"`
-	CreateTime util.LocalTime  `json:"create_time"`
-	LoginTime  util.LocalTime  `json:"login_time"`
-	Status     int             `json:"status"`
-	AddTime    util.NumberTime `json:"AddTime"`
-	Bool       bool
+	ID        int            `json:"id"`
+	Email     string         `json:"email"`
+	Name      string         `json:"name"`
+	IP        string         `json:"ip"`
+	Ua        string         `json:"ua"`
+	LoginTime util.LocalTime `json:"login_time"`
+	Status    int            `json:"status"`
 }
 
 // WechatOauth 微信用户登陆
@@ -69,18 +68,45 @@ func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
 	return DataBaselimit(limit, page, map[string]interface{}{}, &[]searchUser{}, "users", "id desc")
 }
 
+// RegController AddUser
+func (u *User) RegController(c echo.Context) error {
+
+	user := new(User)
+
+	if err := c.Bind(user); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	user.Password = sha.EnCode(user.Password)
+
+	req := c.Request()
+	ua := req.UserAgent()
+	ip := util.ClientIP(c)
+	user.IP = ip
+	user.Ua = ua
+	user.LoginTime = util.LocalTime{Time: time.Now()}
+	user.Status = 1
+
+	fmt.Println(user)
+	msg, err := user.AddUser()
+	if err != nil {
+		return util.JSONErr(c, nil, msg)
+	}
+	return util.JSONSuccess(c, user.ID, msg)
+}
+
 // UpdateUser 更新用户
-func (u *User) UpdateUser(id int, data *User) error {
+func (u *User) UpdateUser(id uint, data *User) error {
 	db := DB
 
 	// uid, _ := strconv.Atoi(id)
 	// 使用id查找用户
-	user := &User{ID: id}
+	user := &User{Model: gorm.Model{ID: uint(id)}}
 	err := user.Find()
 	if err != nil {
 		return err
 	}
-	row := db.Model(&User{ID: id}).Updates(data)
+	row := db.Model(user).Updates(data)
 	if row.Error != nil {
 		return row.Error
 	}
@@ -94,12 +120,12 @@ func (u *User) UpdateUser(id int, data *User) error {
 func (u *User) AddUser() (string, error) {
 	db := DB
 
-	fmt.Println(u)
+	// fmt.Println(u)
 	db.NewRecord(u) // => 主键为空返回`true`
 	row := db.Create(u)
 
 	if row.Error != nil {
-		return "添加失败,用户已存在", nil
+		return "添加失败,用户已存在", row.Error
 	}
 
 	if row.RowsAffected <= 0 {
