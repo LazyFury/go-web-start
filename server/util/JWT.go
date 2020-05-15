@@ -1,6 +1,7 @@
 package util
 
 import (
+	structtype "EK-Server/util/structType"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -152,6 +153,6 @@ func parseToken(tokenss string) (user *UserInfo, err error) {
 	user.Name = claim["username"].(string)
 
 	exp := int64(claim["exp"].(float64))
-	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(DefaultTimeLayout))
+	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(structtype.DefaultTimeLayout))
 	return
 }

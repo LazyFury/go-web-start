@@ -3,6 +3,7 @@ package model
 import (
 	"EK-Server/util"
 	"EK-Server/util/sha"
+	"EK-Server/util/structtype"
 	"errors"
 	"fmt"
 	"time"
@@ -14,25 +15,25 @@ import (
 // User 用户更新
 type User struct {
 	gorm.Model
-	Password  string         `json:"password"`
-	Name      string         `json:"name" gorm:"unique"`
-	Email     string         `json:"email"`
-	IP        string         `json:"ip"`
-	Ua        string         `json:"ua"`
-	LoginTime util.LocalTime `json:"login_time"`
-	Status    int            `json:"status"`
-	IsAdmin   bool           `json:"isAdmin"`
+	Password  string               `json:"password"`
+	Name      string               `json:"name" gorm:"unique"`
+	Email     string               `json:"email"`
+	IP        string               `json:"ip"`
+	Ua        string               `json:"ua"`
+	LoginTime structtype.LocalTime `json:"login_time"`
+	Status    int                  `json:"status"`
+	IsAdmin   bool                 `json:"isAdmin"`
 }
 
 // SearchUser	 用户列表显示
 type searchUser struct {
-	ID        int            `json:"id"`
-	Email     string         `json:"email"`
-	Name      string         `json:"name"`
-	IP        string         `json:"ip"`
-	Ua        string         `json:"ua"`
-	LoginTime util.LocalTime `json:"login_time"`
-	Status    int            `json:"status"`
+	ID        int                  `json:"id"`
+	Email     string               `json:"email"`
+	Name      string               `json:"name"`
+	IP        string               `json:"ip"`
+	Ua        string               `json:"ua"`
+	LoginTime structtype.LocalTime `json:"login_time"`
+	Status    int                  `json:"status"`
 }
 
 // WechatOauth 微信用户登陆
@@ -84,7 +85,7 @@ func (u *User) RegController(c echo.Context) error {
 	ip := util.ClientIP(c)
 	user.IP = ip
 	user.Ua = ua
-	user.LoginTime = util.LocalTime{Time: time.Now()}
+	user.LoginTime = structtype.LocalTime{Time: time.Now()}
 	user.Status = 1
 
 	fmt.Println(user)
