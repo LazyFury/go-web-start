@@ -21,8 +21,8 @@ require (
 	// github.com/spf13/viper v1.6.2
 	github.com/valyala/fasttemplate v1.1.0
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
-	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f // indirect
-	golang.org/x/sys v0.0.0-20200511232937-7e40ca221e25 // indirect
+	golang.org/x/net v0.0.0-20200513185701-a91f0712d120 // indirect
+	golang.org/x/sys v0.0.0-20200513112337-417ce2331b5c // indirect
 	golang.org/x/text v0.3.2 // indirect
 // golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 )
