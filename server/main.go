@@ -5,9 +5,6 @@ import (
 	"EK-Server/model"
 	"EK-Server/router"
 	"EK-Server/util"
-	structtype "EK-Server/util/structType"
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -41,16 +38,6 @@ func main() {
 	}
 	e.Renderer = renderer
 
-	var T = structtype.TestTime{
-		Atime: structtype.CustomTime{Time: time.Now()},
-		Btime: structtype.LocalTime{Time: time.Now()},
-	}
-	m := structtype.TestTime{}
-	btyeArr, _ := json.Marshal(T)
-	fmt.Println("解码：" + string(btyeArr))
-	reader := bytes.NewReader(btyeArr)
-	json.NewDecoder(reader).Decode(&m)
-	fmt.Printf("编码：%+v", m)
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
 	e.GET("/hello", func(c echo.Context) error {

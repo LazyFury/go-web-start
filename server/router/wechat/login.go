@@ -8,6 +8,17 @@ import (
 	"net/http"
 )
 
+var (
+	// 拼接微信登陆请求
+	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
+	// 跳转微信登陆授权页
+	wechatRedirectURL string = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+
+	// 微信用户信息
+	wechatUserInfo    string = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
+	wechatUserInfoCgi string = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN"
+)
+
 //发送code换取微信登陆信息
 func sendCodeToWechatServer(code string) (result *model.WechatOauth, msg string) {
 	url := fmt.Sprintf(loginURL, appid, appsecret, code)
