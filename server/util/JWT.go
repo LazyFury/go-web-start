@@ -1,7 +1,7 @@
 package util
 
 import (
-	structtype "EK-Server/util/structType"
+	"EK-Server/util/structtype"
 	"bytes"
 	"encoding/json"
 	"errors"

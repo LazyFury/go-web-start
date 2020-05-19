@@ -11,6 +11,8 @@ import (
 var (
 	// JsAPI 全局jsAPITicket
 	JsAPI *jsAPITicket = &jsAPITicket{}
+	// jsapi_ticket授权请求
+	jsAPITicketURL string = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
 )
 
 // JsAPITicket c

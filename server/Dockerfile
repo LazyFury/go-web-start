@@ -12,7 +12,7 @@ ENV GOROOT /usr/lib/go
 ENV GOPATH /root/go
 ENV PATH $GOPATH/bin:$PATH
 ENV GOPROXY https://goproxy.cn
-ENV GO111MODULE on
+ENV GO111MODULE off
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 # 时区文件

@@ -18,17 +18,6 @@ import (
 var (
 	appid     string = config.Global.Wechat.Appid     // "wx5410d81bd4f6d965"               //
 	appsecret string = config.Global.Wechat.Appsecret //"ff630448cbd2b5dd7bf28ba7054eeeeb" //
-	// 拼接微信登陆请求
-	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
-	// 跳转微信登陆授权页
-	wechatRedirectURL string = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-	// AccessToken 授权请求
-	accessTokenURL string = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
-	// jsapi_ticket授权请求
-	jsAPITicketURL string = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi"
-	// 微信用户信息
-	wechatUserInfo    string = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
-	wechatUserInfoCgi string = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN"
 )
 
 // Init 初始化
