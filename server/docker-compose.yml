@@ -11,7 +11,8 @@ services:
         links: 
             - mysql:mysql
         volumes:
-            - ./:/root/app
+            - ~/.ssh:/root/.ssh
+            - ../:/root/app
             - /Volumes/File/SDK/gowork:/Volumes/File/SDK/gowork
         command:  /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
     mysql:
