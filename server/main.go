@@ -16,10 +16,10 @@ import (
 )
 
 func main() {
-
+	
 	time.LoadLocation("local")
 	e := echo.New()                              //echo实例                                             //日志
-	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接 不知道为什么 main.go 大写暴露的变量不能全局调用
+	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
 	defer model.DB.Close()                       //退出时释放链接
 	e.Pre(middleware.RemoveTrailingSlash())      //删除url反斜杠
 	e.Use(middleware.Gzip())                     //gzip压缩
