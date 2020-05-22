@@ -7,7 +7,7 @@ RUN apk add --no-cache go
 RUN apk add ffmpeg
 RUN apk add lame
 # Configure Go
-ENV GOROOT /usr/lib/go
+# ENV GOROOT /usr/lib/go
 ENV GOPATH /Volumes/File/SDK/gowork
 ENV PATH $GOPATH/bin:$PATH
 ENV GOPROXY https://goproxy.cn
