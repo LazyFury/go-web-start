@@ -25,3 +25,5 @@ main
 */static/upload
 log
 __debug_bin
+
+server/config/docker/mysql/data

@@ -6,13 +6,12 @@ RUN apk add busybox-extras
 RUN apk add --no-cache go
 RUN apk add ffmpeg
 RUN apk add lame
-
 # Configure Go
 ENV GOROOT /usr/lib/go
-ENV GOPATH /root/go
+ENV GOPATH /Volumes/File/SDK/gowork
 ENV PATH $GOPATH/bin:$PATH
 ENV GOPROXY https://goproxy.cn
-ENV GO111MODULE off
+ENV GO111MODULE auto
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 # 时区文件

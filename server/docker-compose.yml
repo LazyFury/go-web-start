@@ -1,0 +1,27 @@
+version: "3"
+services:
+    server:
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        ports: 
+            - 1234:8080
+        depends_on: 
+            - mysql
+        links: 
+            - mysql:mysql
+        volumes:
+            - ./:/root/app
+            - /Volumes/File/SDK/gowork:/Volumes/File/SDK/gowork
+        command:  /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
+    mysql:
+        image: mysql
+        ports: 
+            - 3306:3306
+        environment:
+             - MYSQL_ALLOW_EMPTY_PASSWORD=true
+             - LANG=C.UTF-8 
+             - default_authentication_plugin=mysql_native_password
+        volumes: 
+            - ./config/docker/mysql/data:/var/lib/mysql
+            - ./config/docker/mysql/conf/my.conf:/etc/mysql/my.cnf
