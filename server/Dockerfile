@@ -8,7 +8,7 @@ RUN apk add ffmpeg
 RUN apk add lame
 # Configure Go
 # ENV GOROOT /usr/lib/go
-ENV GOPATH /Volumes/File/SDK/gowork
+ENV GOPATH /root/go
 ENV PATH $GOPATH/bin:$PATH
 ENV GOPROXY https://goproxy.cn
 ENV GO111MODULE auto

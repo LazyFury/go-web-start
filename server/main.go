@@ -16,7 +16,6 @@ import (
 )
 
 func main() {
-	
 	time.LoadLocation("local")
 	e := echo.New()                              //echo实例                                             //日志
 	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
