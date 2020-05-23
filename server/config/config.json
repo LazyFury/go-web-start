@@ -1,5 +1,5 @@
 {
-    "mysql": "suke:@(host.docker.internal:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai",
+    "mysql": "suke:@(mysql:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai",
     "baseURL": "/",
     "tablePrefix": "ek_server",
     "wechat": {
