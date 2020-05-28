@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
@@ -42,7 +43,22 @@ func Start(e *echo.Echo) {
 		fmt.Printf("hello world!")
 		return c.String(http.StatusOK, "hello world！docker got it")
 	})
-
+	index.GET("/svg", func(c echo.Context) error {
+		color := c.QueryParam("color")
+		svgStr := `<svg xmlns="http://www.w3.org/2000/svg"  width="500" height="200">
+				<path id="形状 1" fill='%s' d="
+				M 0 10 
+				l 500 10 
+				v 100 
+				h -500
+				Z" />
+			</svg>`
+		log.Println("color:"+color == "")
+		if color == "" {
+			color = "#000"
+		}
+		return c.Blob(http.StatusOK, "image/svg+xml", []byte(fmt.Sprintf(svgStr, color)))
+	})
 	// index.POST("/upload", func(c echo.Context) error {
 	// 	return util.UploadCustom(c, util.AcceptsImgExt, "pic")
 	// })

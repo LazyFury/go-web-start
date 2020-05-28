@@ -15,6 +15,8 @@ require (
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0
 	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/mdempsky/gocode v0.0.0-20200405233807-4acdcbdea79d // indirect
+	github.com/nsf/gocode v0.0.0-20190302080247-5bee97b48836 // indirect
 	// github.com/sqs/goreturns v0.0.0-20181028201513-538ac6014518 // indirect
 	// github.com/mattn/go-isatty v0.0.12 // indirect
 	// github.com/pilu/config v0.0.0-20131214182432-3eb99e6c0b9a // indirect
@@ -25,5 +27,7 @@ require (
 	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2 // indirect
 	golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 // indirect
 	golang.org/x/text v0.3.2 // indirect
+	golang.org/x/tools v0.0.0-20200522201501-cb1345f3a375 // indirect
+	golang.org/x/tools/gopls v0.4.1 // indirect
 // golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 )

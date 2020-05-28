@@ -22,8 +22,9 @@ dist/
 tmp/*
 main
 *.out
-*/static/upload
+*/static/upload 
 log
 __debug_bin
-
-server/config/docker/mysql/data
+go-runtime/
+go-path/
+docker/mysql/data/

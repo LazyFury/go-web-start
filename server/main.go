@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -19,12 +20,14 @@ func main() {
 	time.LoadLocation("local")
 	e := echo.New()                              //echo实例                                             //日志
 	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
-	defer model.DB.Close()                       //退出时释放链接
-	e.Pre(middleware.RemoveTrailingSlash())      //删除url反斜杠
-	e.Use(middleware.Gzip())                     //gzip压缩
-	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
-	e.Use(util.LogMiddleware())
+
+	defer model.DB.Close()                                                         //退出时释放链接
+	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
+	e.Use(middleware.Gzip())                                                       //gzip压缩
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
+	// e.Use(util.LogMiddleware())
 	e.Use(middleware.Recover())
+
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*", "https://labstack.net"},
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
@@ -42,6 +45,7 @@ func main() {
 	e.GET("/hello", func(c echo.Context) error {
 		return c.HTML(http.StatusOK, "hello world!")
 	})
+	// e.Use("requestInfo")
 	// 静态目录
 	e.Static("/static", "static")
 	e.Static("/h5", "h5")
