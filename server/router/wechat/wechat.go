@@ -28,7 +28,14 @@ func Init(g *echo.Group) {
 	wechat.GET("/jsApiConfig", jsAPIConfig)
 	wechat.GET("/wechat_redirect", wechatRedirect)
 	wechat.GET("/login", login)
+
 	wechat.GET("/info", userInfo)
+	wechat.GET("/signature", signatureCheck)               //配置接口token验证
+	wechat.POST("/signature", handleWechatMessage)         //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
+	wechat.GET("/sendTemplateMsg", sendTemplateMsgHandler) //发送模版消息
+	// 管理
+	wechatAdmin := wechat.Group("/admin", util.AdminJWT)
+	wechatAdmin.GET("/getMenu", getMenu)
 }
 
 // 微信登陆
