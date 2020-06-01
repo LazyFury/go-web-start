@@ -6,6 +6,7 @@ import (
 	"EK-Server/util/structtype"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -76,6 +77,11 @@ func (u *User) RegController(c echo.Context) error {
 
 	if err := c.Bind(user); err != nil {
 		return util.JSONErr(c, err, "参数错误")
+	}
+
+	user.Name = strings.Trim(user.Name, " ")
+	if user.Name == "" {
+		return util.JSONErr(c, nil, "用户名不可空")
 	}
 
 	user.Password = sha.EnCode(user.Password)

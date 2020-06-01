@@ -51,7 +51,7 @@ func logNew() (logger *log.Logger) {
 	logger = log.New(fileAndStdoutWriter, "", log.Ldate|log.Ltime|log.Lshortfile)
 	// os.Stdout = logfile
 	os.Stderr = logfile
-	log.SetOutput(logfile)
+	// log.SetOutput(logfile)
 	return
 }
 
