@@ -11,6 +11,7 @@ import (
 	"EK-Server/router/api"
 	"EK-Server/router/home"
 	"EK-Server/router/product"
+	"EK-Server/router/tg"
 	"EK-Server/router/wechat"
 	"EK-Server/router/ws"
 	"EK-Server/util"
@@ -35,6 +36,7 @@ func Start(e *echo.Echo) {
 	ws.Init(g)
 	home.Init(g)
 	product.Init(g)
+	tg.Init(g)
 	// 入口
 	index := g
 
