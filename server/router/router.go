@@ -2,7 +2,6 @@ package router
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
@@ -41,31 +40,27 @@ func Start(e *echo.Echo) {
 	index := g
 
 	index.GET("/", func(c echo.Context) error {
-
 		fmt.Printf("hello world!")
-		return c.String(http.StatusOK, "hello world！docker got it")
+		return c.Render(http.StatusOK, "layout/index.html", map[string]interface{}{})
 	})
-	index.GET("/svg", func(c echo.Context) error {
-		color := c.QueryParam("color")
-		svgStr := `<svg xmlns="http://www.w3.org/2000/svg"  width="500" height="200">
-				<path id="形状 1" fill='%s' d="
-				M 0 10 
-				l 500 10 
-				v 100 
-				h -500
-				Z" />
-			</svg>`
-		log.Println("color:"+color == "")
-		if color == "" {
-			color = "#000"
-		}
-		return c.Blob(http.StatusOK, "image/svg+xml", []byte(fmt.Sprintf(svgStr, color)))
-	})
+
 	// index.POST("/upload", func(c echo.Context) error {
 	// 	return util.UploadCustom(c, util.AcceptsImgExt, "pic")
 	// })
 	index.POST("/upload", func(c echo.Context) error {
 		return upload.Default(c)
+	})
+
+	index.GET("/sendMail", func(c echo.Context) error {
+		email := c.QueryParam("email")
+		if email == "" {
+			return util.JSONErr(c, nil, "发送邮箱不可空")
+		}
+		err := util.Mail.SendMail("愚蠢的地球人，毁灭吧！", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
+		if err != nil {
+			return util.JSONErr(c, err, "发送失败")
+		}
+		return util.JSONSuccess(c, nil, "发送成功")
 	})
 
 	index.GET("/video", func(c echo.Context) (err error) {

@@ -19,7 +19,7 @@ func EnCode(str string) string {
 	cfb := cipher.NewCFBEncrypter(c, iv)
 	ciphertext := make([]byte, len(strNew))
 	cfb.XORKeyStream(ciphertext, strNew)
-	fmt.Printf("%s=>%x\n", strNew, ciphertext)
+	// fmt.Printf("%s=>%x\n", strNew, ciphertext)
 	return fmt.Sprintf("%x", ciphertext)
 }
 
@@ -31,6 +31,6 @@ func DeCode(str string) string {
 	cfbdec := cipher.NewCFBDecrypter(c, iv)
 	plaintextCopy := make([]byte, len(strNew))
 	cfbdec.XORKeyStream(plaintextCopy, strNew)
-	fmt.Printf("%x=>%s\n", strNew, plaintextCopy)
+	// fmt.Printf("%x=>%s\n", strNew, plaintextCopy)
 	return fmt.Sprintf("%s", plaintextCopy)
 }
