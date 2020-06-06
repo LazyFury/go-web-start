@@ -1,0 +1,19 @@
+{{template "header" .config}}
+  <body>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+      "
+    >
+      <h1>Hello GoLang Web {{.config.SiteName}} Layout second dir</h1>
+      <div>
+        <span>powered by echo</span>
+        <span>{{ "hello world! guys" | title}}</span>
+      </div>
+    </div>
+  </body>
+</html>

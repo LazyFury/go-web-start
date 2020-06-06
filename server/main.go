@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -29,14 +30,17 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*", "https://labstack.net"},
-		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
+		AllowOrigins:     []string{"*", "https://labstack.net"},
+		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
+		AllowCredentials: true,
+		AllowHeaders:     []string{"token"},
 	})) //跨域
-	// e.Use(util.JWT())
 
 	// 模版
 	renderer := &util.TemplateRenderer{
-		Templates: template.Must(template.ParseGlob("template/*.html")),
+		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(template.FuncMap{
+			"msg": func() string { return "hello this is a msg" },
+		}).Funcs(sprig.FuncMap()), "template", "*.html")),
 	}
 	e.Renderer = renderer
 
