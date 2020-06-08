@@ -1,59 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>api 测试</title>
-    <link rel="stylesheet" href="/h5/main.css">
-</head>
-<body>
-
-    <div id="app">
-        <head>
-             <h1 :style="code==1?'color: green':'color: red'">{{time}}</h1>
-        </head>
-
-       <main class="row" style="align-items: flex-start;">
-        <div class="left row" style="align-items: flex-start;">
-            <div class="url-list">
-                <div v-for="(item,index) in urlList" :key='index'>
-                    <li class="row" @click="current = index" :class="current==index?'active':''">
-                       <pre class="hide-text-1"><code> {{item.url}}</code></pre>
-                       <a @click="send(item)" class="submit">测试</a>
-                    </li>
-                    <div style="width: 100%;height: 1px;background: #999;"></div>
-                </div>
-            </div>
-            <div class="config col" style="background: #eee;margin: 0 10px;padding: 10px;align-items: flex-start;">
-                <!-- 请求方式 -->
-                <label for="">请求方式</label>
-                <input type="text" v-model="urlList[current].config.method">
-                <!-- 请求参数 -->
-                <label for="">请求参数</label>
-               <div v-for="(item,index) in Object.keys(urlList[current].config.body)" :key="index">
-                   <label for="">{{item}}</label>
-                   <input type="text" v-model="urlList[current].config.body[item]">
-               </div>
-                <!-- 请求头 -->
-                <label for="">请求头</label>
-                <textarea v-model="urlList[current].config.headers" id="" cols="30" rows="10"></textarea>
-            </div>
-        </div>
-
-        <div class="right" style="flex: 1;overflow-x: auto;">
-           <h4>
-               <a :href="urlList[current].url">{{ urlList[current].url}}</a>
-           </h4>
-           <pre class="editer" v-html="result"></pre>
-        </div>
-       </main>
-
-    </div>
-
-    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
-    <script src="/h5/api.js?12113132as3d2322123"></script>
-    <script src="/h5/main.js?2dddsd"></script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    hello world!
+  </body>
 </html>
