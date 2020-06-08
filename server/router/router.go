@@ -41,7 +41,7 @@ func Start(e *echo.Echo) {
 
 	index.GET("/", func(c echo.Context) error {
 		fmt.Printf("hello world!")
-		return c.Render(http.StatusOK, "layout/index.html", map[string]interface{}{})
+		return c.Render(http.StatusOK, "index.html", map[string]interface{}{})
 	})
 
 	// index.POST("/upload", func(c echo.Context) error {

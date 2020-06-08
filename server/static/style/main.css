@@ -1,0 +1,30 @@
+/* privite */
+header {
+  background-color: cornflowerblue;
+  color: #fff;
+  padding: 10px 0;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+header a {
+  color: #fff;
+}
+.header-nav ul {
+  padding: 10px 0;
+  list-style: none;
+}
+.header-nav li {
+  margin-right: 20px;
+}
+
+/* main  */
+main.container {
+  margin: 0 auto auto;
+}
+/* footer  */
+footer {
+  min-height: 100px;
+  background-color: #eee;
+  padding: 10px 0;
+}

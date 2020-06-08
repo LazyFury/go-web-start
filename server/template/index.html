@@ -1,19 +1,18 @@
 {{template "header" .config}}
-  <body>
-    <div
-      style="
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 60vh;
-      "
-    >
-      <h1>Hello GoLang Web {{.config.SiteName}}</h1>
-      <div>
-        <span>powered by echo</span>
-        <span>{{ "hello world! guys" | title}}</span>
-      </div>
+<main class="container">
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <h1>Hello GoLang Web test {{.config.SiteName}}</h1>
+    <div>
+      <span>powered by echo</span><br /><br /><br />
+      <span>{{ "hello world! guys" | title}}</span>
     </div>
-  </body>
-</html>
+  </div>
+</main>
+{{template "footer"}}
