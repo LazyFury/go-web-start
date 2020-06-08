@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -32,7 +31,7 @@ func readConfig() *configType {
 	f, err := os.Open("./config/config.json")
 	defer f.Close()
 	if err != nil {
-		panic(fmt.Errorf("打开文件错误"))
+		panic("打开配置文件错误，请创建config/config.json 参考(config-defaultjson")
 	}
 	c := configType{}
 	if err = json.NewDecoder(f).Decode(&c); err != nil {
