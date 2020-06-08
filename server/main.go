@@ -7,6 +7,7 @@ import (
 	"EK-Server/util"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -18,10 +19,11 @@ import (
 )
 
 func main() {
-	time.LoadLocation("local")
-	e := echo.New()                              //echo实例                                             //日志
-	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
 
+	time.LoadLocation("local")
+	e := echo.New() //echo实例                                             //日志
+	fmt.Println("hello world!")
+	model.DB = model.InitDB(config.Global.Mysql)                                   //初始化数据链接
 	defer model.DB.Close()                                                         //退出时释放链接
 	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
 	e.Use(middleware.Gzip())                                                       //gzip压缩
@@ -57,9 +59,11 @@ func main() {
 	e.GET("requestInfo", requestInfo)
 	// 注册路由
 	router.Start(e)
+	log.Printf("time")
 
 	// 启动服务
 	e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
+
 }
 
 // requestInfo
