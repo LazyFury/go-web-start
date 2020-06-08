@@ -6,5 +6,12 @@
     "appid": "",
     "appsecret": ""
   },
-  "port": 8080
+  "port": 8080,
+  "mail": {
+    "host": "smtp.qq.com",
+    "nickname": "比鲁斯",
+    "password": "--",
+    "port": "587",
+    "user": "--@qq.com"
+  }
 }
