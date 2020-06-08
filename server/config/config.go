@@ -9,7 +9,6 @@ import (
 // Global 全局配置
 var Global *configType = readConfig()
 
-// configType ConfigType
 type (
 	wechat struct {
 		Appid     string `json:"appid"`
@@ -23,6 +22,7 @@ type (
 		TablePrefix string `json:"tablePrefix"`
 		Wechat      wechat `json:"wechat"`
 		Port        int    `json:"port"`
+		Mail        mail
 	}
 )
 
