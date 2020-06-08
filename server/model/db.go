@@ -29,17 +29,19 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{}, &Post{})
 
 	return db
 }
 
 // PageParams PageParams
-type PageParams struct {
-	Page  int    `json:"page"`
-	Limit int    `json:"limit"`
-	Order string `json:"order"`
-}
+type (
+	PageParams struct {
+		Page  int    `json:"page"`
+		Limit int    `json:"limit"`
+		Order string `json:"order"`
+	}
+)
 
 // DataBaselimit  获取所有用户列表
 func DataBaselimit(limit int, page int, model interface{}, list interface{}, table string, Order string) map[string]interface{} {

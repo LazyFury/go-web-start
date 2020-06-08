@@ -1,0 +1,13 @@
+{{template "header" .config}}
+<main class="container">
+  <div>
+    {{range .articles.list}}
+    <div>
+      <h1>
+        {{.Name}}
+      </h1>
+    </div>
+    {{end}}
+  </div>
+</main>
+{{template "footer"}}

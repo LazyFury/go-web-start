@@ -91,7 +91,7 @@ func allFiles(dir string, suffix string) (arr []*tplFile) {
 				if len(list) > 1 {
 					list = list[1:]
 				}
-				fmt.Println(pathName, list)
+				// fmt.Println(pathName, list)
 				name := strings.Join(list, "/")
 				arr = append(arr, &tplFile{Name: name, Path: pathName})
 			}
