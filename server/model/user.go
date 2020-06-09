@@ -16,8 +16,8 @@ import (
 // User 用户更新
 type User struct {
 	gorm.Model
-	Password  string               `json:"password"`
-	Name      string               `json:"name" gorm:"unique"`
+	Password  string               `json:"password" gorm:"not null"`
+	Name      string               `json:"name" gorm:"unique;not null"`
 	Email     string               `json:"email"`
 	IP        string               `json:"ip"`
 	Ua        string               `json:"ua"`

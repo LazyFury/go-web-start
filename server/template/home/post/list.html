@@ -1,10 +1,10 @@
 {{template "header" .config}}
 <main class="container">
   <div>
-    {{range .articles.list}}
+    {{range $i,$ele := .articles.list}}
     <div>
       <h1>
-        {{.Name}}
+        {{$i | add}}, {{$ele.Name}}
       </h1>
     </div>
     {{end}}

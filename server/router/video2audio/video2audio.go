@@ -1,6 +1,7 @@
 package video2audio
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"log"
@@ -18,8 +19,8 @@ func Init(g *echo.Group) {
 }
 
 func command(order string) (err error) {
-	var stdoutBuf, stderrBuf btyes.Buffer
-	cmd := exec.Command("/bin/sh", "-c", order) 
+	var stdoutBuf, stderrBuf bytes.Buffer
+	cmd := exec.Command("/bin/sh", "-c", order)
 	stdoutIn, _ := cmd.StdoutPipe()
 	stderrIn, _ := cmd.StderrPipe()
 	var errStdout, errStderr error
@@ -37,7 +38,6 @@ func command(order string) (err error) {
 		_, errStderr = io.Copy(stderr, stderrIn)
 	}()
 
-	
 	err = cmd.Wait()
 	if err != nil {
 		log.Fatalf("cmd wait failed with %s \n", err)
@@ -48,6 +48,6 @@ func command(order string) (err error) {
 	}
 
 	outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
-	fmt.Printf("\n out:\n%s\nerr:\n$s\n", outStr, errStr)
+	fmt.Printf("\n out:\n%s\nerr:\n%s\n", outStr, errStr)
 	return
 }
