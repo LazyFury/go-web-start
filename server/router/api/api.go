@@ -12,9 +12,9 @@ import (
 )
 
 // Init Init
-func Init(g *echo.Group) {
+func Init(app *echo.Group) {
 	baseURL := "/api"
-	api := g.Group(baseURL)
+	api := app.Group(baseURL)
 	api.GET("/addCate", addCate)
 	api.GET("/apiCateAll", apiCateAll)
 	api.GET("/apiCateSave", apiCateSave)

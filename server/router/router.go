@@ -1,7 +1,6 @@
 package router
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 
@@ -19,7 +18,7 @@ import (
 
 // Start 入口
 func Start(e *echo.Echo) {
-	// baseURl 默认值 / Group的url末尾有斜杠时 get post绑定路由时不要加斜杠  无法识别 //xx 类似 传递下一季group时没有这个问题
+	// baseURl 默认值 / Group的url末尾有斜杠时 get post绑定路由时不要加斜杠  无法识别 //xx 类似 传递下一级group时没有这个问题
 	baseURL := config.Global.BaseURL
 	if baseURL == "/" {
 		baseURL = ""
@@ -35,14 +34,10 @@ func Start(e *echo.Echo) {
 	// 入口
 	index := g
 
-	index.GET("/", func(c echo.Context) error {
-		fmt.Printf("hello world!")
-		return c.Render(http.StatusOK, "index.html", map[string]interface{}{})
-	})
-
 	// index.POST("/upload", func(c echo.Context) error {
 	// 	return util.UploadCustom(c, util.AcceptsImgExt, "pic")
 	// })
+
 	index.POST("/upload", func(c echo.Context) error {
 		return upload.Default(c)
 	})
