@@ -42,6 +42,11 @@ func main() {
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(template.FuncMap{
 			"msg": func() string { return "hello this is a msg" },
+			"admin": func() map[string]interface{} {
+				return map[string]interface{}{
+					"name": "MD webSite",
+				}
+			},
 		}).Funcs(sprig.FuncMap()), "template", "*.html")),
 	}
 	e.Renderer = renderer

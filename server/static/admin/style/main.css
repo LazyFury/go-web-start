@@ -1,0 +1,12 @@
+body {
+  background-color: #f9f9f9;
+}
+
+#main-drawer {
+  background-color: #fff;
+  z-index: 1;
+}
+
+main.mdui-container {
+  margin-top: 30px;
+}

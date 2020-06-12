@@ -1,0 +1,110 @@
+{{define "admin/header"}}
+{{$a := admin }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{$a.name}}</title>
+    <link
+      rel="stylesheet"
+      href="//cdnjs.loli.net/ajax/libs/mdui/0.4.3/css/mdui.min.css"
+    />
+    <link rel="stylesheet" href="/static/admin/style/main.css">
+    <script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.3/js/mdui.min.js"></script>
+    
+  </head>
+  <body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-indigo mdui-theme-accent-pink mdui-loaded">
+    <!-- header   -->
+    <header class="mdui-appbar mdui-appbar-fixed">
+      <div class="mdui-toolbar mdui-color-theme">
+        <!-- <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a> -->
+        <a href="javascript:;" class="mdui-typo-headline">{{$a.name}}</a>
+        <a href="javascript:;" class="mdui-typo-title">管理后台</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/" target="_blank" class="mdui-btn" >
+          <i class="mdui-icon material-icons" style="margin-top: -4px;">share</i>
+          查看网站</a>
+        <a   target="_blank" class="mdui-btn" >
+          <i class="mdui-icon material-icons" style="margin-top: -4px;">notifications</i>
+          消息</a>
+        <a href="" class="mdui-btn"><i class="mdui-icon material-icons">refresh</i>刷新</a>
+        <a class="mdui-btn " mdui-menu="{target: '#user-menu'}">
+          <img class="mdui-icon mdui-btn-icon mdui-img-circle" src="/static/1.jpg"/>
+          suke
+        </a>
+         <a class="mdui-btn mdui-btn-icon"></a>
+         <!-- user menu  -->
+              <ul class="mdui-menu" id='user-menu'>
+              <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple">
+                  <i class="mdui-menu-item-icon mdui-icon material-icons">remove_red_eye</i>Preview
+                </a>
+              </li>
+              <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple">
+                  <i class="mdui-menu-item-icon mdui-icon material-icons">file_download</i>Download
+                </a>
+              </li>
+              <li class="mdui-divider"></li>
+              <li class="mdui-menu-item">
+                <a href="javascript:;" class="mdui-ripple">
+                  <i class="mdui-menu-item-icon mdui-icon material-icons">delete</i>Remove
+                </a>
+              </li>
+              <li class="mdui-menu-item mdui-text-color-red">
+                <a href="javascript:;" class="mdui-ripple">
+                 <i class="mdui-menu-item-icon mdui-icon material-icons">error_outline</i>退出登陆
+                </a>
+              </li>
+            </ul>
+            <!-- user menu  -->
+
+      </div>
+    </header>
+
+
+
+    <!-- menu  -->
+    <div class='mdui-drawer mdui-drawer-open' id='main-drawer'>
+      <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+         <a href="/admin/" class=" mdui-list-item mdui-ripple" >
+            <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-blue">home</i>
+            <div class="mdui-list-item-content">欢迎👏</div>
+          </a>
+        <div class="mdui-collapse-item">
+         
+          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-orange">near_me</i>
+            <div class="mdui-list-item-content">开始使用</div>
+            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+          </div>
+          <div class="mdui-collapse-item-body mdui-list">
+            <a href="/admin1" class="mdui-list-item mdui-ripple ">安装</a>
+            <a href="./compatibility" class="mdui-list-item mdui-ripple ">兼容性</a>
+            <a href="./jq" class="mdui-list-item mdui-ripple ">JavaScript 工具库</a>
+            <a href="./global" class="mdui-list-item mdui-ripple ">JavaScript 全局方法</a>
+          </div>
+          
+        </div>
+         <div class="mdui-collapse-item">
+          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+            <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-purple">account_balance</i>
+            <div class="mdui-list-item-content">开始使用1</div>
+            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+          </div>
+          <div class="mdui-collapse-item-body mdui-list">
+            <a href="/admin1" class="mdui-list-item mdui-ripple ">安装</a>
+            <a href="./compatibility" class="mdui-list-item mdui-ripple ">兼容性</a>
+            <a href="./jq" class="mdui-list-item mdui-ripple ">JavaScript 工具库</a>
+            <a href="./global" class="mdui-list-item mdui-ripple ">JavaScript 全局方法</a>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <main class="mdui-container">
+  {{end}}
+  </main>
+</html>
