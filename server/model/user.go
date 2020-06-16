@@ -23,12 +23,12 @@ type User struct {
 	Ua        string               `json:"ua"`
 	LoginTime structtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
-	IsAdmin   bool                 `json:"isAdmin"`
+	IsAdmin   bool                 `json:"isAdmin" gorm:"default:0"`
 }
 
 // SearchUser	 用户列表显示
 type searchUser struct {
-	ID        int                  `json:"id"`
+	ID        uint                 `json:"id"`
 	Email     string               `json:"email"`
 	Name      string               `json:"name"`
 	IP        string               `json:"ip"`

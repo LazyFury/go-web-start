@@ -1,12 +1,40 @@
+/* public */
 body {
   background-color: #f9f9f9;
 }
-
 #main-drawer {
   background-color: #fff;
-  z-index: 1;
 }
-
 main.mdui-container {
   margin-top: 30px;
+}
+
+button > i {
+  margin-top: -4px;
+}
+a > i {
+  margin-top: -4px;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+}
+/* privite */
+main {
+  background-color: #fff;
+  padding: 30px !important;
+}
+
+.crumbs {
+  margin-top: -30px;
+  align-items: center;
+}
+
+.crumbs div {
+  margin-left: 20px;
+  margin-top: 24px;
 }

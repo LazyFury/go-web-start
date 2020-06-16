@@ -1,5 +1,5 @@
-var $$ = mdui.JQ;
-var inst = new mdui.Drawer('#main-drawer');
+// var inst = new mdui.Drawer('#main-drawer');
+mdui.mutation();
 
 // 图片占位符
 Holder.addTheme('gray', {
@@ -11,10 +11,13 @@ Holder.addTheme('gray', {
 
 // 自动选中menu
 let links = Array.from(document.querySelectorAll('a'));
-let href = location.href.replace(/\/$/g, '');
+let href = (location.origin + location.pathname).replace(/\/$/g, '');
 for (let i = 0; i < links.length; i++) {
   const element = links[i];
-  if (href == element.href.replace(/\/$/g, '')) {
+  const eHref = element.href.split('?')[0].replace(/\/$/g, '');
+  const isMatch = href == eHref;
+  // console.log({ eHref, reg, isMatch, href });
+  if (isMatch) {
     if ($$(element).hasClass('mdui-list-item')) {
       $$(element).toggleClass('mdui-list-item-active');
       let parent =
@@ -24,4 +27,15 @@ for (let i = 0; i < links.length; i++) {
       }
     }
   }
+}
+
+function params2JSON(params) {
+  params = decodeURIComponent(params);
+  let arr = params.split('&');
+  let obj = {};
+  for (let i = 0; i < arr.length; i++) {
+    let ele = arr[i].split('=');
+    obj[ele[0]] = ele[1];
+  }
+  return obj;
 }

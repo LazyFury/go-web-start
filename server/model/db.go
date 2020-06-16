@@ -29,7 +29,7 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Article{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{}, &Post{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &API{}, &APICate{}, &Goods{}, &GoodsCate{}, &Post{})
 
 	return db
 }

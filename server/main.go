@@ -42,6 +42,16 @@ func main() {
 	renderer := &util.TemplateRenderer{
 		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(template.FuncMap{
 			"msg": func() string { return "hello this is a msg" },
+			"strDefault": func(str string, def string) string {
+				fmt.Println(str)
+				if str != "" {
+					return str
+				}
+				return def
+			},
+			"timeFormat": func(t time.Time) string {
+				return t.Format("2006-01-02 15:04:05")
+			},
 			"admin": func() map[string]interface{} {
 				return map[string]interface{}{
 					"name": "MD webSite",

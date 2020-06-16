@@ -2,6 +2,7 @@ package admin
 
 import (
 	"EK-Server/router/admin/login"
+	"EK-Server/router/admin/post"
 	"EK-Server/router/admin/product"
 	"EK-Server/router/admin/user"
 	"EK-Server/util"
@@ -25,7 +26,7 @@ func Init(app *echo.Group) {
 	admin := app.Group(baseURL) //注册admin的中间价
 	user.Init(admin)            // 用户模块
 	product.Init(admin)
-
+	post.Init(admin)
 	admin.GET("", index) //首页
 
 	//测试
