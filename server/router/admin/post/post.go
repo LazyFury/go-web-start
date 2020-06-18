@@ -8,24 +8,28 @@ import (
 	"github.com/labstack/echo"
 )
 
+var modelPost model.Post
+
 // Init 初始化
 func Init(g *echo.Group) {
-	baseURL := "/post"
-	post := g.Group(baseURL)
+	post := g.Group("/post")
 
 	post.GET("", func(c echo.Context) error {
-		db := model.DB
-		posts := &[]model.Post{}
-		db.Find(&posts)
+		posts, _ := modelPost.List(c)
+		page := model.GeneratePaging(posts.PageCount, posts.PageNow, "/admin/post?page=")
 		return c.Render(http.StatusOK, "admin/post/post.html", map[string]interface{}{
-			"list": posts,
+			"posts": posts,
+			"page":  page,
 		})
 	})
+	// 添加文章
 	post.GET("/add", func(c echo.Context) error {
 		return c.Render(http.StatusOK, "admin/post/add.html", map[string]interface{}{})
 	})
 	post.POST("/add", addArticle)
 }
+
+// 添加文章
 func addArticle(c echo.Context) error {
 	article := &model.Post{}
 	if err := c.Bind(article); err != nil {

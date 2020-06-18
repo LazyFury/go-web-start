@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"EK-Server/config"
 	"EK-Server/router/admin/login"
 	"EK-Server/router/admin/post"
 	"EK-Server/router/admin/product"
@@ -32,6 +33,10 @@ func Init(app *echo.Group) {
 	//测试
 	admin.GET("/test", func(c echo.Context) error {
 		return util.JSON(c, "", "", 1)
+	})
+
+	admin.GET("/settings", func(c echo.Context) error {
+		return c.Render(http.StatusOK, "admin/settings.html", config.Global)
 	})
 }
 

@@ -23,6 +23,12 @@ a > i {
   display: flex;
   flex-direction: column;
 }
+
+/* reset */
+.mdui-collapse-item-body {
+  background-color: #fafafa;
+}
+
 /* privite */
 main {
   background-color: #fff;
@@ -37,4 +43,16 @@ main {
 .crumbs div {
   margin-left: 20px;
   margin-top: 24px;
+}
+
+/* 分页 */
+.paging {
+  margin: 20px 0;
+}
+.paging a {
+  display: block;
+  padding: 0 10px;
+}
+.paging a.active {
+  /* color: red !important; */
 }

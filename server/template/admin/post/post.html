@@ -1,6 +1,5 @@
 {{template "admin/header"}}
-
-<div class="mdui-typo crumbs row" style="">
+<div class="mdui-typo crumbs row">
   <h1>文章列表</h1>
   <div>
     <span>/</span>
@@ -13,16 +12,19 @@
 </div>
 
 <!-- Action -->
-<div class="mdui-row" style="justify-content: flex-end; margin: 0 0 20px 0;">
-  <div class="mdui-col-sm-5">
+<div
+  class="row"
+  style="justify-content: flex-end; margin: 0 0 20px 0; align-items: center;"
+>
+  <div style="flex: 1;">
     <a href="post/add" class="mdui-btn mdui-color-theme-accent mdui-ripple"
       >发布文章</a
     >
     <a href="" class="mdui-btn mdui-ripple">隐藏文章</a>
     <a href="" class="mdui-btn mdui-ripple">批量删除</a>
   </div>
-  <div class="mdui-col-sm-5">
-    page
+  <div>
+    {{template "pageview" .}}
   </div>
 </div>
 <!-- table  -->
@@ -47,7 +49,7 @@
       </tr>
     </thead>
     <tbody>
-      {{range .list}}
+      {{range .posts.List}}
       <tr>
         <td style="max-width: 200px;">{{strDefault .Title "未设置标题"}}</td>
         <td style="max-width: 300px;">
@@ -58,7 +60,7 @@
         <td>{{.Author}}</td>
         <td>{{timeFormat .CreatedAt}}</td>
         <td>{{timeFormat .UpdatedAt}}</td>
-        <td>
+        <td style="width: 10em;">
           <a href="" class="mdui-text-color-indigo">编辑</a>
           <span>/</span>
           <a href="" class="mdui-text-color-red">删除</a>
@@ -67,5 +69,8 @@
       {{end}}
     </tbody>
   </table>
+</div>
+<div>
+  {{template "pageview" .}}
 </div>
 {{template "admin/footer"}}

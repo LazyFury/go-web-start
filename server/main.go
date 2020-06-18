@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo"
@@ -18,8 +17,6 @@ import (
 )
 
 func main() {
-
-	time.LoadLocation("local")
 	e := echo.New() //echo实例                                             //日志
 	fmt.Println("hello world!")
 	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
@@ -40,38 +37,21 @@ func main() {
 
 	// 模版
 	renderer := &util.TemplateRenderer{
-		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(template.FuncMap{
-			"msg": func() string { return "hello this is a msg" },
-			"strDefault": func(str string, def string) string {
-				fmt.Println(str)
-				if str != "" {
-					return str
-				}
-				return def
-			},
-			"timeFormat": func(t time.Time) string {
-				return t.Format("2006-01-02 15:04:05")
-			},
-			"admin": func() map[string]interface{} {
-				return map[string]interface{}{
-					"name": "MD webSite",
-				}
-			},
-		}).Funcs(sprig.FuncMap()), "template", "*.html")),
+		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(util.TemplateFuns).Funcs(sprig.FuncMap()), "template", "*.html")),
 	}
+	// 绑定渲染模版方法
 	e.Renderer = renderer
 
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
-	e.GET("/hello", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "hello world!")
-	})
-	// e.Use("requestInfo")
+
 	// 静态目录
 	e.Static("/static", "static")
 	e.Static("/h5", "h5")
+
 	// 请求信息
 	e.GET("requestInfo", requestInfo)
+
 	// 注册路由
 	router.Start(e)
 

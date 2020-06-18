@@ -66,7 +66,7 @@ func (u *User) Find() error {
 }
 
 // GetAllUser  获取所有用户列表
-func (u *User) GetAllUser(limit int, page int) map[string]interface{} {
+func (u *User) GetAllUser(limit int, page int) *Result {
 	return DataBaselimit(limit, page, map[string]interface{}{}, &[]searchUser{}, "users", "id desc")
 }
 

@@ -1,0 +1,20 @@
+{{define "pageview"}}
+<div class="row paging mdui-typo">
+  <span class="mdui-text-color-black-secondary"
+    >{{.posts.PageNow}}/{{.posts.PageCount}}
+  </span>
+
+  <div class="row">
+    {{range .page}}
+
+    <a
+      href="{{.Href}}"
+      class="{{if .Active}}mdui-text-color-black active{{end}}"
+    >
+      {{.Name}}</a
+    >
+
+    {{end}}
+  </div>
+</div>
+{{end}}
