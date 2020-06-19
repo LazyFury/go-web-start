@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -31,7 +32,22 @@ func readConfig() *configType {
 	f, err := os.Open("./config/config.json")
 	defer f.Close()
 	if err != nil {
-		panic("打开配置文件错误，请创建config/config.json 参考(config-defaultjson")
+
+		defaultConf := &configType{
+			Port:  8080,
+			Mysql: "[username]:[password]@(localhost:3306)/[databaseName]?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai",
+		}
+		b, _ := json.Marshal(defaultConf)
+		fmt.Println(string(b))
+
+		f, err = os.Create("./config/config.json")
+		if err != nil {
+			panic(err)
+		}
+
+		f.Write(b)
+
+		panic("打开配置文件错误，请补充填写 config/config.json 参考(config-defaultjson")
 	}
 	c := configType{}
 	if err = json.NewDecoder(f).Decode(&c); err != nil {
