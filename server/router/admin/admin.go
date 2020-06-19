@@ -36,7 +36,9 @@ func Init(app *echo.Group) {
 	})
 
 	admin.GET("/settings", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "admin/settings.html", config.Global)
+		return c.Render(http.StatusOK, "admin/settings.html", map[string]interface{}{
+			"g": config.Global,
+		})
 	})
 }
 

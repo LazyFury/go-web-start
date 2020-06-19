@@ -34,13 +34,14 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 	return db
 }
 
-// PageParams PageParams
 type (
+	// PageParams PageParams
 	PageParams struct {
 		Page  int    `json:"page"`
 		Limit int    `json:"limit"`
 		Order string `json:"order"`
 	}
+	// Result 分页方法返回结果
 	Result struct {
 		Count     int         `json:"count"`
 		PageSize  int         `json:"page"`

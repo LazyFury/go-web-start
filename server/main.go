@@ -17,23 +17,21 @@ import (
 )
 
 func main() {
-	e := echo.New() //echo实例                                             //日志
-	fmt.Println("hello world!")
-	model.DB = model.InitDB(config.Global.Mysql) //初始化数据链接
-	defer model.DB.Close()                       //退出时释放链接
-
+	e := echo.New()                                                                //echo实例
+	model.DB = model.InitDB(config.Global.Mysql)                                   //初始化数据链接
+	defer model.DB.Close()                                                         //退出时释放链接
 	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
 	e.Use(middleware.Gzip())                                                       //gzip压缩
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(util.LogMiddleware())
 	e.Use(middleware.Recover())
-
+	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*", "https://labstack.net"},
 		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
 		AllowCredentials: true,
 		AllowHeaders:     []string{"token"},
-	})) //跨域
+	}))
 
 	// 模版
 	renderer := &util.TemplateRenderer{
