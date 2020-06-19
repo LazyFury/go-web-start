@@ -1,0 +1,39 @@
+@import '~antd/dist/antd.css';
+
+// 处理margin溢出
+.clearMargin {
+  &:after {
+    content: '';
+    display: table;
+  }
+  &:before {
+    content: '';
+    display: table;
+  }
+}
+// 常用view
+.fff {
+  background-color: #fff !important;
+  .clearMargin();
+}
+
+.eee {
+  background-color: #eee !important;
+  .clearMargin();
+}
+// 布局
+.flex {
+  display: flex;
+}
+.row {
+  .flex();
+  flex-direction: row;
+}
+.col {
+  .flex();
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}

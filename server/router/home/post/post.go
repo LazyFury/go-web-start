@@ -3,11 +3,12 @@ package post
 import (
 	"EK-Server/model"
 	"EK-Server/util"
-	"net/http"
 	"strings"
 
 	"github.com/labstack/echo"
 )
+
+var modelPost model.Post
 
 // Init 初始化
 func Init(g *echo.Group) {
@@ -15,10 +16,8 @@ func Init(g *echo.Group) {
 	post := g.Group(baseURL)
 
 	post.GET("", func(c echo.Context) error {
-		articles := model.DataBaselimit(10, 1, map[string]interface{}{}, &[]model.User{}, "users", "id desc")
-		return c.Render(http.StatusOK, "home/post/list.html", map[string]interface{}{
-			"articles": articles,
-		})
+		posts, _ := modelPost.List(c)
+		return util.JSONSuccess(c, posts, "获取成功")
 	})
 
 	post.POST("/add", func(c echo.Context) error {

@@ -30,7 +30,7 @@ func main() {
 		AllowOrigins:     []string{"*", "https://labstack.net"},
 		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
 		AllowCredentials: true,
-		AllowHeaders:     []string{"token"},
+		AllowHeaders:     []string{"token", "Content-Type"},
 	}))
 
 	// 模版
