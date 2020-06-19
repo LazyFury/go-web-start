@@ -18,6 +18,7 @@ func Init(g *echo.Group) {
 	login := g.Group(baseURL)
 	login.GET("", doLogin)
 	login.POST("/reg", user.RegController)
+
 }
 
 func doLogin(c echo.Context) error {

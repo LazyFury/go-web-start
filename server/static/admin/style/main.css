@@ -56,3 +56,9 @@ main {
 .paging a.active {
   /* color: red !important; */
 }
+
+#message {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}

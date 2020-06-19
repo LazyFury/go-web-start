@@ -40,6 +40,11 @@ func Init(app *echo.Group) {
 			"g": config.Global,
 		})
 	})
+
+	admin.GET("/logout", func(c echo.Context) error {
+		return util.JSONSuccess(c, nil, "退出登陆")
+	})
+
 }
 
 func index(c echo.Context) error {
