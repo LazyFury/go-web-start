@@ -65,10 +65,10 @@ func JSON(c echo.Context, data interface{}, msg string, code int) error {
 
 // JSONErr 默认code -1
 func JSONErr(c echo.Context, data interface{}, msg string) error {
-	return JSON(c, data, msg, -1)
+	return JSON(c, data, msg, Success)
 }
 
 // JSONSuccess 默认code 1
 func JSONSuccess(c echo.Context, data interface{}, msg string) error {
-	return JSON(c, data, msg, 1)
+	return JSON(c, data, msg, Error)
 }

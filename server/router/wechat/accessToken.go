@@ -48,6 +48,8 @@ func (t *tokenType) sendAccessTokenReq() (err error) {
 	if t.ExpiresIn != 0 {
 		t.ExpiresIn += time.Now().Unix() //7200加当前时间为过期时间
 	} else {
+		fmt.Println(url)
+		fmt.Println(t)
 		err = errors.New("获取微信授权失败")
 	}
 	return

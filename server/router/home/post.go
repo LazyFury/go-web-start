@@ -1,4 +1,4 @@
-package post
+package home
 
 import (
 	"EK-Server/model"
@@ -11,7 +11,7 @@ import (
 var modelPost model.Post
 
 // Init 初始化
-func Init(g *echo.Group) {
+func post(g *echo.Group) {
 	baseURL := "/post"
 	post := g.Group(baseURL)
 

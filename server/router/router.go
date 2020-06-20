@@ -45,7 +45,7 @@ func Start(e *echo.Echo) {
 		if email == "" {
 			return util.JSONErr(c, nil, "发送邮箱不可空")
 		}
-		err := util.Mail.SendMail("愚蠢的地球人，毁灭吧！", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
+		err := config.Global.Mail.SendMail("愚蠢的地球人，毁灭吧！", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
 			return util.JSONErr(c, err, "发送失败")
 		}
@@ -63,6 +63,14 @@ func Start(e *echo.Echo) {
 
 	index.GET("/👌", func(c echo.Context) error {
 		return util.JSONSuccess(c, nil, "👌")
+	})
+
+	index.GET("/reload", func(c echo.Context) error {
+		//读取配置文件
+		if err := config.Global.ReadConfig(); err != nil {
+			return util.JSONErr(c, err, "读取配置失败")
+		}
+		return util.JSONSuccess(c, nil, "reload")
 	})
 
 }

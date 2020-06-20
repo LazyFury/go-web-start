@@ -2,8 +2,6 @@ package home
 
 import (
 	"EK-Server/config"
-	"EK-Server/router/home/post"
-	"EK-Server/router/home/product"
 	"net/http"
 	"strings"
 	"time"
@@ -14,8 +12,8 @@ import (
 // Init 初始化
 func Init(g *echo.Group) {
 	home := g
-	product.Init(home)
-	post.Init(home)
+	product(home)
+	post(home)
 
 	indexURL := "/"
 	if config.Global.BaseURL == "" || config.Global.BaseURL == "/" {

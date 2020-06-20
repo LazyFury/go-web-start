@@ -1,4 +1,4 @@
-package product
+package home
 
 import (
 	"EK-Server/model"
@@ -12,7 +12,7 @@ var (
 )
 
 // Init 初始化
-func Init(g *echo.Group) {
+func product(g *echo.Group) {
 	baseURL := "/product"
 	product := g.Group(baseURL)
 

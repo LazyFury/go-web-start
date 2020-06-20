@@ -18,14 +18,15 @@ type (
 	TemplateRenderer struct {
 		Templates *template.Template
 	}
-	siteConfig struct {
-		SiteName string `json:"siteName"`
-	}
+
 	tplFile struct {
 		Name string
 		Path string
 	}
 )
+type siteConfig struct {
+	SiteName string `json:"siteName"`
+}
 
 // Render renders a template document
 func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {

@@ -35,8 +35,8 @@ eval  GOOS=$GOOS   go build -o $TempDir/$File
 # 拷贝静态资源和配置文件
 echo ' - 拷贝配置文件...'
 cp -r config/config.json $TempDir/config/config.json
-cp -r config/database.db $TempDir/config/database.db
-cp -r config/zoneinfo.zip $TempDir/config/zoneinfo.zip
+# cp -r config/database.db $TempDir/config/database.db
+cp -r docker/zoneinfo.zip $TempDir/config/zoneinfo.zip
 echo ' - 拷贝前端目录...'
 cp -r h5/* $TempDir/h5
 echo ' - 拷贝资源文件...'

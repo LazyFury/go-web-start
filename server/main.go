@@ -18,10 +18,7 @@ import (
 
 func main() {
 	e := echo.New() //echo实例
-	//读取配置文件
-	if err := config.Global.ReadConfig(); err != nil {
-		panic(err)
-	}
+
 	//初始化数据链接
 	if err := model.DB.MysqlConn(config.Global.Mysql); err != nil {
 		panic(err)
