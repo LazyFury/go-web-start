@@ -4,7 +4,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk update
 # RUN apt install -y ffmpeg
 # RUN apt install lame
-# Configure Go
+# Configure Go 生产模式不需要安装go
 ENV GOROOT /usr/local/go
 ENV GOPATH /root/go
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH

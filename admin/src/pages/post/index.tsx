@@ -1,18 +1,17 @@
-import { makeListResult, useDataList } from '@/hooks';
+import { useDataList } from '@/hooks';
+import { http } from '@/server/request';
 import { PageHeader, Table } from 'antd';
 import React from 'react';
-
-export default () => {
-  const getList = (page: number) => {
-    return fetch('http://127.0.0.1:8080/post?page=' + page, {
+const getList = (page: number) => {
+  return http
+    .get('http://127.0.0.1:8080/post', {
+      params: { page },
       headers: { 'Content-Type': ' application/json' },
     })
-      .then((res) => {
-        return res.json();
-      })
-      .then((res) => makeListResult(res.data));
-  };
+    .then((res) => res.data);
+};
 
+export default () => {
   let { data, load } = useDataList(getList);
   return (
     <div>
@@ -50,6 +49,7 @@ export default () => {
   );
 };
 
+// 表格列配置
 const columns = [
   { title: 'Title', key: 'title', dataIndex: 'title' },
   {

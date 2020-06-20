@@ -24,6 +24,7 @@
     "@umijs/preset-react": "1.x",
     "@umijs/test": "^3.2.4",
     "antd": "^4.3.4",
+    "axios": "^0.19.2",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "react": "^16.12.0",

@@ -6,7 +6,6 @@ import (
 
 	"EK-Server/config"
 	"EK-Server/router/admin"
-	"EK-Server/router/api"
 	"EK-Server/router/home"
 	"EK-Server/router/wechat"
 	"EK-Server/router/ws"
@@ -28,7 +27,6 @@ func Start(e *echo.Echo) {
 	// 项目页面
 	admin.Init(g)
 	wechat.Init(g)
-	api.Init(g)
 	ws.Init(g)
 	home.Init(g)
 	// 入口
