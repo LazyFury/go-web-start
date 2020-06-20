@@ -1,6 +1,7 @@
-package util
+package middleware
 
 import (
+	"EK-Server/util"
 	"EK-Server/util/structtype"
 	"bytes"
 	"encoding/json"
@@ -31,10 +32,10 @@ var AdminJWT echo.MiddlewareFunc = baseJWT(adminCheckToken)
 func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
 	user, err := parseToken(tokenString)
 	if err != nil {
-		return JSON(c, nil, "登陆失效!", LogTimeOut)
+		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
 	}
 	if user.ID == 0 {
-		return JSON(c, nil, "登陆失效!", LogTimeOut)
+		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
 	}
 	c.Set("user", user)
 	return next(c)
@@ -46,7 +47,7 @@ var UserJWT echo.MiddlewareFunc = baseJWT(userCheckToken)
 // CheckToken 检查token可用
 func userCheckToken(next echo.HandlerFunc, c echo.Context, token string) error {
 	if token != "312" {
-		return JSON(c, nil, "登陆失效!", LogTimeOut)
+		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
 	}
 	return next(c)
 }
@@ -62,7 +63,7 @@ func baseJWT(callback func(next echo.HandlerFunc, c echo.Context, token string) 
 				return callback(next, c, token)
 			}
 
-			return JSON(c, nil, "请先登陆!", Logout)
+			return util.JSON(c, nil, "请先登陆!", util.Logout)
 		}
 	}
 }

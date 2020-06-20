@@ -14,8 +14,8 @@ services:
       - ~/.ssh:/root/.ssh
       - ../../:/root/app
       # - /Volumes/File/SDK/gowork:/root/go
-      - ./go-runtime:/usr/local/go
-      - ./go-path:/root/go
+      - /Volumes/File/SDK/docker/go:/usr/local/go
+      # - ./go-path:/root/go
     command: /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
   mysql:
     image: mysql

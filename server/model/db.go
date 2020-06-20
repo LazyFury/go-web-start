@@ -12,16 +12,21 @@ import (
 )
 
 // DB DB
-var DB *gorm.DB
+var DB *MyDB = &MyDB{}
 
-// InitDB InitDB
-func InitDB(DataBaseConfig string) *gorm.DB {
+// MyDB 继承gorm
+type MyDB struct {
+	*gorm.DB
+}
+
+// MysqlConn InitDB
+func (_db *MyDB) MysqlConn(DataBaseConfig string) (err error) {
 	t := time.Now().Format("2006年01-02 15:04:05")
 	fmt.Printf("数据库链接>>>>>>>> %s \n", t)
 	db, err := gorm.Open("mysql", DataBaseConfig)
 	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
@@ -30,6 +35,6 @@ func InitDB(DataBaseConfig string) *gorm.DB {
 
 	db.LogMode(true)
 	db.AutoMigrate(&User{}, &WechatOauth{}, &Goods{}, &GoodsCate{}, &Post{})
-
-	return db
+	_db = &MyDB{DB: db}
+	return nil
 }

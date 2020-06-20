@@ -4,6 +4,7 @@ import (
 	"EK-Server/config"
 	"EK-Server/model"
 	"EK-Server/util"
+	"EK-Server/util/middleware"
 	"crypto/sha1"
 	"fmt"
 	"net/http"
@@ -16,8 +17,8 @@ import (
 )
 
 var (
-	appid     string = config.Global.Wechat.Appid     // "wx5410d81bd4f6d965"               //
-	appsecret string = config.Global.Wechat.Appsecret //"ff630448cbd2b5dd7bf28ba7054eeeeb" //
+	appid     string = config.Global.Wechat.Appid     // "wx5410d81bd4f6d965"
+	appsecret string = config.Global.Wechat.Appsecret //"ff630448cbd2b5dd7bf28ba7054eeeeb"
 )
 
 // Init 初始化
@@ -34,7 +35,7 @@ func Init(g *echo.Group) {
 	wechat.POST("/signature", handleWechatMessage)         //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
 	wechat.GET("/sendTemplateMsg", sendTemplateMsgHandler) //发送模版消息
 	// 管理
-	wechatAdmin := wechat.Group("/admin", util.AdminJWT)
+	wechatAdmin := wechat.Group("/admin", middleware.AdminJWT)
 	wechatAdmin.GET("/getMenu", getMenu)
 }
 

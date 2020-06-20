@@ -3,6 +3,7 @@ package login
 import (
 	"EK-Server/model"
 	"EK-Server/util"
+	"EK-Server/util/middleware"
 	"EK-Server/util/sha"
 
 	"github.com/labstack/echo"
@@ -38,9 +39,9 @@ func doLogin(c echo.Context) error {
 	if err == nil {
 		password := sha.EnCode(password)
 		if user.Password == password {
-			jwtUser := util.UserInfo{ID: float64(user.ID), Name: user.Name}
+			jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name}
 
-			str, _ := util.CreateToken(&jwtUser)
+			str, _ := middleware.CreateToken(&jwtUser)
 
 			return util.JSONSuccess(c, str, "登陆成功")
 		}

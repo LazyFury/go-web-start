@@ -1,6 +1,7 @@
-package util
+package middleware
 
 import (
+	"EK-Server/util"
 	"bytes"
 	"io"
 	"os"
@@ -142,7 +143,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 					}
 					return buf.WriteString(id)
 				case "remote_ip":
-					return buf.WriteString(ClientIP(c))
+					return buf.WriteString(util.ClientIP(c))
 				case "host":
 					return buf.WriteString(req.Host)
 				case "uri":
@@ -211,7 +212,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 			}
 
 			// _, err = config.Output.Write(buf.Bytes())
-			Logger.Print(string(buf.Bytes()))
+			util.Logger.Print(string(buf.Bytes()))
 			return
 		}
 	}
