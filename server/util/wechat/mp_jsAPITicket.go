@@ -23,16 +23,8 @@ type jsAPITicket struct {
 	ExpiresIn int64  `json:"expires_in"`
 }
 
-func (j *jsAPITicket) getJsAPITicket(token string) (ticket string, err error) {
-	// 如果accesstken超时 60为timeout 防止请求超时
-	if j.ExpiresIn < time.Now().Unix()-60 {
-		err = j.sendJsAPITicketReq(token)
-	}
-	ticket = j.Ticket
-	return
-}
-func (j *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
-	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket>>>>\n")
+func (w *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
+	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket: token:%s>>>>\n", token)
 	url := fmt.Sprintf(jsAPITicketURL, token)
 	res, err := http.Get(url)
 
@@ -40,10 +32,10 @@ func (j *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
 		err = errors.New("api_ticket获取微信授权失败")
 		return
 	}
-
-	err = json.NewDecoder(res.Body).Decode(j)
-	if j.ExpiresIn != 0 {
-		j.ExpiresIn += time.Now().Unix() //7200加当前时间为过期时间
+	fmt.Println(url)
+	err = json.NewDecoder(res.Body).Decode(w)
+	if w.ExpiresIn != 0 {
+		w.ExpiresIn += time.Now().Unix() //7200加当前时间为过期时间
 	} else {
 		err = errors.New("api_ticket获取微信授权失败")
 	}

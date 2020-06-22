@@ -2,7 +2,7 @@ package model
 
 import (
 	"EK-Server/util"
-	"EK-Server/util/structtype"
+	"EK-Server/util/customtype"
 	"fmt"
 	"strings"
 
@@ -18,8 +18,8 @@ type (
 		Title       string           `json:"title"`
 		Description string           `gorm:"type:MEDIUMTEXT" json:"description"`
 		Cover       string           `json:"cover"`
-		Images      structtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
-		Price       structtype.Money `gorm:"not null" json:"price"`
+		Images      customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
+		Price       customtype.Money `gorm:"not null" json:"price"`
 		Count       int              `json:"count"`
 	}
 
@@ -30,8 +30,8 @@ type (
 		Title       string           `json:"title"`
 		Description string           `json:"description"`
 		Cover       string           `json:"cover"`
-		Images      structtype.Array `json:"images"`
-		Price       structtype.Money `json:"price"`
+		Images      customtype.Array `json:"images"`
+		Price       customtype.Money `json:"price"`
 		Count       int              `json:"count"`
 	}
 

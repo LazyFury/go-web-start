@@ -16,10 +16,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-var (
-	appid     string = config.Global.Wechat.Appid     // "wx5410d81bd4f6d965"
-	appsecret string = config.Global.Wechat.Appsecret //"ff630448cbd2b5dd7bf28ba7054eeeeb"
-)
+var wechat = &config.Global.Wechat
 
 // Init 初始化
 func Init(g *echo.Group) {
@@ -113,7 +110,7 @@ func wechatRedirect(c echo.Context) (err error) {
 	}
 
 	redirectURI = url.PathEscape(redirectURI)
-	urlStr := fmt.Sprintf(wechatRedirectURL, appid, redirectURI)
+	urlStr := fmt.Sprintf(wechatRedirectURL, wechat.Appid, redirectURI)
 	return c.Redirect(http.StatusMovedPermanently, urlStr)
 }
 
@@ -124,11 +121,8 @@ func jsAPIConfig(c echo.Context) error {
 		return util.JSONErr(c, nil, "url不可空")
 	}
 
-	token, err := AccessToken.getAccessToken()
-	if err != nil {
-		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
-	}
-	ticket, err := JsAPI.getJsAPITicket(token)
+	ticket, err := wechat.GetJsAPITicket()
+
 	if err != nil {
 		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
 	}
@@ -148,6 +142,6 @@ func jsAPIConfig(c echo.Context) error {
 		"url":       url,
 		"rawString": str,
 		"signature": sign,
-		"appId":     appid,
+		"appId":     wechat.Appid,
 	}, "请求成功")
 }

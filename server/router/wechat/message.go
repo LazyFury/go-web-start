@@ -103,7 +103,7 @@ func sendTemplateMsgHandler(c echo.Context) error {
 
 func sendTemplateMsg(postData *templateMsg) (body *templateReturn, err error) {
 	body = &templateReturn{}
-	accessToken, err := AccessToken.getAccessToken()
+	accessToken, err := wechat.GetAccessToken()
 	if err != nil {
 		err = errors.New("获取assessToken失败")
 		return

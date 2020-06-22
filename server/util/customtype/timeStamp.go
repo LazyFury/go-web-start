@@ -1,4 +1,4 @@
-package structtype
+package customtype
 
 import (
 	"database/sql/driver"

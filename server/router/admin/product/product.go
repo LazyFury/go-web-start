@@ -4,7 +4,7 @@ import (
 	"EK-Server/model"
 	"EK-Server/router/admin/product/cate"
 	"EK-Server/util"
-	"EK-Server/util/structtype"
+	"EK-Server/util/customtype"
 	"errors"
 	"math"
 
@@ -51,7 +51,7 @@ func add(c echo.Context) error {
 	}
 
 	money := math.Round(float64(good.Price)*100) / 100 //保留两位小数，接口输出文本是在marshajson的时候处理的
-	good.Price = structtype.Money(money)
+	good.Price = customtype.Money(money)
 
 	db.NewRecord(good) // => 主键为空返回`true`
 	row := db.Create(good)

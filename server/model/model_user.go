@@ -2,8 +2,8 @@ package model
 
 import (
 	"EK-Server/util"
+	"EK-Server/util/customtype"
 	"EK-Server/util/sha"
-	"EK-Server/util/structtype"
 	"errors"
 	"fmt"
 	"strings"
@@ -21,7 +21,7 @@ type User struct {
 	Email     string               `json:"email"`
 	IP        string               `json:"ip"`
 	Ua        string               `json:"ua"`
-	LoginTime structtype.LocalTime `json:"login_time"`
+	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
 	IsAdmin   bool                 `json:"isAdmin" gorm:"default:0"`
 }
@@ -33,7 +33,7 @@ type searchUser struct {
 	Name      string               `json:"name"`
 	IP        string               `json:"ip"`
 	Ua        string               `json:"ua"`
-	LoginTime structtype.LocalTime `json:"login_time"`
+	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
 }
 
@@ -91,7 +91,7 @@ func (u *User) RegController(c echo.Context) error {
 	ip := util.ClientIP(c)
 	user.IP = ip
 	user.Ua = ua
-	user.LoginTime = structtype.LocalTime{Time: time.Now()}
+	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 	user.Status = 1
 
 	fmt.Println(user)

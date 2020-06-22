@@ -21,7 +21,7 @@ var (
 
 //发送code换取微信登陆信息
 func sendCodeToWechatServer(code string) (result *model.WechatOauth, msg string) {
-	url := fmt.Sprintf(loginURL, appid, appsecret, code)
+	url := fmt.Sprintf(loginURL, wechat.Appid, wechat.Appsecret, code)
 	result = &model.WechatOauth{}
 	res, err := http.Get(url)
 	if err != nil {
@@ -104,7 +104,7 @@ func updateWechatInfo(user *model.WechatOauth, isReg bool) (info *model.WechatOa
 		url = fmt.Sprintf(wechatUserInfo, user.AccessToken, user.Openid) //相对通用
 	} else {
 		//可以获取到是否关注公众号 为关注到情况下无法获取其他信息
-		token, err := AccessToken.getAccessToken()
+		token, err := wechat.GetAccessToken()
 		if err != nil {
 			msg = "获取微信token失败"
 			return

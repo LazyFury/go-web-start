@@ -14,7 +14,7 @@ var (
 )
 
 func getMenu(c echo.Context) (err error) {
-	accessToken, err := AccessToken.getAccessToken()
+	accessToken, err := wechat.GetAccessToken()
 	res, err := http.Get(fmt.Sprintf(getCurrentSelfmenuInfo, accessToken))
 	if err != nil {
 		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))

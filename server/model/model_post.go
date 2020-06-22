@@ -1,7 +1,7 @@
 package model
 
 import (
-	"EK-Server/util/structtype"
+	"EK-Server/util/customtype"
 	"strconv"
 
 	"github.com/jinzhu/gorm"
@@ -18,7 +18,7 @@ type (
 		Content string           `json:"content" gorm:"type:text"`
 		Email   string           `json:"email"`
 		Cover   string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
-		Tag     structtype.Array `json:"tag" gorm:"type:varchar(255)"`
+		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255)"`
 	}
 )
 

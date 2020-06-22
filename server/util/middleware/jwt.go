@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"EK-Server/util"
-	"EK-Server/util/structtype"
+	"EK-Server/util/customtype"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -154,6 +154,6 @@ func parseToken(tokenss string) (user *UserInfo, err error) {
 	user.Name = claim["username"].(string)
 
 	exp := int64(claim["exp"].(float64))
-	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(structtype.DefaultTimeLayout))
+	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(customtype.DefaultTimeLayout))
 	return
 }

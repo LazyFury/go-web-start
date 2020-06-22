@@ -2,6 +2,7 @@ package config
 
 import (
 	"EK-Server/util"
+	"EK-Server/util/wechat"
 	"encoding/json"
 	"log"
 	"os"
@@ -25,7 +26,7 @@ type configType struct {
 	// 网站根目录
 	BaseURL     string    `json:"baseURL"`
 	TablePrefix string    `json:"tablePrefix"`
-	Wechat      wechat    `json:"wechat"`
+	Wechat      wechat.MP `json:"wechat"`
 	Port        int       `json:"port"`
 	Mail        util.Mail `json:"mail"`
 }
