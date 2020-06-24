@@ -4,6 +4,7 @@ import (
 	"EK-Server/util"
 	"EK-Server/util/customtype"
 	"EK-Server/util/sha"
+	"EK-Server/util/wechat"
 	"errors"
 	"fmt"
 	"strings"
@@ -40,20 +41,8 @@ type searchUser struct {
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
 	gorm.Model
-	UID          int    `json:"uid"`
-	AccessToken  string `json:"access_token"`
-	ExpiresIn    int64  `json:"expires_in"`
-	RefreshToken string `json:"refresh_token"`
-	Openid       string `json:"openid"`
-	Scope        string `json:"scope"`
-	Nickname     string `json:"nickname"`
-	Sex          int    `json:"sex"`
-	Headimgurl   string `json:"headimgurl"`
-	Province     string `json:"province"`
-	City         string `json:"city"`
-	Country      string `json:"country"`
-	Unionid      string `json:"unionid"`
-	Subscribe    int    `json:"subscribe"`
+	UID    int `json:"uid"`
+	Wechat wechat.UserInfo
 }
 
 // Find 查找用户

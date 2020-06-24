@@ -1,57 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>WebSocket</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <p id="output"></p>
 
-    <input type="text" id='input'>
+    <input type="text" id="input" />
     <button onclick="send()">发送</button>
     <script>
-       var loc = window.location;
-        var uri = 'ws:';
-        if (loc.protocol === 'https:') {
-            uri = 'wss:';
+      var loc = window.location;
+      var uri = 'ws:';
+      if (loc.protocol === 'https:') {
+        uri = 'wss:';
+      }
+      uri += '//' + loc.host;
+      uri += '/ws';
+      ws = new WebSocket(uri);
+      ws.onopen = function () {
+        console.log('Connected');
+        let id = window.localStorage.getItem('userId');
+        let a = { hello: 'asd', id };
+        send(JSON.stringify(a));
+      };
+      ws.onmessage = function (evt) {
+        var out = document.getElementById('output');
+
+        out.innerHTML += evt.data + '<br>';
+
+        jsonStr = {};
+        try {
+          jsonStr = JSON.parse(evt.data);
+        } catch (err) {}
+        let id = jsonStr.ID;
+        console.log(jsonStr, id);
+        id && window.localStorage.setItem('userId', id);
+      };
+
+      function send(val) {
+        if (!val) {
+          val = input.value;
         }
-        uri += '//' + loc.host;
-        uri += '/ws';
-        ws = new WebSocket(uri)
-        ws.onopen = function () {
-            console.log('Connected')
-            let id = window.localStorage.getItem('userId')   
-            let a = {hello:"asd",id}
-            send(JSON.stringify(a))
-        }
-        ws.onmessage = function (evt) {
-            var out = document.getElementById('output');
-        
-            out.innerHTML += evt.data + '<br>';
-
-            jsonStr = {}
-            try{
-                jsonStr = JSON.parse(evt.data)
-            }catch(err){
-
-            }      
-            let id = jsonStr.ID
-            console.log(jsonStr,id)
-            id && window.localStorage.setItem("userId",id)
-      
-        }
-
-
-        function send(val) {
-            if(!val){
-                val = input.value
-            }
-
-            ws.send(val);
-        }
+        let id = window.localStorage.getItem('userId');
+        ws.send(JSON.stringify({ msg: val, action: '', id }));
+      }
     </script>
-</body>
-
+  </body>
 </html>

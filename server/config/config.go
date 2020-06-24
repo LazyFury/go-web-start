@@ -40,8 +40,10 @@ func (c *configType) ReadConfig() (err error) {
 		log.Fatalln("打开配置文件错误，请创建 config/config.json 参考(config-defaultjson")
 		return
 	}
+	c.Wechat = wechat.MP{}
 	if err = json.NewDecoder(f).Decode(c); err != nil {
 		return
 	}
+
 	return nil
 }

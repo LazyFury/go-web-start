@@ -8,13 +8,6 @@ import (
 	"time"
 )
 
-var (
-	// AccessToken 全局 AccessToken
-	AccessToken *tokenType = &tokenType{}
-	// AccessToken 授权请求
-	accessTokenURL string = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
-)
-
 // 获取全局 accesstoken 类型
 type tokenType struct {
 	AccessToken string `json:"access_token"`

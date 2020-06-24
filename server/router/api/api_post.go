@@ -12,14 +12,14 @@ var modelPost model.Post
 
 // Init 初始化
 func post(g *echo.Group) {
-
-	post := g.Group("/post")
-
+	post := g.Group("/posts")
+	//list
 	post.GET("", modelPost.List)
-
+	//detail
 	post.GET("/:id", modelPost.Detail)
+	//del
 	post.DELETE("/:id", modelPost.Delete)
-
+	//add todo:整理新建和更新到同一个方法
 	post.POST("", func(c echo.Context) error {
 		empty := func(err interface{}, msg string) error {
 			return util.JSONErr(c, err, msg)

@@ -13,7 +13,7 @@ var (
 
 // Init 初始化
 func product(g *echo.Group) {
-	baseURL := "/product"
+	baseURL := "/goods"
 	product := g.Group(baseURL)
 
 	product.GET("", func(c echo.Context) error {

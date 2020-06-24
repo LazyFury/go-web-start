@@ -63,7 +63,7 @@ func Push() {
 	for {
 		c := <-broadcast
 		util.Logger.Print(c)
-		group.sendAll(c.Msg, c.UID)
+		group.sendAll(c.Msg)
 	}
 }
 
@@ -112,7 +112,7 @@ func (g Group) hasKey(ws *websocket.Conn) (hasKey bool) {
 	_, hasKey = g[ws]
 	return
 }
-func (g *Group) sendAll(msg interface{}, uid string) {
+func (g *Group) sendAll(msg interface{}) {
 	var player []string
 	for _, v := range *g {
 		player = append(player, v.Name)

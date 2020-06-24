@@ -2,26 +2,16 @@ package wechat
 
 import (
 	"EK-Server/model"
+	"EK-Server/util/wechat"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 )
 
-var (
-	// 拼接微信登陆请求
-	loginURL string = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"
-	// 跳转微信登陆授权页
-	wechatRedirectURL string = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-
-	// 微信用户信息
-	wechatUserInfo    string = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN"
-	wechatUserInfoCgi string = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN"
-)
-
 //发送code换取微信登陆信息
 func sendCodeToWechatServer(code string) (result *model.WechatOauth, msg string) {
-	url := fmt.Sprintf(loginURL, wechat.Appid, wechat.Appsecret, code)
+	url := fmt.Sprintf(wechat.LoginURL, mp.Appid, mp.Appsecret, code)
 	result = &model.WechatOauth{}
 	res, err := http.Get(url)
 	if err != nil {
@@ -33,7 +23,7 @@ func sendCodeToWechatServer(code string) (result *model.WechatOauth, msg string)
 		return
 	}
 	// 数据获取失败
-	if result.ExpiresIn == 0 {
+	if result.Wechat.ExpiresIn == 0 {
 		msg = "微信Code失效，请尝试重新获取"
 		fmt.Printf("失效的微信code: %+v\n", result)
 		return
@@ -45,7 +35,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 	code = 1
 	err := errors.New("")
 	//创建微信用户
-	wechatUser = &model.WechatOauth{Openid: wechatInfo.Openid}
+	wechatUser = &model.WechatOauth{Wechat: wechatInfo.Wechat}
 	// 数据库
 	db := model.DB
 	//开启自动迁移模式
@@ -61,13 +51,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 			code = -1
 			return
 		}
-		wechatInfo.Nickname = info.Nickname
-		wechatInfo.Sex = info.Sex
-		wechatInfo.Headimgurl = info.Headimgurl
-		wechatInfo.Province = info.Province
-		wechatInfo.City = info.City
-		wechatInfo.Country = info.Country
-		wechatInfo.Unionid = info.Unionid
+		wechatInfo.Wechat = info.Wechat
 
 		err = db.Create(wechatInfo).Error
 		if err != nil {
@@ -77,7 +61,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 		}
 		db.Find(wechatUser)
 	} else {
-		fmt.Printf("存在微信用户账户(openid:%s),更新状态...", wechatInfo.Openid)
+		fmt.Printf("存在微信用户账户(openid:%s),更新状态...", wechatInfo.Wechat.Openid)
 		// 如果账号存在则更新微信 token 信息
 		err = db.Model(wechatUser).Updates(wechatInfo).Error
 		if err != nil {
@@ -101,15 +85,15 @@ func updateWechatInfo(user *model.WechatOauth, isReg bool) (info *model.WechatOa
 
 	url := ""
 	if isReg {
-		url = fmt.Sprintf(wechatUserInfo, user.AccessToken, user.Openid) //相对通用
+		url = fmt.Sprintf(wechat.UserInfoURL, user.Wechat.AccessToken, user.Wechat.Openid) //相对通用
 	} else {
 		//可以获取到是否关注公众号 为关注到情况下无法获取其他信息
-		token, err := wechat.GetAccessToken()
+		token, err := mp.GetAccessToken()
 		if err != nil {
 			msg = "获取微信token失败"
 			return
 		}
-		url = fmt.Sprintf(wechatUserInfoCgi, token, user.Openid)
+		url = fmt.Sprintf(wechat.UserInfoCgiURL, token, user.Wechat.Openid)
 	}
 
 	// fmt.Printf(wechatUserInfoCgi, token, user.Openid)

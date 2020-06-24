@@ -62,7 +62,6 @@ func readMessage(info Message, ws *websocket.Conn) {
 	var user = &Gamer{}
 	if !group.hasKey(ws) {
 		//更新ws连接 或者新建用户
-		fmt.Println(userList)
 		if u, ok := userList[info.ID]; ok {
 			updateUser(u, ws)
 			user = u
@@ -74,4 +73,11 @@ func readMessage(info Message, ws *websocket.Conn) {
 	user = group[ws]
 	log.Println(user)
 	user.send(fmt.Sprintf("serve收到消息：%+v", info)) //以获取到用户 其他操作
+
+	switch info.Action {
+	case "start":
+		break
+	default:
+		broadcast <- Cast{Msg: user.Name + "发送了" + info.Message}
+	}
 }

@@ -1,6 +1,9 @@
 package wechat
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // MP 微信公众号
 type MP struct {
@@ -8,6 +11,11 @@ type MP struct {
 	Appsecret   string `json:"appsecret"`
 	JsAPITicket jsAPITicket
 	AccessToken tokenType
+}
+
+//LoginRedirect 获取登陆链接
+func (m *MP) LoginRedirect(redirectURI string) (url string) {
+	return fmt.Sprintf(RedirectURL, m.Appid, redirectURI)
 }
 
 // GetAccessToken 获取token
