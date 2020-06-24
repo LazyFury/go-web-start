@@ -18,10 +18,15 @@ const (
 	Success int = 1
 	// Error 返回码 失败
 	Error int = -1
-	// Logout 返回码 为登陆 int类型1000 在js会呗识别为1
+
+	// Logout 返回码 为登陆
 	Logout int = -101
 	// LogTimeOut 返回码 登陆超时
 	LogTimeOut int = -102
+	// BindWeChat 绑定微信
+	BindWeChat int = -103
+	// BingPhone 绑定手机号
+	BingPhone int = -104
 )
 
 var (
@@ -30,15 +35,15 @@ var (
 	errCode map[int]string = map[int]string{
 		// 正常
 		Success: "请求成功",
-		Error:   "请求错误,仅提示类型，应该返回错误原因，需要操作的设置另外的错误码",
+		Error:   "请求错误",
 		// 登陆
-		Logout:     "用户未登陆",
-		LogTimeOut: "用户登陆超时",
+		Logout:     "请先登录～",
+		LogTimeOut: "登陆超时失效～",
+		BindWeChat: "请先绑定微信账号",
+		BingPhone:  "请先绑定手机号",
 
-		// 需要客户端指定操作
-		-1002: "用户名已存在,请尝试其他",
-		// 4开头微信
-		-4001: "微信授权登陆失败",
+		// 无权限
+		http.StatusUnauthorized: "无权限操作!",
 	}
 )
 
@@ -66,6 +71,11 @@ func JSON(c echo.Context, data interface{}, msg string, code int) error {
 // JSONErr 默认code -1
 func JSONErr(c echo.Context, data interface{}, msg string) error {
 	return JSON(c, data, msg, Error)
+}
+
+// JSONErrJustCode err
+func JSONErrJustCode(c echo.Context, code int) error {
+	return JSON(c, nil, "", code)
 }
 
 // JSONSuccess 默认code 1

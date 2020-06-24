@@ -32,10 +32,15 @@ func GetList(c echo.Context) (list *Result, err error) {
 	if page == "" {
 		page = "1"
 	}
+	limit := c.QueryParam("limit")
+	if limit == "" {
+		limit = "10"
+	}
 	// 转化类型
 	p, _ := strconv.Atoi(page)
+	size, _ := strconv.Atoi(limit)
 	// 请求数据
-	list = QuickLimit(p, map[string]interface{}{}, &[]Post{}, "posts")
+	list = DataBaselimit(size, p, map[string]interface{}{}, &[]Post{}, "posts", "created_at desc")
 	return
 }
 

@@ -16,8 +16,9 @@ import (
 
 // UserInfo jwt UserInfo type
 type UserInfo struct {
-	ID   float64 `json:"id"`
-	Name string  `json:"name"`
+	ID      float64 `json:"id"`
+	Name    string  `json:"name"`
+	IsAdmin bool    `json:"isAdmin"`
 }
 
 const (
@@ -32,12 +33,17 @@ var AdminJWT echo.MiddlewareFunc = baseJWT(adminCheckToken)
 func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
 	user, err := parseToken(tokenString)
 	if err != nil {
-		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
+		return util.JSONErrJustCode(c, util.LogTimeOut)
 	}
 	if user.ID == 0 {
-		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
+		return util.JSONErrJustCode(c, util.LogTimeOut)
 	}
-	c.Set("user", user)
+	// if !user.IsAdmin {
+	// 	return util.JSONErrJustCode(c, http.StatusUnauthorized)
+	// }
+	// fmt.Println(user)
+	c.Set("userId", user.ID)
+	c.Set("userName", user.Name)
 	return next(c)
 }
 
@@ -47,7 +53,7 @@ var UserJWT echo.MiddlewareFunc = baseJWT(userCheckToken)
 // CheckToken 检查token可用
 func userCheckToken(next echo.HandlerFunc, c echo.Context, token string) error {
 	if token != "312" {
-		return util.JSON(c, nil, "登陆失效!", util.LogTimeOut)
+		return util.JSONErrJustCode(c, util.LogTimeOut)
 	}
 	return next(c)
 }
@@ -63,7 +69,7 @@ func baseJWT(callback func(next echo.HandlerFunc, c echo.Context, token string) 
 				return callback(next, c, token)
 			}
 
-			return util.JSON(c, nil, "请先登陆!", util.Logout)
+			return util.JSONErrJustCode(c, util.Logout)
 		}
 	}
 }

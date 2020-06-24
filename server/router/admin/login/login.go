@@ -39,7 +39,7 @@ func doLogin(c echo.Context) error {
 	if err == nil {
 		password := sha.EnCode(password)
 		if user.Password == password {
-			jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name}
+			jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin}
 
 			str, _ := middleware.CreateToken(&jwtUser)
 

@@ -2,6 +2,7 @@ package wechat
 
 import (
 	"EK-Server/model"
+	"EK-Server/util"
 	"EK-Server/util/wechat"
 	"encoding/json"
 	"errors"
@@ -48,14 +49,14 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 		info := &model.WechatOauth{}
 		info, msg = updateWechatInfo(wechatInfo, true)
 		if msg != "" {
-			code = -1
+			code = util.Error
 			return
 		}
 		wechatInfo.Wechat = info.Wechat
 
 		err = db.Create(wechatInfo).Error
 		if err != nil {
-			code = -1
+			code = util.Error
 			msg = "创建微信账号失败"
 			return
 		}
@@ -72,8 +73,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 
 	// 如果用户未绑定则通知绑定
 	if wechatUser.UID == 0 {
-		msg = "请先绑定账号，未找到uid"
-		code = -102
+		code = util.BindWeChat
 		return
 	}
 
