@@ -31,6 +31,6 @@ func (post *Post) List(c echo.Context) (posts *Result, err error) {
 	// 转化类型
 	p, _ := strconv.Atoi(page)
 	// 请求数据
-	posts = QuickLimit(p, &Post{}, &[]Post{}, "posts")
+	posts = QuickLimit(p, map[string]string{}, &[]Post{}, "posts")
 	return
 }

@@ -20,7 +20,7 @@ func main() {
 	e := echo.New() //echo实例
 
 	//初始化数据链接
-	if err := model.DB.MysqlConn(config.Global.Mysql); err != nil {
+	if err := model.MysqlConn(config.Global.Mysql); err != nil {
 		panic(err)
 	}
 	defer model.DB.Close() //退出时释放链接
@@ -92,5 +92,4 @@ func httpErrorHandler(err error, c echo.Context) {
 	}
 	// 如果是ajax
 	c.Logger().Error(util.JSONBase(c, nil, msg, code, code))
-	// c.Logger().Error(util.JSONBase)
 }

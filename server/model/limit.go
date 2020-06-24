@@ -32,13 +32,13 @@ func QuickLimit(page int, where interface{}, list interface{}, tableName string)
 func DataBaselimit(limit int, page int, where interface{}, list interface{}, tableName string, orderBy string) *Result {
 	db := DB
 	// 初始化数据库对象
-	userModal := db.Table(TableName(tableName)).Where(where)
+	resultModal := db.Table(TableName(tableName)).Where(where)
 	// 总数
 	var count int
 	// 绑定总数
-	userModal.Count(&count)
+	resultModal.Count(&count)
 	// 查询绑定用户列表
-	userModal.Offset(limit * (page - 1)).Limit(limit).Order(orderBy).Find(list)
+	resultModal.Offset(limit * (page - 1)).Limit(limit).Order(orderBy).Find(list)
 	var pageCount int = int(math.Ceil(float64(count) / float64(limit)))
 	if list == nil {
 		list = []string{}

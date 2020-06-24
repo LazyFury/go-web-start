@@ -25,7 +25,7 @@ type configType struct {
 	Mysql string `json:"mysql"`
 	// 网站根目录
 	BaseURL     string    `json:"baseURL"`
-	TablePrefix string    `json:"tablePrefix"`
+	TablePrefix string    `json:"tablePrefix"` //数据库表前缀
 	Wechat      wechat.MP `json:"wechat"`
 	Port        int       `json:"port"`
 	Mail        util.Mail `json:"mail"`

@@ -16,7 +16,10 @@ func post(g *echo.Group) {
 	post := g.Group(baseURL)
 
 	post.GET("", func(c echo.Context) error {
-		posts, _ := modelPost.List(c)
+		posts, err := modelPost.List(c)
+		if err != nil {
+			return util.JSONErr(c, err, "err")
+		}
 		return util.JSONSuccess(c, posts, "获取成功")
 	})
 

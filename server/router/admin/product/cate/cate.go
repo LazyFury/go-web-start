@@ -41,7 +41,7 @@ func list(c echo.Context) error {
 }
 
 // 循环获取自分类
-func getTmenu(item *catelist, db *model.MyDB, tableName string) (tmenu []catelist) {
+func getTmenu(item *catelist, db *gorm.DB, tableName string) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
 	db.Table(tableName).Where(&model.GoodsCate{ParentID: parentID}).Find(&tmenu)
