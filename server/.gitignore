@@ -1,0 +1,15 @@
+
+dist/
+tmp/*
+main
+*.out
+*/static/upload 
+log
+__debug_bin
+go-runtime/
+go-path/
+docker/mysql/data
+server/config/config.json
+
+.vscode/
+.idea/
