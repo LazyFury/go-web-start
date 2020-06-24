@@ -38,6 +38,7 @@ func Custom(c echo.Context, acceptsExt []string, folder string) error {
 	return util.JSONSuccess(c, link, "上传成功")
 }
 
+// acceptsExt  这里是一个扩展到类型，默认到图片，视频 压缩包类型，已经写在默认方法中了
 func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName string) (fileName string, err error) {
 	pathExt := path.Ext(file.Filename)
 
@@ -48,6 +49,9 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 	}
 	if inArray(AcceptsVideoExt, strings.Trim(pathExt, ".")) {
 		folder = "video"
+	}
+	if inArray(AcceptsAudioExt, strings.Trim(pathExt, ".")) {
+		folder = "audio"
 	}
 	if inArray(AcceptsOtherFileExt, strings.Trim(pathExt, ".")) {
 		folder = "file"
@@ -103,6 +107,7 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 // 在数组中
 func inArray(arr []string, item string) (inArr bool) {
 	index := -1
+	item = strings.ToLower(item)
 	for i, x := range arr {
 		if item == x {
 			index = i
