@@ -1,8 +1,8 @@
 package model
 
 import (
+	"EK-Server/util"
 	"EK-Server/util/customtype"
-	"strconv"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -23,14 +23,21 @@ type (
 )
 
 //List 文章列表
-func (post *Post) List(c echo.Context) (posts *Result, err error) {
-	page := c.QueryParam("page")
-	if page == "" {
-		page = "1"
+func (post *Post) List(c echo.Context) error {
+	posts, err := GetList(c)
+	if err != nil {
+		return util.JSONErr(c, nil, err.Error())
 	}
-	// 转化类型
-	p, _ := strconv.Atoi(page)
-	// 请求数据
-	posts = QuickLimit(p, map[string]string{}, &[]Post{}, "posts")
-	return
+	return util.JSONSuccess(c, posts, "")
+}
+
+// Delete 删除文章
+func (post *Post) Delete(c echo.Context) error {
+	id := c.Param("id")
+	return util.JSONSuccess(c, id, "删除成功")
+}
+
+// Detail 文章详情
+func (post *Post) Detail(c echo.Context) error {
+	return util.JSONSuccess(c, nil, "")
 }

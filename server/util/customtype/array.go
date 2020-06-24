@@ -35,11 +35,14 @@ func (a Array) Value() (driver.Value, error) {
 	return arr, nil
 }
 
-// Scan 绑定，数据库到对象,这里到数据取到到都是[]uint8字节，转化为对象
+// Scan 绑定，数据库到对象,这里到数据取到到都是[]uint8字节，转化为字符在处理成数组
 func (a *Array) Scan(v interface{}) error {
 	// fmt.Printf("scan")
 	value, ok := v.([]uint8)
 	if ok {
+		if string(value) == "" {
+			return nil
+		}
 		arr := strings.Split(string(value), ",")
 		*a = Array(arr)
 		return nil

@@ -4,6 +4,9 @@ import (
 	"EK-Server/config"
 	"fmt"
 	"math"
+	"strconv"
+
+	"github.com/labstack/echo"
 )
 
 type (
@@ -22,6 +25,19 @@ type (
 		List      interface{} `json:"list"`
 	}
 )
+
+// GetList 获取列表
+func GetList(c echo.Context) (list *Result, err error) {
+	page := c.QueryParam("page")
+	if page == "" {
+		page = "1"
+	}
+	// 转化类型
+	p, _ := strconv.Atoi(page)
+	// 请求数据
+	list = QuickLimit(p, map[string]interface{}{}, &[]Post{}, "posts")
+	return
+}
 
 // QuickLimit 分页方法省略参数
 func QuickLimit(page int, where interface{}, list interface{}, tableName string) *Result {
