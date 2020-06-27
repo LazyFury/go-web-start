@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-var modelPost model.Post
+var modelPost model.Articles
 
 // Init 初始化
 func post(g *echo.Group) {

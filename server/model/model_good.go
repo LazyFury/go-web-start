@@ -76,11 +76,9 @@ func (g Goods) List(c echo.Context) error {
 		page.Order = strings.ReplaceAll(page.Order, "_", " ")
 		// page.Order = strings.ReplaceAll(page.Order, ",", " ")
 	}
-	where := &Goods{}
 	if page.Cid > 0 {
-		where = &Goods{Cid: page.Cid}
+		// where = &Goods{Cid: page.Cid}
 	}
 
-	return util.JSONSuccess(c, DataBaselimit(page.Limit, page.Page, where, &[]GoodsList{}, "goods",
-		page.Order), "获取成功")
+	return util.JSONSuccess(c, nil, "获取成功")
 }

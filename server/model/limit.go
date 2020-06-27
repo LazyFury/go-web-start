@@ -2,10 +2,11 @@ package model
 
 import (
 	"EK-Server/config"
-	"fmt"
+	"EK-Server/util"
 	"math"
 	"strconv"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -24,10 +25,19 @@ type (
 		PageNow   int         `json:"pageNow"`
 		List      interface{} `json:"list"`
 	}
+
+	listModel interface {
+		// Pointer return gorm.model数组类型，用户分页查询绑定数据
+		Pointer() interface{}
+		// TableName 自定义表名
+		TableName() string
+		// Where 搜索条件
+		Search(db *gorm.DB, key string) *gorm.DB
+	}
 )
 
 // GetList 获取列表
-func GetList(c echo.Context) (list *Result, err error) {
+func GetList(c echo.Context, listModel listModel, where interface{}) (err error) {
 	page := c.QueryParam("page")
 	if page == "" {
 		page = "1"
@@ -36,24 +46,32 @@ func GetList(c echo.Context) (list *Result, err error) {
 	if limit == "" {
 		limit = "10"
 	}
+	orderBy := c.QueryParam("order")
+	if orderBy == "" {
+		orderBy = "created_at desc"
+	}
+	key := c.QueryParam("key")
+
 	// 转化类型
 	p, _ := strconv.Atoi(page)
 	size, _ := strconv.Atoi(limit)
 	// 请求数据
-	list = DataBaselimit(size, p, map[string]interface{}{}, &[]Post{}, "posts", "created_at desc")
-	return
-}
-
-// QuickLimit 分页方法省略参数
-func QuickLimit(page int, where interface{}, list interface{}, tableName string) *Result {
-	return DataBaselimit(10, page, where, list, tableName, "created_at desc")
+	list := DataBaselimit(size, p, where, listModel, key, orderBy)
+	return util.JSONSuccess(c, list, "")
 }
 
 // DataBaselimit  mysql数据分页
-func DataBaselimit(limit int, page int, where interface{}, list interface{}, tableName string, orderBy string) *Result {
+func DataBaselimit(limit int, page int, where interface{}, _model listModel, key string, orderBy string) *Result {
 	db := DB
+	list := _model.Pointer()
+
 	// 初始化数据库对象
-	resultModal := db.Table(TableName(tableName)).Where(where)
+	resultModal := db.Table(_model.TableName())
+	if where != nil {
+		resultModal = resultModal.Where(where)
+	}
+
+	resultModal = _model.Search(resultModal, key)
 	// 总数
 	var count int
 	// 绑定总数
@@ -71,52 +89,6 @@ func DataBaselimit(limit int, page int, where interface{}, list interface{}, tab
 		PageSize:  limit,
 		List:      list,
 	}
-}
-
-//Paging 分页类型
-type Paging struct {
-	Href   string
-	Name   string
-	Active bool
-}
-
-//GeneratePaging 生成分页html数组
-func GeneratePaging(l int, page int, href string) (arr []Paging) {
-	// 显示的最大页码  超出8页是会显示省略号隐藏一部分
-	var pagingSize int = 8
-	var pagingHalf int = int(math.Ceil(float64(pagingSize / 2)))
-	// 建立切片
-	arr = make([]Paging, l)
-	// 填充内容
-	for i := range arr {
-		active := (page == i+1)
-		arr[i].Href = fmt.Sprintf("%s%d", href, i+1)
-		if active {
-			arr[i].Href = "javascript:;"
-		}
-		arr[i].Name = fmt.Sprintf("%d", i+1)
-		arr[i].Active = active
-	}
-	// 处理超出隐藏
-	if l > 10 {
-		start := page - pagingHalf
-		end := page + pagingHalf
-		//默认 首....2,3,4,5.....尾
-		if start < 0 { //首,1,2,3,4...尾
-			start = 0
-			end = pagingSize
-		} else if end > l { //首...3,4,5,6,尾
-			start = l - pagingSize
-			end = l
-		}
-
-		arr = arr[start:end]
-	}
-
-	// 添加首尾
-	arr = append([]Paging{{Href: fmt.Sprintf("%s%d", href, 1), Name: "首页", Active: page == 1}}, arr...)
-	arr = append(arr, Paging{Href: fmt.Sprintf("%s%d", href, l), Name: "末页", Active: page == l})
-	return
 }
 
 //TableName 拼接默认表名

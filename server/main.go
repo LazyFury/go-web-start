@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo"
@@ -18,12 +19,12 @@ import (
 
 func main() {
 	e := echo.New() //echo实例
-
+	fmt.Println(time.Now().Format(time.ANSIC))
 	//初始化数据链接
 	if err := model.MysqlConn(config.Global.Mysql); err != nil {
 		panic(err)
 	}
-	defer model.DB.Close() //退出时释放链接
+	defer model.DB.Close() //退ß出时释放链接
 
 	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
 	e.Use(middleware.Gzip())                                                       //gzip压缩

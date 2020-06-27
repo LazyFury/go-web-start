@@ -29,7 +29,7 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Goods{}, &GoodsCate{}, &Post{})
+	db.AutoMigrate(&User{}, &WechatOauth{}, &Goods{}, &GoodsCate{}, &Articles{}, &ArticlesCate{})
 
 	DB = db
 	t = time.Now().Format("2006年01-02 15:04:05")
