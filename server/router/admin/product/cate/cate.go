@@ -20,7 +20,7 @@ func Init(g *echo.Group) {
 }
 
 type catelist struct {
-	model.GoodsCateList
+	model.GoodsCate
 	Tmenu []catelist `json:"tmenu"`
 }
 

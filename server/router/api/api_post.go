@@ -13,7 +13,9 @@ var modelPost model.Articles
 
 // Init 初始化
 func post(g *echo.Group) {
+	modelPost.BaseControll.Model = &modelPost
 	post := g.Group("/posts")
+
 	//list
 	post.GET("", modelPost.List)
 	//detail
@@ -40,10 +42,6 @@ func post(g *echo.Group) {
 	// 点赞文章
 	post.GET("/:id/actions/like", func(c echo.Context) error {
 		return util.JSONSuccess(c, nil, "点赞成功")
-	}, middleware.AdminJWT)
-
-	post.GET("/:id/actions/unlike", func(c echo.Context) error {
-		return util.JSONSuccess(c, nil, "")
 	}, middleware.AdminJWT)
 
 }

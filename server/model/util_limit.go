@@ -2,21 +2,13 @@ package model
 
 import (
 	"EK-Server/config"
-	"EK-Server/util"
 	"math"
-	"strconv"
 
 	"github.com/jinzhu/gorm"
-	"github.com/labstack/echo"
 )
 
 type (
-	// PageParams PageParams
-	PageParams struct {
-		Page  int    `json:"page"`
-		Limit int    `json:"limit"`
-		Order string `json:"order"`
-	}
+
 	// Result 分页方法返回结果
 	Result struct {
 		Count     int         `json:"count"`
@@ -27,7 +19,9 @@ type (
 	}
 
 	listModel interface {
-		// Pointer return gorm.model数组类型，用户分页查询绑定数据
+		// PointerList return gorm.model数组类型，用户分页查询绑定数据
+		PointerList() interface{}
+		// Pointer
 		Pointer() interface{}
 		// TableName 自定义表名
 		TableName() string
@@ -36,34 +30,10 @@ type (
 	}
 )
 
-// GetList 获取列表
-func GetList(c echo.Context, listModel listModel, where interface{}) (err error) {
-	page := c.QueryParam("page")
-	if page == "" {
-		page = "1"
-	}
-	limit := c.QueryParam("limit")
-	if limit == "" {
-		limit = "10"
-	}
-	orderBy := c.QueryParam("order")
-	if orderBy == "" {
-		orderBy = "created_at desc"
-	}
-	key := c.QueryParam("key")
-
-	// 转化类型
-	p, _ := strconv.Atoi(page)
-	size, _ := strconv.Atoi(limit)
-	// 请求数据
-	list := DataBaselimit(size, p, where, listModel, key, orderBy)
-	return util.JSONSuccess(c, list, "")
-}
-
 // DataBaselimit  mysql数据分页
 func DataBaselimit(limit int, page int, where interface{}, _model listModel, key string, orderBy string) *Result {
 	db := DB
-	list := _model.Pointer()
+	list := _model.PointerList()
 
 	// 初始化数据库对象
 	resultModal := db.Table(_model.TableName())
