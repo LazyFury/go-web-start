@@ -56,11 +56,11 @@ func JSONBase(c echo.Context, data interface{}, msg string, code int, httpCode i
 			msg = "未知错误码"
 		}
 	}
-	return c.JSON(httpCode, &returnJSON{
+	return c.JSONPretty(httpCode, &returnJSON{
 		Code: code,
 		Msg:  msg,
 		Data: data,
-	})
+	}, " ")
 }
 
 // JSON 自定义通用返回方法
