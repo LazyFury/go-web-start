@@ -1,7 +1,6 @@
 package model
 
 import (
-	"EK-Server/util"
 	"EK-Server/util/customtype"
 	"strconv"
 
@@ -65,15 +64,4 @@ func (article *Articles) List(c echo.Context) error {
 		}
 	}
 	return article.BaseControll.GetList(c, nil)
-}
-
-// Delete 删除文章
-func (article *Articles) Delete(c echo.Context) error {
-	id := c.Param("id")
-	return util.JSONSuccess(c, id, "删除成功")
-}
-
-// Detail 文章详情
-func (article *Articles) Detail(c echo.Context) error {
-	return article.BaseControll.Detail(c, "文章不存在")
 }

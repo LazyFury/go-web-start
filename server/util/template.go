@@ -24,9 +24,6 @@ type (
 		Path string
 	}
 )
-type siteConfig struct {
-	SiteName string `json:"siteName"`
-}
 
 // Render renders a template document
 func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
@@ -35,9 +32,6 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 	viewContext, isMap := data.(map[string]interface{})
 	if isMap {
 		viewContext["reverse"] = c.Echo().Reverse
-		viewContext["config"] = &siteConfig{
-			SiteName: "塞尔达",
-		}
 	}
 
 	return t.Templates.ExecuteTemplate(w, name, viewContext)

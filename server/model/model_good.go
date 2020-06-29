@@ -1,10 +1,8 @@
 package model
 
 import (
-	"EK-Server/util"
 	"EK-Server/util/customtype"
-	"fmt"
-	"strings"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -14,13 +12,14 @@ type (
 	//Goods 商品表
 	Goods struct {
 		gorm.Model
-		Cid         uint             `json:"cid"`
-		Title       string           `json:"title"`
-		Description string           `gorm:"type:MEDIUMTEXT" json:"description"`
-		Cover       string           `json:"cover"`
-		Images      customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
-		Price       customtype.Money `gorm:"not null" json:"price"`
-		Count       int              `json:"count"`
+		Cid          uint             `json:"cid"`
+		Title        string           `json:"title"`
+		Description  string           `gorm:"type:MEDIUMTEXT" json:"description"`
+		Cover        string           `json:"cover"`
+		Images       customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
+		Price        customtype.Money `gorm:"not null" json:"price"`
+		Count        int              `json:"count"`
+		BaseControll BaseControll
 	}
 
 	//GoodsCate 商品分类表
@@ -35,34 +34,37 @@ type (
 	}
 )
 
-// PageParams PageParams
-type PageParams struct {
-	Page  int    `json:"page"`
-	Limit int    `json:"limit"`
-	Order string `json:"order"`
+// PointerList 列表
+func (goods *Goods) PointerList() interface{} {
+	return &[]Goods{}
 }
 
-//List 商品列表
-func (g Goods) List(c echo.Context) error {
-	type Param struct {
-		PageParams
-		Cid int `json:"cid"`
-	}
-	page := Param{PageParams: PageParams{Page: 1, Limit: 10, Order: "id_desc"}}
+// Pointer 实例
+func (goods *Goods) Pointer() interface{} {
+	return &Goods{}
+}
 
-	if err := c.Bind(&page); err != nil {
-		return util.JSONErr(c, err, "参数错误")
-	}
+// TableName 表名
+func (goods *Goods) TableName() string {
+	return TableName("goods")
+}
 
-	fmt.Printf("post json 参数：%v", page)
-
-	if page.Order != "" {
-		page.Order = strings.ReplaceAll(page.Order, "_", " ")
-		// page.Order = strings.ReplaceAll(page.Order, ",", " ")
+// Search 搜索
+func (goods *Goods) Search(db *gorm.DB, key string) *gorm.DB {
+	if key != "" {
+		return db.Where("`title` like ?", "%"+key+"%").Or("`desc` like ?", "%"+key+"%")
 	}
-	if page.Cid > 0 {
-		// where = &Goods{Cid: page.Cid}
-	}
+	return db
+}
 
-	return util.JSONSuccess(c, nil, "获取成功")
+//List 文章列表
+func (goods *Goods) List(c echo.Context) error {
+	cid := c.QueryParam("cid")
+	if cid != "" {
+		cateID, err := strconv.Atoi(cid)
+		if err == nil && cateID > 0 {
+			return goods.BaseControll.GetList(c, &Goods{Cid: uint(cateID)})
+		}
+	}
+	return goods.BaseControll.GetList(c, nil)
 }

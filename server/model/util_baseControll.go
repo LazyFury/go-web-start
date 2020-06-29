@@ -38,15 +38,46 @@ func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
 
 // Detail 获取某一条数据
 func (b *BaseControll) Detail(c echo.Context, recordNotFoundTips string) error {
+	db := DB
+	if recordNotFoundTips == "" {
+		recordNotFoundTips = "内容不存在"
+	}
+
 	id := c.Param("id")
 	if id == "" {
 		return util.JSONErr(c, nil, "参数错误")
 	}
+
 	p := b.Model.Pointer()
-	if DB.Where(map[string]interface{}{
+	where := map[string]interface{}{
 		"id": id,
-	}).First(p).RecordNotFound() {
+	}
+	if db.Where(where).First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 	return util.JSONSuccess(c, p, "")
+}
+
+// Delete 删除数据
+func (b *BaseControll) Delete(c echo.Context) error {
+	db := DB
+	id := c.Param("id")
+	if id == "" {
+		return util.JSONErr(c, nil, "参数错误")
+	}
+
+	p := b.Model.Pointer()
+	row := db.Where(map[string]interface{}{
+		"id": id,
+	}).Delete(p)
+
+	if row.Error != nil {
+		return util.JSONErr(c, nil, "删除失败")
+	}
+
+	if row.RowsAffected <= 0 {
+		return util.JSONErr(c, nil, "删除失败,数据不存在")
+	}
+
+	return util.JSONSuccess(c, nil, "删除成功")
 }

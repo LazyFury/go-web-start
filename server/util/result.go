@@ -15,9 +15,9 @@ type returnJSON struct {
 
 const (
 	// Success 返回码 成功
-	Success int = 1
+	Success int = http.StatusOK
 	// Error 返回码 失败
-	Error int = -1
+	Error int = http.StatusInternalServerError
 
 	// Logout 返回码 为登陆
 	Logout int = -101
