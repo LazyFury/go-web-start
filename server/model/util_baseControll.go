@@ -9,7 +9,7 @@ import (
 
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
-	Model listModel
+	Model listModel `gorm:"-"`
 }
 
 // GetList 获取列表
