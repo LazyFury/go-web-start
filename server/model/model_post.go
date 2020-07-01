@@ -22,6 +22,12 @@ type (
 		CID     int              `json:"cate_id" gorm:"column:cate_id"`
 	}
 
+	// 尝试列表或者详情隐藏部分隐私字段
+	showArticle struct {
+		*Articles
+		Email string `json:"email,omitempty"`
+	}
+
 	// ArticlesCate 文章分类
 	ArticlesCate struct {
 		BaseControll
@@ -32,12 +38,12 @@ type (
 
 // PointerList 列表
 func (article *Articles) PointerList() interface{} {
-	return &[]Articles{}
+	return &[]showArticle{}
 }
 
 // Pointer 实例
 func (article *Articles) Pointer() interface{} {
-	return &Articles{}
+	return &showArticle{}
 }
 
 // TableName 表名

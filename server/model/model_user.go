@@ -15,14 +15,14 @@ import (
 
 // User 用户更新
 type User struct {
-	Password  string               `json:"password,omitempty" gorm:"not null"`
+	Password  string               `json:"password" gorm:"not null"`
 	Name      string               `json:"name" gorm:"unique;not null"`
 	Email     string               `json:"email"`
-	IP        string               `json:"ip,omitempty"`
+	IP        string               `json:"ip"`
 	Ua        string               `json:"ua"`
 	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
-	IsAdmin   bool                 `json:"isAdmin,omitempty" gorm:"default:0"`
+	IsAdmin   bool                 `json:"is_admin" gorm:"default:0"`
 	BaseControll
 }
 
@@ -31,6 +31,15 @@ type WechatOauth struct {
 	BaseControll
 	UID int `json:"uid"`
 	wechat.UserInfo
+}
+
+// PointerList 列表
+func (u *User) PointerList() interface{} {
+	type tmp struct {
+		*User
+		Password string `json:"-"`
+	}
+	return &[]tmp{}
 }
 
 // Find 查找用户

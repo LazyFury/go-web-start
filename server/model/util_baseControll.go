@@ -2,6 +2,7 @@ package model
 
 import (
 	"EK-Server/util"
+	"EK-Server/util/customtype"
 	"strconv"
 	"time"
 
@@ -10,11 +11,11 @@ import (
 
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
-	ID        uint       `json:"id" gorm:"primary_key"`
-	CreatedAt time.Time  `json:"created_at,omitempty"`
-	UpdatedAt time.Time  `json:"updated_at,omitempty"`
-	DeletedAt *time.Time `json:"deleted_at,omitempty" sql:"index"`
-	Model     listModel  `json:"-" gorm:"-"`
+	ID        uint                 `json:"id" gorm:"primary_key"`
+	CreatedAt customtype.LocalTime `json:"created_at"`
+	UpdatedAt customtype.LocalTime `json:"updated_at"`
+	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
+	Model     listModel            `json:"-" gorm:"-"`
 }
 
 // GetList 获取列表

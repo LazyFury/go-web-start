@@ -80,8 +80,6 @@ func userInfo(c echo.Context) (err error) {
 		if msg != "" {
 			return util.JSONErr(c, nil, msg)
 		}
-		info.CreatedAt = time.Now()
-		info.UpdatedAt = time.Now()
 
 		db.Model(&user).Updates(&info)
 	}
