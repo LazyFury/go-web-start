@@ -66,7 +66,7 @@ func add(c echo.Context) error {
 	}
 	// 查询分类是否存在 parentID为空时是一级分类
 	if cate.ParentID > 0 {
-		parent := &model.GoodsCate{Model: gorm.Model{ID: uint(cate.ParentID)}}
+		parent := &model.GoodsCate{BaseControll: model.BaseControll{ID: uint(cate.ParentID)}}
 		empty := db.First(parent).RecordNotFound()
 		// fmt.Println(empty)
 		if empty {

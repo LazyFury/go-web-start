@@ -8,7 +8,6 @@ import (
 	"errors"
 	"math"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -45,7 +44,7 @@ func add(c echo.Context) error {
 	}
 	// 查询分类是否存在
 	if good.Cid > 0 {
-		if empty := db.First(&model.GoodsCate{Model: gorm.Model{ID: uint(good.Cid)}}).RecordNotFound(); empty {
+		if empty := db.First(&model.GoodsCate{BaseControll: model.BaseControll{ID: uint(good.Cid)}}).RecordNotFound(); empty {
 			return util.JSONErr(c, nil, "分类不存在")
 		}
 	}

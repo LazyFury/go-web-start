@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -35,7 +34,7 @@ func frozen(c echo.Context) error {
 	}
 
 	db := model.DB
-	row := db.Model(&model.User{Model: gorm.Model{ID: u.ID}}).Update("status", u.Status)
+	row := db.Model(&model.User{BaseControll: model.BaseControll{ID: u.ID}}).Update("status", u.Status)
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "操作失败")
 	}

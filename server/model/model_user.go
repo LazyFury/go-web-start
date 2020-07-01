@@ -10,39 +10,27 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
 // User 用户更新
 type User struct {
-	gorm.Model
-	Password  string               `json:"password" gorm:"not null"`
+	Password  string               `json:"password,omitempty" gorm:"not null"`
 	Name      string               `json:"name" gorm:"unique;not null"`
 	Email     string               `json:"email"`
-	IP        string               `json:"ip"`
+	IP        string               `json:"ip,omitempty"`
 	Ua        string               `json:"ua"`
 	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
-	IsAdmin   bool                 `json:"isAdmin" gorm:"default:0"`
-}
-
-// SearchUser	 用户列表显示
-type searchUser struct {
-	ID        uint                 `json:"id"`
-	Email     string               `json:"email"`
-	Name      string               `json:"name"`
-	IP        string               `json:"ip"`
-	Ua        string               `json:"ua"`
-	LoginTime customtype.LocalTime `json:"login_time"`
-	Status    int                  `json:"status"`
+	IsAdmin   bool                 `json:"isAdmin,omitempty" gorm:"default:0"`
+	BaseControll
 }
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
-	gorm.Model
-	UID    int `json:"uid"`
-	Wechat wechat.UserInfo
+	BaseControll
+	UID int `json:"uid"`
+	wechat.UserInfo
 }
 
 // Find 查找用户
@@ -97,7 +85,7 @@ func (u *User) UpdateUser(id uint, data *User) error {
 
 	// uid, _ := strconv.Atoi(id)
 	// 使用id查找用户
-	user := &User{Model: gorm.Model{ID: uint(id)}}
+	user := &User{BaseControll: BaseControll{ID: uint(id)}}
 	err := user.Find()
 	if err != nil {
 		return err

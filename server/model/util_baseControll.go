@@ -3,13 +3,18 @@ package model
 import (
 	"EK-Server/util"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo"
 )
 
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
-	Model listModel `gorm:"-"`
+	ID        uint       `json:"id" gorm:"primary_key"`
+	CreatedAt time.Time  `json:"created_at,omitempty"`
+	UpdatedAt time.Time  `json:"updated_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty" sql:"index"`
+	Model     listModel  `json:"-" gorm:"-"`
 }
 
 // GetList 获取列表

@@ -11,20 +11,19 @@ import (
 type (
 	//Goods 商品表
 	Goods struct {
-		gorm.Model
-		Cid          uint             `json:"cid"`
-		Title        string           `json:"title"`
-		Description  string           `gorm:"type:MEDIUMTEXT" json:"description"`
-		Cover        string           `json:"cover"`
-		Images       customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
-		Price        customtype.Money `gorm:"not null" json:"price"`
-		Count        int              `json:"count"`
-		BaseControll BaseControll
+		Cid         uint             `json:"cid"`
+		Title       string           `json:"title"`
+		Description string           `gorm:"type:MEDIUMTEXT" json:"description"`
+		Cover       string           `json:"cover"`
+		Images      customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
+		Price       customtype.Money `gorm:"not null" json:"price"`
+		Count       int              `json:"count"`
+		BaseControll
 	}
 
 	//GoodsCate 商品分类表
 	GoodsCate struct {
-		gorm.Model
+		BaseControll
 		Name     string `json:"name"`
 		Desc     string `json:"desc"`
 		ParentID uint   `json:"parent_id"` //上级

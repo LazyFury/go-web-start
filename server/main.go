@@ -31,6 +31,7 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(util.LogMiddleware())
 	e.Use(middleware.Recover())
+
 	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*", "https://labstack.net"},

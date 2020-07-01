@@ -1,7 +1,5 @@
 package model
 
-import "github.com/jinzhu/gorm"
-
 // 点赞类型声明
 const (
 	LIKE    int = 1
@@ -27,7 +25,7 @@ var MessageType = map[int]string{
 // Message 客户意见反馈
 // 暂定 如果存sql数据量太多，后期尝试redis之类的
 type Message struct {
-	gorm.Model
+	BaseControll
 	OrderID   uint `json:"orderId"`
 	ArticleID uint `json:"articleId"`
 	Action    int  `json:"action"`

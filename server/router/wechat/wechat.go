@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -44,7 +43,7 @@ func login(c echo.Context) (err error) {
 		return util.JSONErr(c, WeChatLogin, msg)
 	}
 	// 更新过期时间
-	WeChatLogin.Wechat.ExpiresIn += time.Now().Unix()
+	WeChatLogin.ExpiresIn += time.Now().Unix()
 	// 查询微信用户数据库表
 	WeChatUser, msg, errCode := wechatDoLogin(WeChatLogin)
 	if msg != "" {
@@ -69,14 +68,14 @@ func userInfo(c echo.Context) (err error) {
 	if newID < 1 {
 		return util.JSONErr(c, nil, "用户id不可为空")
 	}
-	user := model.WechatOauth{Model: gorm.Model{ID: uint(newID)}}
+	user := model.WechatOauth{BaseControll: model.BaseControll{ID: uint(newID)}}
 
 	db := model.DB
 	if db.Find(&user).RecordNotFound() {
 		return util.JSONErr(c, err, "未找到用户")
 	}
 	// token := user.AccessToken
-	if time.Now().Unix()-user.CreatedAt.Unix() > 3600*24*10 || user.Wechat.Nickname == "" || user.Wechat.Headimgurl == "" {
+	if time.Now().Unix()-user.CreatedAt.Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
 		info, msg := updateWechatInfo(&user, false)
 		if msg != "" {
 			return util.JSONErr(c, nil, msg)
