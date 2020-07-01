@@ -20,17 +20,6 @@ type (
 		Count       int              `json:"count"`
 		BaseControll
 	}
-
-	//GoodsCate 商品分类表
-	GoodsCate struct {
-		BaseControll
-		Name     string `json:"name"`
-		Desc     string `json:"desc"`
-		ParentID uint   `json:"parent_id"` //上级
-		Cover    string `json:"cover"`     //封面
-		Icon     string `json:"icon"`      //图标
-		Level    int    `gorm:"DEFAULT:1" json:"level"`
-	}
 )
 
 // PointerList 列表
@@ -51,7 +40,7 @@ func (goods *Goods) TableName() string {
 // Search 搜索
 func (goods *Goods) Search(db *gorm.DB, key string) *gorm.DB {
 	if key != "" {
-		return db.Where("`title` like ?", "%"+key+"%").Or("`desc` like ?", "%"+key+"%")
+		return db.Where("`title` like ?", "%"+key+"%").Or("`description` like ?", "%"+key+"%")
 	}
 	return db
 }

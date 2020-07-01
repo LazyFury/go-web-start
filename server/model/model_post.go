@@ -1,8 +1,10 @@
 package model
 
 import (
+	"EK-Server/util"
 	"EK-Server/util/customtype"
 	"strconv"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -25,7 +27,7 @@ type (
 	// 尝试列表或者详情隐藏部分隐私字段
 	showArticle struct {
 		*Articles
-		Email string `json:"email,omitempty"`
+		AnyThing string `json:"updated_at1,omitempty"`
 	}
 
 	// ArticlesCate 文章分类
@@ -69,4 +71,39 @@ func (article *Articles) List(c echo.Context) error {
 		}
 	}
 	return article.BaseControll.GetList(c, nil)
+}
+
+// Detail 文章详情
+func (article *Articles) Detail(c echo.Context) error {
+	return article.BaseControll.GetDetail(c, "文章不存在")
+}
+
+// Add 添加
+func (article *Articles) Add(c echo.Context) error {
+	a := &Articles{}
+
+	if err := c.Bind(a); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	if strings.Trim(a.Title, " ") == "" {
+		return util.JSONErr(c, nil, "文章标题不可空")
+	}
+
+	a.ID = 0
+	a.Empty()
+
+	return article.BaseControll.Add(c, a)
+}
+
+// Update Update
+func (article *Articles) Update(c echo.Context) error {
+	a := &Articles{}
+
+	if err := c.Bind(a); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	a.Empty()
+	return article.BaseControll.Update(c, a)
 }

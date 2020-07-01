@@ -20,7 +20,7 @@ func product(g *echo.Group) {
 	product.GET("", modelGoods.List)
 	// 详情
 	product.GET("/:id", func(c echo.Context) error {
-		return modelGoods.BaseControll.Detail(c, "商品不存在")
+		return modelGoods.BaseControll.GetDetail(c, "商品不存在")
 	})
 	// del
 	product.GET("/:id/del", modelGoods.BaseControll.Delete, middleware.AdminJWT)
