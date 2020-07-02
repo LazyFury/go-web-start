@@ -22,7 +22,7 @@ func post(g *echo.Group) {
 	//添加内容
 	post.POST("", modelPost.Add)
 	//del
-	post.DELETE("/:id", modelPost.Delete)
+	post.DELETE("/:id", modelPost.Delete, rbacAdmin)
 	// Update 更新内容
 	post.PUT("/:id", modelPost.Update)
 

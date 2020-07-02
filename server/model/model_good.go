@@ -18,6 +18,7 @@ type (
 		Images      customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
 		Price       customtype.Money `gorm:"not null" json:"price"`
 		Count       int              `json:"count"`
+		OnSale      bool             `json:"on_sale" gorm:"comment:'是否在售，上下架功能'"`
 		BaseControll
 	}
 )
