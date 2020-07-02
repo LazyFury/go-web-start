@@ -15,7 +15,7 @@ require (
 	github.com/jinzhu/gorm v1.9.14
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0
-	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/mattn/go-colorable v0.1.7 // indirect
 	// github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.1 // indirect
