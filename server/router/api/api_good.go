@@ -24,6 +24,10 @@ func product(g *echo.Group) {
 	})
 	// del
 	product.GET("/:id/del", modelGood.BaseControll.Delete, middleware.AdminJWT)
+	// 添加
+	product.POST("", modelGood.Add)
+	// 更新
+	product.PUT("/:id", modelGood.Update)
 }
 
 // 商品分类

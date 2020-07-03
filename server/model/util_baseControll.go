@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -27,6 +28,17 @@ type controll interface {
 
 	// 置空对象
 	Empty()
+}
+
+type listModel interface {
+	// PointerList return gorm.model数组类型，用户分页查询绑定数据
+	PointerList() interface{}
+	// Pointer
+	Pointer() interface{}
+	// TableName 自定义表名
+	TableName() string
+	// Where 搜索条件
+	Search(db *gorm.DB, key string) *gorm.DB
 }
 
 // BaseControll 空方法用户数据模型继承方法

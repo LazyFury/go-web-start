@@ -3,8 +3,6 @@ package model
 import (
 	"EK-Server/config"
 	"math"
-
-	"github.com/jinzhu/gorm"
 )
 
 type (
@@ -16,17 +14,6 @@ type (
 		PageCount int         `json:"pageCount"`
 		PageNow   int         `json:"pageNow"`
 		List      interface{} `json:"list"`
-	}
-
-	listModel interface {
-		// PointerList return gorm.model数组类型，用户分页查询绑定数据
-		PointerList() interface{}
-		// Pointer
-		Pointer() interface{}
-		// TableName 自定义表名
-		TableName() string
-		// Where 搜索条件
-		Search(db *gorm.DB, key string) *gorm.DB
 	}
 )
 

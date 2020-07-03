@@ -50,7 +50,7 @@ func (article *Articles) Pointer() interface{} {
 
 // TableName 表名
 func (article *Articles) TableName() string {
-	return TableName("posts")
+	return TableName("articles")
 }
 
 // Search 搜索
@@ -90,7 +90,6 @@ func (article *Articles) Add(c echo.Context) error {
 		return util.JSONErr(c, nil, "文章标题不可空")
 	}
 
-	a.ID = 0
 	a.Empty()
 
 	return article.BaseControll.Add(c, a)

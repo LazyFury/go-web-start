@@ -52,10 +52,8 @@ type catelist struct {
 
 // List 列表
 func (cate *GoodsCate) List(c echo.Context) error {
-
-	list := []catelist{}
-
 	db := DB
+	list := []catelist{}
 
 	db.Table(cate.TableName()).Where(map[string]interface{}{"parent_id": 0, "level": 1}).Find(&list)
 
