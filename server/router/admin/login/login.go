@@ -35,7 +35,7 @@ func doLogin(c echo.Context) error {
 
 	user := model.User{Name: username}
 
-	err := user.Find()
+	err := user.HasUser()
 	if err == nil {
 		password := sha.EnCode(password)
 		if user.Password == password {

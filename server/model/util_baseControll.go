@@ -10,35 +10,22 @@ import (
 	"github.com/labstack/echo"
 )
 
-// 说明一下这个文件里的方法，这个接口暂时没用到
-type controll interface {
-	// 列表
-	List(c echo.Context) error
-	// 详情
-	Detail(c echo.Context) error
-	// 删除
-	Delete(c echo.Context) error
-	// 添加
-	Add(c echo.Context, data interface{}) error
-	// 更新
-	Update(c echo.Context, data interface{}) error
-
-	GetList(c echo.Context, where interface{}) error
-	GetDetail(c echo.Context, recordNotFoundTips string) error
-
-	// 置空对象
-	Empty()
-}
-
 type listModel interface {
 	// PointerList return gorm.model数组类型，用户分页查询绑定数据
 	PointerList() interface{}
 	// Pointer
 	Pointer() interface{}
 	// TableName 自定义表名
-	TableName() string
+	// TableName() string
 	// Where 搜索条件
 	Search(db *gorm.DB, key string) *gorm.DB
+	// 列表，增，查，删，改
+	List(c echo.Context) error
+	Detail(c echo.Context) error
+	Delete(c echo.Context) error
+	Add(c echo.Context) error
+	Update(c echo.Context) error
+	Count(c echo.Context) error
 }
 
 // BaseControll 空方法用户数据模型继承方法
@@ -56,6 +43,11 @@ type EmptySystemFiled struct {
 	B string `json:"updated_at,omitempty"`
 }
 
+// Search 搜索
+func (b *BaseControll) Search(db *gorm.DB, key string) *gorm.DB {
+	return db
+}
+
 // List 数据列表
 func (b *BaseControll) List(c echo.Context) error {
 	return b.GetList(c, nil)
@@ -64,6 +56,20 @@ func (b *BaseControll) List(c echo.Context) error {
 // Detail 详情
 func (b *BaseControll) Detail(c echo.Context) error {
 	return b.GetDetail(c, "")
+}
+
+// ListWithOutPaging 直接取所有数据不分页
+func (b *BaseControll) ListWithOutPaging(c echo.Context) error {
+	db := DB
+	list := b.Model.PointerList()
+
+	row := db.Model(b.Model.Pointer()).Find(list)
+
+	if row.Error != nil {
+		return util.JSONErr(c, nil, "获取失败")
+	}
+
+	return util.JSONSuccess(c, list, "")
 }
 
 // GetList 获取列表
@@ -106,7 +112,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	where := map[string]interface{}{
 		"id": id,
 	}
-	if db.Table(b.Model.TableName()).Where(where).First(p).RecordNotFound() {
+	if db.Model(b.Model.Pointer()).Where(where).First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 	return util.JSONSuccess(c, p, "")
@@ -121,7 +127,7 @@ func (b *BaseControll) Delete(c echo.Context) error {
 	}
 
 	p := b.Model.Pointer()
-	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
+	row := db.Model(b.Model.Pointer()).Where(map[string]interface{}{
 		"id": id,
 	}).Delete(p)
 
@@ -162,7 +168,7 @@ func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
+	row := db.Model(b.Model.Pointer()).Where(map[string]interface{}{
 		"id": id,
 	}).Update(data)
 
@@ -175,6 +181,41 @@ func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 	}
 
 	return util.JSONSuccess(c, nil, "更新成功")
+}
+
+// Count 统计表
+func (b *BaseControll) Count(c echo.Context) error {
+	db := DB
+
+	var n int
+
+	row := db.Model(b.Model.Pointer())
+
+	start := c.QueryParam("start")
+	end := c.QueryParam("end")
+	if start != "" {
+		startTime, err := time.Parse("2006-01-02 15:04:05", start)
+		var endTime time.Time
+
+		if end != "" {
+			endTime, err = time.Parse("2006-01-02 15:04:05", end)
+		} else {
+			endTime = time.Now()
+		}
+
+		if err != nil {
+			return util.JSONErr(c, err, "时间格式错误")
+		}
+
+		row = row.Where("`created_at` BETWEEN ? AND ?", startTime.Format(util.TimeZone()), endTime.Format(util.TimeZone()))
+	}
+	row = row.Count(&n)
+	if row.Error != nil {
+		return util.JSONErr(c, nil, "")
+	}
+	return util.JSONSuccess(c, map[string]interface{}{
+		"total": &n,
+	}, "")
 }
 
 // Empty 基础参数id,CreatedAt,UpdatedAt置空，避免更新时修改到

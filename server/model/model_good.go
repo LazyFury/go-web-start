@@ -20,7 +20,7 @@ type (
 		Cover       string           `json:"cover"`
 		Images      customtype.Array `gorm:"type:MEDIUMTEXT" json:"images" `
 		Price       customtype.Money `gorm:"not null" json:"price"`
-		Count       int              `json:"count"`
+		StockCount  int              `json:"stock_count"`
 		OnSale      bool             `json:"on_sale" gorm:"default:1;comment:'是否在售，上下架功能'"`
 	}
 )
@@ -33,11 +33,6 @@ func (g *Goods) PointerList() interface{} {
 // Pointer 实例
 func (g *Goods) Pointer() interface{} {
 	return &Goods{}
-}
-
-// TableName 表名
-func (g *Goods) TableName() string {
-	return TableName("goods")
 }
 
 // Search 搜索

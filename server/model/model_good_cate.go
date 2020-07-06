@@ -19,9 +19,17 @@ type GoodsCate struct {
 	Level    int    `gorm:"DEFAULT:1" json:"level"`
 }
 
+// 接口返回的列表 隐藏部分属性
 type showGoodsCate struct {
 	*GoodsCate
 	*EmptySystemFiled
+}
+
+// 遍历所有子分类的结构体
+type catelist struct {
+	*GoodsCate
+	*EmptySystemFiled
+	Tmenu []catelist `json:"tmenu"`
 }
 
 // PointerList 列表
@@ -34,28 +42,12 @@ func (cate *GoodsCate) Pointer() interface{} {
 	return &showGoodsCate{}
 }
 
-// TableName 表名
-func (cate *GoodsCate) TableName() string {
-	return TableName("good_cates")
-}
-
-// Search 搜索
-func (cate *GoodsCate) Search(db *gorm.DB, key string) *gorm.DB {
-	return db
-}
-
-type catelist struct {
-	*GoodsCate
-	*EmptySystemFiled
-	Tmenu []catelist `json:"tmenu"`
-}
-
 // List 列表
 func (cate *GoodsCate) List(c echo.Context) error {
 	db := DB
 	list := []catelist{}
 
-	db.Table(cate.TableName()).Where(map[string]interface{}{"parent_id": 0, "level": 1}).Find(&list)
+	db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": 0, "level": 1}).Find(&list)
 
 	for i, item := range list {
 		list[i].Tmenu = cate.getCateTmenu(&item, db)
@@ -67,7 +59,7 @@ func (cate *GoodsCate) List(c echo.Context) error {
 func (cate *GoodsCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
-	db.Table(cate.TableName()).Where(&GoodsCate{ParentID: parentID}).Find(&tmenu)
+	db.Model(cate.Pointer()).Where(&GoodsCate{ParentID: parentID}).Find(&tmenu)
 	if len(tmenu) > 0 {
 		for i, menuItem := range tmenu {
 			tmenu[i].Tmenu = cate.getCateTmenu(&menuItem, db)
@@ -85,9 +77,11 @@ func (cate *GoodsCate) Add(c echo.Context) error {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
-	if strings.Trim(_cate.Name, " ") == "" {
+	_cate.Name = strings.Trim(_cate.Name, " ")
+	if _cate.Name == "" {
 		return util.JSONErr(c, nil, "分类名称不可空")
 	}
+
 	_cate.Level = 1 //禁止手动设置level
 	_cate.Empty()
 	// 查询分类是否存在 parentID为空时是一级分类
@@ -135,10 +129,10 @@ func (cate *GoodsCate) Delete(c echo.Context) error {
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	if hasGoods := db.Table(cate.TableName()).Where(map[string]interface{}{"cid": id}).Find(cate.Pointer()).RowsAffected; hasGoods > 0 {
+	if hasGoods := db.Model(cate.Pointer()).Where(map[string]interface{}{"cid": id}).Find(cate.Pointer()).RowsAffected; hasGoods > 0 {
 		return util.JSONErr(c, nil, "分类下有商品，无法删除")
 	}
-	if hasCates := db.Table(cate.TableName()).Where(map[string]interface{}{"parent_id": id}).Find(cate.Pointer()).RowsAffected; hasCates > 0 {
+	if hasCates := db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": id}).Find(cate.Pointer()).RowsAffected; hasCates > 0 {
 		return util.JSONErr(c, nil, "分类下有其他分类，无法删除")
 	}
 

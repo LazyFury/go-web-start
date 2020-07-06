@@ -6,7 +6,6 @@ import (
 	"EK-Server/util/sha"
 	"EK-Server/util/wechat"
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 
@@ -15,6 +14,7 @@ import (
 
 // User 用户更新
 type User struct {
+	BaseControll
 	Password  string               `json:"password" gorm:"not null"`
 	Name      string               `json:"name" gorm:"unique;not null"`
 	Email     string               `json:"email"`
@@ -23,14 +23,13 @@ type User struct {
 	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
 	IsAdmin   bool                 `json:"is_admin" gorm:"default:0"`
-	BaseControll
 }
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
 	BaseControll
-	UID int `json:"uid"`
-	wechat.UserInfo
+	UID int `json:"user_id"`
+	*wechat.UserInfo
 }
 
 // PointerList 列表
@@ -42,23 +41,18 @@ func (u *User) PointerList() interface{} {
 	return &[]tmp{}
 }
 
-// Find 查找用户
-func (u *User) Find() error {
-	db := DB
-	if db.Where(u).First(u).RecordNotFound() {
-		return errors.New("用户不存在")
-	}
-	return nil
+// Pointer 实例
+func (u *User) Pointer() interface{} {
+	return &User{}
 }
 
-// GetAllUser  获取所有用户列表
-func (u *User) GetAllUser(limit int, page int) *Result {
-	return nil
+// TableName 表名
+func (u *User) TableName() string {
+	return TableName("users")
 }
 
-// RegController AddUser
-func (u *User) RegController(c echo.Context) error {
-
+// Add 添加
+func (u *User) Add(c echo.Context) error {
 	user := new(User)
 
 	if err := c.Bind(user); err != nil {
@@ -68,6 +62,9 @@ func (u *User) RegController(c echo.Context) error {
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Name == "" {
 		return util.JSONErr(c, nil, "用户名不可空")
+	}
+	if user.Password == "" {
+		return util.JSONErr(c, nil, "用户密码不可空")
 	}
 
 	user.Password = sha.EnCode(user.Password)
@@ -80,52 +77,46 @@ func (u *User) RegController(c echo.Context) error {
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 	user.Status = 1
 
-	fmt.Println(user)
-	msg, err := user.AddUser()
-	if err != nil {
-		return util.JSONErr(c, nil, msg)
-	}
-	return util.JSONSuccess(c, user.ID, msg)
+	user.Empty()
+	return u.BaseControll.Add(c, user)
 }
 
-// UpdateUser 更新用户
-func (u *User) UpdateUser(id uint, data *User) error {
-	db := DB
+// RegController AddUser
+func (u *User) RegController(c echo.Context) error {
 
-	// uid, _ := strconv.Atoi(id)
-	// 使用id查找用户
-	user := &User{BaseControll: BaseControll{ID: uint(id)}}
-	err := user.Find()
+	return u.Add(c)
+}
+
+// Update 更新
+func (u *User) Update(c echo.Context) error {
+	user := new(User)
+
+	if err := c.Bind(user); err != nil {
+		return util.JSONErr(c, err, "参数错误")
+	}
+
+	_u := &User{BaseControll: BaseControll{ID: uint(user.ID)}}
+	err := _u.HasUser()
 	if err != nil {
-		return err
+		return util.JSONErr(c, nil, err.Error())
 	}
-	row := db.Model(user).Updates(data)
-	if row.Error != nil {
-		return row.Error
+
+	user.Name = strings.Trim(user.Name, " ")
+	if user.Password != "" {
+		user.Password = sha.EnCode(user.Password)
 	}
-	if row.RowsAffected <= 0 {
-		return errors.New("没有更改")
+
+	user.Empty()
+	return u.BaseControll.Update(c, user)
+}
+
+// HasUser 查找用户
+func (u *User) HasUser() error {
+	db := DB
+	if db.Where(u).First(u).RecordNotFound() {
+		return errors.New("用户不存在")
 	}
 	return nil
-}
-
-// AddUser 添加用户
-func (u *User) AddUser() (string, error) {
-	db := DB
-
-	// fmt.Println(u)
-	db.NewRecord(u) // => 主键为空返回`true`
-	row := db.Create(u)
-
-	if row.Error != nil {
-		return "添加失败,用户已存在", row.Error
-	}
-
-	if row.RowsAffected <= 0 {
-		return "添加失败，没有更改", errors.New("")
-	}
-
-	return "添加成功", nil
 }
 
 // DelUser 删除用户

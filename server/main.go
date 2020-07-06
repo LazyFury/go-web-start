@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo"
@@ -19,7 +18,7 @@ import (
 
 func main() {
 	e := echo.New() //echo实例
-	fmt.Println(time.Now().Format(time.ANSIC))
+
 	//初始化数据链接
 	if err := model.MysqlConn(config.Global.Mysql); err != nil {
 		panic(err)
