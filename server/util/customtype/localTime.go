@@ -24,7 +24,9 @@ func (t *LocalTime) localLayout() string {
 
 // MarshalJSON json格式化时间的方法
 func (t LocalTime) MarshalJSON() ([]byte, error) {
-	var stamp = fmt.Sprintf("\"%s\"", time.Time(t.Time).Format(t.localLayout()))
+	// var stamp = fmt.Sprintf("\"%s\"", time.Time(t.Time).Format(t.localLayout()))
+	var stamp = fmt.Sprintf("\"%d\"", time.Time(t.Time).Unix())
+
 	return []byte(stamp), nil
 }
 

@@ -29,6 +29,11 @@ func (a *ArticlesCate) Pointer() interface{} {
 	return &showArticleCate{}
 }
 
+// TableName 表名
+func (a *ArticlesCate) TableName() string {
+	return TableName("article_cates")
+}
+
 // Add 添加分类
 func (a *ArticlesCate) Add(c echo.Context) error {
 	cate := &ArticlesCate{}

@@ -23,7 +23,7 @@ func DataBaselimit(limit int, page int, where interface{}, _model listModel, key
 	list := _model.PointerList()
 
 	// 初始化数据库对象
-	resultModal := db.Model(_model.Pointer())
+	resultModal := db.Table(_model.TableName())
 	if where != nil {
 		resultModal = resultModal.Where(where)
 	}

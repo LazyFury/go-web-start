@@ -41,6 +41,11 @@ func (a *Articles) Pointer() interface{} {
 	return &showArticle{}
 }
 
+// TableName 表名
+func (a *Articles) TableName() string {
+	return TableName("articles")
+}
+
 // Search 搜索
 func (a *Articles) Search(db *gorm.DB, key string) *gorm.DB {
 	if key != "" {

@@ -43,6 +43,11 @@ func (g *Goods) Search(db *gorm.DB, key string) *gorm.DB {
 	return db
 }
 
+// TableName 表名
+func (g *Goods) TableName() string {
+	return TableName("goods")
+}
+
 //List 文章列表
 func (g *Goods) List(c echo.Context) error {
 	cid := c.QueryParam("cid")

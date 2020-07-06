@@ -16,7 +16,7 @@ type listModel interface {
 	// Pointer
 	Pointer() interface{}
 	// TableName 自定义表名
-	// TableName() string
+	TableName() string
 	// Where 搜索条件
 	Search(db *gorm.DB, key string) *gorm.DB
 	// 列表，增，查，删，改
@@ -63,7 +63,7 @@ func (b *BaseControll) ListWithOutPaging(c echo.Context) error {
 	db := DB
 	list := b.Model.PointerList()
 
-	row := db.Model(b.Model.Pointer()).Find(list)
+	row := db.Table(b.Model.TableName()).Find(list)
 
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "获取失败")
@@ -112,7 +112,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	where := map[string]interface{}{
 		"id": id,
 	}
-	if db.Model(b.Model.Pointer()).Where(where).First(p).RecordNotFound() {
+	if db.Table(b.Model.TableName()).Where(where).First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 	return util.JSONSuccess(c, p, "")
@@ -127,7 +127,7 @@ func (b *BaseControll) Delete(c echo.Context) error {
 	}
 
 	p := b.Model.Pointer()
-	row := db.Model(b.Model.Pointer()).Where(map[string]interface{}{
+	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
 		"id": id,
 	}).Delete(p)
 
@@ -168,7 +168,7 @@ func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	row := db.Model(b.Model.Pointer()).Where(map[string]interface{}{
+	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
 		"id": id,
 	}).Update(data)
 
@@ -189,7 +189,7 @@ func (b *BaseControll) Count(c echo.Context) error {
 
 	var n int
 
-	row := db.Model(b.Model.Pointer())
+	row := db.Table(b.Model.TableName())
 
 	start := c.QueryParam("start")
 	end := c.QueryParam("end")

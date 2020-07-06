@@ -42,12 +42,17 @@ func (cate *GoodsCate) Pointer() interface{} {
 	return &showGoodsCate{}
 }
 
+// TableName 表名
+func (cate *GoodsCate) TableName() string {
+	return TableName("good-cates")
+}
+
 // List 列表
 func (cate *GoodsCate) List(c echo.Context) error {
 	db := DB
 	list := []catelist{}
 
-	db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": 0, "level": 1}).Find(&list)
+	db.Table(cate.TableName()).Where(map[string]interface{}{"parent_id": 0, "level": 1}).Find(&list)
 
 	for i, item := range list {
 		list[i].Tmenu = cate.getCateTmenu(&item, db)
@@ -59,7 +64,7 @@ func (cate *GoodsCate) List(c echo.Context) error {
 func (cate *GoodsCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
-	db.Model(cate.Pointer()).Where(&GoodsCate{ParentID: parentID}).Find(&tmenu)
+	db.Table(cate.TableName()).Where(&GoodsCate{ParentID: parentID}).Find(&tmenu)
 	if len(tmenu) > 0 {
 		for i, menuItem := range tmenu {
 			tmenu[i].Tmenu = cate.getCateTmenu(&menuItem, db)
