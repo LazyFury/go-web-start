@@ -71,7 +71,8 @@ func (g *Goods) Add(c echo.Context) error {
 	if good.Cid == 0 {
 		return util.JSONErr(c, nil, "请选择商品分类")
 	}
-	if strings.Trim(good.Title, " ") == "" {
+	good.Title = strings.Trim(good.Title, " ")
+	if good.Title == "" {
 		return util.JSONErr(c, nil, "商品标题不可空")
 	}
 

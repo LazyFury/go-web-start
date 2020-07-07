@@ -1,7 +1,6 @@
 package model
 
 import (
-	"EK-Server/config"
 	"math"
 )
 
@@ -45,10 +44,4 @@ func DataBaselimit(limit int, page int, where interface{}, _model listModel, key
 		PageSize:  limit,
 		List:      list,
 	}
-}
-
-//TableName 拼接默认表名
-func TableName(str string) (result string) {
-	result = config.Global.TablePrefix + "_" + str
-	return result
 }

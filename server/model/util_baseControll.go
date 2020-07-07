@@ -3,7 +3,9 @@ package model
 import (
 	"EK-Server/util"
 	"EK-Server/util/customtype"
+	"math"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -187,34 +189,90 @@ func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 func (b *BaseControll) Count(c echo.Context) error {
 	db := DB
 
-	var n int
-
 	row := db.Table(b.Model.TableName())
 
+	//time: 2006-01-02 15:04:05
 	start := c.QueryParam("start")
 	end := c.QueryParam("end")
-	if start != "" {
-		startTime, err := time.Parse("2006-01-02 15:04:05", start)
-		var endTime time.Time
-
-		if end != "" {
-			endTime, err = time.Parse("2006-01-02 15:04:05", end)
-		} else {
-			endTime = time.Now()
-		}
-
-		if err != nil {
-			return util.JSONErr(c, err, "时间格式错误")
-		}
-
-		row = row.Where("`created_at` BETWEEN ? AND ?", startTime.Format(util.TimeZone()), endTime.Format(util.TimeZone()))
+	if start == "" {
+		return util.JSONErr(c, nil, "请选择查询开始时间")
 	}
+	//type: year,month,week,day
+	queryType := c.QueryParam("type")
+	if queryType == "" {
+		queryType = "day"
+	}
+	queryType = strings.ToLower(queryType)
+
+	// 按时间查询
+	startTime, err := time.Parse("2006-01-02 15:04:05", start)
+	var endTime time.Time
+	if end != "" {
+		endTime, err = time.Parse("2006-01-02 15:04:05", end)
+	} else {
+		endTime = time.Now()
+	}
+
+	if err != nil {
+		return util.JSONErr(c, err, "时间格式错误")
+	}
+
+	row = row.Where("`created_at` BETWEEN ? AND ?", startTime.Format(util.TimeZone()), endTime.Format(util.TimeZone()))
+
+	list := []struct {
+		Date       string  `json:"date"`
+		Count      int     `json:"count"`
+		Offset     int     `json:"offset"`
+		GrowthRate float64 `json:"growth_rate"`
+		// GrowthRateStr string  `json:"growth_rate_str"`
+		List interface{} `json:"list,omitempty"`
+	}{}
+
+	dateFormat := "%Y-%m-%d"
+
+	queryTypes := map[string]string{
+		"day":   "%Y-%m-%d",
+		"week":  "%Y-%u",
+		"month": "%Y-%m",
+		"year":  "%Y",
+	}
+
+	if format := queryTypes[queryType]; format != "" {
+		dateFormat = format
+	}
+
+	// 统计总数量
+	var n int
 	row = row.Count(&n)
+	// 查询近n (天，周，月) 数据
+	row = row.Select("DATE_FORMAT(created_at,'" + dateFormat + "') date,count(*) count")
+	row = row.Group("date").Order("date desc").Find(&list)
+	// 计算近n天数据的增加或者减少
+	var defaultCount int
+	for i, item := range list {
+		list[i].Offset = item.Count - defaultCount
+		if defaultCount > 0 {
+			list[i].GrowthRate = math.Floor(float64(list[i].Offset)/float64(defaultCount)*10000) / 100
+		} else {
+			list[i].GrowthRate = 100
+		}
+		// list[i].GrowthRateStr = fmt.Sprintf("%.2f%%", list[i].GrowthRate)
+		defaultCount = item.Count
+
+		// if item.Count > 0 {
+		// 	l := b.Model.PointerList()
+		// 	row = DB
+		// 	row.Table(b.Model.TableName()).Where("DATE_FORMAT(created_at,'"+dateFormat+"') = ?", item.Date).Find(l)
+		// 	list[i].List = &l
+		// }
+	}
+
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "")
 	}
 	return util.JSONSuccess(c, map[string]interface{}{
 		"total": &n,
+		"list":  list,
 	}, "")
 }
 

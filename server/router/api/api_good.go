@@ -14,7 +14,7 @@ var modelGoodsCate model.GoodsCate
 func product(g *echo.Group) {
 	modelGood.BaseControll.Model = &modelGood
 
-	product := g.Group("/goods")
+	product := g.Group("/products")
 
 	// 列表
 	product.GET("", modelGood.List)

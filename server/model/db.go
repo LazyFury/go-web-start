@@ -25,7 +25,7 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return config.Global.TablePrefix + "_" + defaultTableName
+		return TableName(defaultTableName)
 	}
 
 	db.LogMode(true)
@@ -35,4 +35,10 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	t = time.Now().Format("2006年01-02 15:04:05")
 	fmt.Printf("数据库链接>>>成功>> %s \n", t)
 	return nil
+}
+
+//TableName 拼接默认表名
+func TableName(str string) (result string) {
+	result = config.Global.TablePrefix + "_" + str
+	return result
 }

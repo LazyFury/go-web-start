@@ -14,20 +14,22 @@ type (
 	// Articles 文章模型
 	Articles struct {
 		BaseControll
-		Title   string           `json:"title" gorm:"not null"`
-		Desc    string           `json:"desc"`
-		Author  string           `json:"author" gorm:"DEFAULT:'佚名'"`
-		Content string           `json:"content" gorm:"type:text"`
-		Email   string           `json:"email"`
-		Cover   string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
-		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255)"`
-		CID     int              `json:"cate_id" gorm:"column:cate_id"`
+		Title          string           `json:"title" gorm:"not null"`
+		Desc           string           `json:"desc"`
+		Author         string           `json:"author" gorm:"DEFAULT:'佚名'"`
+		Content        string           `json:"content" gorm:"type:text"`
+		Email          string           `json:"email"`
+		Cover          string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
+		Tag            customtype.Array `json:"tag" gorm:"type:varchar(255)"`
+		CID            int              `json:"cate_id" gorm:"column:cate_id"`
+		Like           int              `json:"like"`
+		AlreadyLikedIt bool             `json:"already_liked_it" gorm:"-"` //判断当前用户是否点赞
 	}
 
 	// 尝试列表或者详情隐藏部分隐私字段
 	showArticle struct {
 		*Articles
-		AnyThing string `json:"updated_at1,omitempty"`
+		A string `json:"content,omitempty"`
 	}
 )
 
