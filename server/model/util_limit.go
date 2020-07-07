@@ -30,9 +30,11 @@ func DataBaselimit(limit int, page int, where interface{}, _model listModel, key
 	resultModal = _model.Search(resultModal, key)
 	// 总数
 	var count int
+	countRow := resultModal
+	countRow.Select("count(id)").Where("deleted_at is NULL").Count(&count)
 	// 绑定总数
 	// 查询绑定用户列表
-	resultModal.Offset(limit * (page - 1)).Limit(limit).Order(orderBy).Find(list).Count(&count)
+	resultModal.Offset(limit * (page - 1)).Limit(limit).Order(orderBy).Find(list)
 	var pageCount int = int(math.Ceil(float64(count) / float64(limit)))
 	if list == nil {
 		list = []string{}

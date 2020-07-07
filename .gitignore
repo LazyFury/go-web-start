@@ -1,7 +1,6 @@
 dist/*
 *.mov
 *.m3u8
-*.ts
 node_modules/
 node_modules/**/*
 .expo

@@ -2,13 +2,16 @@ import {
   LaptopOutlined,
   NotificationOutlined,
   UserOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React from 'react';
-import { Link } from 'umi';
+import { Link, withRouter, useLocation } from 'umi';
 
 const { SubMenu } = Menu;
-export default function Sider(props: { collapsed: boolean }) {
+ 
+export default function Sider(props: { collapsed: boolean | undefined; }) {
+  const location = useLocation()
   return (
     <Layout.Sider
       trigger={null}
@@ -18,27 +21,30 @@ export default function Sider(props: { collapsed: boolean }) {
     >
       <Menu
         mode="inline"
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
+        selectedKeys={[location.pathname]}
+        defaultOpenKeys={[location.pathname.split('/')[1]]}
         style={{ height: '100%', borderRight: 0 }}
       >
-        <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
-          <Menu.Item key="1">
-            <Link to="">Home</Link>
+         <Menu.Item key="/" icon={<HomeOutlined />}>
+            <Link to="">后台首页
+            </Link>
           </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="post">文章管理</Link>
-          </Menu.Item>
+        <SubMenu key="sub1" icon={<UserOutlined />} title="用户管理">
           <Menu.Item key="3">option3</Menu.Item>
           <Menu.Item key="4">option4</Menu.Item>
         </SubMenu>
-        <SubMenu key="sub2" icon={<LaptopOutlined />} title="subnav 2">
-          <Menu.Item key="5">option5</Menu.Item>
-          <Menu.Item key="6">option6</Menu.Item>
-          <Menu.Item key="7">option7</Menu.Item>
-          <Menu.Item key="8">option8</Menu.Item>
+        <SubMenu key="post" icon={<LaptopOutlined />} title="文章管理">
+          <Menu.Item key="/post">
+            <Link to="/post">文章列表</Link>
+          </Menu.Item>
+          <Menu.Item key="/post/add" >
+            <Link to="/post/add">发布文章</Link>
+            </Menu.Item>
+          <Menu.Item key="6">Tag管理</Menu.Item>
+          <Menu.Item key="7">分类管理</Menu.Item>
+          <Menu.Item key="8">文章推荐</Menu.Item>
         </SubMenu>
-        <SubMenu key="sub3" icon={<NotificationOutlined />} title="subnav 3">
+        <SubMenu key="sub3" icon={<NotificationOutlined />} title="系统公告">
           <Menu.Item key="9">option9</Menu.Item>
           <Menu.Item key="10">option10</Menu.Item>
           <Menu.Item key="11">option11</Menu.Item>
