@@ -103,6 +103,6 @@ func (a *Articles) Update(c echo.Context) error {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
-	a.Empty()
-	return a.BaseControll.Update(c, a)
+	article.Empty()
+	return a.BaseControll.Update(c, article)
 }

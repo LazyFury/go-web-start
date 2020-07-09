@@ -15,7 +15,6 @@ func product(g *echo.Group) {
 	modelGood.BaseControll.Model = &modelGood
 
 	product := g.Group("/products")
-
 	// 列表
 	product.GET("", modelGood.List)
 	// 详情
