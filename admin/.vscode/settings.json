@@ -1,0 +1,6 @@
+{
+  "go.inferGopath": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  }
+}
