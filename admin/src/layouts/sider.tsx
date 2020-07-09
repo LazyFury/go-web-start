@@ -1,17 +1,18 @@
 import {
+  HomeOutlined,
   LaptopOutlined,
   NotificationOutlined,
+  SettingOutlined,
   UserOutlined,
-  HomeOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React from 'react';
-import { Link, withRouter, useLocation } from 'umi';
+import { Link, useLocation } from 'umi';
 
 const { SubMenu } = Menu;
- 
-export default function Sider(props: { collapsed: boolean | undefined; }) {
-  const location = useLocation()
+
+export default function Sider(props: { collapsed: boolean | undefined }) {
+  const location = useLocation();
   return (
     <Layout.Sider
       trigger={null}
@@ -25,21 +26,19 @@ export default function Sider(props: { collapsed: boolean | undefined; }) {
         defaultOpenKeys={[location.pathname.split('/')[1]]}
         style={{ height: '100%', borderRight: 0 }}
       >
-         <Menu.Item key="/" icon={<HomeOutlined />}>
-            <Link to="">后台首页
-            </Link>
-          </Menu.Item>
+        <Menu.Item key="/" icon={<HomeOutlined />}>
+          <Link to="">后台首页</Link>
+        </Menu.Item>
         <SubMenu key="sub1" icon={<UserOutlined />} title="用户管理">
-          <Menu.Item key="3">option3</Menu.Item>
           <Menu.Item key="4">option4</Menu.Item>
         </SubMenu>
         <SubMenu key="post" icon={<LaptopOutlined />} title="文章管理">
           <Menu.Item key="/post">
             <Link to="/post">文章列表</Link>
           </Menu.Item>
-          <Menu.Item key="/post/add" >
+          <Menu.Item key="/post/add">
             <Link to="/post/add">发布文章</Link>
-            </Menu.Item>
+          </Menu.Item>
           <Menu.Item key="6">Tag管理</Menu.Item>
           <Menu.Item key="7">分类管理</Menu.Item>
           <Menu.Item key="8">文章推荐</Menu.Item>
@@ -50,6 +49,9 @@ export default function Sider(props: { collapsed: boolean | undefined; }) {
           <Menu.Item key="11">option11</Menu.Item>
           <Menu.Item key="12">option12</Menu.Item>
         </SubMenu>
+        <Menu.Item key="/setting" icon={<SettingOutlined></SettingOutlined>}>
+          <Link to="/setting">系统设置</Link>
+        </Menu.Item>
       </Menu>
     </Layout.Sider>
   );

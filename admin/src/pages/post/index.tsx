@@ -1,19 +1,18 @@
 import { useDataList } from '@/hooks';
-import { http } from '@/server/request';
-import { PageHeader, Table, Tooltip, Modal, Button } from 'antd';
-import React from 'react';
+import { posts } from '@/server/api';
+import config from '@/utils/config';
 import {
-  PaperClipOutlined,
-  EditOutlined,
   DeleteOutlined,
+  EditOutlined,
+  PaperClipOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
-import config from '@/utils/config';
+import { Button, Modal, PageHeader, Table, Tooltip } from 'antd';
+import React from 'react';
 import { Link } from 'umi';
-import { posts } from '@/server/api';
 
 let { confirm } = Modal;
-let resetTableData: () => Promise<void>;
+let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
 
 export default () => {
   let { data, load, loading } = useDataList(page => posts.list({ page }));
@@ -24,7 +23,7 @@ export default () => {
         style={{ padding: '20rpx 0' }}
         // onBack={() => null}
         title="文章管理"
-        subTitle={`共${data.pageCount}页${data.count}篇文章，当前${data.pageNow}页`}
+        subTitle={`共${data.count}篇文章，${data.pageCount}页，当前${data.pageNow}页`}
       />
 
       <div style={{ margin: '10px 0' }}>
@@ -67,29 +66,29 @@ export default () => {
 const columns = [
   { title: 'ID', key: 'id', dataIndex: 'id' },
   { title: '文章标题', key: 'title', dataIndex: 'title', render: title },
-  {
-    title: '简介',
-    key: 'desc',
-    dataIndex: 'desc',
-    render(desc: any) {
-      return <div>{desc || '暂无内容....'}</div>;
-    },
-  },
+  { title: '分类', key: 'cate', dataIndex: 'cate_id' },
+  // {
+  //   title: '简介',
+  //   key: 'desc',
+  //   dataIndex: 'desc',
+  //   render(desc: any) {
+  //     return <div>{desc || '暂无内容....'}</div>;
+  //   },
+  // },
   { title: '作者', key: 'author', dataIndex: 'author' },
   { title: '文章标签', key: 'tag', dataIndex: 'tag' },
   { title: '创建时间', key: 'created_at', dataIndex: 'created_at' },
   { title: '更新时间', key: 'updated_at', dataIndex: 'updated_at' },
-
   {
     title: '操作',
     key: 'action',
     dataIndex: 'id',
     render: (id: any) => {
       return (
-        <div>
+        <>
           {edit(id)}
           {del(id)}
-        </div>
+        </>
       );
     },
   },
