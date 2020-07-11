@@ -1,5 +1,5 @@
 import useRequest from '@/hooks/useRequest';
-import { postCates, posts } from '@/server/api';
+import { postCates, posts } from '@/server/api/posts';
 import { Button, Form, Input, PageHeader, Select } from 'antd';
 import React, { useState } from 'react';
 import { history, useLocation } from 'umi';
@@ -39,11 +39,13 @@ export default () => {
           <Input />
         </Form.Item>
 
-        <Form.Item labelCol={{span:2}} wrapperCol={{span:4}} name="cate_id" label="文章分类">
-          <Select
-            allowClear
-            placeholder="请选择文章分类"
-          >
+        <Form.Item
+          labelCol={{ span: 2 }}
+          wrapperCol={{ span: 4 }}
+          name="cate_id"
+          label="文章分类"
+        >
+          <Select allowClear placeholder="请选择文章分类">
             {cate && cate.length > 0
               ? cate.map(
                   (x: { id: React.ReactText; name: React.ReactNode }) => {

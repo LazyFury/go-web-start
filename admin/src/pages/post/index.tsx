@@ -1,5 +1,5 @@
-import { useDataList } from '@/hooks';
-import { posts } from '@/server/api';
+import { useDataList } from '@/hooks/useDataList';
+import { posts } from '@/server/api/posts';
 import config from '@/utils/config';
 import {
   DeleteOutlined,

@@ -1,4 +1,4 @@
-import { http } from './request';
+import { http } from '../request';
 
 export const posts = {
   list: (params: object) => http.get('/posts', { params }),
@@ -12,9 +12,3 @@ export const posts = {
 export const postCates = {
   list: () => http.get(`/post-cates`),
 };
-
-export const users = {
-  total: (params: object) => http.get(`/users-actions/count`, { params }),
-};
-
-export const base = {};

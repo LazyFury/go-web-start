@@ -1,5 +1,6 @@
 import useRequest from '@/hooks/useRequest';
-import { posts, users } from '@/server/api';
+import { posts } from '@/server/api/posts';
+import { users } from '@/server/api/users';
 import { Button } from 'antd';
 import React, { useEffect } from 'react';
 import { Link } from 'umi';
