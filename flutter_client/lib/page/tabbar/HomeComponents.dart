@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/components/safeMode.dart';
 import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/page/search.dart';
 // import 'utils/color.dart';
 
 Widget searchBar(context, {bool scan = false}) => Container(
@@ -26,11 +27,15 @@ Widget searchBar(context, {bool scan = false}) => Container(
                     Text('东莞'),
                   ],
                 ),
-                borderRadiusInput(),
+                borderRadiusInput(context),
                 Container(
                   child: (scan
                       ? TouchView(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                              return SearchPage(context);
+                            }));
+                          },
                           child: Image(
                               image: AssetImage('static/image/scan.png'),
                               width: 20,
@@ -45,10 +50,14 @@ Widget searchBar(context, {bool scan = false}) => Container(
       ),
     );
 
-Expanded borderRadiusInput() {
+Expanded borderRadiusInput(context) {
   return Expanded(
     child: TouchView(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+          return SearchPage(context);
+        }));
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         margin: EdgeInsets.fromLTRB(20, 0, 16, 0),

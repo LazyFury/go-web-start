@@ -15,7 +15,7 @@ class Cate extends StatefulWidget {
 class CateStatus extends State<Cate> {
   final cates = [
     {
-      'name': "服饰",
+      'name': "服饰1呀",
       'tmenu': [
         {
           'name': "夏装",
@@ -46,7 +46,8 @@ class CateStatus extends State<Cate> {
     {
       'name': "日常",
       'tmenu': [
-        {'name': "是个动漫来的", 'tmenu': []}
+        {'name': "分类1", 'tmenu': []},
+        {'name': "分类2", 'tmenu': []}
       ]
     }
   ];
