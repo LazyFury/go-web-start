@@ -3,6 +3,7 @@ package model
 import (
 	"EK-Server/util"
 	"EK-Server/util/customtype"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -29,7 +30,8 @@ type (
 	// 尝试列表或者详情隐藏部分隐私字段
 	showArticle struct {
 		*Articles
-		A string `json:"content,omitempty"`
+		CateName string `json:"cate_name"`
+		A        string `json:"content,omitempty"`
 	}
 )
 
@@ -40,7 +42,7 @@ func (a *Articles) PointerList() interface{} {
 
 // Pointer 实例
 func (a *Articles) Pointer() interface{} {
-	return &showArticle{}
+	return &Articles{}
 }
 
 // TableName 表名
@@ -51,8 +53,17 @@ func (a *Articles) TableName() string {
 // Search 搜索
 func (a *Articles) Search(db *gorm.DB, key string) *gorm.DB {
 	if key != "" {
-		return db.Where("`title` like ?", "%"+key+"%").Or("`desc` like ?", "%"+key+"%")
+		db = db.Where("`title` like ?", "%"+key+"%").Or("`desc` like ?", "%"+key+"%").Or("`tag` like ?", "%"+key+"%")
 	}
+	return db
+}
+
+// Joins 查询分类名
+func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
+	// left join 需要手动拼接字段了,gorm默认都是slect tableName.*
+	db = db.Select("id,title,cate_id,cate_name,created_at,updated_at,author,email,cover,tag,`like`,`desc`")
+	cateTableName := TableName("article_cates")
+	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cateTableName, a.TableName()))
 	return db
 }
 

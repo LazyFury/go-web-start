@@ -21,6 +21,7 @@ type listModel interface {
 	TableName() string
 	// Where 搜索条件
 	Search(db *gorm.DB, key string) *gorm.DB
+	Joins(db *gorm.DB) *gorm.DB
 	// 列表，增，查，删，改
 	List(c echo.Context) error
 	Detail(c echo.Context) error
@@ -28,6 +29,7 @@ type listModel interface {
 	Add(c echo.Context) error
 	Update(c echo.Context) error
 	Count(c echo.Context) error
+	Install(g *echo.Group, baseURL string) *echo.Group
 }
 
 // BaseControll 空方法用户数据模型继承方法
@@ -47,6 +49,11 @@ type EmptySystemFiled struct {
 
 // Search 搜索
 func (b *BaseControll) Search(db *gorm.DB, key string) *gorm.DB {
+	return db
+}
+
+// Joins 链接
+func (b *BaseControll) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
@@ -246,7 +253,7 @@ func (b *BaseControll) Count(c echo.Context) error {
 	row = row.Count(&n)
 	// 查询近n (天，周，月) 数据
 	row = row.Select("DATE_FORMAT(created_at,'" + dateFormat + "') date,count(*) count")
-	row = row.Group("date").Order("date desc").Find(&list)
+	row = row.Group("date").Order("date asc").Find(&list)
 	// 计算近n天数据的增加或者减少
 	var defaultCount int
 	for i, item := range list {
@@ -281,4 +288,18 @@ func (b *BaseControll) Empty() {
 	b.ID = 0
 	b.CreatedAt = customtype.LocalTime{Time: time.Time{}}
 	b.UpdatedAt = customtype.LocalTime{Time: time.Time{}}
+}
+
+// Install 快速注册路由
+func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
+	route := g.Group(baseURL)
+
+	route.GET("", b.Model.List)
+	route.GET("/:id", b.Model.Detail)
+	route.POST("", b.Model.Add)
+	route.PUT("/:id", b.Model.Update)
+	route.DELETE("/:id", b.Model.Delete)
+
+	return route
+
 }

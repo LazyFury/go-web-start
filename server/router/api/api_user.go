@@ -12,14 +12,7 @@ var modelUser model.User
 // 用户API
 func user(g *echo.Group) {
 	modelUser.BaseControll.Model = &modelUser
-
-	user := g.Group("/users")
-	user.GET("", modelUser.List)
-	user.GET("/:id", modelUser.Detail)
-
-	user.POST("", modelUser.Add)
-	user.PUT("/:id", modelUser.Update)
-	user.DELETE("/:id", modelUser.Delete)
+	user := modelUser.Install(g, "/users")
 
 	// actions   url like: /users-actions/repeat-of-name
 	user.GET("-actions/repeat-of-name", repeatOfName)

@@ -60,6 +60,11 @@ func (g *Goods) List(c echo.Context) error {
 	return g.BaseControll.GetList(c, nil)
 }
 
+// Detail 商品详情
+func (g *Goods) Detail(c echo.Context) error {
+	return g.BaseControll.GetDetail(c, "商品不存在")
+}
+
 // Add 添加商品
 func (g *Goods) Add(c echo.Context) error {
 	good := &Goods{}

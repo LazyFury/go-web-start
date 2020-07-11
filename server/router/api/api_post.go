@@ -13,18 +13,7 @@ var modelPostCate model.ArticlesCate
 // Init 初始化
 func post(g *echo.Group) {
 	modelPost.BaseControll.Model = &modelPost
-	post := g.Group("/posts")
-
-	//list
-	post.GET("", modelPost.List)
-	//detail
-	post.GET("/:id", modelPost.Detail)
-	//添加内容
-	post.POST("", modelPost.Add)
-	//del
-	post.DELETE("/:id", modelPost.Delete)
-	// Update 更新内容
-	post.PUT("/:id", modelPost.Update)
+	post := modelPost.Install(g, "/posts") //list,detail,add,update,delete
 
 	// Actions
 	// 点赞文章
@@ -38,13 +27,5 @@ func post(g *echo.Group) {
 // 文章分类
 func postCate(g *echo.Group) {
 	modelPostCate.BaseControll.Model = &modelPostCate
-
-	cate := g.Group("/post-cates")
-
-	cate.GET("", modelPostCate.ListWithOutPaging)
-	cate.GET("/:id", modelPostCate.Detail)
-
-	cate.POST("", modelPostCate.Add)
-	cate.PUT("/:id", modelPostCate.Update)
-	cate.DELETE("/:id", modelPostCate.Delete)
+	modelPostCate.Install(g, "/post-cates")
 }

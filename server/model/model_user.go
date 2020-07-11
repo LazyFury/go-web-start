@@ -51,6 +51,11 @@ func (u *User) TableName() string {
 	return TableName("users")
 }
 
+// Detail 用户信息
+func (u *User) Detail(c echo.Context) error {
+	return u.BaseControll.GetDetail(c, "用户不存在")
+}
+
 // Add 添加
 func (u *User) Add(c echo.Context) error {
 	user := new(User)
