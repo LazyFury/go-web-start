@@ -39,10 +39,10 @@ export default () => {
           <Input />
         </Form.Item>
 
-        <Form.Item name="cate_id" label="文章分类">
+        <Form.Item labelCol={{span:2}} wrapperCol={{span:4}} name="cate_id" label="文章分类">
           <Select
             allowClear
-            placeholder="Select a option and change input text above"
+            placeholder="请选择文章分类"
           >
             {cate && cate.length > 0
               ? cate.map(
