@@ -24,6 +24,7 @@ const defaultData: listResult = {
  */
 export function useDataList(
   api: (page: number) => Promise<AxiosResponse<listResult>>,
+  autoLoad: boolean | undefined = true,
 ): {
   readonly data: listResult;
   load: (p?: number | undefined) => Promise<void>;
@@ -49,7 +50,7 @@ export function useDataList(
   const reload = () => load(page); //刷新当前页
 
   useEffect(() => {
-    load();
+    if (autoLoad) load();
   }, []);
   return { data, load, reset, reload, loading };
 }

@@ -8,14 +8,13 @@ const layout = {
   labelCol: { span: 2 },
   wrapperCol: { span: 12 },
 };
-
+const { Option } = Select;
 export default () => {
   let param: any = useLocation();
   let { id } = param.query;
   let [isEdit] = useState(Boolean(id));
   let { data: cate, load: loadCate } = useRequest(postCates.list, true);
   const [form] = Form.useForm();
-  const { Option } = Select;
 
   const onFinish = (values: any) => {
     if (isEdit) {

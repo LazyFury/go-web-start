@@ -8,15 +8,27 @@ import {
   SyncOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, PageHeader, Table, Tooltip } from 'antd';
-import React from 'react';
-import { Link } from 'umi';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'umi';
 
 let { confirm } = Modal;
 let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
 
 export default () => {
-  let { data, load, loading } = useDataList(page => posts.list({ page }));
+  let location: any = useLocation();
+  let { cid = '' } = location.query;
+  if (cid) cid = Number(cid);
+  console.log({ cid });
+  let { data, load, loading, reset } = useDataList(
+    page => posts.list({ page, cid }),
+    false,
+  );
+
   resetTableData = load;
+
+  useEffect(() => {
+    reset();
+  }, [cid]);
   return (
     <div>
       <PageHeader
@@ -42,7 +54,7 @@ export default () => {
         loading={loading}
         pagination={{
           position: ['bottomLeft'],
-          defaultCurrent: data.pageNow,
+          current: data.pageNow,
           total: data.count,
           showSizeChanger: false,
           onChange: load,
@@ -66,7 +78,6 @@ export default () => {
 const columns = [
   { title: 'ID', key: 'id', dataIndex: 'id' },
   { title: '文章标题', key: 'title', dataIndex: 'title', render: title },
-  { title: '分类', key: 'cate', dataIndex: 'cate_id' },
   // {
   //   title: '简介',
   //   key: 'desc',
@@ -75,6 +86,12 @@ const columns = [
   //     return <div>{desc || '暂无内容....'}</div>;
   //   },
   // },
+  {
+    title: '分类',
+    key: 'cate',
+    dataIndex: 'cate_name',
+    render: filterCate,
+  },
   { title: '作者', key: 'author', dataIndex: 'author' },
   { title: '文章标签', key: 'tag', dataIndex: 'tag' },
   { title: '创建时间', key: 'created_at', dataIndex: 'created_at' },
@@ -93,6 +110,18 @@ const columns = [
     },
   },
 ];
+
+// 根据分类选择
+function filterCate(_: any, data: any) {
+  return (
+    <div>
+      {data.cate_name}
+      <Link to={'/post?cid=' + data.cate_id}>
+        <PaperClipOutlined></PaperClipOutlined>
+      </Link>
+    </div>
+  );
+}
 
 function del(id: number) {
   return (
@@ -118,13 +147,13 @@ function edit(id: number) {
   );
 }
 
-function title(article: React.ReactNode) {
+function title(article: string, data: any) {
   return (
     <div>
       <span> {article}</span>
       <Tooltip title="预览文章">
         <a
-          href={config.previewUrl}
+          href={config.previewUrl + '/posts/' + data.id}
           target="_blank"
           style={{ marginLeft: '4px' }}
         >
