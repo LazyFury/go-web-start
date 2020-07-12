@@ -2,8 +2,10 @@ package model
 
 import (
 	"EK-Server/util"
+	"fmt"
 	"strings"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -14,24 +16,40 @@ type ArticlesCate struct {
 	Key  string `json:"key"`
 	Desc string `json:"desc"`
 }
-type showArticleCate struct {
-	*ArticlesCate
-	*EmptySystemFiled
-}
 
 // PointerList 列表
 func (a *ArticlesCate) PointerList() interface{} {
-	return &[]showArticleCate{}
+	return &[]struct {
+		*ArticlesCate
+		*EmptySystemFiled
+		Count int `json:"count"`
+	}{}
 }
 
 // Pointer 实例
 func (a *ArticlesCate) Pointer() interface{} {
-	return &showArticleCate{}
+	return &struct {
+		*ArticlesCate
+		*EmptySystemFiled
+	}{}
 }
 
 // TableName 表名
 func (a *ArticlesCate) TableName() string {
 	return TableName("article_cates")
+}
+
+// Joins  查询相关文章数据
+func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
+	db = db.Select("`name`,`desc`,`key`,`id`,a1.count")
+	articleTable := TableName("articles")
+	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", articleTable, a.TableName()))
+	return db
+}
+
+// List 分页
+func (a *ArticlesCate) List(c echo.Context) error {
+	return a.BaseControll.ListWithOutPaging(c)
 }
 
 // Add 添加分类
