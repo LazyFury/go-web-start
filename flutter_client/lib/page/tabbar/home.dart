@@ -9,8 +9,6 @@ import 'package:flutterproject/components/touchView.dart';
 import 'package:flutterproject/page/tabbar/HomeComponents.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../search.dart';
-
 class Home extends StatefulWidget {
   @override
   HomeState createState() => HomeState();
@@ -205,9 +203,7 @@ class HomeState extends State<Home> {
   }
 
   Widget menuIcon({@required Image image, @required String text}) => TouchView(
-        onTap: () async {
-
-        },
+        onTap: () async {},
         child: Container(
           decoration: BoxDecoration(color: Colors.transparent),
           child: Column(
