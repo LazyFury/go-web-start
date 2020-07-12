@@ -22,9 +22,10 @@ type (
 		Email          string           `json:"email"`
 		Cover          string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
 		Tag            customtype.Array `json:"tag" gorm:"type:varchar(255)"`
-		CID            int              `json:"cate_id" gorm:"column:cate_id"`
 		Like           int              `json:"like"`
 		AlreadyLikedIt bool             `json:"already_liked_it" gorm:"-"` //判断当前用户是否点赞
+
+		CateID int `json:"cate_id" gorm:"column:cate_id"`
 	}
 
 	// 尝试列表或者详情隐藏部分隐私字段
@@ -73,7 +74,7 @@ func (a *Articles) List(c echo.Context) error {
 	if cid != "" {
 		cateID, err := strconv.Atoi(cid)
 		if err == nil && cateID > 0 {
-			return a.BaseControll.GetList(c, &Articles{CID: cateID})
+			return a.BaseControll.GetList(c, &Articles{CateID: cateID})
 		}
 	}
 	return a.BaseControll.GetList(c, nil)
@@ -97,7 +98,7 @@ func (a *Articles) Add(c echo.Context) error {
 		return util.JSONErr(c, nil, "文章标题不可空")
 	}
 
-	if article.CID == 0 {
+	if article.CateID == 0 {
 		return util.JSONErr(c, nil, "请选择文章分类")
 	}
 
