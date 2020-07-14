@@ -1,4 +1,5 @@
 #! /bin/bash
+rm -r ./dist/
 # 创建文件夹
 mkdir -p  dist/{config,h5,static,template}
 echo '编译项目中..'$1
