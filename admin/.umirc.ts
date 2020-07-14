@@ -6,5 +6,8 @@ export default defineConfig({
     type: 'none',
     exclude: [],
   },
+  // ssr: {
+  //   // mode: 'stream',
+  // },
   // routes: [{ path: '/', component: '@/pages/index' }],
 });

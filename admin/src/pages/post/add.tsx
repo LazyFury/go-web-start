@@ -1,10 +1,9 @@
 import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
-import { Button, Col, Form, Input, PageHeader, Row, Select } from 'antd';
+import { Button, Form, Input, PageHeader, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+// import 'react-quill/dist/quill.snow.css';
 import { history, useLocation } from 'umi';
 import './add.less';
 
@@ -87,14 +86,14 @@ export default () => {
           <Input />
         </Form.Item>
 
-        <Row style={{ marginBottom: '20px' }}>
+        {/* <Row style={{ marginBottom: '20px' }}>
           <Col span={2} style={{ textAlign: 'right' }}>
             <text>文章内容:</text>
           </Col>
           <Col span={12} style={{ marginLeft: '10px' }}>
             <ReactQuill theme="snow" value={content} onChange={setContent} />
           </Col>
-        </Row>
+        </Row> */}
 
         <Form.Item name="tag" label="标签" rules={[{ required: true }]}>
           <Input />

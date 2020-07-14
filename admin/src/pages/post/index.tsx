@@ -9,7 +9,6 @@ import {
   SyncOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, PageHeader, Select, Table, Tooltip } from 'antd';
-import { SelectValue } from 'antd/lib/select';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import './index.less';
@@ -47,9 +46,8 @@ export default () => {
   /**
    * @methods
    */
-  const cateSelectChange = (value: SelectValue) => {
-    let cate_id = Number(value) || 0;
-    setCid(cate_id);
+  const cateSelectChange = (value: string) => {
+    setCid(value);
   };
 
   /**
@@ -61,7 +59,7 @@ export default () => {
         style={{ padding: '20rpx 0' }}
         // onBack={() => null}
         title="文章管理"
-        subTitle={`共${data.count}篇文章，${data.pageCount}页，当前${data.pageNow}页`}
+        subTitle={`共${data.count}篇文章，${data.page_count}页，当前${data.page_now}页`}
       />
 
       <div className="action-bar" style={{ margin: '10px 0' }}>
@@ -102,7 +100,7 @@ export default () => {
         loading={loading}
         pagination={{
           position: ['bottomLeft'],
-          current: data.pageNow,
+          current: data.page_now,
           total: data.count,
           showSizeChanger: false,
           onChange: load,
