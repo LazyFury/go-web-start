@@ -1,5 +1,6 @@
 import { useDataList } from '@/hooks/useDataList';
-import { posts } from '@/server/api/posts';
+import useRequest from '@/hooks/useRequest';
+import { postCates, posts } from '@/server/api/posts';
 import config from '@/utils/config';
 import {
   DeleteOutlined,
@@ -7,28 +8,53 @@ import {
   PaperClipOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, PageHeader, Table, Tooltip } from 'antd';
-import React, { useEffect } from 'react';
-import { Link, useLocation } from 'umi';
+import { Button, Modal, PageHeader, Select, Table, Tooltip } from 'antd';
+import { SelectValue } from 'antd/lib/select';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'umi';
+import './index.less';
 
+const { Option } = Select;
 let { confirm } = Modal;
 let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
+let setCate_id: React.Dispatch<React.SetStateAction<string>>;
 
 export default () => {
-  let location: any = useLocation();
-  let { cid = '' } = location.query;
-  if (cid) cid = Number(cid);
-  console.log({ cid });
+  /**
+   * @init
+   */
+  let [cid, setCid] = useState('');
+  setCate_id = setCid;
+
+  // 获取文章列表
   let { data, load, loading, reset } = useDataList(
     page => posts.list({ page, cid }),
     false,
   );
 
+  let { data: cates } = useRequest(() => postCates.list(), true);
+
   resetTableData = load;
+
+  /**
+   * @event
+   */
 
   useEffect(() => {
     reset();
   }, [cid]);
+
+  /**
+   * @methods
+   */
+  const cateSelectChange = (value: SelectValue) => {
+    let cate_id = Number(value) || 0;
+    setCid(cate_id);
+  };
+
+  /**
+   * @render
+   */
   return (
     <div>
       <PageHeader
@@ -38,7 +64,29 @@ export default () => {
         subTitle={`共${data.count}篇文章，${data.pageCount}页，当前${data.pageNow}页`}
       />
 
-      <div style={{ margin: '10px 0' }}>
+      <div className="action-bar" style={{ margin: '10px 0' }}>
+        {/* 选择分类 */}
+        <Select
+          allowClear
+          placeholder="请选择文章分类"
+          value={cid || 0}
+          onChange={cateSelectChange}
+        >
+          {/* cid 使用usestate， 默认值为0而不是空 */}
+          <Option key={0} value={0}>
+            全部分类
+          </Option>
+          {cates && cates.length > 0
+            ? cates.map((x: any) => {
+                return (
+                  <Option key={x.id} value={x.id}>
+                    {x.name}
+                  </Option>
+                );
+              })
+            : null}
+        </Select>
+        {/* 刷新列表 */}
         <Button onClick={() => load()}>
           <SyncOutlined></SyncOutlined>
           <span>刷新</span>
@@ -116,9 +164,9 @@ function filterCate(_: any, data: any) {
   return (
     <div>
       {data.cate_name}
-      <Link to={'/post?cid=' + data.cate_id}>
+      <a onClick={() => setCate_id(data.cate_id)}>
         <PaperClipOutlined></PaperClipOutlined>
-      </Link>
+      </a>
     </div>
   );
 }

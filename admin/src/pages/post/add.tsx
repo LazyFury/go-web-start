@@ -1,15 +1,21 @@
 import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
-import { Button, Form, Input, PageHeader, Select } from 'antd';
+import { Button, Col, Form, Input, PageHeader, Row, Select } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { history, useLocation } from 'umi';
 import './add.less';
+
 const layout = {
   labelCol: { span: 2 },
   wrapperCol: { span: 12 },
 };
 const { Option } = Select;
 export default () => {
+  const [content, setContent] = useState('');
+
   let param: any = useLocation();
   let { id } = param.query;
   let [isEdit] = useState(Boolean(id));
@@ -18,10 +24,10 @@ export default () => {
 
   const onFinish = (values: any) => {
     if (isEdit) {
-      posts.update(id, values);
+      posts.update(id, { ...values, content });
       return;
     }
-    posts.add(values);
+    posts.add({ ...values, content });
   };
   const onReset = () => {};
 
@@ -57,6 +63,41 @@ export default () => {
                 )
               : null}
           </Select>
+        </Form.Item>
+
+        <Form.Item name="desc" label="文章简介" rules={[{ required: true }]}>
+          <TextArea />
+        </Form.Item>
+
+        <Form.Item
+          name="author"
+          wrapperCol={{ span: 4 }}
+          label="文章作者"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="email"
+          wrapperCol={{ span: 4 }}
+          label="作者邮箱"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Row style={{ marginBottom: '20px' }}>
+          <Col span={2} style={{ textAlign: 'right' }}>
+            <text>文章内容:</text>
+          </Col>
+          <Col span={12} style={{ marginLeft: '10px' }}>
+            <ReactQuill theme="snow" value={content} onChange={setContent} />
+          </Col>
+        </Row>
+
+        <Form.Item name="tag" label="标签" rules={[{ required: true }]}>
+          <Input />
         </Form.Item>
         <Form.Item className="submit" wrapperCol={{ offset: 2, span: 16 }}>
           <Button type="primary" htmlType="submit">
