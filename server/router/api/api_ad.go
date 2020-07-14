@@ -1,13 +1,27 @@
 package api
 
-import "github.com/labstack/echo"
+import (
+	"EK-Server/model"
+
+	"github.com/labstack/echo"
+)
+
+var modelAd model.Ad
+var modelAdGroup model.AdGroup
+var modelAdEvent model.AdEvent
 
 func ad(g *echo.Group) {
+	modelAd.BaseControll.Model = &modelAd
+	modelAd.Install(g, "/ads")
 
 }
+
 func adGroup(g *echo.Group) {
-
+	modelAdGroup.BaseControll.Model = &modelAdGroup
+	modelAdGroup.Install(g, "/ad-groups")
 }
-func adEvent(g *echo.Group) {
 
+func adEvent(g *echo.Group) {
+	modelAdEvent.BaseControll.Model = &modelAdEvent
+	modelAdEvent.Install(g, "/ad-events")
 }

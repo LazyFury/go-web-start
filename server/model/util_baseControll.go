@@ -21,8 +21,9 @@ type listModel interface {
 	TableName() string
 	// Where 搜索条件
 	Search(db *gorm.DB, key string) *gorm.DB
+	// 列表的补充条件
 	Joins(db *gorm.DB) *gorm.DB
-	// 列表，增，查，删，改
+	// 列表，增，查，删，改, 统计
 	List(c echo.Context) error
 	Detail(c echo.Context) error
 	Delete(c echo.Context) error
@@ -299,6 +300,7 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route.POST("", b.Model.Add)
 	route.PUT("/:id", b.Model.Update)
 	route.DELETE("/:id", b.Model.Delete)
+	route.GET("-actions/count", b.Model.Count)
 
 	return route
 

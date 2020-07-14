@@ -2,6 +2,7 @@ package model
 
 import (
 	"EK-Server/config"
+	"EK-Server/util/customtype"
 	"fmt"
 	"time"
 
@@ -16,8 +17,7 @@ var DB *gorm.DB
 
 // MysqlConn InitDB
 func MysqlConn(DataBaseConfig string) (err error) {
-	t := time.Now().Format("2006年01-02 15:04:05")
-	fmt.Printf("数据库链接>>>准备>> %s \n", t)
+	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
 	db, err := gorm.Open("mysql", DataBaseConfig)
 	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
@@ -32,8 +32,7 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	db.AutoMigrate(&User{}, &WechatOauth{}, &Goods{}, &GoodsCate{}, &Articles{}, &ArticlesCate{}, &AdEvent{}, &AdGroup{}, &Ad{})
 
 	DB = db
-	t = time.Now().Format("2006年01-02 15:04:05")
-	fmt.Printf("数据库链接>>>成功>> %s \n", t)
+	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
 	return nil
 }
 

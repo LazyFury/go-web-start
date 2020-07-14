@@ -58,7 +58,7 @@ func (u *User) Detail(c echo.Context) error {
 
 // Add 添加
 func (u *User) Add(c echo.Context) error {
-	user := new(User)
+	user := &User{}
 
 	if err := c.Bind(user); err != nil {
 		return util.JSONErr(c, err, "参数错误")

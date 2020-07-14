@@ -21,7 +21,6 @@ func post(g *echo.Group) {
 		return util.JSONSuccess(c, nil, "点赞成功")
 	}, rbacAdmin)
 
-	post.GET("-actions/count", modelPost.Count)
 }
 
 // 文章分类

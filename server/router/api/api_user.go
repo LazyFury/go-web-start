@@ -16,8 +16,6 @@ func user(g *echo.Group) {
 
 	// actions   url like: /users-actions/repeat-of-name
 	user.GET("-actions/repeat-of-name", repeatOfName)
-	// 统计
-	user.GET("-actions/count", modelUser.Count)
 }
 
 func repeatOfEmail(c echo.Context) error {
