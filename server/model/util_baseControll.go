@@ -73,7 +73,16 @@ func (b *BaseControll) ListWithOutPaging(c echo.Context) error {
 	db := DB
 	list := b.Model.PointerList()
 
-	row := db.Table(b.Model.TableName()).Find(list)
+	row := db.Table(b.Model.TableName())
+
+	key := c.QueryParam("key")
+	if key != "" {
+		row = b.Model.Search(row, key)
+	}
+
+	row = b.Model.Joins(row)
+
+	row = row.Find(list)
 
 	if row.Error != nil {
 		return util.JSONErr(c, nil, "获取失败")

@@ -35,8 +35,8 @@ func (a *AdGroup) TableName() string {
 	return TableName("AdGroups")
 }
 
-// AdGroupd AdGroupd
-func (a *AdGroup) AdGroupd(c echo.Context) error {
+// Add AdGroupd
+func (a *AdGroup) Add(c echo.Context) error {
 	adGroup := &AdGroup{}
 
 	if err := c.Bind(adGroup); err != nil {

@@ -27,8 +27,8 @@ func (a *AdEvent) TableName() string {
 	return TableName("AdEvents")
 }
 
-// AdEventd AdEventd
-func (a *AdEvent) AdEventd(c echo.Context) error {
+// Add AdEventd
+func (a *AdEvent) Add(c echo.Context) error {
 	adEvent := &AdEvent{}
 
 	if err := c.Bind(adEvent); err != nil {
