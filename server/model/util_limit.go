@@ -9,9 +9,9 @@ type (
 	// Result 分页方法返回结果
 	Result struct {
 		Count     int         `json:"count"`
-		PageSize  int         `json:"page"`
-		PageCount int         `json:"pageCount"`
-		PageNow   int         `json:"pageNow"`
+		PageSize  int         `json:"page_size"`
+		PageCount int         `json:"page_count"`
+		PageNow   int         `json:"page_now"`
 		List      interface{} `json:"list"`
 	}
 )
