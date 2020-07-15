@@ -31,6 +31,8 @@ type listModel interface {
 	Update(c echo.Context) error
 	Count(c echo.Context) error
 	Install(g *echo.Group, baseURL string) *echo.Group
+
+	HasOne(where interface{}) bool
 }
 
 // BaseControll 空方法用户数据模型继承方法
@@ -69,15 +71,13 @@ func (b *BaseControll) Detail(c echo.Context) error {
 }
 
 // ListWithOutPaging 直接取所有数据不分页
-func (b *BaseControll) ListWithOutPaging(c echo.Context) error {
+func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 	db := DB
 	list := b.Model.PointerList()
 
 	row := db.Table(b.Model.TableName())
-
-	key := c.QueryParam("key")
-	if key != "" {
-		row = b.Model.Search(row, key)
+	if where != nil {
+		row = row.Where(where)
 	}
 
 	row = b.Model.Joins(row)
@@ -85,10 +85,10 @@ func (b *BaseControll) ListWithOutPaging(c echo.Context) error {
 	row = row.Find(list)
 
 	if row.Error != nil {
-		return util.JSONErr(c, nil, "获取失败")
+		return []string{}
 	}
 
-	return util.JSONSuccess(c, list, "")
+	return list
 }
 
 // GetList 获取列表
@@ -162,6 +162,7 @@ func (b *BaseControll) Delete(c echo.Context) error {
 }
 
 // Add 添加 需要实现绑定json的部分以及自定义的验证
+// 必须重写 需要调用empty避免关键字段修改
 func (b *BaseControll) Add(c echo.Context, data interface{}) error {
 	db := DB
 
@@ -180,6 +181,7 @@ func (b *BaseControll) Add(c echo.Context, data interface{}) error {
 }
 
 // Update 更新数据  需要实现绑定json的部分以及自定义的验证
+// 必须重写 需要调用empty避免关键字段修改
 func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 	db := DB
 	id := c.Param("id")
@@ -313,4 +315,14 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 
 	return route
 
+}
+
+// HasOne 避免重复
+func (b *BaseControll) HasOne(where interface{}) bool {
+	db := DB
+	row := db.Table(b.Model.TableName()).Where(where).First(b.Model.Pointer())
+	if row.RecordNotFound() {
+		return false
+	}
+	return true
 }

@@ -23,7 +23,7 @@ class AppStatus extends State<App> {
   int current = 0;
 
   void getInfo() {
-    Http.get("admin1").then((res) {
+    Http.get("/api/v1/posts").then((res) {
       print("请求成功");
       print(res);
     }).catchError((err) {

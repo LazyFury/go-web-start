@@ -49,7 +49,7 @@ func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
 
 // List 分页
 func (a *ArticlesCate) List(c echo.Context) error {
-	return a.BaseControll.ListWithOutPaging(c)
+	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(nil), "")
 }
 
 // Add 添加分类

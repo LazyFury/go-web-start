@@ -13,7 +13,6 @@ var modelAdEvent model.AdEvent
 func ad(g *echo.Group) {
 	modelAd.BaseControll.Model = &modelAd
 	modelAd.Install(g, "/ads")
-
 }
 
 func adGroup(g *echo.Group) {

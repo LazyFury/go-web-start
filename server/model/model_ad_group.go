@@ -32,7 +32,7 @@ func (a *AdGroup) Pointer() interface{} {
 
 // TableName TableName
 func (a *AdGroup) TableName() string {
-	return TableName("AdGroups")
+	return TableName("ad_groups")
 }
 
 // Add AdGroupd
