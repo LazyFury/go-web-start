@@ -30,8 +30,9 @@ type listModel interface {
 	Add(c echo.Context) error
 	Update(c echo.Context) error
 	Count(c echo.Context) error
+	// 快速注册路由
 	Install(g *echo.Group, baseURL string) *echo.Group
-
+	// 是否存在
 	HasOne(where interface{}) bool
 }
 

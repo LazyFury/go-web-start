@@ -23,9 +23,11 @@ func (a *Ad) PointerList() interface{} {
 	return &[]struct {
 		*Ad
 		*EmptySystemFiled
-		Y     string `json:"event_id,omitempty"`
-		X     string `json:"id,omitempty"`
-		Event string `json:"event"`
+		Y         string `json:"event_id,omitempty"`
+		X         string `json:"id,omitempty"`
+		Event     string `json:"event"`
+		GroupName string `json:"group_name,omitempty"`
+		Type      int    `json:"type,omitempty"`
 	}{}
 }
 
@@ -41,15 +43,22 @@ func (a *Ad) TableName() string {
 
 // Joins 查询
 func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("`title`,`param`,`event_id`,IFNULL(`event`,'no_event') `event`,`group_id`")
+	db = db.Select("`title`,`param`,`event_id`,IFNULL(`event`,'no_event') `event`,`group_id`") //`group_name`,`type`
+	// 连接事件
 	eventName := TableName("ad_events")
 	db = db.Joins(fmt.Sprintf("left join (select `id` e_id,`event` from `%s`) t2 on t2.`e_id`=`%s`.`event_id`", eventName, a.TableName()))
+	// 连接分类
+	// groupName := TableName("ad_groups")
+	// db = db.Joins(fmt.Sprintf("left join (select `id` g_id,`name` group_name,`type` from `%s`) t3 on t3.`g_id`=`%s`.`group_id`", groupName, a.TableName()))
 	return db
 }
 
 // List 列表
 func (a *Ad) List(c echo.Context) error {
 	groupID := c.QueryParam("group_id")
+	if groupID == "" {
+		return util.JSONErr(c, nil, "请选择分组")
+	}
 	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": groupID,
 	}), "")
@@ -70,6 +79,14 @@ func (a *Ad) Add(c echo.Context) error {
 
 	if ad.GroupID == 0 {
 		return util.JSONErr(c, nil, "请选择广告位分组")
+	}
+
+	adGourp := &AdGroup{}
+	adGourp.BaseControll.Model = adGourp
+	if !adGourp.BaseControll.HasOne(map[string]interface{}{
+		"id": ad.GroupID,
+	}) {
+		return util.JSONErr(c, nil, "分组不存在")
 	}
 
 	ad.Empty()

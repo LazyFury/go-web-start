@@ -9,8 +9,8 @@ import (
 
 // AdEvent banner事件
 type AdEvent struct {
-	Event string `json:"event" gorm:"not null;unique_index;default:'no_event';comment:'banner事件,字符串，唯一'"`
 	BaseControll
+	Event string `json:"event" gorm:"not null;unique_index;default:'no_event';comment:'banner事件,字符串，唯一'"`
 }
 
 // PointerList PointerList
