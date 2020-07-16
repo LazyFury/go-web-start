@@ -1,14 +1,11 @@
 import { http } from '../request';
+import { install } from './easy_install';
 
 export const posts = {
-  list: (params: object) => http.get('/posts', { params }),
-  del: (id: number) => http.delete(`/posts/${id}`),
-  detail: (id: number) => http.get(`/posts/${id}`),
-  add: (data: object) => http.post(`/posts`, data),
-  update: (id: any, data: object) => http.put(`/posts/${id}`, data),
-  total: (params: object) => http.get(`/posts-actions/count`, { params }),
+  ...install('posts'),
 };
 
 export const postCates = {
+  ...install('post-cates'),
   list: () => http.get(`/post-cates`),
 };

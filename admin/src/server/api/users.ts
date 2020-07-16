@@ -1,5 +1,5 @@
-import { http } from '../request';
+import { install } from './easy_install';
 
 export const users = {
-  total: (params: object) => http.get(`/users-actions/count`, { params }),
+  ...install('users'),
 };
