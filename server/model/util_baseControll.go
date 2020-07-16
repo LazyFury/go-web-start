@@ -86,7 +86,7 @@ func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 	row = row.Find(list)
 
 	if row.Error != nil {
-		return []string{}
+		return []interface{}{}
 	}
 
 	return list
@@ -132,7 +132,11 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	where := map[string]interface{}{
 		"id": id,
 	}
-	if db.Table(b.Model.TableName()).Where(where).First(p).RecordNotFound() {
+	row := db.Table(b.Model.TableName()).Where(where)
+
+	row = b.Model.Joins(row)
+
+	if row.First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 	return util.JSONSuccess(c, p, "")

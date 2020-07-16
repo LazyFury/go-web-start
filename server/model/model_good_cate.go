@@ -44,7 +44,7 @@ func (cate *GoodsCate) Pointer() interface{} {
 
 // TableName 表名
 func (cate *GoodsCate) TableName() string {
-	return TableName("good-cates")
+	return TableName("good_cates")
 }
 
 // List 列表

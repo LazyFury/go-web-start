@@ -88,7 +88,6 @@ func (u *User) Add(c echo.Context) error {
 
 // RegController AddUser
 func (u *User) RegController(c echo.Context) error {
-
 	return u.Add(c)
 }
 

@@ -15,6 +15,25 @@ import (
 // DB DB
 var DB *gorm.DB
 
+// 需要自动迁移的表
+var autoMigrate = []interface{}{
+	//user
+	&User{},
+	&WechatOauth{},
+	//goods
+	&Goods{},
+	&GoodsCate{},
+	//article
+	&Articles{},
+	&ArticlesCate{},
+	//ad
+	&AdEvent{},
+	&AdGroup{},
+	&Ad{},
+	//feedback
+	&Feedback{},
+}
+
 // MysqlConn InitDB
 func MysqlConn(DataBaseConfig string) (err error) {
 	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
@@ -29,7 +48,8 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	}
 
 	db.LogMode(true)
-	db.AutoMigrate(&User{}, &WechatOauth{}, &Goods{}, &GoodsCate{}, &Articles{}, &ArticlesCate{}, &AdEvent{}, &AdGroup{}, &Ad{})
+
+	db.AutoMigrate(autoMigrate...)
 
 	DB = db
 	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))

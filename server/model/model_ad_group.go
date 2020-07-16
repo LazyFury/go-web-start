@@ -2,8 +2,11 @@ package model
 
 import (
 	"EK-Server/util"
+	"fmt"
+	"reflect"
 	"strings"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
 
@@ -20,6 +23,7 @@ func (a *AdGroup) PointerList() interface{} {
 	return &[]struct {
 		*AdGroup
 		*EmptySystemFiled
+		Count int `json:"count"`
 	}{}
 }
 
@@ -31,6 +35,14 @@ func (a *AdGroup) Pointer() interface{} {
 // TableName TableName
 func (a *AdGroup) TableName() string {
 	return TableName("ad_groups")
+}
+
+// Joins 统计
+func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
+	db = db.Select("`id`,`name`,`is_sigle`,`desc`,`count`")
+	ad := &Ad{}
+	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
+	return db
 }
 
 // Detail 分组详情
@@ -54,10 +66,27 @@ func (a *AdGroup) Detail(c echo.Context) error {
 	list := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": id,
 	})
-	result := map[string]interface{}{
-		"name":     group.Name,
-		"is_sigle": group.IsSigle,
-		"list":     list,
+	count := 1
+	// fmt.Printf("%v\n\n", reflect.TypeOf(list).Elem().Kind())
+	// fmt.Printf("%v\n\n", reflect.ValueOf(list).Elem())
+
+	// Elem 指针到真实数据
+	// Kind 取类型
+	switch reflect.TypeOf(list).Elem().Kind() {
+	case reflect.Slice, reflect.Array:
+		arr := reflect.ValueOf(list).Elem()
+		count = arr.Len()
+	}
+
+	result := &struct {
+		*AdGroup
+		*EmptySystemFiled
+		Count int         `json:"count"`
+		List  interface{} `json:"list"`
+	}{
+		AdGroup: group,
+		List:    list,
+		Count:   count,
 	}
 
 	return util.JSONSuccess(c, result, "")

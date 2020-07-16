@@ -27,23 +27,23 @@ type (
 
 		CateID int `json:"cate_id" gorm:"column:cate_id"`
 	}
-
-	// 尝试列表或者详情隐藏部分隐私字段
-	showArticle struct {
-		*Articles
-		CateName string `json:"cate_name"`
-		A        string `json:"content,omitempty"`
-	}
 )
 
 // PointerList 列表
 func (a *Articles) PointerList() interface{} {
-	return &[]showArticle{}
+	return &[]struct {
+		*Articles
+		CateName string `json:"cate_name"`
+		A        string `json:"content,omitempty"`
+	}{}
 }
 
 // Pointer 实例
 func (a *Articles) Pointer() interface{} {
-	return &Articles{}
+	return &struct {
+		*Articles
+		CateName string `json:"cate_name"`
+	}{}
 }
 
 // TableName 表名
@@ -63,8 +63,8 @@ func (a *Articles) Search(db *gorm.DB, key string) *gorm.DB {
 func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
 	// left join 需要手动拼接字段了,gorm默认都是slect tableName.*
 	db = db.Select("id,title,cate_id,cate_name,created_at,updated_at,author,email,cover,tag,`like`,`desc`")
-	cateTableName := TableName("article_cates")
-	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cateTableName, a.TableName()))
+	cate := &ArticlesCate{}
+	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
 	return db
 }
 

@@ -45,8 +45,8 @@ func (a *Ad) TableName() string {
 func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("`title`,`param`,`event_id`,IFNULL(`event`,'no_event') `event`,`group_id`") //`group_name`,`type`
 	// 连接事件
-	eventName := TableName("ad_events")
-	db = db.Joins(fmt.Sprintf("left join (select `id` e_id,`event` from `%s`) t2 on t2.`e_id`=`%s`.`event_id`", eventName, a.TableName()))
+	event := &AdEvent{}
+	db = db.Joins(fmt.Sprintf("left join (select `id` e_id,`event` from `%s`) t2 on t2.`e_id`=`%s`.`event_id`", event.TableName(), a.TableName()))
 	// 连接分类
 	// groupName := TableName("ad_groups")
 	// db = db.Joins(fmt.Sprintf("left join (select `id` g_id,`name` group_name,`type` from `%s`) t3 on t3.`g_id`=`%s`.`group_id`", groupName, a.TableName()))

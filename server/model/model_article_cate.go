@@ -42,8 +42,8 @@ func (a *ArticlesCate) TableName() string {
 // Joins  查询相关文章数据
 func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("`name`,`desc`,`key`,`id`,a1.count")
-	articleTable := TableName("articles")
-	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", articleTable, a.TableName()))
+	article := &Articles{}
+	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", article.TableName(), a.TableName()))
 	return db
 }
 

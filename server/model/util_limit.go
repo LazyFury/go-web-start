@@ -39,7 +39,7 @@ func DataBaselimit(limit int, page int, where interface{}, _model listModel, key
 
 	var pageCount int = int(math.Ceil(float64(count) / float64(limit)))
 	if list == nil {
-		list = []string{}
+		list = []interface{}{}
 	}
 	return &Result{
 		Count:     count,
