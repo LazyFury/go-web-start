@@ -55,7 +55,7 @@ func (a *Array) MarshalJSON() ([]byte, error) {
 	b, err := json.Marshal([]string(*a))
 	// fmt.Printf("MarshalJSON %v \n", string(b))
 	if err != nil {
-		return nil, err
+		return []byte(`[]`), err
 	}
 	// 空数组默认值
 	if string(b) == "null" {

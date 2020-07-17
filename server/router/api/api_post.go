@@ -2,8 +2,8 @@ package api
 
 import (
 	"EK-Server/model"
-	"EK-Server/model/message"
 	"EK-Server/util"
+	"EK-Server/util/customtype/message"
 
 	"github.com/labstack/echo"
 )
@@ -17,16 +17,7 @@ func post(g *echo.Group) {
 	post := modelPost.Install(g, "/posts") //list,detail,add,update,delete
 
 	// Actions
-	// 点赞文章
-	post.GET("/:id/actions/like", func(c echo.Context) error {
-		message.AddUserActionLog(map[string]interface{}{
-			"fromID":    uint(1),
-			"articleID": uint(1),
-			"action":    message.LIKE,
-			"remark":    "文章",
-		})
-		return util.JSONSuccess(c, nil, "点赞成功")
-	})
+	post.GET("/:id/actions/like", likeArticle)
 
 }
 
@@ -34,4 +25,24 @@ func post(g *echo.Group) {
 func postCate(g *echo.Group) {
 	modelPostCate.BaseControll.Model = &modelPostCate
 	modelPostCate.Install(g, "/post-cates")
+}
+
+// 点赞文章
+func likeArticle(c echo.Context) error {
+	post := &struct {
+		*model.Articles
+	}{}
+
+	db := model.DB
+
+	if db.Model(&model.Articles{}).Where(map[string]interface{}{
+		"id": c.Param("id"),
+	}).First(post).RecordNotFound() {
+		return util.JSONSuccess(c, nil, "文章不存在")
+	}
+
+	// 添加文章消息
+	modelMessage.AddArticleLog(uint(1), post.ID, message.LIKE)
+
+	return util.JSONSuccess(c, nil, "点赞成功")
 }

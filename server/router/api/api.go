@@ -25,4 +25,7 @@ func Init(g *echo.Group) {
 	user(apiV1)
 	// 意见反馈
 	feedback(apiV1)
+
+	// 用户消息
+	messages(apiV1)
 }

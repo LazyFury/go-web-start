@@ -39,7 +39,7 @@ func (a *AdGroup) TableName() string {
 
 // Joins 统计
 func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("`id`,`name`,`is_sigle`,`desc`,`count`")
+	db = db.Select("*")
 	ad := &Ad{}
 	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
 	return db

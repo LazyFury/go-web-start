@@ -35,14 +35,15 @@ type listModel interface {
 	Count(c echo.Context) error
 	// 快速注册路由
 	Install(g *echo.Group, baseURL string) *echo.Group
-	// 是否存在
-	HasOne(where interface{}) bool
+
+	// 处理列表返回结果
+	Result(data interface{}) interface{}
 }
 
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
 	ID        uint                 `json:"id" gorm:"primary_key"`
-	Code      string               `json:"code"`
+	Code      string               `json:"code" sql:"type:uuid"`
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
 	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
@@ -80,6 +81,11 @@ func (b *BaseControll) List(c echo.Context) error {
 // Detail 详情
 func (b *BaseControll) Detail(c echo.Context) error {
 	return b.GetDetail(c, "")
+}
+
+// Result 处理列表返回结果
+func (b *BaseControll) Result(data interface{}) interface{} {
+	return data
 }
 
 // ListWithOutPaging 直接取所有数据不分页
@@ -150,6 +156,9 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	if row.First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
+
+	p = b.Model.Result(p)
+
 	return util.JSONSuccess(c, p, "")
 }
 

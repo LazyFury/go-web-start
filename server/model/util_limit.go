@@ -37,6 +37,7 @@ func DataBaselimit(limit int, page int, where interface{}, _model listModel, key
 
 	resultModal.Offset(limit * (page - 1)).Limit(limit).Order(orderBy).Find(list)
 
+	list = _model.Result(list)
 	var pageCount int = int(math.Ceil(float64(count) / float64(limit)))
 	if list == nil {
 		list = []interface{}{}
