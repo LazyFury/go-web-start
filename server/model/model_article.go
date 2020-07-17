@@ -27,23 +27,21 @@ type (
 
 		CateID int `json:"cate_id" gorm:"column:cate_id"`
 	}
+	selectArticle struct {
+		*Articles
+		CateName string `json:"cate_name"`
+		A        string `json:"content,omitempty"`
+	}
 )
 
 // PointerList 列表
 func (a *Articles) PointerList() interface{} {
-	return &[]struct {
-		*Articles
-		CateName string `json:"cate_name"`
-		A        string `json:"content,omitempty"`
-	}{}
+	return &[]selectArticle{}
 }
 
 // Pointer 实例
 func (a *Articles) Pointer() interface{} {
-	return &struct {
-		*Articles
-		CateName string `json:"cate_name"`
-	}{}
+	return &selectArticle{}
 }
 
 // TableName 表名

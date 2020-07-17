@@ -30,7 +30,7 @@ type selectMessage struct {
 	OrderID uint        `json:"order_id,omitempty"`
 	Order   interface{} `json:"order,omitempty"`
 	// 文章
-	Articles Articles `json:"article,omitempty"`
+	Articles selectArticle `json:"article,omitempty"`
 }
 
 // PointerList PointerList
@@ -63,8 +63,12 @@ func (m *Message) getMoreField(v selectMessage) selectMessage {
 	db := DB
 
 	// 绑定文章信息
-	a := Articles{}
-	db.First(&a)
+	a := selectArticle{}
+	row := db.Table(a.TableName()).Where(map[string]interface{}{
+		"id": v.ArticleID,
+	})
+	row = a.Joins(row)
+	row.First(&a)
 
 	v.Articles = a
 	return v
