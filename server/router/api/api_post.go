@@ -2,6 +2,7 @@ package api
 
 import (
 	"EK-Server/model"
+	"EK-Server/model/message"
 	"EK-Server/util"
 
 	"github.com/labstack/echo"
@@ -18,8 +19,14 @@ func post(g *echo.Group) {
 	// Actions
 	// 点赞文章
 	post.GET("/:id/actions/like", func(c echo.Context) error {
+		message.AddUserActionLog(map[string]interface{}{
+			"fromID":    uint(1),
+			"articleID": uint(1),
+			"action":    message.LIKE,
+			"remark":    "文章",
+		})
 		return util.JSONSuccess(c, nil, "点赞成功")
-	}, rbacAdmin)
+	})
 
 }
 

@@ -32,6 +32,8 @@ var autoMigrate = []interface{}{
 	&Ad{},
 	//feedback
 	&Feedback{},
+	// message
+	&Message{},
 }
 
 // MysqlConn InitDB

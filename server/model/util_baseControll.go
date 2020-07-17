@@ -3,11 +3,14 @@ package model
 import (
 	"EK-Server/util"
 	"EK-Server/util/customtype"
+	"fmt"
 	"math"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 )
@@ -39,6 +42,7 @@ type listModel interface {
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
 	ID        uint                 `json:"id" gorm:"primary_key"`
+	Code      string               `json:"code"`
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
 	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
@@ -49,6 +53,13 @@ type BaseControll struct {
 type EmptySystemFiled struct {
 	A string `json:"created_at,omitempty"`
 	B string `json:"updated_at,omitempty"`
+}
+
+//BeforeCreate gorm
+func (b *BaseControll) BeforeCreate(scope *gorm.Scope) error {
+	err := scope.SetColumn("code", uuid.New())
+	fmt.Println(err)
+	return nil
 }
 
 // Search 搜索
@@ -170,6 +181,10 @@ func (b *BaseControll) Delete(c echo.Context) error {
 // 必须重写 需要调用empty避免关键字段修改
 func (b *BaseControll) Add(c echo.Context, data interface{}) error {
 	db := DB
+
+	elem := reflect.ValueOf(data).Elem()
+	code := elem.FieldByName("Code")
+	code.SetString(uuid.New().String())
 
 	db.NewRecord(data)
 	row := db.Create(data)
@@ -325,9 +340,5 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 // HasOne 避免重复
 func (b *BaseControll) HasOne(where interface{}) bool {
 	db := DB
-	row := db.Table(b.Model.TableName()).Where(where).First(b.Model.Pointer())
-	if row.RecordNotFound() {
-		return false
-	}
-	return true
+	return !db.Table(b.Model.TableName()).Where(where).First(b.Model.Pointer()).RecordNotFound()
 }

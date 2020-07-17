@@ -43,7 +43,7 @@ func (a *Ad) TableName() string {
 
 // Joins 查询
 func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("`title`,`param`,`event_id`,IFNULL(`event`,'no_event') `event`,`group_id`") //`group_name`,`type`
+	db = db.Select("`title`,`param`,`event_id`,`code`,IFNULL(`event`,'no_event') `event`,`group_id`") //`group_name`,`type`
 	// 连接事件
 	event := &AdEvent{}
 	db = db.Joins(fmt.Sprintf("left join (select `id` e_id,`event` from `%s`) t2 on t2.`e_id`=`%s`.`event_id`", event.TableName(), a.TableName()))
@@ -77,16 +77,34 @@ func (a *Ad) Add(c echo.Context) error {
 		return util.JSONErr(c, nil, "广告位标题不可空")
 	}
 
+	if ad.EventID > 0 {
+		event := &AdEvent{}
+		event.BaseControll.Model = event
+		if !event.HasOne(map[string]interface{}{
+			"id": ad.EventID,
+		}) {
+			return util.JSONErr(c, nil, "事件不存在")
+		}
+	}
+
 	if ad.GroupID == 0 {
 		return util.JSONErr(c, nil, "请选择广告位分组")
 	}
 
 	adGourp := &AdGroup{}
-	adGourp.BaseControll.Model = adGourp
-	if !adGourp.BaseControll.HasOne(map[string]interface{}{
+	db := DB
+	if db.Model(adGourp).Where(map[string]interface{}{
 		"id": ad.GroupID,
-	}) {
+	}).First(adGourp).RecordNotFound() {
 		return util.JSONErr(c, nil, "分组不存在")
+	}
+
+	if adGourp.IsSigle {
+		if a.HasOne(map[string]interface{}{
+			"group_id": ad.GroupID,
+		}) {
+			return util.JSONErr(c, nil, "此分组为单图广告位，不可继续添加")
+		}
 	}
 
 	ad.Empty()
