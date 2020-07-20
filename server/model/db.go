@@ -34,6 +34,9 @@ var autoMigrate = []interface{}{
 	&Feedback{},
 	// message
 	&Message{},
+
+	// 订单
+	&Order{},
 }
 
 // MysqlConn InitDB

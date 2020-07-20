@@ -69,7 +69,6 @@ func (m *Message) getMoreField(v selectMessage) selectMessage {
 	})
 	row = a.Joins(row)
 	row.First(&a)
-
 	v.Articles = a
 	return v
 }

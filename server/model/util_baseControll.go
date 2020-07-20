@@ -43,7 +43,7 @@ type listModel interface {
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
 	ID        uint                 `json:"id" gorm:"primary_key"`
-	Code      string               `json:"code" sql:"type:uuid"`
+	Code      string               `json:"code"`
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
 	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
