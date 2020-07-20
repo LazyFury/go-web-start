@@ -42,7 +42,7 @@ func (c *configType) ReadConfig() (err error) {
 	}
 	c.Wechat = wechat.MP{}
 	if err = json.NewDecoder(f).Decode(c); err != nil {
-		return
+		return err
 	}
 
 	return nil

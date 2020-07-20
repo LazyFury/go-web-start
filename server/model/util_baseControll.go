@@ -1,9 +1,9 @@
 package model
 
 import (
+	"EK-Server/middleware"
 	"EK-Server/util"
 	"EK-Server/util/customtype"
-	"fmt"
 	"math"
 	"reflect"
 	"strconv"
@@ -38,6 +38,10 @@ type listModel interface {
 
 	// 处理列表返回结果
 	Result(data interface{}) interface{}
+
+	// 是否公开数据，私有数据查询是需要用户id 或者超级管理员权限
+	// 用户id字段统一为UserID json:user_id
+	IsPublic() bool
 }
 
 // BaseControll 空方法用户数据模型继承方法
@@ -56,12 +60,8 @@ type EmptySystemFiled struct {
 	B string `json:"updated_at,omitempty"`
 }
 
-//BeforeCreate gorm
-func (b *BaseControll) BeforeCreate(scope *gorm.Scope) error {
-	err := scope.SetColumn("code", uuid.New())
-	fmt.Println(err)
-	return nil
-}
+// IsPublic IsPublic
+func (b *BaseControll) IsPublic() bool { return true }
 
 // Search 搜索
 func (b *BaseControll) Search(db *gorm.DB, key string) *gorm.DB {
@@ -150,6 +150,13 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 		"id": id,
 	}
 	row := db.Table(b.Model.TableName()).Where(where)
+
+	if !b.Model.IsPublic() {
+		userID := c.Get("userId")
+		row = row.Where(map[string]interface{}{
+			"user_id": userID,
+		})
+	}
 
 	row = b.Model.Joins(row)
 
@@ -335,12 +342,18 @@ func (b *BaseControll) Empty() {
 func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route := g.Group(baseURL)
 
-	route.GET("", b.Model.List)
-	route.GET("/:id", b.Model.Detail)
-	route.POST("", b.Model.Add)
-	route.PUT("/:id", b.Model.Update)
-	route.DELETE("/:id", b.Model.Delete)
-	route.GET("-actions/count", b.Model.Count)
+	if b.Model.IsPublic() {
+		route.GET("", b.Model.List)
+		route.GET("/:id", b.Model.Detail)
+	} else {
+		route.GET("", b.Model.List, middleware.UserJWT)
+		route.GET("/:id", b.Model.Detail, middleware.UserJWT)
+	}
+
+	route.POST("", b.Model.Add, middleware.AdminJWT)
+	route.PUT("/:id", b.Model.Update, middleware.AdminJWT)
+	route.DELETE("/:id", b.Model.Delete, middleware.AdminJWT)
+	route.GET("-actions/count", b.Model.Count, middleware.AdminJWT)
 
 	return route
 

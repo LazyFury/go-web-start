@@ -1,6 +1,10 @@
 package api
 
-import "github.com/labstack/echo"
+import (
+	"EK-Server/router/api/wechat"
+
+	"github.com/labstack/echo"
+)
 
 // Init  api Version 1.0 初始化
 func Init(g *echo.Group) {
@@ -28,4 +32,6 @@ func Init(g *echo.Group) {
 
 	// 用户消息
 	messages(apiV1)
+
+	wechat.Init(apiV1)
 }

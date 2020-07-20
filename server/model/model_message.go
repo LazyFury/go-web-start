@@ -16,21 +16,27 @@ import (
 // 暂定 如果存sql数据量太多，后期尝试redis之类的
 type Message struct {
 	BaseControll
+	UserID    uint           `json:"user_id"`
 	FromID    uint           `json:"from_id"`
+	Action    message.Action `json:"action"`
 	OrderID   uint           `json:"order_id"`
 	ArticleID uint           `json:"article_id"`
-	Action    message.Action `json:"action"`
 }
 
 type selectMessage struct {
-	*Message
+	BaseControll
 
+	UserID   uint   `json:"user_id"`
+	FromID   uint   `json:"from_id"`
 	UserName string `json:"user_name"`
+
+	Action message.Action `json:"action"`
 	// 订单
 	OrderID uint        `json:"order_id,omitempty"`
 	Order   interface{} `json:"order,omitempty"`
 	// 文章
-	Articles selectArticle `json:"article,omitempty"`
+	ArticleID uint          `json:"article_id,omitempty"`
+	Articles  selectArticle `json:"article,omitempty"`
 }
 
 // PointerList PointerList
@@ -48,12 +54,15 @@ func (m *Message) TableName() string {
 	return TableName("messages")
 }
 
+// IsPublic IsPublic
+func (m *Message) IsPublic() bool { return false }
+
 // Joins Joins
 func (m *Message) Joins(db *gorm.DB) *gorm.DB {
-	// db = db.Select("*")
+	db = db.Select("*")
 
-	// user := &User{}
-	// db = db.Joins(fmt.Sprintf("left join (select `name` `user_name`,`id` `u_id` from `%s`) u1 on `u1`.`u_id`=`%s`.`from_id`", user.TableName(), m.TableName()))
+	user := &User{}
+	db = db.Joins(fmt.Sprintf("left join (select `name` `user_name`,`id` `u_id` from `%s`) u1 on `u1`.`u_id`=`%s`.`from_id`", user.TableName(), m.TableName()))
 
 	// article := &Articles{}
 	// db = db.Joins(fmt.Sprintf("left join (select `title` `article_title`,`id` `article_id`,`desc` `article_desc` from `%s`) t2 on `t2`.`article_id`=`%s`.`article_id`", article.TableName(), m.TableName()))
@@ -61,7 +70,6 @@ func (m *Message) Joins(db *gorm.DB) *gorm.DB {
 }
 func (m *Message) getMoreField(v selectMessage) selectMessage {
 	db := DB
-
 	// 绑定文章信息
 	a := selectArticle{}
 	row := db.Table(a.TableName()).Where(map[string]interface{}{

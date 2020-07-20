@@ -2,8 +2,6 @@ package admin
 
 import (
 	"EK-Server/config"
-	"EK-Server/router/admin/login"
-	"EK-Server/router/admin/user"
 	"EK-Server/util"
 	"net/http"
 
@@ -13,12 +11,9 @@ import (
 // Init 初始化
 func Init(app *echo.Group) {
 
-	login.Init(app) //登陆页面
-
 	//admin之下 检测登陆权限
 	admin := app.Group("/admin") //注册admin的中间价
 
-	user.Init(admin)     // 用户模块
 	admin.GET("", index) //首页
 
 	//测试

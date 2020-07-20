@@ -7,8 +7,6 @@ import (
 	"EK-Server/config"
 	"EK-Server/router/admin"
 	"EK-Server/router/api"
-	"EK-Server/router/wechat"
-	"EK-Server/router/ws"
 	"EK-Server/util"
 	"EK-Server/util/upload"
 
@@ -26,8 +24,6 @@ func Start(e *echo.Echo) {
 
 	// 项目页面
 	admin.Init(g)
-	wechat.Init(g)
-	ws.Init(g)
 	api.Init(g)
 
 	// 入口
@@ -60,10 +56,6 @@ func Start(e *echo.Echo) {
 		}
 		defer video.Close()
 		return c.Stream(http.StatusOK, "application/x-mpegURL", video)
-	})
-
-	index.GET("/👌", func(c echo.Context) error {
-		return util.JSONSuccess(c, nil, "👌")
 	})
 
 	index.GET("/reload", func(c echo.Context) error {
