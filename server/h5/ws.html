@@ -17,7 +17,7 @@
         uri = 'wss:';
       }
       uri += '//' + loc.host;
-      uri += '/ws';
+      uri += '/api/v1/ws';
       ws = new WebSocket(uri);
       ws.onopen = function () {
         console.log('Connected');

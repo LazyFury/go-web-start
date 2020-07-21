@@ -113,9 +113,12 @@ func (g Group) hasKey(ws *websocket.Conn) (hasKey bool) {
 	return
 }
 func (g *Group) sendAll(msg interface{}) {
-	var player []string
+	var player []map[string]interface{}
 	for _, v := range *g {
-		player = append(player, v.Name)
+		player = append(player, map[string]interface{}{
+			"id":   v.ID,
+			"name": v.Name,
+		})
 	}
 	for _, v := range *g {
 		_, _ = v.send(map[string]interface{}{

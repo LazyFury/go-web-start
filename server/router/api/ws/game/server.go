@@ -3,7 +3,6 @@ package game
 import (
 	"EK-Server/util"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -72,7 +71,7 @@ func readMessage(info Message, ws *websocket.Conn) {
 	}
 	user = group[ws]
 	log.Println(user)
-	user.send(fmt.Sprintf("serve收到消息：%+v", info)) //以获取到用户 其他操作
+	// user.send(fmt.Sprintf("serve收到消息：%+v", info)) //以获取到用户 其他操作
 
 	switch info.Action {
 	case "start":

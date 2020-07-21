@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/Masterminds/sprig"
+	"github.com/fvbock/endless"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -60,8 +61,9 @@ func main() {
 	router.Start(e)
 
 	// 启动服务
-	e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
+	// e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
 
+	endless.ListenAndServe(fmt.Sprintf(":%d", config.Global.Port), e)
 }
 
 // requestInfo

@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -21,9 +22,9 @@ type UserInfo struct {
 	IsAdmin bool    `json:"isAdmin"`
 }
 
-const (
+var (
 	// SECRET jwt
-	SECRET string = "token.secret"
+	SECRET string = util.RandStringBytes(32)
 )
 
 // AdminJWT 管理后台用户验证
@@ -38,10 +39,10 @@ func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) 
 	if user.ID == 0 {
 		return util.JSONErrJustCode(c, util.LogTimeOut)
 	}
-	// if !user.IsAdmin {
-	// 	return util.JSONErrJustCode(c, http.StatusUnauthorized)
-	// }
-	// fmt.Println(user)
+	if !user.IsAdmin {
+		return util.JSONErrJustCode(c, http.StatusUnauthorized)
+	}
+	fmt.Println(user)
 	c.Set("userId", user.ID)
 	c.Set("userName", user.Name)
 	return next(c)
@@ -51,10 +52,20 @@ func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) 
 var UserJWT echo.MiddlewareFunc = baseJWT(userCheckToken)
 
 // CheckToken 检查token可用
-func userCheckToken(next echo.HandlerFunc, c echo.Context, token string) error {
-	if token != "312" {
+func userCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
+	user, err := parseToken(tokenString)
+	if err != nil {
 		return util.JSONErrJustCode(c, util.LogTimeOut)
 	}
+	if user.ID == 0 {
+		return util.JSONErrJustCode(c, util.LogTimeOut)
+	}
+	// if !user.IsAdmin {
+	// 	return util.JSONErrJustCode(c, http.StatusUnauthorized)
+	// }
+	// fmt.Println(user)
+	c.Set("userId", user.ID)
+	c.Set("userName", user.Name)
 	return next(c)
 }
 

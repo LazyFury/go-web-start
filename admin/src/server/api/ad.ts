@@ -8,6 +8,7 @@ export const ads = {
 
 export const adEvents = {
   ...install('ad-events'),
+  // override
   list: () => http.get('/ads'),
 };
 

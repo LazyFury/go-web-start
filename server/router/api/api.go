@@ -2,6 +2,7 @@ package api
 
 import (
 	"EK-Server/router/api/wechat"
+	"EK-Server/router/api/ws"
 
 	"github.com/labstack/echo"
 )
@@ -34,4 +35,6 @@ func Init(g *echo.Group) {
 	messages(apiV1)
 
 	wechat.Init(apiV1)
+
+	ws.Init(apiV1)
 }

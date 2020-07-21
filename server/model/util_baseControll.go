@@ -128,8 +128,11 @@ func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
 	// 转化类型
 	p, _ := strconv.Atoi(page)
 	size, _ := strconv.Atoi(limit)
+
+	userID, _ := c.Get("userId").(string)
+
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.Model, key, orderBy)
+	list := DataBaselimit(size, p, where, b.Model, key, orderBy, userID)
 	return util.JSONSuccess(c, list, "")
 }
 
@@ -353,7 +356,7 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route.POST("", b.Model.Add, middleware.AdminJWT)
 	route.PUT("/:id", b.Model.Update, middleware.AdminJWT)
 	route.DELETE("/:id", b.Model.Delete, middleware.AdminJWT)
-	route.GET("-actions/count", b.Model.Count, middleware.AdminJWT)
+	route.GET("-actions/count", b.Model.Count)
 
 	return route
 

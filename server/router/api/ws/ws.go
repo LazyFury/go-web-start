@@ -1,14 +1,14 @@
 package ws
 
 import (
-	"EK-Server/router/ws/game"
+	"EK-Server/router/api/ws/game"
 
 	"github.com/labstack/echo"
 )
 
 // Init Init
 func Init(g *echo.Group) {
-	baseURL := "ws"
+	baseURL := "/ws"
 	app := g.Group(baseURL)
 	app.GET("", game.WsServer)
 	go game.Push()
