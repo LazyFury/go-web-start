@@ -8,8 +8,9 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"os"
 	"strings"
+
+	midd "EK-Server/middleware"
 
 	"github.com/Masterminds/sprig"
 	"github.com/fvbock/endless"
@@ -26,10 +27,10 @@ func main() {
 	}
 	defer model.DB.Close() //退ß出时释放链接
 
-	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
-	e.Use(middleware.Gzip())                                                       //gzip压缩
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
-	// e.Use(util.LogMiddleware())
+	e.Pre(middleware.RemoveTrailingSlash()) //删除url反斜杠
+	e.Use(middleware.Gzip())                //gzip压缩
+	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
+	e.Use(midd.LogMiddleware())
 	e.Use(middleware.Recover())
 
 	//跨域

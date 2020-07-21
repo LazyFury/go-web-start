@@ -49,9 +49,9 @@ func logNew() (logger *log.Logger) {
 	fileAndStdoutWriter := io.MultiWriter(writers...)
 	// 创建新的log对象
 	logger = log.New(fileAndStdoutWriter, "", log.Ldate|log.Ltime|log.Lshortfile)
-	// os.Stdout = logfile
+	os.Stdout = logfile
 	os.Stderr = logfile
-	// log.SetOutput(logfile)
+	logger.SetOutput(logfile)
 	return
 }
 

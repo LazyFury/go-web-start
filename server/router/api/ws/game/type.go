@@ -121,6 +121,11 @@ func (g *Group) sendAll(msg interface{}) {
 		})
 	}
 	for _, v := range *g {
+		util.Logger.Printf("%+v\n", v)
+		if v.Ws == nil {
+			g.remove(v.Ws)
+			continue
+		}
 		_, _ = v.send(map[string]interface{}{
 			"msg":        msg,
 			"count":      len(group),

@@ -38,6 +38,10 @@
         console.log(jsonStr, id);
         id && window.localStorage.setItem('userId', id);
       };
+      ws.onclose = function (evt) {
+        alert('链接已断开');
+        document.location.reload();
+      };
 
       function send(val) {
         if (!val) {
