@@ -1,6 +1,10 @@
 #!/bin/bash
 tmp_path=""
 
+export CGO_ENABLED=0
+export GOARCH=amd64
+# export GOOS=
+
 if [ ! -n "$1" ]
 then
   echo "请输入程序路径 like ./debug_bin"
