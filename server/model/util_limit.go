@@ -17,7 +17,7 @@ type (
 )
 
 // DataBaselimit  mysql数据分页
-func DataBaselimit(limit int, page int, where interface{}, _model listModel, key string, orderBy string, userID string) *Result {
+func DataBaselimit(limit int, page int, where interface{}, _model Model, key string, orderBy string, userID string) *Result {
 	db := DB
 	list := _model.PointerList()
 

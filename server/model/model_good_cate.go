@@ -109,7 +109,7 @@ func (cate *GoodsCate) Add(c echo.Context) error {
 		return util.JSONErr(c, nil, "已存在相同分类")
 	}
 
-	return cate.BaseControll.Add(c, _cate)
+	return cate.BaseControll.DoAdd(c, _cate)
 }
 
 // Update 更新
@@ -123,7 +123,7 @@ func (cate *GoodsCate) Update(c echo.Context) error {
 	_cate.ParentID = 0
 	_cate.Level = 0
 	_cate.Empty()
-	return cate.BaseControll.Update(c, _cate)
+	return cate.BaseControll.DoUpdate(c, _cate)
 }
 
 // Delete 删除

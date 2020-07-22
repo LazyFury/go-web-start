@@ -108,7 +108,7 @@ func (a *Ad) Add(c echo.Context) error {
 	}
 
 	ad.Empty()
-	return a.BaseControll.Add(c, ad)
+	return a.BaseControll.DoAdd(c, ad)
 }
 
 // Update  更新
@@ -120,5 +120,5 @@ func (a *Ad) Update(c echo.Context) error {
 	}
 
 	ad.Empty()
-	return a.BaseControll.Update(c, ad)
+	return a.BaseControll.DoUpdate(c, ad)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"EK-Server/app"
 	"EK-Server/config"
+	"EK-Server/model"
 	"fmt"
 	"os"
 
@@ -11,6 +12,12 @@ import (
 
 func main() {
 	e := app.New()
+
+	//初始化数据链接
+	if err := model.MysqlConn(config.Global.Mysql); err != nil {
+		panic(err)
+	}
+	defer model.DB.Close() //退ß出时释放链接
 
 	server := endless.NewServer(fmt.Sprintf(":%d", config.Global.Port), e)
 

@@ -87,7 +87,7 @@ func (g *Goods) Add(c echo.Context) error {
 	}
 
 	good.Empty()
-	return g.BaseControll.Add(c, good)
+	return g.BaseControll.DoAdd(c, good)
 }
 
 // Update 添加商品
@@ -99,5 +99,5 @@ func (g *Goods) Update(c echo.Context) error {
 	}
 
 	good.Empty()
-	return g.BaseControll.Update(c, good)
+	return g.BaseControll.DoUpdate(c, good)
 }

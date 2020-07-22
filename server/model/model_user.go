@@ -84,7 +84,7 @@ func (u *User) Add(c echo.Context) error {
 	user.Status = 1
 
 	user.Empty()
-	return u.BaseControll.Add(c, user)
+	return u.BaseControll.DoAdd(c, user)
 }
 
 // RegController AddUser
@@ -112,7 +112,7 @@ func (u *User) Update(c echo.Context) error {
 	}
 
 	user.Empty()
-	return u.BaseControll.Update(c, user)
+	return u.BaseControll.DoUpdate(c, user)
 }
 
 // DelUser 删除用户

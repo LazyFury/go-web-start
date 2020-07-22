@@ -102,7 +102,7 @@ func (a *Articles) Add(c echo.Context) error {
 
 	article.Empty()
 
-	return a.BaseControll.Add(c, article)
+	return a.BaseControll.DoAdd(c, article)
 }
 
 // Update Update
@@ -114,5 +114,5 @@ func (a *Articles) Update(c echo.Context) error {
 	}
 
 	article.Empty()
-	return a.BaseControll.Update(c, article)
+	return a.BaseControll.DoUpdate(c, article)
 }

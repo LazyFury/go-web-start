@@ -48,7 +48,7 @@ func (f *Feedback) Add(c echo.Context) error {
 	}
 
 	feedback.Empty()
-	return f.BaseControll.Add(c, feedback)
+	return f.BaseControll.DoAdd(c, feedback)
 }
 
 // Update 添加文章
@@ -60,5 +60,5 @@ func (f *Feedback) Update(c echo.Context) error {
 	}
 
 	feedback.Empty()
-	return f.BaseControll.Update(c, feedback)
+	return f.BaseControll.DoUpdate(c, feedback)
 }

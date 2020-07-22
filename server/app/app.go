@@ -1,8 +1,6 @@
 package app
 
 import (
-	"EK-Server/config"
-	"EK-Server/model"
 	"EK-Server/router"
 	"EK-Server/util"
 	"fmt"
@@ -19,12 +17,6 @@ import (
 // New 初始化
 func New() *echo.Echo {
 	e := echo.New() //echo实例
-
-	//初始化数据链接
-	if err := model.MysqlConn(config.Global.Mysql); err != nil {
-		panic(err)
-	}
-	defer model.DB.Close() //退ß出时释放链接
 
 	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
 	e.Use(middleware.Gzip())                                                       //gzip压缩

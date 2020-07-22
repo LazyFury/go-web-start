@@ -66,7 +66,7 @@ func (a *ArticlesCate) Add(c echo.Context) error {
 	}
 
 	cate.Empty()
-	return a.BaseControll.Add(c, cate)
+	return a.BaseControll.DoAdd(c, cate)
 }
 
 // Update 添加分类
@@ -78,5 +78,5 @@ func (a *ArticlesCate) Update(c echo.Context) error {
 	}
 
 	cate.Empty()
-	return a.BaseControll.Update(c, cate)
+	return a.BaseControll.DoUpdate(c, cate)
 }

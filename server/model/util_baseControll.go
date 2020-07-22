@@ -15,7 +15,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-type listModel interface {
+// Model Model
+type Model interface {
 	// PointerList return gorm.model数组类型，用户分页查询绑定数据
 	PointerList() interface{}
 	// Pointer
@@ -51,13 +52,20 @@ type BaseControll struct {
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
 	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
-	Model     listModel            `json:"-" gorm:"-"`
+	Model     Model                `json:"-" gorm:"-"`
 }
 
 // EmptySystemFiled 置空
 type EmptySystemFiled struct {
 	A string `json:"created_at,omitempty"`
 	B string `json:"updated_at,omitempty"`
+}
+
+func (b *BaseControll) model() Model {
+	if b.Model == nil {
+		b.Model = &Null{}
+	}
+	return b.Model
 }
 
 // IsPublic IsPublic
@@ -73,6 +81,11 @@ func (b *BaseControll) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
+// Result 处理列表返回结果
+func (b *BaseControll) Result(data interface{}) interface{} {
+	return data
+}
+
 // List 数据列表
 func (b *BaseControll) List(c echo.Context) error {
 	return b.GetList(c, nil)
@@ -83,22 +96,51 @@ func (b *BaseControll) Detail(c echo.Context) error {
 	return b.GetDetail(c, "")
 }
 
-// Result 处理列表返回结果
-func (b *BaseControll) Result(data interface{}) interface{} {
-	return data
+// Add Add
+func (b *BaseControll) Add(c echo.Context) error {
+	return util.JSONErr(c, nil, "不可添加")
+}
+
+// Update Update
+func (b *BaseControll) Update(c echo.Context) error {
+	return util.JSONErr(c, nil, "不可修改")
+}
+
+// Delete 删除数据 无需重复实现
+func (b *BaseControll) Delete(c echo.Context) error {
+	db := DB
+	id := c.Param("id")
+	if id == "" {
+		return util.JSONErr(c, nil, "参数错误")
+	}
+
+	p := b.model().Pointer()
+	row := db.Table(b.model().TableName()).Where(map[string]interface{}{
+		"id": id,
+	}).Delete(p)
+
+	if row.Error != nil {
+		return util.JSONErr(c, nil, "删除失败")
+	}
+
+	if row.RowsAffected <= 0 {
+		return util.JSONErr(c, nil, "删除失败,数据不存在")
+	}
+
+	return util.JSONSuccess(c, nil, "删除成功")
 }
 
 // ListWithOutPaging 直接取所有数据不分页
 func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 	db := DB
-	list := b.Model.PointerList()
+	list := b.model().PointerList()
 
-	row := db.Table(b.Model.TableName())
+	row := db.Table(b.model().TableName())
 	if where != nil {
 		row = row.Where(where)
 	}
 
-	row = b.Model.Joins(row)
+	row = b.model().Joins(row)
 
 	row = row.Find(list)
 
@@ -132,7 +174,7 @@ func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
 	userID, _ := c.Get("userId").(string)
 
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.Model, key, orderBy, userID)
+	list := DataBaselimit(size, p, where, b.model(), key, orderBy, userID)
 	return util.JSONSuccess(c, list, "")
 }
 
@@ -148,57 +190,33 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	p := b.Model.Pointer()
+	p := b.model().Pointer()
 	where := map[string]interface{}{
 		"id": id,
 	}
-	row := db.Table(b.Model.TableName()).Where(where)
+	row := db.Table(b.model().TableName()).Where(where)
 
-	if !b.Model.IsPublic() {
+	if !b.model().IsPublic() {
 		userID := c.Get("userId")
 		row = row.Where(map[string]interface{}{
 			"user_id": userID,
 		})
 	}
 
-	row = b.Model.Joins(row)
+	row = b.model().Joins(row)
 
 	if row.First(p).RecordNotFound() {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 
-	p = b.Model.Result(p)
+	p = b.model().Result(p)
 
 	return util.JSONSuccess(c, p, "")
 }
 
-// Delete 删除数据 无需重复实现
-func (b *BaseControll) Delete(c echo.Context) error {
-	db := DB
-	id := c.Param("id")
-	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
-	}
-
-	p := b.Model.Pointer()
-	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
-		"id": id,
-	}).Delete(p)
-
-	if row.Error != nil {
-		return util.JSONErr(c, nil, "删除失败")
-	}
-
-	if row.RowsAffected <= 0 {
-		return util.JSONErr(c, nil, "删除失败,数据不存在")
-	}
-
-	return util.JSONSuccess(c, nil, "删除成功")
-}
-
-// Add 添加 需要实现绑定json的部分以及自定义的验证
+// DoAdd 添加 需要实现绑定json的部分以及自定义的验证
 // 必须重写 需要调用empty避免关键字段修改
-func (b *BaseControll) Add(c echo.Context, data interface{}) error {
+func (b *BaseControll) DoAdd(c echo.Context, data interface{}) error {
 	db := DB
 
 	elem := reflect.ValueOf(data).Elem()
@@ -219,16 +237,16 @@ func (b *BaseControll) Add(c echo.Context, data interface{}) error {
 	return util.JSONSuccess(c, nil, "提交成功")
 }
 
-// Update 更新数据  需要实现绑定json的部分以及自定义的验证
+// DoUpdate 更新数据  需要实现绑定json的部分以及自定义的验证
 // 必须重写 需要调用empty避免关键字段修改
-func (b *BaseControll) Update(c echo.Context, data interface{}) error {
+func (b *BaseControll) DoUpdate(c echo.Context, data interface{}) error {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	row := db.Table(b.Model.TableName()).Where(map[string]interface{}{
+	row := db.Table(b.model().TableName()).Where(map[string]interface{}{
 		"id": id,
 	}).Update(data)
 
@@ -247,7 +265,7 @@ func (b *BaseControll) Update(c echo.Context, data interface{}) error {
 func (b *BaseControll) Count(c echo.Context) error {
 	db := DB
 
-	row := db.Table(b.Model.TableName())
+	row := db.Table(b.model().TableName())
 
 	//time: 2006-01-02 15:04:05
 	start := c.QueryParam("start")
@@ -318,9 +336,9 @@ func (b *BaseControll) Count(c echo.Context) error {
 		defaultCount = item.Count
 
 		// if item.Count > 0 {
-		// 	l := b.Model.PointerList()
+		// 	l := b.model().PointerList()
 		// 	row = DB
-		// 	row.Table(b.Model.TableName()).Where("DATE_FORMAT(created_at,'"+dateFormat+"') = ?", item.Date).Find(l)
+		// 	row.Table(b.model().TableName()).Where("DATE_FORMAT(created_at,'"+dateFormat+"') = ?", item.Date).Find(l)
 		// 	list[i].List = &l
 		// }
 	}
@@ -346,17 +364,17 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route := g.Group(baseURL)
 
 	if b.Model.IsPublic() {
-		route.GET("", b.Model.List)
-		route.GET("/:id", b.Model.Detail)
+		route.GET("", b.model().List)
+		route.GET("/:id", b.model().Detail)
 	} else {
-		route.GET("", b.Model.List, middleware.UserJWT)
-		route.GET("/:id", b.Model.Detail, middleware.UserJWT)
+		route.GET("", b.model().List, middleware.UserJWT)
+		route.GET("/:id", b.model().Detail, middleware.UserJWT)
 	}
 
-	route.POST("", b.Model.Add, middleware.AdminJWT)
-	route.PUT("/:id", b.Model.Update, middleware.AdminJWT)
-	route.DELETE("/:id", b.Model.Delete, middleware.AdminJWT)
-	route.GET("-actions/count", b.Model.Count)
+	route.POST("", b.model().Add, middleware.AdminJWT)
+	route.PUT("/:id", b.model().Update, middleware.AdminJWT)
+	route.DELETE("/:id", b.model().Delete, middleware.AdminJWT)
+	route.GET("-actions/count", b.model().Count)
 
 	return route
 
@@ -365,5 +383,5 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 // HasOne 避免重复
 func (b *BaseControll) HasOne(where interface{}) bool {
 	db := DB
-	return !db.Table(b.Model.TableName()).Where(where).First(b.Model.Pointer()).RecordNotFound()
+	return !db.Table(b.model().TableName()).Where(where).First(b.model().Pointer()).RecordNotFound()
 }

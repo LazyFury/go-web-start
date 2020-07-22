@@ -57,7 +57,7 @@ func (a *AdEvent) Add(c echo.Context) error {
 	}
 
 	adEvent.Empty()
-	return a.BaseControll.Add(c, adEvent)
+	return a.BaseControll.DoAdd(c, adEvent)
 }
 
 // Update Update
@@ -69,5 +69,5 @@ func (a *AdEvent) Update(c echo.Context) error {
 	}
 
 	adEvent.Empty()
-	return a.BaseControll.Update(c, adEvent)
+	return a.BaseControll.DoUpdate(c, adEvent)
 }

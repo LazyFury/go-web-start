@@ -112,7 +112,7 @@ func (a *AdGroup) Add(c echo.Context) error {
 	}
 
 	adGroup.Empty()
-	return a.BaseControll.Add(c, adGroup)
+	return a.BaseControll.DoAdd(c, adGroup)
 }
 
 // Update Update
@@ -124,5 +124,5 @@ func (a *AdGroup) Update(c echo.Context) error {
 	}
 
 	adGroup.Empty()
-	return a.BaseControll.Update(c, adGroup)
+	return a.BaseControll.DoUpdate(c, adGroup)
 }
