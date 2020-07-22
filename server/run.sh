@@ -23,8 +23,10 @@ if [ ! -n "$pid" ]
 then
   echo "没有运行中的进程";
   echo "restarting..."
-  # nohup  $tmp_path >> ./log/nohup.log 2>&1 &
-  exec $tmp_path
+  # nohup  $tmp_path >> ./log/nohup.log &
+  exec $tmp_path >> ./log/nohup.log &
+  #通知重启一下  结束当前回话 nohup有些异常
+  exec $0 $1
 else
   for i in `echo $pid`
     do
