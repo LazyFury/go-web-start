@@ -1,5 +1,6 @@
-FROM debian
+FROM debian:9.0
 
+RUN printf "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib\ndeb-src http://mirrors.aliyun.com/debian/ stretch main non-free contrib\ndeb http://mirrors.aliyun.com/debian-security stretch/updates main\ndeb-src http://mirrors.aliyun.com/debian-security stretch/updates main\ndeb http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib\ndeb-src http://mirrors.aliyun.com/debian/ stretch-updates main non-free contrib\ndeb http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib\ndeb-src http://mirrors.aliyun.com/debian/ stretch-backports main non-free contrib\n" > /etc/apt/sources.list
 
 # alpine
 # RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
@@ -8,8 +9,7 @@ FROM debian
 # RUN apt install -y ffmpeg
 # RUN apt install lame
 
-RUN apt-get updated
-RUN apt-get upgrade
+RUN  apt update &&  apt -y full-upgrade
 RUN apt-get install -y procps
 
 # Configure Go 生产模式不需要安装go
