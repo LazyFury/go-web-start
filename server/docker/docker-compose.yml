@@ -15,24 +15,10 @@ services:
       - ../../:/root/app
       # - /Volumes/File/SDK/gowork:/root/go
       - /Volumes/File/SDK/docker/go:/usr/local/go
-      # - ./go-path:/root/go
-    command: /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
-  # server:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 1234:8080
-  #   depends_on:
-  #     - mysql
-  #   links:
-  #     - mysql:mysql
-  #   volumes:
-  #     - ./:/root/app
-  #     - ./config:/root/mysql_config
-  #     - ./wait-for-it.sh:/root/wait-for-it.sh
-  #   # restart: always
-  #   command: /bin/sh -c "chmod +x /root/wait-for-it.sh;/root/wait-for-it.sh mysql:3306 -- echo mysql success;./linux-main"
+      - ./go-path:/root/go
+      - ./wait-for-it.sh:/root/wait-for-it.sh
+    # command: /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
+    command: /bin/bash -c  "chmod +x /root/wait-for-it.sh;/root/wait-for-it.sh mysql:3306 -- echo mysql launch success;cd /root/app/server;chmod +x ./run.sh;while true;do echo hello world!;sleep 1;done;" #./run.sh ./debug_bin;
   mysql:
     image: mysql
     ports:

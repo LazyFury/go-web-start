@@ -8,9 +8,8 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 	"strings"
-
-	midd "EK-Server/middleware"
 
 	"github.com/Masterminds/sprig"
 	"github.com/fvbock/endless"
@@ -27,10 +26,10 @@ func main() {
 	}
 	defer model.DB.Close() //退ß出时释放链接
 
-	e.Pre(middleware.RemoveTrailingSlash()) //删除url反斜杠
-	e.Use(middleware.Gzip())                //gzip压缩
-	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
-	e.Use(midd.LogMiddleware())
+	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
+	e.Use(middleware.Gzip())                                                       //gzip压缩
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
+	// e.Use(midd.LogMiddleware())
 	e.Use(middleware.Recover())
 
 	//跨域
@@ -70,7 +69,7 @@ func main() {
 // requestInfo
 func requestInfo(c echo.Context) error {
 	req := c.Request()
-	format := "<pre><strong>Request Information</strong>\n\n<code>Protocol: %s\nHost: %s\nRemote Address: %s\nMethod: %s\nPath: %s\n</code></pre>"
+	format := "<pre><strong>Request Information suke</strong>\n\n<code>Protocol: %s\nHost: %s\nRemote Address: %s\nMethod: %s\nPath: %s\n</code></pre>"
 	fmt.Println(strings.Split(req.Header.Get("Accept"), ",")[0])
 	fmt.Printf("%+v", req.Header)
 	return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))

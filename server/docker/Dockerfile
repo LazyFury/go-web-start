@@ -1,9 +1,17 @@
-FROM alpine
+FROM debian
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-RUN apk update
+
+# alpine
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+# RUN apk update
+# RUN apk add bash
 # RUN apt install -y ffmpeg
 # RUN apt install lame
+
+RUN apt-get updated
+RUN apt-get upgrade
+RUN apt-get install -y procps
+
 # Configure Go 生产模式不需要安装go
 ENV GOROOT /usr/local/go
 ENV GOPATH /root/go
@@ -14,7 +22,7 @@ RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin
 
 
 # 二进制文件直接运行 not fund 
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+# RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 # 时区文件
 COPY  ./zoneinfo.zip /opt/zoneinfo.zip
 ENV ZONEINFO /opt/zoneinfo.zip
