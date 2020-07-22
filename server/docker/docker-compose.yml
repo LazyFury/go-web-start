@@ -22,7 +22,7 @@ services:
   mysql:
     image: mysql
     ports:
-      - 3306:3306
+      - 1233:3306
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=false
       - mysql_root_password=123456
