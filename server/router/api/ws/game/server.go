@@ -42,7 +42,7 @@ func WsServer(c echo.Context) (err error) {
 			group.remove(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
 			break
 		}
-		info := Message{}
+		info := UserSubmit{}
 
 		if err = json.Unmarshal(message, &info); err != nil {
 			util.Logger.Println(message)
@@ -59,7 +59,7 @@ func WsServer(c echo.Context) (err error) {
 }
 
 // 读取用户信息
-func readMessage(info Message, ws *websocket.Conn) {
+func readMessage(info UserSubmit, ws *websocket.Conn) {
 	var user = &Gamer{}
 	if !group.hasKey(ws) {
 		//更新ws连接 或者新建用户
@@ -80,7 +80,7 @@ func readMessage(info Message, ws *websocket.Conn) {
 		break
 	default:
 		rlock.Lock()
-		broadcast <- Cast{Msg: user.Name + "发送了" + info.Message}
+		broadcast <- &Message{Message: info.Msg, From: user, To: "all", Action: allUser}
 		rlock.Unlock()
 	}
 }

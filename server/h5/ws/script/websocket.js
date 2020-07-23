@@ -3,6 +3,7 @@ class SocketClient {
   userId = '';
   count = 0;
   onlineUser = {};
+  userName = '';
 
   constructor() {
     this.messages = [];
@@ -34,16 +35,26 @@ class SocketClient {
     } catch (err) {
       throw err;
     }
-    let id = result.ID;
-    console.log(result, id);
-    id && window.localStorage.setItem('userId', id);
-    this.userId = id;
 
     console.log(this.messages);
-    this.messages.push(result);
-    // update
-    this.count = result.count;
-    this.onlineUser = result.OnLineUser;
+
+    switch (result.action) {
+      case 'allUser':
+      case 'SystemNotify':
+        this.messages.push(result);
+        break;
+      case 'regUser':
+        let id = result.from.id;
+        console.log(result, id);
+        id && window.localStorage.setItem('userId', id);
+        this.userId = id;
+        this.userName = result.from.name;
+        break;
+      case 'update':
+        this.count = result.global.count;
+        this.onlineUser = result.global.onlineUser;
+        break;
+    }
   }
 
   onClose(evt) {
@@ -56,7 +67,7 @@ class SocketClient {
     if (!val) {
       throw 'err 没有输入';
     }
-    let id = this.userId;
+    let id = window.localStorage.getItem('userId') || this.userId || '';
     if (!id) {
     }
     if (this.conn) this.conn.send(JSON.stringify({ msg: val, action, id }));

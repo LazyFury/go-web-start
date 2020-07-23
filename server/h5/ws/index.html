@@ -10,14 +10,26 @@
   <body>
     <div id="app">
       <div class="chat">
-        <div class="count">当前共：{{ws.count}}人</div>
-        <p id="output">
-          <block v-for="(msg,i) in ws.messages" :key="i" v-if="msg.msg">
-            <span >{{msg.msg}}</span></br>
-          </block>
-        </p>
+        <div class="count">{{ws.userName}}</div>
+        <div id="output">
+          <div class='msg-box' v-for="(msg,i) in ws.messages" :key="i" v-if="msg.msg">
+            <div
+              class="msg"
+              :class="{ismine:msg.is_self}"
+              v-if="msg.action=='allUser'"
+            >
+              <span class="user-name">
+                {{msg.from.name}}
+              </span>
+              <div class="bubbles">
+                <span>{{msg.msg}}</span>
+              </div>
+            </div>
+            <div class="notify" v-if="msg.action=='SystemNotify'">{{(msg.from && msg.from.name||"" )+" "+ msg.msg}}</div>
+          </div>
+        </div>
         <div class="fake-input">
-          <input type="text" id="input" v-model="val"  placeholder="请输入" />
+          <input type="text" id="input" v-model="val" placeholder="请输入" />
           <button @click="send">发送</button>
         </div>
       </div>
@@ -25,9 +37,11 @@
       <div class="other">
         <h1>hello world!</h1>
 
-        在线用户
-        <div >
-          <span v-for="(user,i) in ws.onlineUser" :key='i'>{{user.name}}，</span>
+        在线用户 当前共：{{ws.count}}人
+        <div>
+          <span v-for="(user,i) in ws.onlineUser" :key="i"
+            >{{user.name}}，</span
+          >
         </div>
       </div>
     </div>

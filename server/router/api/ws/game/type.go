@@ -2,6 +2,7 @@ package game
 
 import (
 	"EK-Server/util"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math/rand"
@@ -15,23 +16,21 @@ type (
 	ID string
 	// Gamer Gamer
 	Gamer struct {
-		ID          string
-		Name        string `json:"name"`
-		Ws          *websocket.Conn
-		MessageType int
+		ID          string          `json:"id"`
+		Name        string          `json:"name"`
+		Ws          *websocket.Conn `json:"-"`
+		MessageType int             `json:"-"`
 	}
 	// Group Group
 	Group map[*websocket.Conn]*Gamer
 	// Message 消息
 	Message struct {
-		ID      string `json:"id"`
-		Message string `json:"msg"`
-		Action  string `json:"action"`
-	}
-	// Cast 广播
-	Cast struct {
-		Msg string
-		UID string
+		From    *Gamer                 `json:"from"`
+		To      string                 `json:"to"`
+		Message string                 `json:"msg,omitempty"`
+		Action  string                 `json:"action"`
+		Global  map[string]interface{} `json:"global,omitempty"`
+		IsSelf  bool                   `json:"is_self,omitempty"`
 	}
 	// Room 游戏房间
 	Room struct {
@@ -40,11 +39,26 @@ type (
 		blueTeam []string //蓝队
 		MaxCount int      //每队最大人数
 	}
+
+	// UserSubmit 用户提交的数据
+	UserSubmit struct {
+		ID     string
+		Msg    string
+		Action string
+	}
+)
+
+const (
+	systemNotify = "SystemNotify"
+	toUser       = "MsgToUser"
+	regUser      = "regUser"
+	allUser      = "allUser"
+	update       = "update"
 )
 
 var (
 	group     = Group{}
-	broadcast = make(chan Cast)
+	broadcast = make(chan *Message)
 	randName  = []string{"西门吹雪", "陆小凤", "章北海", "搬山", "斜岭", "摸金", "吃瓜群众", "花满楼", "崇华", "小柿子", "xixi"}
 	userList  = map[string]*Gamer{}
 
@@ -67,20 +81,44 @@ func Push() {
 	for {
 		c := <-broadcast
 		util.Logger.Print(c)
-		group.sendAll(c.Msg)
+		group.sendAll(c)
 	}
+}
+func updateGlobalConfig() {
+	l := len(group)
+	onlineUser := []map[string]string{}
+
+	for _, gamer := range group {
+		onlineUser = append(onlineUser, map[string]string{
+			"id":   gamer.ID,
+			"name": gamer.Name,
+		})
+	}
+
+	var config = map[string]interface{}{
+		"count":      l,
+		"onlineUser": onlineUser,
+	}
+	rlock.Lock()
+	broadcast <- &Message{From: nil, To: "all", Action: update, Global: config}
+	rlock.Unlock()
 }
 
 // Game
 func updateUser(user *Gamer, ws *websocket.Conn) {
-	user.Ws = ws
-	group[ws] = user
+	group[ws] = &Gamer{
+		ID:   user.ID,
+		Name: user.Name,
+		Ws:   ws,
+	}
 
 	rlock.Lock()
-	broadcast <- Cast{Msg: user.Name + " 重新回到游戏", UID: user.ID}
+	broadcast <- &Message{Message: "回来了", From: user, To: "all", Action: systemNotify}
 	rlock.Unlock()
 
-	user.send(user)
+	updateGlobalConfig()
+
+	group[ws].send(&Message{From: group[ws], To: "", Action: regUser})
 }
 func createUser(ws *websocket.Conn) (user *Gamer) {
 	var id = util.RandStringBytes(32)
@@ -93,25 +131,27 @@ func createUser(ws *websocket.Conn) (user *Gamer) {
 	group[ws] = user
 	userList[user.ID] = user
 	rlock.Lock()
-	broadcast <- Cast{Msg: user.Name + " 加入游戏", UID: user.ID}
+	broadcast <- &Message{Message: "加入房间", From: user, To: "all", Action: systemNotify}
 	rlock.Unlock()
+	updateGlobalConfig()
 
-	user.send(user)
+	user.send(&Message{From: user, To: "", Action: regUser})
 	return
 }
 
 // 发送消息
-func (g *Gamer) send(data interface{}) (msg string, err error) {
+func (g *Gamer) send(msg *Message) (err error) {
 	if g.Ws == nil {
 		err = errors.New("链接断开")
 		return
 	}
 
-	if str, ok := data.(string); ok {
-		err = g.Ws.WriteMessage(1, []byte(str))
-	} else {
-		err = g.Ws.WriteJSON(data)
+	str, err := json.Marshal(msg)
+	if err != nil {
+		return
 	}
+
+	err = g.Ws.WriteMessage(websocket.TextMessage, str)
 
 	if err != nil {
 		util.Logger.Println(err)
@@ -127,25 +167,14 @@ func (g Group) hasKey(ws *websocket.Conn) (hasKey bool) {
 	_, hasKey = g[ws]
 	return
 }
-func (g *Group) sendAll(msg interface{}) {
-	var player []map[string]interface{}
-	for _, v := range *g {
-		player = append(player, map[string]interface{}{
-			"id":   v.ID,
-			"name": v.Name,
-		})
-	}
+func (g *Group) sendAll(msg *Message) {
 	for _, v := range *g {
 		util.Logger.Printf("%+v\n", v)
 		if v.Ws == nil {
 			g.remove(v.Ws)
 			continue
 		}
-		v.send(map[string]interface{}{
-			"msg":        msg,
-			"count":      len(group),
-			"OnLineUser": player,
-		})
+		v.send(msg)
 	}
 
 }
@@ -157,7 +186,7 @@ func (g Group) remove(ws *websocket.Conn) {
 	if ok {
 
 		rlock.Lock()
-		broadcast <- Cast{Msg: "用户 " + user.Name + " 退出房间"}
+		broadcast <- &Message{Message: "退出房间", From: user, To: "all", Action: systemNotify}
 		rlock.Unlock()
 		delete(g, ws)
 	}
@@ -165,12 +194,12 @@ func (g Group) remove(ws *websocket.Conn) {
 }
 
 // Message
-func (m *Message) toString() (str string) {
+func (u *UserSubmit) toString() (str string) {
 	var tmp = `ws Message:{
 					  "id":%s,
 					  "message":%s,
 					  "action":%s
 					}
 				`
-	return fmt.Sprintf(tmp, m.ID, m.Message, m.Action)
+	return fmt.Sprintf(tmp, u.ID, u.Msg, u.Action)
 }
