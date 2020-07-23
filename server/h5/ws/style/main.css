@@ -1,0 +1,65 @@
+html {
+  background-color: #4daf60;
+}
+
+#app {
+  display: flex;
+  flex-direction: row;
+}
+.other h1 {
+  font-size: 10em;
+  flex: 1;
+}
+
+.fake-input {
+  display: flex;
+  flex-direction: row;
+}
+.fake-input input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.chat {
+  width: 500px;
+  height: 80vh;
+  margin: 30px;
+  float: left;
+  background-color: #62c375;
+  box-shadow: 0 10px 10px #4fab61;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  color: #fff;
+}
+.chat::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 10px 10px #4fab61;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+}
+
+.chat #output {
+  height: calc(98% - 70px);
+  overflow-y: auto;
+}
+
+.chat input{
+  outline:none;
+  border:0;
+  border-radius:5px;
+  padding:0 10px;
+}
+
+.chat button{
+  outline:none;
+  border:0;
+  border-radius:5px;
+  padding:5px 10px;
+  background-color:#fff;
+}

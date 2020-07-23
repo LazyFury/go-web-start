@@ -20,7 +20,8 @@ func Init(g *echo.Group) {
 	//商品
 	product(apiV1)
 	productCate(apiV1) //商品分类
-
+	// 订单
+	order(apiV1)
 	// banner 广告位
 	ad(apiV1)
 	adEvent(apiV1)

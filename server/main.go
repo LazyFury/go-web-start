@@ -4,6 +4,7 @@ import (
 	"EK-Server/app"
 	"EK-Server/config"
 	"EK-Server/model"
+	"EK-Server/util"
 	"fmt"
 	"os"
 
@@ -19,13 +20,13 @@ func main() {
 	}
 	defer model.DB.Close() //退ß出时释放链接
 
-	server := endless.NewServer(fmt.Sprintf(":%d", config.Global.Port), e)
+	// e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
 
+	server := endless.NewServer(fmt.Sprintf(":%d", config.Global.Port), e)
 	err := server.ListenAndServe()
 	if err != nil {
-		fmt.Println(err)
+		util.Logger.Println(err)
 	}
 	fmt.Printf("stopd\n")
-	// config.Global.Mail.SendMail("服务异常断开", []string{"suke971219@gmail.com"}, fmt.Sprintf("%+v", os.Getpid()))
 	os.Exit(0)
 }

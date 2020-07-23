@@ -29,6 +29,11 @@ func WsServer(c echo.Context) (err error) {
 	}
 	defer ws.Close()
 
+	ws.SetCloseHandler(func(code int, text string) error {
+		util.Logger.Printf("Err %v %v", code, text)
+		return nil
+	})
+
 	for {
 		//处理接收消息  保存conn对象，在需要的时候推送消息给用户
 		_, message, err := ws.ReadMessage()
@@ -40,18 +45,15 @@ func WsServer(c echo.Context) (err error) {
 		info := Message{}
 
 		if err = json.Unmarshal(message, &info); err != nil {
-			util.Logger.Println(err)
+			util.Logger.Println(message)
+			continue
 		}
 
 		util.Logger.Printf("收到消息: %v", info.toString())
 
 		readMessage(info, ws)
-
-		ws.SetCloseHandler(func(code int, text string) error {
-			util.Logger.Printf("Err %v %v", code, text)
-			return nil
-		})
 	}
+
 	return
 
 }
@@ -77,6 +79,8 @@ func readMessage(info Message, ws *websocket.Conn) {
 	case "start":
 		break
 	default:
+		rlock.Lock()
 		broadcast <- Cast{Msg: user.Name + "发送了" + info.Message}
+		rlock.Unlock()
 	}
 }

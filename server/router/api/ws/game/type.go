@@ -2,8 +2,10 @@ package game
 
 import (
 	"EK-Server/util"
+	"errors"
 	"fmt"
 	"math/rand"
+	"sync"
 
 	"github.com/gorilla/websocket"
 )
@@ -45,6 +47,8 @@ var (
 	broadcast = make(chan Cast)
 	randName  = []string{"西门吹雪", "陆小凤", "章北海", "搬山", "斜岭", "摸金", "吃瓜群众", "花满楼", "崇华", "小柿子", "xixi"}
 	userList  = map[string]*Gamer{}
+
+	rlock sync.Mutex
 )
 
 // 在数组中
@@ -71,7 +75,11 @@ func Push() {
 func updateUser(user *Gamer, ws *websocket.Conn) {
 	user.Ws = ws
 	group[ws] = user
+
+	rlock.Lock()
 	broadcast <- Cast{Msg: user.Name + " 重新回到游戏", UID: user.ID}
+	rlock.Unlock()
+
 	user.send(user)
 }
 func createUser(ws *websocket.Conn) (user *Gamer) {
@@ -84,13 +92,20 @@ func createUser(ws *websocket.Conn) (user *Gamer) {
 	}
 	group[ws] = user
 	userList[user.ID] = user
+	rlock.Lock()
 	broadcast <- Cast{Msg: user.Name + " 加入游戏", UID: user.ID}
+	rlock.Unlock()
+
 	user.send(user)
 	return
 }
 
 // 发送消息
 func (g *Gamer) send(data interface{}) (msg string, err error) {
+	if g.Ws == nil {
+		err = errors.New("链接断开")
+		return
+	}
 
 	if str, ok := data.(string); ok {
 		err = g.Ws.WriteMessage(1, []byte(str))
@@ -126,7 +141,7 @@ func (g *Group) sendAll(msg interface{}) {
 			g.remove(v.Ws)
 			continue
 		}
-		_, _ = v.send(map[string]interface{}{
+		v.send(map[string]interface{}{
 			"msg":        msg,
 			"count":      len(group),
 			"OnLineUser": player,
@@ -135,9 +150,17 @@ func (g *Group) sendAll(msg interface{}) {
 
 }
 func (g Group) remove(ws *websocket.Conn) {
-	user := g[ws]
-	broadcast <- Cast{Msg: "用户 " + user.Name + " 退出房间"}
-	delete(g, ws)
+	if ws == nil {
+		return
+	}
+	user, ok := g[ws]
+	if ok {
+
+		rlock.Lock()
+		broadcast <- Cast{Msg: "用户 " + user.Name + " 退出房间"}
+		rlock.Unlock()
+		delete(g, ws)
+	}
 	ws.Close()
 }
 

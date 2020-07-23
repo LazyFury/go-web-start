@@ -40,10 +40,10 @@ func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c 
 // ParseGlob 自定义模版解析，扫描子目录
 func ParseGlob(tpl *template.Template, dir string, pattern string) (t *template.Template, err error) {
 	t = tpl
-	fmt.Println(">>扫描模版目录：" + dir)
+	fmt.Println("扫描模版目录：" + dir)
 	files := allFiles(dir, pattern)
 	for _, file := range files {
-		fmt.Println(file.Path)
+		fmt.Printf("挂载模板：%s\n", file.Path)
 		b, err := ioutil.ReadFile(file.Path)
 		if err != nil {
 			return t, err
@@ -77,7 +77,7 @@ func allFiles(dir string, suffix string) (arr []*tplFile) {
 
 	for _, file := range files {
 		if file.IsDir() {
-			fmt.Println(">>扫描子目录：" + file.Name())
+			fmt.Println("扫描子目录：" + file.Name())
 			arr = append(arr, allFiles(path.Join(dir, file.Name()), suffix)...)
 		} else {
 			ok, _ := filepath.Match(suffix, file.Name())

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>WebSocket</title>
+    <link rel="stylesheet" href="/h5/ws/style/main.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="chat">
+        <div class="count">当前共：{{ws.count}}人</div>
+        <p id="output">
+          <block v-for="(msg,i) in ws.messages" :key="i" v-if="msg.msg">
+            <span >{{msg.msg}}</span></br>
+          </block>
+        </p>
+        <div class="fake-input">
+          <input type="text" id="input" v-model="val"  placeholder="请输入" />
+          <button @click="send">发送</button>
+        </div>
+      </div>
+
+      <div class="other">
+        <h1>hello world!</h1>
+
+        在线用户
+        <div >
+          <span v-for="(user,i) in ws.onlineUser" :key='i'>{{user.name}}，</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="/h5/ws/script/websocket.js"></script>
+    <script src="/h5/ws/script/app.js"></script>
+  </body>
+</html>
