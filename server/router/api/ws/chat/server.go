@@ -1,9 +1,8 @@
-package game
+package chat
 
 import (
 	"EK-Server/util"
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
@@ -18,6 +17,7 @@ var (
 			return true
 		},
 	}
+	chat = NewChat()
 )
 
 // WsServer server
@@ -39,48 +39,24 @@ func WsServer(c echo.Context) (err error) {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
 			util.Logger.Println("close:", err)
-			group.remove(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
+			ws.Close()
+			// chat.remove(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
 			break
 		}
 		info := UserSubmit{}
 
 		if err = json.Unmarshal(message, &info); err != nil {
 			util.Logger.Println(message)
+			util.Logger.Println(info)
 			continue
 		}
 
 		util.Logger.Printf("收到消息: %v", info.toString())
 
-		readMessage(info, ws)
+		// readMessage(info, ws)
+		chat.handleMessage(&info, ws)
 	}
 
 	return
 
-}
-
-// 读取用户信息
-func readMessage(info UserSubmit, ws *websocket.Conn) {
-	var user = &Gamer{}
-	if !group.hasKey(ws) {
-		//更新ws连接 或者新建用户
-		if u, ok := userList[info.ID]; ok {
-			updateUser(u, ws)
-			user = u
-		} else {
-			user = createUser(ws)
-		}
-		return
-	}
-	user = group[ws]
-	log.Println(user)
-	// user.send(fmt.Sprintf("serve收到消息：%+v", info)) //以获取到用户 其他操作
-
-	switch info.Action {
-	case "ping":
-		break
-	default:
-		rlock.Lock()
-		broadcast <- &Message{Message: info.Msg, From: user, Action: allUser}
-		rlock.Unlock()
-	}
 }

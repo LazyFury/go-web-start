@@ -31,7 +31,8 @@ func logNew() (logger *log.Logger) {
 	// 定义多个写入器
 	writers := []io.Writer{
 		logfile,
-		os.Stdout}
+		os.Stdout,
+	}
 	fileAndStdoutWriter := io.MultiWriter(writers...)
 	// 创建新的log对象
 	logger = log.New(fileAndStdoutWriter, "", log.Ldate|log.Ltime|log.Lshortfile)

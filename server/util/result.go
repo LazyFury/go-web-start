@@ -56,7 +56,7 @@ func JSONBase(c echo.Context, data interface{}, msg string, code int, httpCode i
 			msg = "未知错误码"
 		}
 	}
-	c.Response().Header().Add("Cache-Control", "no-cache")
+	// c.Response().Header().Add("Cache-Control", "no-cache")
 	return c.JSONPretty(httpCode, &returnJSON{
 		Code: code,
 		Msg:  msg,

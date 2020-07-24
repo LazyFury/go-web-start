@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"EK-Server/router/api/ws/game"
+	"EK-Server/router/api/ws/chat"
 
 	"github.com/labstack/echo"
 )
@@ -10,6 +10,5 @@ import (
 func Init(g *echo.Group) {
 	baseURL := "/ws"
 	app := g.Group(baseURL)
-	app.GET("", game.WsServer)
-	go game.Push()
+	app.GET("", chat.WsServer)
 }
