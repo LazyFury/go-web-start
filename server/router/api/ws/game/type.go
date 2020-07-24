@@ -25,8 +25,7 @@ type (
 	Group map[*websocket.Conn]*Gamer
 	// Message 消息
 	Message struct {
-		From    *Gamer                 `json:"from"`
-		To      string                 `json:"to"`
+		From    *Gamer                 `json:"from,omitempty"`
 		Message string                 `json:"msg,omitempty"`
 		Action  string                 `json:"action"`
 		Global  map[string]interface{} `json:"global,omitempty"`
@@ -100,7 +99,7 @@ func updateGlobalConfig() {
 		"onlineUser": onlineUser,
 	}
 	rlock.Lock()
-	broadcast <- &Message{From: nil, To: "all", Action: update, Global: config}
+	broadcast <- &Message{From: nil, Action: update, Global: config}
 	rlock.Unlock()
 }
 
@@ -113,12 +112,12 @@ func updateUser(user *Gamer, ws *websocket.Conn) {
 	}
 
 	rlock.Lock()
-	broadcast <- &Message{Message: "回来了", From: user, To: "all", Action: systemNotify}
+	broadcast <- &Message{Message: "回来了", From: user, Action: systemNotify}
 	rlock.Unlock()
 
 	updateGlobalConfig()
 
-	group[ws].send(&Message{From: group[ws], To: "", Action: regUser})
+	group[ws].send(&Message{From: group[ws], Action: regUser})
 }
 func createUser(ws *websocket.Conn) (user *Gamer) {
 	var id = util.RandStringBytes(32)
@@ -131,11 +130,11 @@ func createUser(ws *websocket.Conn) (user *Gamer) {
 	group[ws] = user
 	userList[user.ID] = user
 	rlock.Lock()
-	broadcast <- &Message{Message: "加入房间", From: user, To: "all", Action: systemNotify}
+	broadcast <- &Message{Message: "加入房间", From: user, Action: systemNotify}
 	rlock.Unlock()
 	updateGlobalConfig()
 
-	user.send(&Message{From: user, To: "", Action: regUser})
+	user.send(&Message{From: user, Action: regUser})
 	return
 }
 
@@ -144,6 +143,14 @@ func (g *Gamer) send(msg *Message) (err error) {
 	if g.Ws == nil {
 		err = errors.New("链接断开")
 		return
+	}
+	fmt.Printf("Msg %+v\n", msg)
+	fmt.Printf("user %+v\n", g)
+
+	if msg != nil && msg.From != nil {
+		if msg.From.ID == g.ID {
+			msg.IsSelf = true
+		}
 	}
 
 	str, err := json.Marshal(msg)
@@ -186,7 +193,7 @@ func (g Group) remove(ws *websocket.Conn) {
 	if ok {
 
 		rlock.Lock()
-		broadcast <- &Message{Message: "退出房间", From: user, To: "all", Action: systemNotify}
+		broadcast <- &Message{Message: "退出房间", From: user, Action: systemNotify}
 		rlock.Unlock()
 		delete(g, ws)
 	}

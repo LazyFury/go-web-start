@@ -4,6 +4,8 @@ class SocketClient {
   count = 0;
   onlineUser = {};
   userName = '';
+  useOnMessageFuncs = [];
+  timer = null;
 
   constructor() {
     this.messages = [];
@@ -25,7 +27,18 @@ class SocketClient {
 
   onOpen() {
     console.log('Connected');
-    this.send('join'); //服务端第一次收到消息之后创建用户，发送用户加入通知
+    this.send('_', 'join'); //服务端第一次收到消息之后创建用户，发送用户加入通知
+    this.heartbeat();
+  }
+
+  heartbeat() {
+    if (this.timer != null) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    this.timer = setInterval(() => {
+      this.send('_', 'ping');
+    }, 1000 * 10);
   }
 
   onMessage(evt) {
@@ -36,7 +49,7 @@ class SocketClient {
       throw err;
     }
 
-    console.log(this.messages);
+    // console.log(this.messages);
 
     switch (result.action) {
       case 'allUser':
@@ -55,6 +68,10 @@ class SocketClient {
         this.onlineUser = result.global.onlineUser;
         break;
     }
+
+    this.useOnMessageFuncs.forEach((fn) => {
+      fn.call(this, result);
+    });
   }
 
   onClose(evt) {
@@ -71,5 +88,13 @@ class SocketClient {
     if (!id) {
     }
     if (this.conn) this.conn.send(JSON.stringify({ msg: val, action, id }));
+  }
+
+  useOnMessage(fn) {
+    if (fn instanceof Function) {
+      this.useOnMessageFuncs.push(fn);
+    } else {
+      throw '不是合法的的方法';
+    }
   }
 }

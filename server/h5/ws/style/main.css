@@ -48,32 +48,33 @@ html {
 .chat #output {
   height: calc(98% - 70px);
   overflow-y: auto;
+  margin-bottom: 10px;
 }
 
-.chat input{
-  outline:none;
-  border:0;
-  border-radius:5px;
-  padding:0 10px;
+.chat input {
+  outline: none;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 10px;
 }
 
-.chat button{
-  outline:none;
-  border:0;
-  border-radius:5px;
-  padding:5px 10px;
+.chat button {
+  outline: none;
+  border: 0;
+  border-radius: 5px;
+  padding: 5px 10px;
   background-color: #4dae60;
   color: #fff;
 }
 
-.chat #output .user-name{
+.chat #output .user-name {
   font-weight: bold;
   color: #797979;
   display: block;
   margin-top: 20px;
 }
 
-.chat #output .msg .bubbles{
+.chat #output .msg .bubbles {
   background-color: #4b6ddc;
   padding: 10px;
   color: #fff;
@@ -84,16 +85,16 @@ html {
   margin-top: 10px;
 }
 
-.chat #output .ismine .bubbles{
-  background-color: #63e0aa;
+.chat #output .ismine .bubbles {
+  background-color: #63e0aa !important;
 }
 
-.chat #output .notify{
+.chat #output .notify {
   background-color: rgb(78 78 78 / 55%);
-  color:#fff;
+  color: #fff;
   /* margin:auto; */
-  display:inline-block;
-  font-size:.8em;
+  display: inline-block;
+  font-size: 0.8em;
   padding: 1px 6px;
   border-radius: 4px;
   margin-top: 6px;

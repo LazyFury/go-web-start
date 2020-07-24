@@ -76,11 +76,11 @@ func readMessage(info UserSubmit, ws *websocket.Conn) {
 	// user.send(fmt.Sprintf("serve收到消息：%+v", info)) //以获取到用户 其他操作
 
 	switch info.Action {
-	case "start":
+	case "ping":
 		break
 	default:
 		rlock.Lock()
-		broadcast <- &Message{Message: info.Msg, From: user, To: "all", Action: allUser}
+		broadcast <- &Message{Message: info.Msg, From: user, Action: allUser}
 		rlock.Unlock()
 	}
 }
