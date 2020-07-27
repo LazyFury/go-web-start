@@ -33,7 +33,7 @@ func (g *Gamer) Write() {
 
 	for {
 		if msg, ok := <-g.WriteList; ok {
-			fmt.Printf("监听发消息:%v \n", msg)
+			// fmt.Printf("监听发消息:%v \n", msg)
 			err := g.send(msg)
 			if err != nil {
 				fmt.Println(err)
@@ -91,6 +91,5 @@ func (g *Gamer) send(msg *Message) (err error) {
 	if err != nil {
 		err = errors.New("writeErr")
 	}
-
 	return
 }

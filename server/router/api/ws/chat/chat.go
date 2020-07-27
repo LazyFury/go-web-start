@@ -2,7 +2,6 @@ package chat
 
 import (
 	"EK-Server/util"
-	"fmt"
 	"math/rand"
 	"sync"
 
@@ -24,7 +23,7 @@ type Chat struct {
 func NewChat() *Chat {
 	chat := &Chat{
 		locker:    sync.RWMutex{},
-		broadcast: make(BoradcastChan, 1000),
+		broadcast: make(BoradcastChan, 100000),
 		Group:     make(map[*websocket.Conn]*Gamer, 100),
 		Users:     make(map[string]*Gamer),
 	}
@@ -34,9 +33,11 @@ func NewChat() *Chat {
 
 func (c *Chat) broadcastServer() {
 	for {
-		msg := <-c.broadcast
-		fmt.Printf("发送广播消息：%+v\n", msg)
-		c.SendAll(msg)
+		msg, ok := <-c.broadcast
+		if ok {
+			c.SendAll(msg)
+		}
+		// fmt.Printf("发送广播消息：%+v\n", msg)
 	}
 }
 
@@ -76,6 +77,7 @@ func (c *Chat) remove(ws *websocket.Conn) {
 	user, ok := c.Group[ws]
 	if ok {
 		c.pushBroadcastMessage(&Message{Message: "退出房间", From: user, Action: systemNotify})
+		c.updateGlobalConfig()
 	}
 	delete(c.Group, ws)
 	user.remove()
@@ -138,7 +140,8 @@ func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
 
 // SendAll SendAll
 func (c *Chat) SendAll(msg *Message) {
-	fmt.Printf("广播用户组：%+v\n\n", c.Group)
+	// fmt.Printf("广播用户组：%+v\n\n", c.Group)
+	c.locker.Lock()
 	for _, v := range c.Group {
 		// util.Logger.Printf("%+v\n", v)
 		if v.Ws == nil {
@@ -147,6 +150,7 @@ func (c *Chat) SendAll(msg *Message) {
 		}
 		c.SendTOUser(v, msg)
 	}
+	c.locker.Unlock()
 }
 
 // SendTOUser SendTOUser
