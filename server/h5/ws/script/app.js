@@ -25,6 +25,7 @@ var app = new Vue({
       } else {
         this.ws.connect();
       }
+      ws = this.ws;
     },
     send() {
       this.ws.send(this.val);

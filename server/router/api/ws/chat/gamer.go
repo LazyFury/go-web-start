@@ -1,9 +1,9 @@
 package chat
 
 import (
-	"EK-Server/util"
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/gorilla/websocket"
 )
@@ -15,8 +15,45 @@ type (
 		Name        string          `json:"name"`
 		Ws          *websocket.Conn `json:"-"`
 		MessageType int             `json:"-"`
+		WriteList   chan *Message   `json:"-"`
+		isDone      chan bool       `json:"-"`
 	}
 )
+
+func (g *Gamer) Write() {
+	fmt.Printf("初始化用户监听消息\n")
+
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("写数据错误，结束链接\n")
+		}
+	}()
+
+	defer func() {
+		fmt.Printf("close user\n")
+		g.remove()
+	}()
+
+	for {
+		if msg, ok := <-g.WriteList; ok {
+			fmt.Printf("监听发消息:%v \n", msg)
+			err := g.send(msg)
+			if err != nil {
+				fmt.Println(err)
+				break
+			}
+		} else {
+			break
+		}
+
+	}
+}
+
+func (g *Gamer) remove() {
+	g.Ws.Close()
+	close(g.WriteList)
+	g.isDone <- true
+}
 
 // 发送消息
 func (g *Gamer) send(msg *Message) (err error) {
@@ -55,7 +92,6 @@ func (g *Gamer) send(msg *Message) (err error) {
 	err = g.Ws.WriteMessage(websocket.TextMessage, str)
 
 	if err != nil {
-		util.Logger.Println(err)
 		err = errors.New("writeErr")
 	}
 

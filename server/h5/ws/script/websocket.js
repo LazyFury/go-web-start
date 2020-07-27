@@ -18,7 +18,7 @@ class SocketClient {
       uri = 'wss:';
     }
     uri += '//' + loc.host;
-    uri += '/api/v1/ws';
+    uri += '/api/v1/ws?token=' + window.localStorage.getItem('userId');
     this.conn = new WebSocket(uri);
     this.conn.onopen = () => this.onOpen();
     this.conn.onmessage = (e) => this.onMessage(e);

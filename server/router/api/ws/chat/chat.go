@@ -11,14 +11,13 @@ import (
 
 // BoradcastChan 广播消息
 type BoradcastChan chan *Message
-type users map[string]*Gamer
 
 //Chat 聊天室
 type Chat struct {
 	locker    sync.RWMutex
 	broadcast BoradcastChan
-	Group     Group
-	Users     users
+	Group     map[*websocket.Conn]*Gamer
+	Users     map[string]*Gamer
 }
 
 // NewChat 初始化
@@ -26,8 +25,8 @@ func NewChat() *Chat {
 	chat := &Chat{
 		locker:    sync.RWMutex{},
 		broadcast: make(BoradcastChan, 1000),
-		Group:     make(Group, 100),
-		Users:     make(users),
+		Group:     make(map[*websocket.Conn]*Gamer, 100),
+		Users:     make(map[string]*Gamer),
 	}
 	go chat.broadcastServer()
 	return chat
@@ -49,8 +48,7 @@ func (c *Chat) pushBroadcastMessage(msg *Message) {
 
 // 处理消息
 func (c *Chat) handleMessage(msg *UserSubmit, ws *websocket.Conn) {
-
-	user := c.getUser(msg.ID, ws)
+	user := c.Group[ws]
 
 	switch msg.Action {
 	case "join":
@@ -76,13 +74,11 @@ func (c *Chat) getUser(id string, ws *websocket.Conn) *Gamer {
 
 func (c *Chat) remove(ws *websocket.Conn) {
 	user, ok := c.Group[ws]
-	delete(c.Group, ws)
 	if ok {
 		c.pushBroadcastMessage(&Message{Message: "退出房间", From: user, Action: systemNotify})
 	}
-
-	defer user.Ws.Close()
-
+	delete(c.Group, ws)
+	user.remove()
 }
 
 func (c *Chat) removeByWsConn(ws *websocket.Conn) {
@@ -109,23 +105,25 @@ func (c *Chat) updateGlobalConfig() {
 
 // Game
 func (c *Chat) updateUser(user *Gamer, ws *websocket.Conn) {
+	c.doUpdateUser(user, ws)
+	c.pushBroadcastMessage(&Message{Message: "回来了", From: user, Action: systemNotify})
 
+}
+func (c *Chat) doUpdateUser(user *Gamer, ws *websocket.Conn) {
 	c.locker.Lock()
-	u := &Gamer{
-		ID:   user.ID,
-		Name: user.Name,
-		Ws:   ws,
-	}
+	u := user
+	u.Ws = ws
+	u.WriteList = make(chan *Message, 1000)
 	c.Group[ws] = u
 	c.Users[u.ID] = u
+	// go u.Write()
 	c.locker.Unlock()
-
-	c.pushBroadcastMessage(&Message{Message: "回来了", From: u, Action: systemNotify})
 	c.SendTOUser(u, &Message{From: u, Action: regUser})
 	c.updateGlobalConfig()
 }
 
 func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
+
 	var id = util.RandStringBytes(32)
 	var name = randName[rand.Intn(len(randName))]
 	user = &Gamer{
@@ -133,11 +131,8 @@ func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
 		Name: name,
 		Ws:   ws,
 	}
-	c.Group[ws] = user
-	c.Users[id] = user
+	c.doUpdateUser(user, ws)
 	c.pushBroadcastMessage(&Message{Message: "加入房间", From: user, Action: systemNotify})
-	c.updateGlobalConfig()
-	c.SendTOUser(user, &Message{From: user, Action: regUser})
 	return
 }
 
@@ -156,11 +151,5 @@ func (c *Chat) SendAll(msg *Message) {
 
 // SendTOUser SendTOUser
 func (c *Chat) SendTOUser(user *Gamer, msg *Message) {
-	c.locker.Lock()
-	err := user.send(msg)
-	if err != nil && err.Error() == "writeErr" {
-		fmt.Println(err)
-		c.remove(user.Ws)
-	}
-	c.locker.Unlock()
+	user.WriteList <- msg
 }
