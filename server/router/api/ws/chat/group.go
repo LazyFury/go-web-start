@@ -1,16 +1,12 @@
 package chat
 
+import "github.com/gorilla/websocket"
+
 // Group Group
-type Group map[string]*Gamer
+type Group map[*websocket.Conn]*Gamer
 
 // Group
-func (g Group) hasKey(id string) (hasKey bool) {
-	_, hasKey = g[id]
+func (g Group) hasKey(ws *websocket.Conn) (hasKey bool) {
+	_, hasKey = g[ws]
 	return
-}
-
-func (g Group) remove(id string) (user *Gamer, ok bool) {
-	user, ok = g[id]
-	delete(g, id)
-	return user, ok
 }

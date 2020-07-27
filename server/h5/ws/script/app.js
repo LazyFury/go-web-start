@@ -4,7 +4,7 @@ var app = new Vue({
   el: '#app',
   data: { val: '', ws: new SocketClient() },
   created() {
-    this.ws.connect();
+    this.start();
     this.ws.useOnMessage((e) => {
       if (!e.is_self) return;
       this.$nextTick(function () {
@@ -13,6 +13,9 @@ var app = new Vue({
     });
   },
   methods: {
+    start() {
+      this.ws.connect();
+    },
     send() {
       this.ws.send(this.val);
     },

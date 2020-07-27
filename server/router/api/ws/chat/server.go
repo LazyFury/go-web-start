@@ -39,8 +39,7 @@ func WsServer(c echo.Context) (err error) {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
 			util.Logger.Println("close:", err)
-			ws.Close()
-			// chat.remove(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
+			chat.removeByWsConn(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件
 			break
 		}
 		info := UserSubmit{}
