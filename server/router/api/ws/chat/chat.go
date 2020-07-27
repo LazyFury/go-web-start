@@ -60,18 +60,17 @@ func (c *Chat) handleMessage(msg *UserSubmit, ws *websocket.Conn) {
 	}
 }
 func (c *Chat) getUser(id string, ws *websocket.Conn) *Gamer {
-	var u Gamer
+	var u *Gamer
+	var ok bool
 	//更新ws连接 或者新建用户
-	if u, ok := c.Users[id]; ok {
+	if u, ok = c.Users[id]; ok {
 		if u.Ws != ws {
 			c.updateUser(u, ws)
-		} else {
-			u = c.Group[ws]
 		}
 	} else {
 		u = c.createUser(ws)
 	}
-	return &u
+	return u
 }
 
 func (c *Chat) remove(ws *websocket.Conn) {
