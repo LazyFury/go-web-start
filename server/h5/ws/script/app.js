@@ -29,6 +29,7 @@ var app = new Vue({
     },
     send() {
       this.ws.send(this.val);
+      this.val = '';
     },
     confirm() {
       this.send();

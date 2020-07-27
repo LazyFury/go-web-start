@@ -25,14 +25,11 @@ func (g *Gamer) Write() {
 
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Printf("写数据错误，结束链接\n")
+			fmt.Println(r)
 		}
 	}()
 
-	defer func() {
-		fmt.Printf("close user\n")
-		g.remove()
-	}()
+	defer g.remove()
 
 	for {
 		if msg, ok := <-g.WriteList; ok {
