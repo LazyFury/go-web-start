@@ -111,14 +111,17 @@ func (c *Chat) updateGlobalConfig() {
 func (c *Chat) updateUser(user *Gamer, ws *websocket.Conn) {
 
 	c.locker.Lock()
-	u := user
-	u.Ws = ws
+	u := &Gamer{
+		ID:   user.ID,
+		Name: user.Name,
+		Ws:   ws,
+	}
 	c.Group[ws] = u
 	c.Users[u.ID] = u
 	c.locker.Unlock()
 
 	c.pushBroadcastMessage(&Message{Message: "回来了", From: u, Action: systemNotify})
-	// u.send(&Message{From: u, Action: regUser})
+	c.SendTOUser(u, &Message{From: u, Action: regUser})
 	c.updateGlobalConfig()
 }
 
@@ -134,13 +137,13 @@ func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
 	c.Users[id] = user
 	c.pushBroadcastMessage(&Message{Message: "加入房间", From: user, Action: systemNotify})
 	c.updateGlobalConfig()
-
-	user.send(&Message{From: user, Action: regUser})
+	c.SendTOUser(user, &Message{From: user, Action: regUser})
 	return
 }
 
 // SendAll SendAll
 func (c *Chat) SendAll(msg *Message) {
+	fmt.Printf("广播用户组：%+v\n\n", c.Group)
 	for _, v := range c.Group {
 		// util.Logger.Printf("%+v\n", v)
 		if v.Ws == nil {
@@ -153,9 +156,11 @@ func (c *Chat) SendAll(msg *Message) {
 
 // SendTOUser SendTOUser
 func (c *Chat) SendTOUser(user *Gamer, msg *Message) {
+	c.locker.Lock()
 	err := user.send(msg)
 	if err != nil && err.Error() == "writeErr" {
 		fmt.Println(err)
 		c.remove(user.Ws)
 	}
+	c.locker.Unlock()
 }

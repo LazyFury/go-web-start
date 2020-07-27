@@ -14,7 +14,17 @@ var app = new Vue({
   },
   methods: {
     start() {
-      this.ws.connect();
+      if (this.ws.conn != null) {
+        if (confirm('链接似乎已建立，是否重连')) {
+          this.ws.conn.close();
+          this.ws.conn = null;
+          setTimeout(() => {
+            this.ws.connect();
+          }, 300);
+        }
+      } else {
+        this.ws.connect();
+      }
     },
     send() {
       this.ws.send(this.val);

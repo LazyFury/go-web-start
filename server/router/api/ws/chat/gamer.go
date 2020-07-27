@@ -4,7 +4,6 @@ import (
 	"EK-Server/util"
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/gorilla/websocket"
 )
@@ -25,8 +24,14 @@ func (g *Gamer) send(msg *Message) (err error) {
 		err = errors.New("链接断开")
 		return
 	}
-	fmt.Printf("Msg %+v\n", msg)
-	fmt.Printf("user %+v\n", g)
+
+	// fmt.Printf("发送消息内容%v\n\n", struct {
+	// 	Ws *websocket.Conn
+	// 	*Message
+	// }{
+	// 	Ws:      g.Ws,
+	// 	Message: msg,
+	// })
 
 	result := &struct {
 		*Message
