@@ -55,6 +55,7 @@ func (c *Chat) handleMessage(msg *UserSubmit, ws *websocket.Conn) {
 	switch msg.Action {
 	case "join":
 	case "ping":
+		c.SendTOUser(user, &Message{Action: pingHandle})
 	default:
 		c.pushBroadcastMessage(&Message{Message: msg.Msg, From: user, Action: allUser})
 	}

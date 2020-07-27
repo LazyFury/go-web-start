@@ -37,6 +37,7 @@ const (
 	regUser      = "regUser"
 	allUser      = "allUser"
 	update       = "update"
+	pingHandle   = "pingHandle"
 )
 
 var (
