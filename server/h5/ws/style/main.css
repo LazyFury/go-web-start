@@ -10,6 +10,9 @@ html {
   font-size: 10em;
   flex: 1;
 }
+.other .users {
+  max-width: 800px;
+}
 
 .fake-input {
   display: flex;
