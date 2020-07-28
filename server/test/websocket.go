@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"sync"
 	"time"
 
@@ -11,9 +12,9 @@ import (
 var wg sync.WaitGroup
 
 func main() {
-	for i := 0; i < 1000; i++ {
-		wsURI := "ws://127.0.0.1:8080/api/v1/ws"
-		origin := "http://127.0.0.1:8080/"
+	for i := 0; i < 200; i++ {
+		wsURI := "wss://go.abadboy.cn/api/v1/ws"
+		origin := "https://go.abadboy.cn/"
 
 		conn, err := websocket.Dial(wsURI, "", origin)
 		if err != nil {
@@ -34,16 +35,17 @@ func main() {
 				buf := make([]byte, 512)
 				n, err := conn.Read(buf)
 				if err != nil {
-					fmt.Println(err)
 					return
 				}
 				str := fmt.Sprintf("%v", n)
 				fmt.Println(str)
+
 			}
 		}()
 
-		time.Sleep(time.Millisecond * 100)
+		time.Sleep(time.Millisecond * 200)
 	}
 
 	wg.Wait()
+	os.Exit(0)
 }

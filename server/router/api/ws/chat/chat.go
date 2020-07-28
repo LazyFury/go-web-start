@@ -37,14 +37,11 @@ func (c *Chat) broadcastServer() {
 		if ok {
 			c.SendAll(msg)
 		}
-		// fmt.Printf("发送广播消息：%+v\n", msg)
 	}
 }
 
 func (c *Chat) pushBroadcastMessage(msg *Message) {
-	c.locker.Lock()
 	c.broadcast <- msg
-	c.locker.Unlock()
 }
 
 // 处理消息
@@ -73,6 +70,7 @@ func (c *Chat) getUser(id string, ws *websocket.Conn) *Gamer {
 	return u
 }
 
+// remove 删除链接
 func (c *Chat) remove(ws *websocket.Conn) {
 	user, ok := c.Group[ws]
 	if ok {
@@ -87,6 +85,7 @@ func (c *Chat) removeByWsConn(ws *websocket.Conn) {
 	c.remove(ws)
 }
 
+// updateGlobalConfig 更新用户配置
 func (c *Chat) updateGlobalConfig() {
 	l := len(c.Group)
 	onlineUser := []map[string]string{}
@@ -105,12 +104,28 @@ func (c *Chat) updateGlobalConfig() {
 	c.pushBroadcastMessage(&Message{From: nil, Action: update, Global: config})
 }
 
-// Game
+// Game 更新用户信息
 func (c *Chat) updateUser(user *Gamer, ws *websocket.Conn) {
 	c.doUpdateUser(user, ws)
 	c.pushBroadcastMessage(&Message{Message: "回来了", From: user, Action: systemNotify})
 
 }
+
+// createUser 创建用户
+func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
+	var id = util.RandStringBytes(32)
+	var name = randName[rand.Intn(len(randName))]
+	user = &Gamer{
+		ID:   id,
+		Name: name,
+		Ws:   ws,
+	}
+	c.doUpdateUser(user, ws)
+	c.pushBroadcastMessage(&Message{Message: "加入房间", From: user, Action: systemNotify})
+	return
+}
+
+// 初始化用户
 func (c *Chat) doUpdateUser(user *Gamer, ws *websocket.Conn) {
 	c.locker.Lock()
 	u := user
@@ -122,20 +137,6 @@ func (c *Chat) doUpdateUser(user *Gamer, ws *websocket.Conn) {
 	c.locker.Unlock()
 	c.SendTOUser(u, &Message{From: u, Action: regUser})
 	c.updateGlobalConfig()
-}
-
-func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
-
-	var id = util.RandStringBytes(32)
-	var name = randName[rand.Intn(len(randName))]
-	user = &Gamer{
-		ID:   id,
-		Name: name,
-		Ws:   ws,
-	}
-	c.doUpdateUser(user, ws)
-	c.pushBroadcastMessage(&Message{Message: "加入房间", From: user, Action: systemNotify})
-	return
 }
 
 // SendAll SendAll
