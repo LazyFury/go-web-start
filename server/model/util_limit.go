@@ -17,7 +17,7 @@ type (
 )
 
 // DataBaselimit  mysql数据分页
-func DataBaselimit(limit int, page int, where interface{}, _model Model, key string, orderBy string, userID string) *Result {
+func DataBaselimit(limit int, page int, where interface{}, _model Model, key string, orderBy string, userID uint, isAdmin bool) *Result {
 	db := DB
 	list := _model.PointerList()
 
@@ -27,7 +27,7 @@ func DataBaselimit(limit int, page int, where interface{}, _model Model, key str
 		resultModal = resultModal.Where(where)
 	}
 
-	if !_model.IsPublic() {
+	if !_model.IsPublic() && !isAdmin {
 		resultModal = resultModal.Where(map[string]interface{}{
 			"user_id": userID,
 		})

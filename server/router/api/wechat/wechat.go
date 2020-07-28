@@ -12,21 +12,21 @@ import (
 	"github.com/labstack/echo"
 )
 
-var mp = &config.Global.Wechat
+var mp = &config.Global.WechatMP
 
 // Init 初始化
 func Init(g *echo.Group) {
 	baseURL := "/wechat"
 	wechat := g.Group(baseURL)
 
-	wechat.GET("/jsApiConfig", jsAPIConfig)
-	wechat.GET("/wechat_redirect", wechatRedirect)
+	wechat.GET("/js-api-config", jsAPIConfig)
+	wechat.GET("/wechat-redirect", wechatRedirect)
 	wechat.GET("/login", login)
 
 	wechat.GET("/info", userInfo)
-	wechat.GET("/signature", signatureCheck)               //配置接口token验证
-	wechat.POST("/signature", handleWechatMessage)         //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
-	wechat.GET("/sendTemplateMsg", sendTemplateMsgHandler) //发送模版消息
+	wechat.GET("/signature", signatureCheck)                //配置接口token验证
+	wechat.POST("/signature", handleWechatMessage)          //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
+	wechat.GET("/send-templateMsg", sendTemplateMsgHandler) //发送模版消息
 
 }
 
@@ -38,19 +38,24 @@ func login(c echo.Context) (err error) {
 	}
 
 	// 请求微信登陆返回信息
-	WeChatLogin, msg := sendCodeToWechatServer(code)
-	if msg == "" {
-		return util.JSONErr(c, WeChatLogin, msg)
+	WeChatLogin, err := mp.GetUserInfo(code)
+	if err != nil {
+		return util.JSONErr(c, nil, err.Error())
 	}
 	// 更新过期时间
 	WeChatLogin.ExpiresIn += time.Now().Unix()
 	// 查询微信用户数据库表
-	WeChatUser, msg, errCode := wechatDoLogin(WeChatLogin)
-	if msg != "" {
-		return util.JSON(c, WeChatUser, msg, errCode)
+	WeChatUser, err := wechatDoLogin(&model.WechatOauth{UserInfo: *WeChatLogin})
+	if err != nil {
+		return util.JSONErr(c, WeChatUser, err.Error())
 	}
 	// 如果uid存在则查询用户 返回用户信息 生产jwt token
-	// ...
+	// TODO: ...
+
+	// 如果用户未绑定则通知绑定
+	// if WeChatUser.UID == 0 {
+	// 	return util.JSON(c, nil, "", util.BindWeChat)
+	// }
 
 	return util.JSONSuccess(c, WeChatUser, "登陆成功")
 }
@@ -76,9 +81,9 @@ func userInfo(c echo.Context) (err error) {
 	}
 	// token := user.AccessToken
 	if time.Now().Unix()-user.CreatedAt.Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
-		info, msg := updateWechatInfo(&user, false)
-		if msg != "" {
-			return util.JSONErr(c, nil, msg)
+		info, err := updateWechatInfo(&user, false)
+		if err != nil {
+			return util.JSONErr(c, nil, err.Error())
 		}
 
 		db.Model(&user).Updates(&info)

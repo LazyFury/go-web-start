@@ -23,14 +23,14 @@ type User struct {
 	Ua        string               `json:"ua"`
 	LoginTime customtype.LocalTime `json:"login_time"`
 	Status    int                  `json:"status"`
-	IsAdmin   bool                 `json:"is_admin" gorm:"default:0"`
+	IsAdmin   int                  `json:"is_admin" gorm:"default:0"`
 }
 
 // WechatOauth 微信用户登陆
 type WechatOauth struct {
 	BaseControll
 	UID int `json:"user_id"`
-	*wechat.UserInfo
+	wechat.UserInfo
 }
 
 // PointerList 列表
@@ -153,7 +153,8 @@ func (u *User) Frozen(c echo.Context) error {
 // HasUser 查找用户
 func (u *User) HasUser() error {
 	db := DB
-	if db.Where(u).First(u).RecordNotFound() {
+	row := db.Where(u).First(u)
+	if row.RecordNotFound() {
 		return errors.New("用户不存在")
 	}
 	return nil
@@ -170,7 +171,6 @@ func (u *User) RepeatOfEmail(c echo.Context) error {
 
 	}
 	return util.JSON(c, nil, "邮箱已被使用,尝试找回密码或者使用其他邮箱", -1)
-
 }
 
 // RepeatOfName RepeatOfName

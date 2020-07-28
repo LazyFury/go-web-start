@@ -45,6 +45,7 @@ func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) 
 	fmt.Println(user)
 	c.Set("userId", user.ID)
 	c.Set("userName", user.Name)
+	c.Set("isAdmin", user.IsAdmin)
 	return next(c)
 }
 
@@ -66,6 +67,7 @@ func userCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) e
 	// fmt.Println(user)
 	c.Set("userId", user.ID)
 	c.Set("userName", user.Name)
+	c.Set("isAdmin", user.IsAdmin)
 	return next(c)
 }
 
@@ -131,6 +133,7 @@ func CreateToken(user *UserInfo) (tokenstr string, err error) {
 	claim := jwt.MapClaims{
 		"id":       user.ID,
 		"username": user.Name,
+		"is_admin": user.IsAdmin,
 		"nbf":      time.Now().Unix(),            //指定时间之前 token不可用
 		"iat":      time.Now().Unix(),            //签发时间
 		"exp":      time.Now().Unix() + 60*60*24, //过期时间 24小时
@@ -169,6 +172,7 @@ func parseToken(tokenss string) (user *UserInfo, err error) {
 
 	user.ID = claim["id"].(float64) // uint64(claim["id"].(float64))
 	user.Name = claim["username"].(string)
+	user.IsAdmin = claim["is_admin"].(bool)
 
 	exp := int64(claim["exp"].(float64))
 	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(customtype.DefaultTimeLayout))

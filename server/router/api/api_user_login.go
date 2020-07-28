@@ -45,10 +45,9 @@ func doLogin(c echo.Context) error {
 	if err != nil {
 		return util.JSONErr(c, nil, "用户不存在")
 	}
-
 	password := sha.EnCode(u.Password)
 	if user.Password == password {
-		jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin}
+		jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin > 0}
 		str, _ := middleware.CreateToken(&jwtUser)
 		return util.JSONSuccess(c, str, "登陆成功")
 	}

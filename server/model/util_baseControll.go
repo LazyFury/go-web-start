@@ -171,10 +171,12 @@ func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
 	p, _ := strconv.Atoi(page)
 	size, _ := strconv.Atoi(limit)
 
-	userID, _ := c.Get("userId").(string)
+	// 用户信息
+	userID, _ := c.Get("userId").(float64)
+	isAdmin, _ := c.Get("isAdmin").(bool)
 
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.model(), key, orderBy, userID)
+	list := DataBaselimit(size, p, where, b.model(), key, orderBy, uint(userID), isAdmin)
 	return util.JSONSuccess(c, list, "")
 }
 
@@ -196,8 +198,9 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	}
 	row := db.Table(b.model().TableName()).Where(where)
 
-	if !b.model().IsPublic() {
-		userID := c.Get("userId")
+	userID, _ := c.Get("userId").(float64)
+	isAdmin, _ := c.Get("isAdmin").(bool)
+	if !b.model().IsPublic() && !isAdmin {
 		row = row.Where(map[string]interface{}{
 			"user_id": userID,
 		})
@@ -372,7 +375,7 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	}
 
 	route.POST("", b.model().Add, middleware.AdminJWT)
-	route.PUT("/:id", b.model().Update, middleware.AdminJWT)
+	route.PUT("/:id", b.model().Update)
 	route.DELETE("/:id", b.model().Delete, middleware.AdminJWT)
 	route.GET("-actions/count", b.model().Count)
 

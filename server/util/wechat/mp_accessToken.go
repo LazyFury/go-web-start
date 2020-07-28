@@ -18,7 +18,7 @@ type tokenType struct {
 
 // access_token 向微信服务器发送请求
 func (t *tokenType) sendAccessTokenReq(appid string, appsecret string) (err error) {
-	fmt.Printf(">>>>重启请求微信服务器,获取微信 access_token>>>>\n")
+	fmt.Printf(">>>>请求微信服务器,获取微信 access_token>>>>\n")
 	url := fmt.Sprintf(accessTokenURL, appid, appsecret)
 	res, err := http.Get(url)
 

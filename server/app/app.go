@@ -3,11 +3,8 @@ package app
 import (
 	"EK-Server/router"
 	"EK-Server/util"
-	"fmt"
 	"html/template"
-	"net/http"
 	"os"
-	"strings"
 
 	"github.com/Masterminds/sprig"
 	"github.com/labstack/echo"
@@ -55,35 +52,4 @@ func New() *echo.Echo {
 	// 启动服务
 	// e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
 	return e
-}
-
-// requestInfo
-func requestInfo(c echo.Context) error {
-	req := c.Request()
-	format := "<pre><strong>Request Information test auto build</strong>\n\n<code>Protocol: %s\nHost: %s\nRemote Address: %s\nMethod: %s\nPath: %s\n</code></pre>"
-	fmt.Println(strings.Split(req.Header.Get("Accept"), ",")[0])
-	fmt.Printf("%+v", req.Header)
-	return c.HTML(http.StatusOK, fmt.Sprintf(format, req.Proto, req.Host, req.RemoteAddr, req.Method, req.URL.Path))
-}
-
-// 错误处理
-func httpErrorHandler(err error, c echo.Context) {
-	code := http.StatusInternalServerError
-	msg := "error"
-	if he, ok := err.(*echo.HTTPError); ok {
-		code = he.Code
-	}
-	msg = http.StatusText(code)
-	// 如果是浏览器
-	req := c.Request()
-	reqAccept := strings.Split(req.Header.Get("Accept"), ",")[0]
-	if reqAccept == "text/html" {
-		c.Logger().Error(c.Render(code, "error.html", map[string]interface{}{
-			"msg":  msg,
-			"code": code,
-		}))
-		return
-	}
-	// 如果是ajax
-	c.Logger().Error(util.JSONBase(c, nil, msg, code, code))
 }

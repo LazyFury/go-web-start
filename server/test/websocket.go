@@ -13,8 +13,8 @@ var wg sync.WaitGroup
 
 func main() {
 	for i := 0; i < 200; i++ {
-		wsURI := "wss://go.abadboy.cn/api/v1/ws"
-		origin := "https://go.abadboy.cn/"
+		wsURI := "ws://127.0.0.1:8080/api/v1/ws"
+		origin := "http://127.0.0.1:8080/"
 
 		conn, err := websocket.Dial(wsURI, "", origin)
 		if err != nil {

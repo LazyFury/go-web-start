@@ -17,7 +17,7 @@ type jsAPITicket struct {
 }
 
 func (w *jsAPITicket) sendJsAPITicketReq(token string) (err error) {
-	fmt.Printf(">>>>重启请求微信服务器,获取微信 JsAPITicket>>>>\n")
+	fmt.Printf(">>>>请求微信服务器,获取微信 JsAPITicket>>>>\n")
 	url := fmt.Sprintf(jsAPITicketURL, token)
 	res, err := http.Get(url)
 
