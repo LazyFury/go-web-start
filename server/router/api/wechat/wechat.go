@@ -4,6 +4,7 @@ import (
 	"EK-Server/config"
 	"EK-Server/model"
 	"EK-Server/util"
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -80,7 +81,8 @@ func userInfo(c echo.Context) (err error) {
 		return util.JSONErr(c, err, "未找到用户")
 	}
 	// token := user.AccessToken
-	if time.Now().Unix()-user.CreatedAt.Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
+	fmt.Println(time.Now().Unix())
+	if user.CreatedAt.Unix()-time.Now().Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
 		info, err := updateWechatInfo(&user, false)
 		if err != nil {
 			return util.JSONErr(c, nil, err.Error())

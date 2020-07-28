@@ -375,7 +375,7 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	}
 
 	route.POST("", b.model().Add, middleware.AdminJWT)
-	route.PUT("/:id", b.model().Update)
+	route.PUT("/:id", b.model().Update, middleware.AdminJWT)
 	route.DELETE("/:id", b.model().Delete, middleware.AdminJWT)
 	route.GET("-actions/count", b.model().Count)
 

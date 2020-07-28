@@ -3,6 +3,8 @@ tmp_path=""
 
 export CGO_ENABLED=0
 export GOARCH=amd64
+export GODEBUG=netdns=cgo
+
 # export GOOS=
 
 if [ ! -n "$1" ]

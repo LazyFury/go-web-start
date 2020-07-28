@@ -12,7 +12,7 @@ var modelGoodsCate model.GoodsCate
 // Init 初始化
 func product(g *echo.Group) {
 	modelGood.BaseControll.Model = &modelGood
-	modelGood.Install(g, "/products")
+	modelGood.Install(g, "/goods")
 }
 
 // 商品分类
