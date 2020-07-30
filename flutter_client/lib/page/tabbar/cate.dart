@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutterproject/components/easyUse.dart';
-import 'package:flutterproject/components/layout.dart';
-import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/widgets/easyUse.dart';
+import 'package:flutterproject/widgets/layout.dart';
+import 'package:flutterproject/widgets/touchView.dart';
+import 'package:flutterproject/page/product/list.dart';
 
-import 'HomeComponents.dart';
+import 'searchBar.dart';
 
 class Cate extends StatefulWidget {
   @override
@@ -132,10 +133,12 @@ class CateStatus extends State<Cate> {
                   .toList())));
   // 更多分类
   Expanded moreClassify() => Expanded(
-          child: EasyRefresh(
-              child: Column(
-        children: tmenu(),
-      )));
+        child: EasyRefresh(
+          child: Column(
+            children: tmenu(),
+          ),
+        ),
+      );
   // 二级分类
   List<Widget> tmenu() {
     var list = List<Map<String, Object>>.from(cates[current]['tmenu']);
@@ -176,24 +179,34 @@ class CateStatus extends State<Cate> {
     if (list.length == 0) {
       return [Container(child: Center(child: noData(title: "暂无下级分类")))];
     }
-    return list.asMap().entries.map((e) {
-      return Container(
-        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: TouchView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                width: 40,
-                height: 40,
-              ),
-              Text(e.value['name']),
-            ],
+    return list.asMap().entries.map(
+      (e) {
+        return Container(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: TouchView(
+            onTap: () => toProductListPage(context),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  width: 40,
+                  height: 40,
+                ),
+                Text(e.value['name']),
+              ],
+            ),
           ),
-        ),
-      );
-    }).toList();
+        );
+      },
+    ).toList();
+  }
+
+  // mehtods
+  // 到商品列表页
+  void toProductListPage(context) {
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => ProductList()));
   }
 }

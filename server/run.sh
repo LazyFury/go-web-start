@@ -29,7 +29,7 @@ then
   # nohup  $tmp_path >> ./log/nohup.log &
   exec $tmp_path >> ./log/nohup.log & #2>&1 & 
   #通知重启一下  结束当前回话 nohup有些异常
-  # exec $0 $1
+  # exec $0 $1 #linux only
 else
   for i in `echo $pid`
     do

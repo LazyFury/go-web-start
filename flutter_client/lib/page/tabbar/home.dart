@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutterproject/components/easyUse.dart';
-import 'package:flutterproject/components/layout.dart';
-import 'package:flutterproject/components/safeMode.dart';
-import 'package:flutterproject/components/swiper.dart';
-import 'package:flutterproject/components/touchView.dart';
-import 'package:flutterproject/page/tabbar/HomeComponents.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutterproject/widgets/easyUse.dart';
+import 'package:flutterproject/widgets/layout.dart';
+import 'package:flutterproject/widgets/swiper.dart';
+import 'package:flutterproject/widgets/touchView.dart';
+import 'package:flutterproject/page/product/detail.dart';
+import 'package:flutterproject/page/tabbar/searchBar.dart';
+import 'package:flutterproject/server/server.dart';
+import 'package:flutterproject/utils/statusBar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class HomeState extends State<Home> {
   @override
   initState() {
     super.initState();
+    Http.get("/api/v1/posts");
   }
 
   @override
@@ -46,7 +48,7 @@ class HomeState extends State<Home> {
                           spacing: 10,
                           runSpacing: 10,
                           children:
-                              List<Widget>.generate(10, (index) => item()),
+                              List<Widget>.generate(10, (index) => item(index)),
                         ),
                       ))
                 ],
@@ -58,18 +60,15 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget item() {
+  toProductDetail(int i) {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) {
+      return ProductDetailView();
+    }));
+  }
+
+  Widget item(int i) {
     return TouchView(
-      onTap: () {
-        Navigator.push(context, new MaterialPageRoute(builder: (context) {
-          return Layout(
-              title: "商品详情",
-              child: WebView(
-                initialUrl: "http://baidu.com",
-                javascriptMode: JavascriptMode.unrestricted, //JS执行模式 是否允许JS执行
-              ));
-        }));
-      },
+      onTap: () => toProductDetail(i),
       child: Container(
         width: (screenSize(context).width - 50) / 2,
         decoration: BoxDecoration(color: Colors.white),
@@ -78,9 +77,14 @@ class HomeState extends State<Home> {
           children: <Widget>[
             Container(
               height: (screenSize(context).width - 50) / 2,
-              child: networkImage(
-                  'http://wx3.sinaimg.cn/mw600/44f2ef1bgy1gdg8mfzsfij21400u0qag.jpg',
-                  needLoading: true),
+              child: InkWell(
+                child: Hero(
+                  tag: "products$i",
+                  child: networkImage(
+                      'http://wx3.sinaimg.cn/mw600/44f2ef1bgy1gdg8mfzsfij21400u0qag.jpg',
+                      needLoading: true),
+                ),
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,16 +93,20 @@ class HomeState extends State<Home> {
                   margin: EdgeInsets.symmetric(vertical: 6),
                   child: Text(
                     '测试商品标题测试商品标题测试商品标题',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 14),
                     maxLines: 2,
                   ),
                 ),
                 Text(
                   "\¥123.09",
-                  style: TextStyle(color: Colors.red, fontSize: 24),
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                 )
               ],
             ),
+            partation(height: 12, color: Colors.transparent)
           ],
         ),
       ),
@@ -187,18 +195,13 @@ class HomeState extends State<Home> {
   }
 
   List<Widget> menuList() {
-    return [
-      '复习鸡',
-      "挖掘鸡",
-      "战斗鸡",
-      "蒸汽鸡",
-      "攻击鸡",
-      "航空母鸡",
-    ]
-        .map((e) => menuIcon(
-            image: networkImage(
-                "http://www.baidu.com/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg"),
-            text: e))
+    return ['复习鸡', "挖掘鸡", "战斗鸡", "蒸汽鸡", "攻击鸡", "航空母鸡"]
+        .map(
+          (e) => menuIcon(
+              image: networkImage(
+                  "http://www.baidu.com/mw600/006wFViJgy1gde5hntk96j30lx0jy762.jpg"),
+              text: e),
+        )
         .toList();
   }
 

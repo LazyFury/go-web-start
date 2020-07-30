@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutterproject/components/easyUse.dart';
-import 'package:flutterproject/components/layout.dart';
-import 'package:flutterproject/components/navbar.dart';
-import 'package:flutterproject/components/safeMode.dart';
-import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/widgets/easyUse.dart';
+import 'package:flutterproject/widgets/layout.dart';
+import 'package:flutterproject/widgets/navbar.dart';
+import 'package:flutterproject/widgets/touchView.dart';
 import 'package:flutterproject/library/SlidingEventsStatus.dart';
+import 'package:flutterproject/utils/statusBar.dart';
 import 'package:flutterproject/utils/utils.dart';
 
 class Cart extends StatefulWidget {
@@ -17,20 +17,25 @@ class CartStatue extends State<Cart> {
   bool isEdit = false;
   bool canClose = true;
 
+  // 商品列表
   List<Map<String, dynamic>> cartListData = [
-    {"name": "购物车商品", "select": false},
-    {"name": "购物车商品", "select": false},
-    {"name": "购物车商品", "select": false}
+    {"name": "购物车商品3", "select": false},
+    {"name": "购物车商品1", "select": false},
+    {"name": "购物车商品2", "select": false}
   ];
 
+// 是否以全选
   bool get selectAll => (() {
         var list = cartListData.where((e) => e['select']).toList();
         return list.length == cartListData.length;
       })();
+
+  // 全选商品列表
   void selectAllCart() {
     setState(() {
+      bool checked = selectAll;
       for (int i = 0; i < cartListData.length; i++) {
-        cartListData[i]['select'] = true;
+        cartListData[i]['select'] = !checked;
       }
     });
   }
@@ -38,13 +43,14 @@ class CartStatue extends State<Cart> {
   @override
   initState() {
     super.initState();
-    // onPanDown 从父组件传到子组件，所以这里相应到要晚一点，重置方法需要加一点延时
     eventBus.on<SlidingEventsBus>().listen((event) {
-      if (event.event == "inOperation") {
-        print("操作按钮");
-        setState(() {
-          canClose = false;
-        });
+      switch (event.event) {
+        case "inOperation":
+          setState(() {
+            canClose = false;
+          });
+          break;
+        default:
       }
     });
   }
@@ -53,7 +59,7 @@ class CartStatue extends State<Cart> {
   resetAllSliding() {
     Utils.setTimeout(Duration(milliseconds: 50), () {
       if (canClose) {
-        print("全局重置$canClose");
+        print("全局重置 $canClose");
         eventBus.fire(new SlidingEventsBus("reset"));
       }
       setState(() {
@@ -62,7 +68,9 @@ class CartStatue extends State<Cart> {
     });
   }
 
-  List guessYouloveItData = [];
+// 猜你喜欢
+  List guessYouloveItData = ["asd"];
+
   @override
   Widget build(BuildContext context) {
     var textStyle = TextStyle(color: Colors.white, fontSize: 18);
@@ -76,6 +84,7 @@ class CartStatue extends State<Cart> {
           children: <Widget>[
             Expanded(
               child: EasyRefresh(
+                onRefresh: () async {},
                 child: Column(
                   children: <Widget>[
                     Column(
@@ -232,7 +241,7 @@ class CartStatue extends State<Cart> {
     return navbar(context, title: "购物车", leftButton: [
       FlatButton(
           onPressed: selectAllCart,
-          child: Text("${selectAll ? '全选' : '全不选'}", style: textStyle))
+          child: Text("${selectAll ? '全不选' : '全选'}", style: textStyle))
     ], rightButton: [
       FlatButton(
           onPressed: () {

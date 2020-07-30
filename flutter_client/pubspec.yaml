@@ -25,6 +25,8 @@ dependencies:
   # video_player:
   # statusbar:
   event_bus:
+  json_model:
+  lottie: ^0.5.1
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -50,6 +52,7 @@ flutter:
   assets:
     - static/image/
     - static/empty.png
+    - static/lottie/A.json
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

@@ -1,6 +1,6 @@
 // navbar
 import 'package:flutter/material.dart';
-import 'package:flutterproject/components/safeMode.dart';
+import 'package:flutterproject/widgets/safeMode.dart';
 import '../utils/color.dart';
 
 Widget navbar(context,
@@ -61,7 +61,7 @@ Widget slideBox(context, {List<Widget> children, bool isleft: true}) =>
 
 // 是否显示返回按钮
 Widget getBackButton(context) {
-  if (ModalRoute.of(context).canPop) {
+  if (ModalRoute.of(context) != null && ModalRoute.of(context).canPop) {
     return BackButton(color: CustomTheme.primaryTextColor);
   }
   return Row();

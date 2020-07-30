@@ -23,14 +23,16 @@ class Layout extends StatefulWidget {
 class LayoutState extends State<Layout> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Material(
-        color: Colors.grey[100],
-        child: AnnotatedRegion(
-            value: widget.statusMode != null
-                ? widget.statusMode
-                : SystemUiOverlayStyle.light,
-            child: body()),
+    return Material(
+      child: Center(
+        child: Material(
+          color: Colors.grey[100],
+          child: AnnotatedRegion(
+              value: widget.statusMode != null
+                  ? widget.statusMode
+                  : SystemUiOverlayStyle.light,
+              child: body()),
+        ),
       ),
     );
   }

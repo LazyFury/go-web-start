@@ -4,11 +4,11 @@ import 'package:flutterproject/utils/color.dart';
 import 'package:flutterproject/utils/statusBar.dart';
 
 Container safeStatusBar(context, {Color color}) => safeBox(
-    height: statusBarHeight(context),
+    height: safeArea(context).top,
     color: color != null ? color : CustomTheme.primaryColor);
 // 全面屏手机 底部安全位置
 Container safeBottom(context, {Color color}) => safeBox(
-    height: bottomBarHeight(context),
+    height: safeArea(context).bottom,
     color: color != null ? color : CustomTheme.primaryColor);
 
 Container safeBox({double height, Color color = Colors.white}) {
@@ -16,5 +16,3 @@ Container safeBox({double height, Color color = Colors.white}) {
       decoration: BoxDecoration(color: color),
       child: Container(height: height));
 }
-
-screenSize(context) => MediaQuery.of(context).size;

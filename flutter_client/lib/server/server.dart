@@ -40,7 +40,7 @@ class Http {
       var res = await req.close().catchError((err) {
         print(err);
       });
-      if (res.statusCode != HttpStatus.ok) {
+      if (res != null && res.statusCode != HttpStatus.ok) {
         return Future.error("Fail 网络请求错误: ${req.uri}");
       }
       return _result(res, req, isFile);

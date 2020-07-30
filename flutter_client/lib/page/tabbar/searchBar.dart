@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterproject/components/safeMode.dart';
-import 'package:flutterproject/components/touchView.dart';
+import 'package:flutterproject/widgets/safeMode.dart';
+import 'package:flutterproject/widgets/touchView.dart';
 import 'package:flutterproject/page/search.dart';
 // import 'utils/color.dart';
 
@@ -18,30 +18,13 @@ Widget searchBar(context, {bool scan = false}) => Container(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Image(
-                        image: AssetImage('static/image/map.png'),
-                        width: 20,
-                        height: 20),
-                    Text('东莞'),
-                  ],
-                ),
+                //选择地址
+                addrView(),
+                //输入框
                 borderRadiusInput(context),
+                // 扫码
                 Container(
-                  child: (scan
-                      ? TouchView(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                              return SearchPage(context);
-                            }));
-                          },
-                          child: Image(
-                              image: AssetImage('static/image/scan.png'),
-                              width: 20,
-                              height: 20),
-                        )
-                      : null),
+                  child: (scan ? scanView(context) : null),
                 )
               ],
             ),
@@ -50,14 +33,32 @@ Widget searchBar(context, {bool scan = false}) => Container(
       ),
     );
 
+Row addrView() {
+  return Row(
+    children: <Widget>[
+      Image(image: AssetImage('static/image/map.png'), width: 20, height: 20),
+      Text('东莞'),
+    ],
+  );
+}
+
+TouchView scanView(context) {
+  return TouchView(
+    onTap: () {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return SearchPage(context);
+      }));
+    },
+    child: Image(
+        image: AssetImage('static/image/scan.png'), width: 20, height: 20),
+  );
+}
+
 Expanded borderRadiusInput(context) {
   return Expanded(
     child: TouchView(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-          return SearchPage(context);
-        }));
-      },
+      onTap: () => toSearch(context),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
         margin: EdgeInsets.fromLTRB(20, 0, 16, 0),
@@ -84,4 +85,11 @@ Expanded borderRadiusInput(context) {
       ),
     ),
   );
+}
+
+// @Methods
+toSearch(BuildContext context) {
+  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+    return SearchPage(context);
+  }));
 }

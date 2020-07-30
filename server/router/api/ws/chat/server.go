@@ -67,7 +67,9 @@ func received(chat *Chat, ws *websocket.Conn) {
 			continue
 		}
 
-		util.Logger.Printf("收到消息: %v \n", info.toString())
+		if info.Action != "ping" {
+			util.Logger.Printf("收到消息: %v \n", info.toString())
+		}
 
 		chat.handleMessage(&info, ws)
 	}
