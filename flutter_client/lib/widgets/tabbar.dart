@@ -69,7 +69,7 @@ class TabbarState extends State<Tabbar> {
           Icon(
             icon,
             color: color,
-            size: 24,
+            size: 28,
           ),
           Text(
             name,

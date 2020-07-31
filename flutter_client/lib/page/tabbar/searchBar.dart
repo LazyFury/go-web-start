@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterproject/utils/color.dart';
+import 'package:flutterproject/utils/iconFont.dart';
 import 'package:flutterproject/widgets/safeMode.dart';
 import 'package:flutterproject/widgets/touchView.dart';
 import 'package:flutterproject/page/search.dart';
@@ -14,9 +16,10 @@ Widget searchBar(context, {bool scan = false}) => Container(
           safeStatusBar(context, color: Colors.transparent),
           Container(
             height: 50,
-            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: EdgeInsets.fromLTRB(10, 0, 20, 0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 //选择地址
                 addrView(),
@@ -33,12 +36,24 @@ Widget searchBar(context, {bool scan = false}) => Container(
       ),
     );
 
-Row addrView() {
-  return Row(
-    children: <Widget>[
-      Image(image: AssetImage('static/image/map.png'), width: 20, height: 20),
-      Text('东莞'),
-    ],
+TouchView addrView() {
+  return TouchView(
+    child: Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Icon(
+            IconFont.address,
+            color: Colors.green,
+            size: 20,
+          ),
+          Text(
+            '东莞',
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    ),
   );
 }
 
@@ -50,8 +65,7 @@ TouchView scanView(context) {
         return SearchPage(context);
       }));
     },
-    child: Image(
-        image: AssetImage('static/image/scan.png'), width: 20, height: 20),
+    child: Icon(IconFont.scanQR, color: CustomTheme.primaryColor, size: 28),
   );
 }
 
@@ -61,19 +75,18 @@ Expanded borderRadiusInput(context) {
       onTap: () => toSearch(context),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
-        margin: EdgeInsets.fromLTRB(20, 0, 16, 0),
+        margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Image(
-              image: AssetImage('static/image/search.png'),
-              width: 16,
-              height: 16,
-            ),
-            Text(
-              '搜索您想要找的商品名称',
-              style: TextStyle(color: Colors.grey),
+            Icon(IconFont.search, size: 18, color: Colors.grey[600]),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: Text(
+                '搜索您想要找的商品名称',
+                style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
             ),
           ],
         ),

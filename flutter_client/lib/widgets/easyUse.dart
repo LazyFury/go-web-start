@@ -39,7 +39,7 @@ Widget noData({double height = 100, String title = ""}) => Container(
 ///     child:networkImage("http://xxx.com/xx.jpg")
 ///   )
 /// ```
-Widget networkImage(String src, {bool needLoading = false}) {
+Image networkImage(String src, {bool needLoading = false}) {
   ImageProvider image = new NetImage(src, asset: "static/image/empty.gif");
   return Image(
     image: image,
@@ -70,34 +70,36 @@ Widget loadingBuilder(
   //   cumulativeBytesLoaded: 10,
   //   expectedTotalBytes: 100,
   // );
-  return Container(
-    decoration: BoxDecoration(color: Colors.grey[100]),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes
-                : null,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text(loadingProgress.expectedTotalBytes != null
-                ? "加载中..." +
-                    ((loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes *
-                                    100)
-                                .toInt() /
-                            100)
-                        .toString() +
-                    "%"
-                : ""),
-          )
-        ],
-      ),
-    ),
-  );
+  return Container(decoration: BoxDecoration(color: Colors.grey[100]));
+
+  // return Container(
+  //   decoration: BoxDecoration(color: Colors.grey[100]),
+  //   child: Center(
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: <Widget>[
+  //         CircularProgressIndicator(
+  //           backgroundColor: Colors.grey[200],
+  //           value: loadingProgress.expectedTotalBytes != null
+  //               ? loadingProgress.cumulativeBytesLoaded /
+  //                   loadingProgress.expectedTotalBytes
+  //               : null,
+  //         ),
+  //         Container(
+  //           margin: EdgeInsets.only(top: 10),
+  //           child: Text(loadingProgress.expectedTotalBytes != null
+  //               ? "加载中...\n" +
+  //                   ((loadingProgress.cumulativeBytesLoaded /
+  //                                   loadingProgress.expectedTotalBytes *
+  //                                   100)
+  //                               .toInt() /
+  //                           100)
+  //                       .toString() +
+  //                   "%"
+  //               : ""),
+  //         )
+  //       ],
+  //     ),
+  //   ),
+  // );
 }

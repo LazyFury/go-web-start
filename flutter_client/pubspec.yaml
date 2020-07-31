@@ -25,8 +25,8 @@ dependencies:
   # video_player:
   # statusbar:
   event_bus:
-  json_model:
   lottie: ^0.5.1
+  provider:
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -74,6 +74,9 @@ flutter:
     - family: cao
       fonts:
         - asset: static/fonts/LiuJianMaoCao-Regular.ttf
+    - family: iconfont
+      fonts:
+        - asset: static/fonts/iconfont.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

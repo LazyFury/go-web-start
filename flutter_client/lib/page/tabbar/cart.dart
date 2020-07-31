@@ -73,7 +73,7 @@ class CartStatue extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
-    var textStyle = TextStyle(color: Colors.white, fontSize: 18);
+    var textStyle = TextStyle(color: Colors.white, fontSize: 16);
     return GestureDetector(
       onPanDown: (e) {
         resetAllSliding();
@@ -166,7 +166,8 @@ class CartStatue extends State<Cart> {
                 width: 80,
                 height: 80,
                 child: networkImage(
-                    "http://wx1.sinaimg.cn/mw600/9b61e9edgy1gdfzcposrrj20m80m50vm.jpg")),
+                    "http://wx1.sinaimg.cn/mw600/9b61e9edgy1gdfzcposrrj20m80m50vm.jpg",
+                    needLoading: true)),
             Expanded(
               child: Container(
                 height: 80,

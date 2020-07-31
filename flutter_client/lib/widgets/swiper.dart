@@ -11,7 +11,7 @@ Swiper buildSwiper() {
         decoration: BoxDecoration(color: Colors.grey[100]),
         height: 180,
         child: networkImage(
-            "http://ww1.sinaimg.cn/mw600/a6fec82cgy1gct4jpt9u4j20wi1cqkjm_err.jpg",
+            "http://wx4.sinaimg.cn/mw600/a746f3dcly1gh9f8t536tj20u0140n6d.jpg",
             needLoading: true),
       );
     },

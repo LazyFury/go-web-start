@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/page/tabbar/user.dart';
+import 'package:flutterproject/utils/iconFont.dart';
 
 import 'widgets/easyUse.dart';
 import 'widgets/safeMode.dart';
@@ -32,10 +33,10 @@ class AppStatus extends State<App> {
   ];
 
   List<TabbarIcon> tabbars = [
-    TabbarIcon(name: "首页", icon: Icons.home),
-    TabbarIcon(name: "分类", icon: Icons.fast_forward),
-    TabbarIcon(name: "购物车", icon: Icons.card_travel),
-    TabbarIcon(name: "我的", icon: Icons.account_circle),
+    TabbarIcon(name: "首页", icon: IconFont.home),
+    TabbarIcon(name: "商城", icon: IconFont.shoping),
+    TabbarIcon(name: "购物车", icon: IconFont.cart),
+    TabbarIcon(name: "我的", icon: IconFont.user),
   ];
 
   @override

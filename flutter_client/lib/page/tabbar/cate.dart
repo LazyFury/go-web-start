@@ -190,7 +190,7 @@ class CateStatus extends State<Cate> {
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
                   width: 40,
                   height: 40,
                 ),
