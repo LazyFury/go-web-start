@@ -7,7 +7,8 @@ import (
 )
 
 var modelGood model.Goods
-var modelGoodsCate model.GoodsCate
+var modelGoodCate model.GoodCate
+var modelGoodSku model.GoodSku
 
 // Init 初始化
 func product(g *echo.Group) {
@@ -17,6 +18,12 @@ func product(g *echo.Group) {
 
 // 商品分类
 func productCate(g *echo.Group) {
-	modelGoodsCate.BaseControll.Model = &modelGoodsCate
-	modelGoodsCate.Install(g, "/good-cates")
+	modelGoodCate.BaseControll.Model = &modelGoodCate
+	modelGoodCate.Install(g, "/good-cates")
+}
+
+// 商品库存
+func productSku(g *echo.Group) {
+	modelGoodSku.BaseControll.Model = &modelGoodSku
+	modelGoodSku.Install(g, "/good-skus")
 }

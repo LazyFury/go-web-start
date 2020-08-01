@@ -8,8 +8,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-//GoodsCate 商品分类表
-type GoodsCate struct {
+//GoodCate 商品分类表
+type GoodCate struct {
 	BaseControll
 	Name     string `json:"name"`
 	Desc     string `json:"desc"`
@@ -20,35 +20,35 @@ type GoodsCate struct {
 }
 
 // 接口返回的列表 隐藏部分属性
-type showGoodsCate struct {
-	*GoodsCate
+type showGoodCate struct {
+	*GoodCate
 	*EmptySystemFiled
 }
 
 // 遍历所有子分类的结构体
 type catelist struct {
-	*GoodsCate
+	*GoodCate
 	*EmptySystemFiled
 	Tmenu []catelist `json:"tmenu"`
 }
 
 // PointerList 列表
-func (cate *GoodsCate) PointerList() interface{} {
-	return &[]showGoodsCate{}
+func (cate *GoodCate) PointerList() interface{} {
+	return &[]showGoodCate{}
 }
 
 // Pointer 实例
-func (cate *GoodsCate) Pointer() interface{} {
-	return &showGoodsCate{}
+func (cate *GoodCate) Pointer() interface{} {
+	return &showGoodCate{}
 }
 
 // TableName 表名
-func (cate *GoodsCate) TableName() string {
+func (cate *GoodCate) TableName() string {
 	return TableName("good_cates")
 }
 
 // List 列表
-func (cate *GoodsCate) List(c echo.Context) error {
+func (cate *GoodCate) List(c echo.Context) error {
 	db := DB
 	list := []catelist{}
 
@@ -61,10 +61,10 @@ func (cate *GoodsCate) List(c echo.Context) error {
 }
 
 // 循环获取自分类
-func (cate *GoodsCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []catelist) {
+func (cate *GoodCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
-	db.Table(cate.TableName()).Where(&GoodsCate{ParentID: parentID}).Find(&tmenu)
+	db.Table(cate.TableName()).Where(&GoodCate{ParentID: parentID}).Find(&tmenu)
 	if len(tmenu) > 0 {
 		for i, menuItem := range tmenu {
 			tmenu[i].Tmenu = cate.getCateTmenu(&menuItem, db)
@@ -74,9 +74,9 @@ func (cate *GoodsCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []cateli
 }
 
 // Add 添加
-func (cate *GoodsCate) Add(c echo.Context) error {
+func (cate *GoodCate) Add(c echo.Context) error {
 	db := DB
-	_cate := &GoodsCate{}
+	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
 		return util.JSONErr(c, err, "参数错误")
@@ -91,7 +91,7 @@ func (cate *GoodsCate) Add(c echo.Context) error {
 	_cate.Empty()
 	// 查询分类是否存在 parentID为空时是一级分类
 	if _cate.ParentID > 0 {
-		cateParent := &GoodsCate{BaseControll: BaseControll{ID: uint(_cate.ParentID)}}
+		cateParent := &GoodCate{BaseControll: BaseControll{ID: uint(_cate.ParentID)}}
 		empty := db.First(cateParent).RecordNotFound()
 		// fmt.Println(empty)
 		if empty {
@@ -105,7 +105,7 @@ func (cate *GoodsCate) Add(c echo.Context) error {
 	}
 
 	// 禁止同名
-	if repeat := db.Where(&GoodsCate{Name: _cate.Name}).Find(&GoodsCate{}).RecordNotFound(); !repeat {
+	if repeat := db.Where(&GoodCate{Name: _cate.Name}).Find(&GoodCate{}).RecordNotFound(); !repeat {
 		return util.JSONErr(c, nil, "已存在相同分类")
 	}
 
@@ -113,8 +113,8 @@ func (cate *GoodsCate) Add(c echo.Context) error {
 }
 
 // Update 更新
-func (cate *GoodsCate) Update(c echo.Context) error {
-	_cate := &GoodsCate{}
+func (cate *GoodCate) Update(c echo.Context) error {
+	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
 		return util.JSONErr(c, err, "参数错误")
@@ -127,7 +127,7 @@ func (cate *GoodsCate) Update(c echo.Context) error {
 }
 
 // Delete 删除
-func (cate *GoodsCate) Delete(c echo.Context) error {
+func (cate *GoodCate) Delete(c echo.Context) error {
 	db := DB
 	id := c.Param("id")
 	if id == "" {

@@ -22,7 +22,9 @@ var autoMigrate = []interface{}{
 	&WechatOauth{},
 	//goods
 	&Goods{},
-	&GoodsCate{},
+	&GoodCate{},
+	&GoodSku{},
+	&GoodStock{},
 	//article
 	&Articles{},
 	&ArticlesCate{},

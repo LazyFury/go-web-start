@@ -2,6 +2,7 @@ package util
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/labstack/echo"
 )
@@ -10,6 +11,7 @@ import (
 type returnJSON struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
+	Time int64       `json:"time"`
 	Data interface{} `json:"data"`
 }
 
@@ -61,6 +63,7 @@ func JSONBase(c echo.Context, data interface{}, msg string, code int, httpCode i
 		Code: code,
 		Msg:  msg,
 		Data: data,
+		Time: time.Now().Unix(),
 	}, " ")
 }
 
