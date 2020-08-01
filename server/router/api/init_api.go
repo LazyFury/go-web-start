@@ -38,4 +38,6 @@ func Init(g *echo.Group) {
 	wechat.Init(apiV1)
 
 	ws.Init(apiV1)
+
+	wehcatMini(apiV1)
 }

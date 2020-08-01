@@ -19,7 +19,7 @@ func New() *echo.Echo {
 	e.Use(middleware.Gzip())                                                       //gzip压缩
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(midd.LogMiddleware())
-	e.Use(middleware.Recover())
+	// e.Use(middleware.Recover())
 
 	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{

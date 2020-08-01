@@ -8,7 +8,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      title: "hello world",
+      title: "搜索",
       child: EasyRefresh(
         onRefresh: () async {},
         child: Text("hello this is a search page!"),
