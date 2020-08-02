@@ -55,7 +55,7 @@ func (m *Message) TableName() string {
 }
 
 // IsPublic IsPublic
-func (m *Message) IsPublic() bool { return false }
+func (m *Message) IsPublic() bool { return true }
 
 // Joins Joins
 func (m *Message) Joins(db *gorm.DB) *gorm.DB {
@@ -68,7 +68,7 @@ func (m *Message) Joins(db *gorm.DB) *gorm.DB {
 	// db = db.Joins(fmt.Sprintf("left join (select `title` `article_title`,`id` `article_id`,`desc` `article_desc` from `%s`) t2 on `t2`.`article_id`=`%s`.`article_id`", article.TableName(), m.TableName()))
 	return db
 }
-func (m *Message) getMoreField(v selectMessage) selectMessage {
+func (m *Message) getMoreField(v *selectMessage) {
 	db := DB
 	// 绑定文章信息
 	a := selectArticle{}
@@ -77,25 +77,26 @@ func (m *Message) getMoreField(v selectMessage) selectMessage {
 	})
 	row = a.Joins(row)
 	row.First(&a)
+	// 修改对象
 	v.Articles = a
-	return v
 }
 
 // Result 处理返回值
 func (m *Message) Result(data interface{}) interface{} {
 	var val, ok = reflect.ValueOf(data).Elem().Interface().([]selectMessage)
-
+	// 如果是列表
 	if ok {
-		for i, item := range val {
-			val[i] = m.getMoreField(item)
+		for i := range val {
+			m.getMoreField(&val[i])
 		}
 		return val
 	}
-
+	// 如果是详情
 	item, ok := reflect.ValueOf(data).Elem().Interface().(selectMessage)
 	fmt.Println(item)
 	if ok {
-		return m.getMoreField(item)
+		m.getMoreField(&item)
+		return item
 	}
 
 	return data

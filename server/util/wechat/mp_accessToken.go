@@ -23,7 +23,7 @@ func (t *tokenType) sendAccessTokenReq(appid string, appsecret string) (err erro
 	res, err := http.Get(url)
 
 	if err != nil {
-		// err = errors.New("请求微信授权服务器失败")
+		err = errors.New("请求微信授权服务器失败")
 		return
 	}
 

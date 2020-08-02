@@ -17,23 +17,24 @@ type Ad struct {
 	EventID uint   `json:"event_id"`
 	GroupID uint   `json:"group_id"`
 }
+type selectAds struct {
+	*Ad
+	*EmptySystemFiled
+	Y         string `json:"event_id,omitempty"`
+	X         string `json:"id,omitempty"`
+	Event     string `json:"event"`
+	GroupName string `json:"group_name,omitempty"`
+	Type      int    `json:"type,omitempty"`
+}
 
 // PointerList PointerList
 func (a *Ad) PointerList() interface{} {
-	return &[]struct {
-		*Ad
-		*EmptySystemFiled
-		Y         string `json:"event_id,omitempty"`
-		X         string `json:"id,omitempty"`
-		Event     string `json:"event"`
-		GroupName string `json:"group_name,omitempty"`
-		Type      int    `json:"type,omitempty"`
-	}{}
+	return &[]selectAds{}
 }
 
 // Pointer Pointer
 func (a *Ad) Pointer() interface{} {
-	return &Ad{}
+	return &selectAds{}
 }
 
 // TableName TableName

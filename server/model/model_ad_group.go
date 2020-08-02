@@ -3,7 +3,6 @@ package model
 import (
 	"EK-Server/util"
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -63,26 +62,18 @@ func (a *AdGroup) Detail(c echo.Context) error {
 	ad := &Ad{}
 	ad.BaseControll.Model = ad
 
-	list := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
+	list, _ := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": id,
-	})
-	count := 1
+	}).(*[]selectAds)
+	count := len(*list)
 	// fmt.Printf("%v\n\n", reflect.TypeOf(list).Elem().Kind())
 	// fmt.Printf("%v\n\n", reflect.ValueOf(list).Elem())
-
-	// Elem 指针到真实数据
-	// Kind 取类型
-	switch reflect.TypeOf(list).Elem().Kind() {
-	case reflect.Slice, reflect.Array:
-		arr := reflect.ValueOf(list).Elem()
-		count = arr.Len()
-	}
 
 	result := &struct {
 		*AdGroup
 		*EmptySystemFiled
-		Count int         `json:"count"`
-		List  interface{} `json:"list"`
+		Count int          `json:"count"`
+		List  *[]selectAds `json:"list"`
 	}{
 		AdGroup: group,
 		List:    list,
