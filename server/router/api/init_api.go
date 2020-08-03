@@ -3,6 +3,7 @@ package api
 import (
 	"EK-Server/router/api/wechat"
 	"EK-Server/router/api/ws"
+	"EK-Server/util"
 
 	"github.com/labstack/echo"
 )
@@ -12,6 +13,7 @@ func Init(g *echo.Group) {
 	apiV1 := g.Group("/api/v1")
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
+	apiV1.GET("", resources)
 	// base
 	login(apiV1)
 	//文章
@@ -40,4 +42,21 @@ func Init(g *echo.Group) {
 	ws.Init(apiV1)
 
 	wehcatMini(apiV1)
+}
+
+func resources(c echo.Context) error {
+	type resource struct {
+		Name string `json:"name"`
+		Like string `json:"link"`
+	}
+	res := []resource{
+		{"文章", "/api/v1/posts"},
+		{"商品", "/api/v1/goods"},
+		{"订单", "/api/v1/orders"},
+		{"广告", "/api/v1/ads"},
+	}
+
+	return util.JSONSuccess(c, map[string]interface{}{
+		"resources": res,
+	}, "")
 }

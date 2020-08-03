@@ -23,9 +23,19 @@ func (m *Mail) Auth() smtp.Auth {
 // SendMail 发送邮件
 func (m *Mail) SendMail(subject string, to []string, body string) (err error) {
 
-	contentType := "Content-Type: text/html; charset=UTF-8"
+	template := `To:%s
+From:%s<%s>
+Subject:%s
+Content-Type: text/html; charset=UTF-8
 
-	msg := []byte(fmt.Sprintf("To:%s\r\nFrom:%s<%s>\r\nSubject:%s\r\n%s\r\n\r\n%s\r\n", strings.Join(to, ","), m.Nickname, m.User, subject, contentType, body))
+<html>
+	<body>
+		%s
+	<body>
+</html>
+	`
+
+	msg := []byte(fmt.Sprintf(template, strings.Join(to, ","), m.Nickname, m.User, subject, body))
 
 	return smtp.SendMail(m.Host+":"+m.Port, m.Auth(), m.User, to, msg)
 }

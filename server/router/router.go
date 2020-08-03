@@ -42,7 +42,7 @@ func Start(e *echo.Echo) {
 		if email == "" {
 			return util.JSONErr(c, nil, "发送邮箱不可空")
 		}
-		err := config.Global.Mail.SendMail("愚蠢的地球人，毁灭吧！", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
+		err := config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
 			return util.JSONErr(c, err, "发送失败")
 		}

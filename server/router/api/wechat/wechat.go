@@ -21,13 +21,13 @@ func Init(g *echo.Group) {
 	wechat := g.Group(baseURL)
 
 	wechat.GET("/js-api-config", jsAPIConfig)
-	wechat.GET("/wechat-redirect", wechatRedirect)
+	wechat.GET("/redirect", wechatRedirect)
 	wechat.GET("/login", login)
 
 	wechat.GET("/info", userInfo)
-	wechat.GET("/signature", signatureCheck)                //配置接口token验证
-	wechat.POST("/signature", handleWechatMessage)          //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
-	wechat.GET("/send-templateMsg", sendTemplateMsgHandler) //发送模版消息
+	wechat.GET("/signature", signatureCheck)                 //配置接口token验证
+	wechat.POST("/signature", handleWechatMessage)           //服务token验证，验证成功之后微信会post用户消息 和 事件到这个接口
+	wechat.GET("/send-template-msg", sendTemplateMsgHandler) //发送模版消息
 
 }
 
@@ -115,11 +115,13 @@ func wechatRedirect(c echo.Context) (err error) {
 
 // 换取微信分享 jsapi授权
 func jsAPIConfig(c echo.Context) error {
-	url := c.QueryParam("url")
-	if url == "" {
+	urlStr := c.QueryParam("url")
+	if urlStr == "" {
 		return util.JSONErr(c, nil, "url不可空")
 	}
-	conf, err := mp.JsAPIConfig(url)
+	urlStr, _ = url.QueryUnescape(urlStr)
+
+	conf, err := mp.JsAPIConfig(urlStr)
 	if err != nil {
 		return util.JSONErr(c, err, "配置错误")
 	}
