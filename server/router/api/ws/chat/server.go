@@ -33,7 +33,7 @@ func WsServer(c echo.Context) error {
 
 	ws.SetCloseHandler(func(code int, text string) error {
 		fmt.Printf("\nSetCloseHandler Err %v %v \n", code, text)
-		chat.removeByWsConn(ws)
+		// chat.removeByWsConn(ws)
 		return nil
 	})
 
