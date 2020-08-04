@@ -25,9 +25,10 @@ type (
 
 	// UserSubmit 用户提交的数据
 	UserSubmit struct {
-		ID     string
-		Msg    string
-		Action string
+		ID     string `json:"id"`
+		To     string `json:"to"`
+		Msg    string `json:"msg"`
+		Action string `json:"action"`
 	}
 )
 
@@ -41,17 +42,16 @@ const (
 )
 
 var (
-	// broadcast = make(chan *Message)
 	randName = []string{"西门吹雪", "陆小凤", "章北海", "搬山", "斜岭", "摸金", "吃瓜群众", "花满楼", "崇华", "小柿子", "xixi"}
 )
 
 // Message
 func (u *UserSubmit) toString() (str string) {
-	var tmp = `ws Message:{
-					  "id":%s,
-					  "message":%s,
-					  "action":%s
-					}
-				`
+	var tmp = `
+ws Message:{
+	"id":%s,
+	"message":%s,
+	"action":%s
+}`
 	return fmt.Sprintf(tmp, u.ID, u.Msg, u.Action)
 }
