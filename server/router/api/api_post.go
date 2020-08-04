@@ -5,7 +5,7 @@ import (
 	"EK-Server/util"
 	"EK-Server/util/customtype/message"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 var modelPost model.Articles

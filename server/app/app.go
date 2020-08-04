@@ -7,8 +7,10 @@ import (
 	"os"
 
 	"github.com/Masterminds/sprig"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 // New 初始化
@@ -19,8 +21,13 @@ func New() *echo.Echo {
 	e.Use(middleware.Gzip())                                                       //gzip压缩
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(midd.LogMiddleware())
-	e.Use(middleware.Recover())
+	e.Use(middleware.Recover())        //错误处理
+	e.Use(middleware.NonWWWRedirect()) //跳转到没有www到顶级域名
+	e.Use(middleware.Secure())         //安全
 
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(util.RandStringBytes(32))))) //session
+
+	e.Use(middleware.CSRF())
 	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*", "https://labstack.net"},

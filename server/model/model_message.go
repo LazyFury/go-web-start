@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
 )
 
@@ -16,8 +16,8 @@ import (
 // 暂定 如果存sql数据量太多，后期尝试redis之类的
 type Message struct {
 	BaseControll
-	UserID    uint           `json:"user_id"`
-	FromID    uint           `json:"from_id"`
+	UserID    uint           `json:"uid" gorm:"comment:'当前用户id，使用我的uid查询跟我有关当消息'"`
+	FromID    uint           `json:"from_id" gorm:"comment:'操作人id，点赞 评论我的人'"`
 	Action    message.Action `json:"action"`
 	OrderID   uint           `json:"order_id"`
 	ArticleID uint           `json:"article_id"`
@@ -26,9 +26,9 @@ type Message struct {
 type selectMessage struct {
 	BaseControll
 
-	UserID   uint   `json:"user_id"`
+	UserID   uint   `json:"uid"`
 	FromID   uint   `json:"from_id"`
-	UserName string `json:"user_name"`
+	UserName string `json:"from_name"`
 
 	Action message.Action `json:"action"`
 	// 订单
@@ -62,7 +62,7 @@ func (m *Message) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("*")
 
 	user := &User{}
-	db = db.Joins(fmt.Sprintf("left join (select `name` `user_name`,`id` `u_id` from `%s`) u1 on `u1`.`u_id`=`%s`.`from_id`", user.TableName(), m.TableName()))
+	db = db.Joins(fmt.Sprintf("left join (select ifnull(`name`,'未知用户') `user_name`,`id` `user_id` from `%s`) u1 on `u1`.`user_id`=`%s`.`from_id`", user.TableName(), m.TableName()))
 
 	// article := &Articles{}
 	// db = db.Joins(fmt.Sprintf("left join (select `title` `article_title`,`id` `article_id`,`desc` `article_desc` from `%s`) t2 on `t2`.`article_id`=`%s`.`article_id`", article.TableName(), m.TableName()))

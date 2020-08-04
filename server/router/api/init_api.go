@@ -5,7 +5,7 @@ import (
 	"EK-Server/router/api/ws"
 	"EK-Server/util"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // Init  api Version 1.0 初始化

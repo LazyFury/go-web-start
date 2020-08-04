@@ -7,7 +7,7 @@ import (
 	"EK-Server/util/sha"
 	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func login(g *echo.Group) {

@@ -3,7 +3,7 @@ package ws
 import (
 	"EK-Server/router/api/ws/chat"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // Init Init

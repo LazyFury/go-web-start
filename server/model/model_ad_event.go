@@ -4,7 +4,7 @@ import (
 	"EK-Server/util"
 	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // AdEvent banner事件
