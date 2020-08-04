@@ -11,7 +11,7 @@ import (
 type returnJSON struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
-	Time int64       `json:"time"`
+	Time int64       `json:"time,omitempty"`
 	Data interface{} `json:"data"`
 }
 

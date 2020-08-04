@@ -44,16 +44,19 @@ func Init(g *echo.Group) {
 	wehcatMini(apiV1)
 }
 
+type resource struct {
+	Name string `json:"name"`
+	Like string `json:"link"`
+	Doc  string `json:"doc"`
+}
+
 func resources(c echo.Context) error {
-	type resource struct {
-		Name string `json:"name"`
-		Like string `json:"link"`
-	}
+
 	res := []resource{
-		{"文章", "/api/v1/posts"},
-		{"商品", "/api/v1/goods"},
-		{"订单", "/api/v1/orders"},
-		{"广告", "/api/v1/ads"},
+		{"文章", "/api/v1/posts", ""},
+		{"商品", "/api/v1/goods", ""},
+		{"订单", "/api/v1/orders", ""},
+		{"广告", "/api/v1/ads", ""},
 	}
 
 	return util.JSONSuccess(c, map[string]interface{}{

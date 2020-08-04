@@ -10,7 +10,7 @@ import 'utils/color.dart';
 void main() {
   Global.init().then((e) {
     print("加载成功");
-    return runApp(MyApp());
+    runApp(MyApp());
   }).then((e) {
     print("初始化完成");
     // flutter 强制竖屏
