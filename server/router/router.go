@@ -58,12 +58,4 @@ func Start(e *echo.Echo) {
 		return c.Stream(http.StatusOK, "application/x-mpegURL", video)
 	})
 
-	index.GET("/reload", func(c echo.Context) error {
-		//读取配置文件
-		if err := config.Global.ReadConfig(); err != nil {
-			return util.JSONErr(c, err, "读取配置失败")
-		}
-		return util.JSONSuccess(c, nil, "reload")
-	})
-
 }

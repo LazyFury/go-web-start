@@ -21,12 +21,13 @@ func initConfig() *configType {
 }
 
 type configType struct {
-	Mysql       string    `json:"mysql"`       // 数据库链接
-	BaseURL     string    `json:"baseURL"`     // 网站根目录
-	TablePrefix string    `json:"tablePrefix"` //数据库表前缀
-	WechatMP    wechat.MP `json:"wechat"`
-	Port        int       `json:"port"`
-	Mail        util.Mail `json:"mail"`
+	TablePrefix string `json:"table_prefix"` //数据库表前缀
+
+	BaseURL  string    `json:"base_url"` // 网站根目录
+	Port     int       `json:"port"`     //端口
+	Mysql    mysql     `json:"mysql"`    // 数据库链接
+	Mail     util.Mail `json:"mail"`
+	WechatMP wechat.MP `json:"wechat"`
 }
 
 // ReadConfig 读取配置 初始化时运行 绑定为全局变量
@@ -38,10 +39,11 @@ func (c *configType) ReadConfig() (err error) {
 		log.Fatalln("打开配置文件错误，请创建 config/config.json 参考(config-defaultjson")
 		return
 	}
-	c.WechatMP = wechat.MP{}
+	conf := &configType{}
 	if err = json.NewDecoder(f).Decode(c); err != nil {
 		return err
 	}
 
+	c = conf
 	return nil
 }

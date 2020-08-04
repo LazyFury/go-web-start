@@ -10,10 +10,10 @@ import (
 
 // MP 微信公众号
 type MP struct {
-	Appid       string `json:"appid"`
-	Appsecret   string `json:"appsecret"`
-	JsAPITicket jsAPITicket
-	AccessToken tokenType
+	Appid       string      `json:"appid"`
+	Appsecret   string      `json:"appsecret"`
+	JsAPITicket jsAPITicket `json:"-"`
+	AccessToken tokenType   `json:"-"`
 }
 
 //LoginRedirect 获取登陆链接

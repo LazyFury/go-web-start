@@ -18,13 +18,11 @@ import (
 func main() {
 	e := app.New()
 	//初始化数据链接
-	if err := model.MysqlConn(config.Global.Mysql); err != nil {
+	if err := model.MysqlConn(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
 	}
-	defer model.DB.Close() //退ß出时释放链接
-
-	// e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
-
+	defer model.DB.Close() //退出时释放链接
+	// e.Logger.Error(e.StartTLS(fmt.Sprintf(":%d", config.Global.Port), "cert.pem", "key.pem"))
 	server := endless.NewServer(fmt.Sprintf(":%d", config.Global.Port), e)
 	err := server.ListenAndServe()
 	if err != nil {

@@ -15,3 +15,7 @@ server/config/config.json
 .idea/
 debug_bin
 debug.log
+cache
+
+cert.pem
+key.pem

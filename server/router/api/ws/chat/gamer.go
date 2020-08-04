@@ -25,7 +25,8 @@ func (g *Gamer) Write() {
 
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println(r)
+			err := r.(error)
+			fmt.Println(err.Error())
 		}
 	}()
 

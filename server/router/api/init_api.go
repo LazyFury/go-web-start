@@ -42,6 +42,8 @@ func Init(g *echo.Group) {
 	ws.Init(apiV1)
 
 	wehcatMini(apiV1)
+
+	configRouter(apiV1)
 }
 
 type resource struct {
