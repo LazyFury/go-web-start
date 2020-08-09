@@ -1,17 +1,11 @@
 PODS:
   - Flutter (1.0.0)
-  - LookinServer (1.0.0)
   - webview_flutter (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - LookinServer
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
-
-SPEC REPOS:
-  trunk:
-    - LookinServer
 
 EXTERNAL SOURCES:
   Flutter:
@@ -21,9 +15,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  LookinServer: 0002891cd3cec5e082a910e897dfe71b4f06b89e
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: db47b163a40877057d5c1613abd7b1c6efc1ac7f
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.9.3

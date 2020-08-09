@@ -25,7 +25,7 @@ class AppStatus extends State<App> {
     super.initState();
   }
 
-  List<Widget> page = [
+  List<Widget> pages = [
     Home(),
     Cate(),
     Cart(),
@@ -46,7 +46,7 @@ class AppStatus extends State<App> {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: page[current],
+            child: pages[current],
           ),
           Column(children: <Widget>[
             Tabbar(
