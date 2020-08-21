@@ -33,7 +33,7 @@ func New() *echo.Echo {
 		AllowOrigins:     []string{"*", "https://labstack.net"},
 		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
 		AllowCredentials: true,
-		AllowHeaders:     []string{"token", "Content-Type"},
+		AllowHeaders:     []string{"token", "Content-Type", "Access-Control-Allow-Origin"},
 	}))
 
 	// 模版
