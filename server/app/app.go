@@ -39,7 +39,7 @@ func New() *echo.Echo {
 			echo.HeaderAccessControlAllowOrigin,
 			echo.HeaderAccessControlAllowHeaders,
 			echo.HeaderAccessControlAllowCredentials,
-			echo.HeaderXRequestedWith, echo.HeaderAccept, echo.headerAuthorization},
+			echo.HeaderXRequestedWith, echo.HeaderAccept},
 	}))
 
 	// 模版
