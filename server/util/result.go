@@ -9,10 +9,10 @@ import (
 
 // Return 公共返回类型
 type returnJSON struct {
-	Code int         `json:"code"`
-	Msg  string      `json:"msg"`
-	Time int64       `json:"time,omitempty"`
-	Data interface{} `json:"data"`
+	Code    int         `json:"code"`
+	Msg     string      `json:"msg"`
+	BuildBy time.Time   `json:"build"`
+	Data    interface{} `json:"data"`
 }
 
 const (
