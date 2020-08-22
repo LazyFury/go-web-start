@@ -47,6 +47,9 @@ var (
 		// 无权限
 		http.StatusUnauthorized: "无权限操作!",
 	}
+
+	// BuildBy 构建时间
+	BuildBy time.Time = time.Now()
 )
 
 // JSONBase 增加了httpcode参数
@@ -60,10 +63,10 @@ func JSONBase(c echo.Context, data interface{}, msg string, code int, httpCode i
 	}
 	// c.Response().Header().Add("Cache-Control", "no-cache")
 	return c.JSONPretty(httpCode, &returnJSON{
-		Code: code,
-		Msg:  msg,
-		Data: data,
-		Time: time.Now().Unix(),
+		Code:    code,
+		Msg:     msg,
+		Data:    data,
+		BuildBy: BuildBy,
 	}, " ")
 }
 
