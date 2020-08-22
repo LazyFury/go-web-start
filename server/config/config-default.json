@@ -1,17 +1,24 @@
 {
-  "mysql": "suke:@(localhost:3306)/test?charset=utf8mb4&parseTime=true&loc=Asia%2fShanghai",
-  "baseURL": "/",
-  "tablePrefix": "ek_server",
+  "mysql": {
+    "user": "suke",
+    "password": "",
+    "host": "localhost",
+    "port": "1233",
+    "database": "test",
+    "Param": "&loc=Asia%2FShanghai"
+  },
+  "base_url": "/",
+  "table_prefix": "ek_server",
   "wechat": {
-    "appid": "",
-    "appsecret": ""
+    "appid": "wx8bddf23d9228626d",
+    "appsecret": "0f28c6ea02973d1719a3312e17f38501"
   },
   "port": 8080,
   "mail": {
     "host": "smtp.qq.com",
     "nickname": "比鲁斯",
-    "password": "--",
+    "password": "zjbghelibeiqdigh",
     "port": "587",
-    "user": "--@qq.com"
+    "user": "2568597007@qq.com"
   }
 }

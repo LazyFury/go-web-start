@@ -26,21 +26,10 @@ func New() *echo.Echo {
 	e.Use(middleware.Secure())         //安全
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(util.RandStringBytes(32))))) //session
-
-	e.Use(middleware.CSRF())
 	//跨域
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"*", "https://labstack.net"},
-		AllowMethods:     []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, echo.OPTIONS, echo.CONNECT},
-		AllowCredentials: true,
-		AllowHeaders: []string{
-			"token",
-			echo.HeaderContentType,
-			echo.HeaderAccessControlAllowOrigin,
-			echo.HeaderAccessControlAllowHeaders,
-			echo.HeaderAccessControlAllowCredentials,
-			echo.HeaderXRequestedWith, echo.HeaderAccept},
-	}))
+	e.Use(middleware.CORS())
+	// fix：csrf未验证crash之后造成之后的cosr配置未生效，已修改顺序
+	e.Use(middleware.CSRF())
 
 	// 模版
 	renderer := &util.TemplateRenderer{

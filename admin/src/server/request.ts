@@ -4,7 +4,10 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 export const http = axios.create({ baseURL: config.baseURL });
 
-http.interceptors.request.use((config: AxiosRequestConfig) => config);
+http.interceptors.request.use((config: AxiosRequestConfig) => ({
+  ...config,
+  // withCredentials: true,
+}));
 http.interceptors.response.use(interceptorsResponse);
 
 function interceptorsResponse(res: any) {
