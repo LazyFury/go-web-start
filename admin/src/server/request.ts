@@ -4,8 +4,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 export const http = axios.create({
   baseURL: config.baseURL,
-  xsrfCookieName: '_csrf',
-  xsrfHeaderName: 'X-CSRF-Token',
 });
 
 http.interceptors.request.use((config: AxiosRequestConfig) => {

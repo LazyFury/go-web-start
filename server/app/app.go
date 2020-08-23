@@ -26,17 +26,19 @@ func New() *echo.Echo {
 	e.Use(middleware.Secure())         //安全
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(util.RandStringBytes(32))))) //session
+	e.Use(sessionInit())
 	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},
 		AllowCredentials: true,
 	}))
 	// fix：csrf未验证crash之后造成之后的cosr配置未生效，已修改顺序
-	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
-		CookieDomain:   "http://127.0.0.1:8000/",
-		CookieHTTPOnly: true,
-		CookieSecure:   true,
-	}))
+	// fix：跨域的情况下不建议使用csrf
+	// e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+	// 	CookieDomain: "127.0.0.1:8080",
+	// 	// CookieHTTPOnly: true,
+	// 	// CookieSecure:   true,
+	// }))
 
 	// 模版
 	renderer := &util.TemplateRenderer{
