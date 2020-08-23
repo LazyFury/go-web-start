@@ -46,6 +46,8 @@ func Init(g *echo.Group) {
 	configRouter(apiV1)
 
 	podcastRouter(apiV1)
+
+	apiV1.GET("/get_csrf_token", getCsrfToken)
 }
 
 type resource struct {
