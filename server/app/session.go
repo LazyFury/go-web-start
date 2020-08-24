@@ -10,11 +10,11 @@ import (
 func sessionInit() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			sess, _ := session.Get("session", c)
-			if _, ok := sess.Values["session_key"]; ok {
+			sess, _ := session.Get("session_key", c)
+			if _, ok := sess.Values["id"]; ok {
 				return next(c)
 			}
-			sess.Values["session_key"] = util.RandStringBytes(32)
+			sess.Values["id"] = util.RandStringBytes(32)
 			sess.Save(c.Request(), c.Response())
 			return next(c)
 		}
