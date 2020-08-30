@@ -14,8 +14,8 @@ services:
       - ~/.ssh:/root/.ssh
       - ../../:/root/app
       # - /Volumes/File/SDK/gowork:/root/go
-      - /Volumes/File/SDK/docker/go:/usr/local/go
-      - /Volumes/File/Cache/docker-go-path:/root/go
+      - ~/.docker-cache/go:/usr/local/go
+      - ~/.docker-cache/docker-go-path:/root/go
       - ./wait-for-it.sh:/root/wait-for-it.sh
     # command: /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
     command: /bin/bash -c  "chmod +x /root/wait-for-it.sh;/root/wait-for-it.sh mysql:3306 -- echo mysql launch success;cd /root/app/server;chmod +x ./run.sh;while true;do echo hello world!;sleep 1;done;" #./run.sh ./debug_bin;
