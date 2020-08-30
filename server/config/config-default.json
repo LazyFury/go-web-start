@@ -10,15 +10,15 @@
   "base_url": "/",
   "table_prefix": "ek_server",
   "wechat": {
-    "appid": "wx8bddf23d9228626d",
-    "appsecret": "0f28c6ea02973d1719a3312e17f38501"
+    "appid": "",
+    "appsecret": ""
   },
   "port": 8080,
   "mail": {
     "host": "smtp.qq.com",
     "nickname": "比鲁斯",
-    "password": "zjbghelibeiqdigh",
+    "password": "",
     "port": "587",
-    "user": "2568597007@qq.com"
+    "user": "@qq.com"
   }
 }
