@@ -16,7 +16,7 @@ type (
 		Ws          *websocket.Conn `json:"-"`
 		MessageType int             `json:"-"`
 		WriteList   chan *Message   `json:"-"`
-		isDone      chan bool       `json:"-"`
+		isDone      chan bool
 	}
 )
 
