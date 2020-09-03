@@ -67,7 +67,7 @@ export default () => {
         <Select
           allowClear
           placeholder="请选择文章分类"
-          value={cid || 0}
+          value={cid || '0'}
           onChange={cateSelectChange}
         >
           {/* cid 使用usestate， 默认值为0而不是空 */}
