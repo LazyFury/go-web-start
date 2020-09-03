@@ -11,10 +11,6 @@ import (
 	"github.com/fvbock/endless"
 )
 
-// @title Swagger Example API
-// @version 1.0
-// @description This is a sample server celler server.
-// @termsOfService http://swagger.io/terms/
 func main() {
 	e := app.New()
 	//初始化数据链接

@@ -53,7 +53,7 @@ func New() *echo.Echo {
 
 	// 静态目录
 	e.Static("/static", "static")
-	e.Static("/h5", "h5")
+	e.Static("", "h5")
 
 	// 请求信息
 	e.GET("requestInfo", requestInfo)

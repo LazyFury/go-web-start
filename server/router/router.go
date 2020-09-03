@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"EK-Server/config"
-	"EK-Server/router/admin"
 	"EK-Server/router/api"
 	"EK-Server/util"
 	"EK-Server/util/upload"
@@ -23,7 +22,6 @@ func Start(e *echo.Echo) {
 	g := e.Group(baseURL)
 
 	// 项目页面
-	admin.Init(g)
 	api.Init(g)
 
 	// 入口
