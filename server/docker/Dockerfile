@@ -9,8 +9,16 @@ RUN printf "deb http://mirrors.aliyun.com/debian/ stretch main non-free contrib\
 # RUN apt install -y ffmpeg
 # RUN apt install lame
 
+
+
+
 RUN apt update &&  apt -y full-upgrade
 RUN apt-get install -y procps && apt-get install -y wget 
+
+
+RUN wget https://dl.google.com/go/go1.15.1.linux-amd64.tar.gz
+RUN tar -xvf  go1.15.1.linux-amd64.tar.gz
+
 # goproxy ca证书
 RUN wget http://cacerts.digitalcertvalidation.com/TrustAsiaTLSRSACA.crt
 RUN cp  TrustAsiaTLSRSACA.crt /usr/share/ca-certificates/goproxy.crt
@@ -18,7 +26,7 @@ RUN chmod a+r /usr/share/ca-certificates/goproxy.crt
 RUN update-ca-certificates
 
 # Configure Go 生产模式不需要安装go
-ENV GOROOT /usr/local/go
+ENV GOROOT /go
 ENV GOPATH /root/go
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
 ENV GOPROXY http://goproxy.cn/
