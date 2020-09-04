@@ -6,8 +6,8 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4
-	github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904045851-813ac257aeb4
+	github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904080106-1b236f66ced2
+	github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904080106-1b236f66ced2
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/armon/go-metrics v0.3.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
@@ -16,7 +16,7 @@ require (
 	github.com/go-openapi/spec v0.19.9 // indirect
 	github.com/go-openapi/swag v0.19.9 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
-	github.com/google/uuid v1.1.1
+	github.com/google/uuid v1.1.2
 	github.com/gorilla/sessions v1.2.0
 	github.com/gorilla/websocket v1.4.2
 	github.com/hashicorp/go-immutable-radix v1.2.0 // indirect
@@ -25,12 +25,12 @@ require (
 	github.com/hashicorp/serf v0.9.3 // indirect
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
-	github.com/jinzhu/gorm v1.9.14
+	github.com/jinzhu/gorm v1.9.16
 	github.com/labstack/armor v0.4.14 // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	// github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo-contrib v0.9.0
-	github.com/labstack/echo/v4 v4.1.16
+	github.com/labstack/echo/v4 v4.1.17
 	github.com/labstack/gommon v0.3.0
 	github.com/labstack/tunnel-client v0.5.15 // indirect
 	github.com/lib/pq v1.8.0 // indirect
@@ -45,11 +45,10 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.7
-	github.com/valyala/fasttemplate v1.2.0
+	github.com/valyala/fasttemplate v1.2.1
 	go.etcd.io/bbolt v1.3.5 // indirect
-	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de
-	golang.org/x/net v0.0.0-20200707034311-ab3426394381
-	golang.org/x/sys v0.0.0-20200803210538-64077c9b5642 // indirect
+	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
+	golang.org/x/net v0.0.0-20200822124328-c89045814202
 	golang.org/x/tools v0.0.0-20200727233628-55644ead90ce // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
