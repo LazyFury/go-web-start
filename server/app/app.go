@@ -1,8 +1,8 @@
 package app
 
 import (
-	"EK-Server/router"
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/router"
+	"github.com/treblex/go-echo-demo/server/util"
 	"html/template"
 	"os"
 

@@ -1,9 +1,9 @@
 package model
 
 import (
-	"EK-Server/middleware"
-	"EK-Server/util"
-	"EK-Server/util/customtype"
+	"github.com/treblex/go-echo-demo/server/middleware"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/customtype"
 	"math"
 	"reflect"
 	"strconv"

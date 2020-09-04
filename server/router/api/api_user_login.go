@@ -1,10 +1,10 @@
 package api
 
 import (
-	"EK-Server/middleware"
-	"EK-Server/model"
-	"EK-Server/util"
-	"EK-Server/util/sha"
+	"github.com/treblex/go-echo-demo/server/middleware"
+	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/sha"
 	"strings"
 
 	"github.com/labstack/echo/v4"

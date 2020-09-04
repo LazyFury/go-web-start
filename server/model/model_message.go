@@ -1,8 +1,8 @@
 package model
 
 import (
-	"EK-Server/util"
-	"EK-Server/util/customtype/message"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/customtype/message"
 	"fmt"
 	"reflect"
 

@@ -1,9 +1,9 @@
 package wechat
 
 import (
-	"EK-Server/config"
-	"EK-Server/model"
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/config"
+	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/treblex/go-echo-demo/server/util"
 	"fmt"
 	"net/http"
 	"net/url"

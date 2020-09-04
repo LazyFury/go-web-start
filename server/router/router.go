@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"os"
 
-	"EK-Server/config"
-	"EK-Server/router/api"
-	"EK-Server/util"
-	"EK-Server/util/upload"
+	"github.com/treblex/go-echo-demo/server/config"
+	"github.com/treblex/go-echo-demo/server/router/api"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/upload"
 
 	"github.com/labstack/echo/v4"
 )

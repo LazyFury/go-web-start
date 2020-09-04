@@ -1,8 +1,8 @@
 package api
 
 import (
-	"EK-Server/config"
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/config"
+	"github.com/treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )

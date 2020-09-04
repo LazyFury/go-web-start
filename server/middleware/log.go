@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/util"
 	"bytes"
 	"io"
 	"os"

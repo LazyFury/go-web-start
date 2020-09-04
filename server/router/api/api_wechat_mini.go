@@ -1,7 +1,7 @@
 package api
 
 import (
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/util"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"

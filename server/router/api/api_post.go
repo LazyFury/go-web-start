@@ -1,9 +1,9 @@
 package api
 
 import (
-	"EK-Server/model"
-	"EK-Server/util"
-	"EK-Server/util/customtype/message"
+	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/customtype/message"
 
 	"github.com/labstack/echo/v4"
 )

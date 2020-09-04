@@ -1,7 +1,7 @@
 package app
 
 import (
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"

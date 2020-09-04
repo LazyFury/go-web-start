@@ -1,10 +1,10 @@
 package model
 
 import (
-	"EK-Server/util"
-	"EK-Server/util/customtype"
-	"EK-Server/util/sha"
-	"EK-Server/util/wechat"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/customtype"
+	"github.com/treblex/go-echo-demo/server/util/sha"
+	"github.com/treblex/go-echo-demo/server/util/wechat"
 	"errors"
 	"fmt"
 	"strings"

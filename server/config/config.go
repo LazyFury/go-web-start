@@ -1,8 +1,8 @@
 package config
 
 import (
-	"EK-Server/util"
-	"EK-Server/util/wechat"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/wechat"
 	"encoding/json"
 	"log"
 	"os"

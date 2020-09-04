@@ -1,8 +1,8 @@
 package wechat
 
 import (
-	"EK-Server/model"
-	"EK-Server/util/wechat"
+	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/treblex/go-echo-demo/server/util/wechat"
 	"encoding/json"
 	"errors"
 	"fmt"

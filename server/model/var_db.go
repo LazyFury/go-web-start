@@ -1,8 +1,8 @@
 package model
 
 import (
-	"EK-Server/config"
-	"EK-Server/util/customtype"
+	"github.com/treblex/go-echo-demo/server/config"
+	"github.com/treblex/go-echo-demo/server/util/customtype"
 	"fmt"
 	"time"
 

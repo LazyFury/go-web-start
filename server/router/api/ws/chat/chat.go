@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/util"
 	"math/rand"
 	"sync"
 

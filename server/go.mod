@@ -1,4 +1,4 @@
-module EK-Server
+module github.com/treblex/go-echo-demo/server
 
 go 1.13
 

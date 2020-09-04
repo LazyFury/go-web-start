@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"EK-Server/router/api/ws/chat"
+	"github.com/treblex/go-echo-demo/server/router/api/ws/chat"
 
 	"github.com/labstack/echo/v4"
 )

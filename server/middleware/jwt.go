@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"EK-Server/util"
-	"EK-Server/util/customtype"
+	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/treblex/go-echo-demo/server/util/customtype"
 	"bytes"
 	"encoding/json"
 	"errors"

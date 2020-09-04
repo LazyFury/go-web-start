@@ -1,6 +1,6 @@
 package model
 
-import "EK-Server/util/customtype"
+import "github.com/treblex/go-echo-demo/server/util/customtype"
 
 // Order 订单
 type Order struct {

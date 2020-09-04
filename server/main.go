@@ -1,12 +1,13 @@
 package main
 
 import (
-	"EK-Server/app"
-	"EK-Server/config"
-	"EK-Server/model"
-	"EK-Server/util"
 	"fmt"
 	"os"
+
+	"github.com/treblex/go-echo-demo/server/app"
+	"github.com/treblex/go-echo-demo/server/config"
+	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/treblex/go-echo-demo/server/util"
 
 	"github.com/fvbock/endless"
 )

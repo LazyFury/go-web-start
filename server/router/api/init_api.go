@@ -1,9 +1,9 @@
 package api
 
 import (
-	"EK-Server/router/api/wechat"
-	"EK-Server/router/api/ws"
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/router/api/wechat"
+	"github.com/treblex/go-echo-demo/server/router/api/ws"
+	"github.com/treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )

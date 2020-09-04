@@ -1,8 +1,9 @@
 package model
 
 import (
-	"EK-Server/util"
 	"strings"
+
+	"github.com/treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )

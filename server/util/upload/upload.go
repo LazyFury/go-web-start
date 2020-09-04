@@ -1,7 +1,7 @@
 package upload
 
 import (
-	"EK-Server/util"
+	"github.com/treblex/go-echo-demo/server/util"
 	"errors"
 	"fmt"
 	"io"
