@@ -34,7 +34,7 @@ else
   for i in `echo $pid`
     do
       echo "kill 进程pid $i 通知原进程fork子进程"
-      kill -s 1 $i &
+      kill -s SIGHUP $i &
     done
 fi
 
