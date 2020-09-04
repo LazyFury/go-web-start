@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/treblex/go-echo-demo/server/router/api/wechat"
-	"github.com/treblex/go-echo-demo/server/router/api/ws"
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
+	"github.com/Treblex/go-echo-demo/server/router/api/ws"
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )

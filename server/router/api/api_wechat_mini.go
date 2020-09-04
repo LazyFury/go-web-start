@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"

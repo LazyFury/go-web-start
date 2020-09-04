@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util"
 	"bytes"
 	"io"
 	"os"

@@ -1,9 +1,9 @@
 package wechat
 
 import (
-	"github.com/treblex/go-echo-demo/server/config"
-	"github.com/treblex/go-echo-demo/server/model"
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/util"
 	"fmt"
 	"net/http"
 	"net/url"

@@ -3,7 +3,7 @@ package model
 import (
 	"strings"
 
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )

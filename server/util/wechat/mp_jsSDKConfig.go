@@ -1,7 +1,7 @@
 package wechat
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util"
 	"crypto/sha1"
 	"fmt"
 	"strconv"

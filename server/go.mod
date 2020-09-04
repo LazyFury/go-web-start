@@ -1,4 +1,4 @@
-module github.com/treblex/go-echo-demo/server
+module github.com/Treblex/go-echo-demo/server
 
 go 1.13
 

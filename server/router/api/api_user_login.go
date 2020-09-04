@@ -1,10 +1,10 @@
 package api
 
 import (
-	"github.com/treblex/go-echo-demo/server/middleware"
-	"github.com/treblex/go-echo-demo/server/model"
-	"github.com/treblex/go-echo-demo/server/util"
-	"github.com/treblex/go-echo-demo/server/util/sha"
+	"github.com/Treblex/go-echo-demo/server/middleware"
+	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/sha"
 	"strings"
 
 	"github.com/labstack/echo/v4"

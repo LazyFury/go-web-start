@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/treblex/go-echo-demo/server/config"
-	"github.com/treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"fmt"
 	"time"
 

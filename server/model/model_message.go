@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
-	"github.com/treblex/go-echo-demo/server/util/customtype/message"
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype/message"
 	"fmt"
 	"reflect"
 

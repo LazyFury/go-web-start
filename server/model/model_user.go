@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
-	"github.com/treblex/go-echo-demo/server/util/customtype"
-	"github.com/treblex/go-echo-demo/server/util/sha"
-	"github.com/treblex/go-echo-demo/server/util/wechat"
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/util/sha"
+	"github.com/Treblex/go-echo-demo/server/util/wechat"
 	"errors"
 	"fmt"
 	"strings"

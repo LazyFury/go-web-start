@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/treblex/go-echo-demo/server/router"
-	"github.com/treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/router"
+	"github.com/Treblex/go-echo-demo/server/util"
 	"html/template"
 	"os"
 

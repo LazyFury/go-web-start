@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/treblex/go-echo-demo/server/util"
-	"github.com/treblex/go-echo-demo/server/util/wechat"
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/wechat"
 	"encoding/json"
 	"log"
 	"os"

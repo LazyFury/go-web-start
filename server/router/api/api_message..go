@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/model"
 
 	"github.com/labstack/echo/v4"
 )
