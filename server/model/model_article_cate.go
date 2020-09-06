@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"fmt"
 	"strings"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -21,7 +22,6 @@ type ArticlesCate struct {
 func (a *ArticlesCate) PointerList() interface{} {
 	return &[]struct {
 		*ArticlesCate
-		*EmptySystemFiled
 		Count int `json:"count"`
 	}{}
 }
@@ -41,7 +41,7 @@ func (a *ArticlesCate) TableName() string {
 
 // Joins  查询相关文章数据
 func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("`name`,`desc`,`key`,`id`,a1.count")
+	db = db.Select("*")
 	article := &Articles{}
 	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", article.TableName(), a.TableName()))
 	return db
@@ -79,4 +79,18 @@ func (a *ArticlesCate) Update(c echo.Context) error {
 
 	cate.Empty()
 	return a.BaseControll.DoUpdate(c, cate)
+}
+
+// Delete 删除
+func (a *ArticlesCate) Delete(c echo.Context) error {
+	db := DB
+	id := c.Param("id")
+	if id == "" {
+		return util.JSONErr(c, nil, "参数错误")
+	}
+	article := &Articles{}
+	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
+		return util.JSONErr(c, nil, "该分类下还有文章，不能删除")
+	}
+	return a.BaseControll.Delete(c)
 }

@@ -11,7 +11,7 @@ import (
 type returnJSON struct {
 	Code    int         `json:"code"`
 	Msg     string      `json:"msg"`
-	BuildBy time.Time   `json:"build"`
+	BuildBy time.Time   `json:"build_by"`
 	Data    interface{} `json:"data"`
 }
 

@@ -6,8 +6,6 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
-	github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904080106-1b236f66ced2
-	github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904080106-1b236f66ced2
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/armon/go-metrics v0.3.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
