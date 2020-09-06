@@ -3,6 +3,7 @@ package sha
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"encoding/hex"
 	"fmt"
 )
 
@@ -20,17 +21,18 @@ func EnCode(str string) string {
 	ciphertext := make([]byte, len(strNew))
 	cfb.XORKeyStream(ciphertext, strNew)
 	// fmt.Printf("%s=>%x\n", strNew, ciphertext)
-	return fmt.Sprintf("%x", ciphertext)
+	return hex.EncodeToString(ciphertext)
 }
 
-// DeCode DeCode
-func DeCode(str string) string {
-	c, _ := aes.NewCipher([]byte(key))
-	strNew := []byte(str)
-	// 解密字符串
-	cfbdec := cipher.NewCFBDecrypter(c, iv)
-	plaintextCopy := make([]byte, len(strNew))
-	cfbdec.XORKeyStream(plaintextCopy, strNew)
-	// fmt.Printf("%x=>%s\n", strNew, plaintextCopy)
-	return fmt.Sprintf("%s", plaintextCopy)
+// AesDecryptCFB DeCode
+func AesDecryptCFB(str string) (decrypted string) {
+	block, _ := aes.NewCipher([]byte(key))
+	encrypted, _ := hex.DecodeString(str)
+	if len(encrypted) < aes.BlockSize {
+		panic("ciphertext too short")
+	}
+
+	stream := cipher.NewCFBDecrypter(block, iv)
+	stream.XORKeyStream(encrypted, encrypted)
+	return fmt.Sprintf("%s", encrypted)
 }

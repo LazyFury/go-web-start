@@ -1,14 +1,15 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/Treblex/go-echo-demo/server/util/sha"
-	"github.com/Treblex/go-echo-demo/server/util/wechat"
 	"errors"
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/util/sha"
+	"github.com/Treblex/go-echo-demo/server/util/wechat"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,7 +17,7 @@ import (
 // User 用户更新
 type User struct {
 	BaseControll
-	Password  string               `json:"password" gorm:"not null"`
+	Password  string               `json:"password" gorm:"not null;type:text"`
 	Name      string               `json:"name" gorm:"unique;not null"`
 	Email     string               `json:"email"`
 	IP        string               `json:"ip"`
