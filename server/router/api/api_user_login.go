@@ -60,7 +60,7 @@ func doLogin(c echo.Context) error {
 func initAdmin(c echo.Context) error {
 
 	ip := util.ClientIP(c)
-	if ip == "127.0.0.1" {
+	if ip != "127.0.0.1" {
 		return util.JSONErr(c, nil, "")
 	}
 
@@ -72,6 +72,7 @@ func initAdmin(c echo.Context) error {
 
 	a := &model.User{Name: "admin", IsAdmin: 1}
 	if findAdmin := db.Where(a).Find(a).RowsAffected; findAdmin >= 1 {
+		a.Password = sha.DeCode(a.Password)
 		return util.JSONSuccess(c, a, "")
 	}
 	pwd := util.RandStringBytes(32)
@@ -85,9 +86,6 @@ func initAdmin(c echo.Context) error {
 	if err := db.Save(admin).Error; err != nil {
 		return util.JSONErr(c, err, "")
 	}
-
-	return util.JSONErr(c, map[string]interface{}{
-		"user": "admin",
-		"pwd":  pwd,
-	}, "注册成功")
+	admin.Password = sha.DeCode(admin.Password)
+	return util.JSONErr(c, admin, "注册成功")
 }
