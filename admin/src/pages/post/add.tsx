@@ -22,11 +22,14 @@ export default () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    if (isEdit) {
-      posts.update(id, { ...values, content });
-      return;
-    }
-    posts.add({ ...values, content });
+    (() => {
+      if (isEdit) {
+        return posts.update(id, { ...values, content });
+      }
+      return posts.add({ ...values, content, tag: values.tag.split(',') });
+    })().then(() => {
+      history.push('/post');
+    });
   };
   const onReset = () => {};
 
@@ -34,7 +37,6 @@ export default () => {
     <div>
       <PageHeader
         className="site-page-header fff"
-        onBack={() => history.go(-1)}
         title={isEdit ? '修改文章' : '发布文章'}
         subTitle=""
       />

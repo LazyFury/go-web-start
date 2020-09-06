@@ -2,12 +2,20 @@ import { Breadcrumb, Layout as ALayout } from 'antd';
 import React, { useState } from 'react';
 import Header from './header';
 import Sider from './sider';
-const Layout = (props: { children: React.ReactNode }) => {
+
+let noLayout = ['/login', '/login/forget'];
+
+const Layout = (props: { location: any; children: React.ReactNode }) => {
   let [collapsed, setCollapsed] = useState(false);
 
   const toggle = () => {
     setCollapsed(!collapsed);
   };
+
+  if (noLayout.includes(props.location.pathname)) {
+    return <div>{props.children}</div>;
+  }
+
   return (
     <ALayout style={{ minHeight: '100vh' }}>
       {/* header  */}

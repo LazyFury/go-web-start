@@ -62,60 +62,62 @@ export default () => {
         subTitle={`共${data.count}篇文章，${data.page_count}页，当前${data.page_now}页`}
       />
 
-      <div className="action-bar" style={{ margin: '10px 0' }}>
-        {/* 选择分类 */}
-        <Select
-          allowClear
-          placeholder="请选择文章分类"
-          value={cid || '0'}
-          onChange={cateSelectChange}
-        >
-          {/* cid 使用usestate， 默认值为0而不是空 */}
-          <Option key={0} value={0}>
-            全部分类
-          </Option>
-          {cates && cates.length > 0
-            ? cates.map((x: any) => {
-                return (
-                  <Option key={x.id} value={x.id}>
-                    {x.name}
-                  </Option>
-                );
-              })
-            : null}
-        </Select>
-        {/* 刷新列表 */}
-        <Button onClick={() => load()}>
-          <SyncOutlined></SyncOutlined>
-          <span>刷新</span>
-        </Button>
-      </div>
+      <div className="page-main">
+        <div className="action-bar" style={{ margin: '10px 0' }}>
+          {/* 选择分类 */}
+          <Select
+            allowClear
+            placeholder="请选择文章分类"
+            value={cid || '全部分类'}
+            onChange={cateSelectChange}
+          >
+            {/* cid 使用usestate， 默认值为0而不是空 */}
+            <Option key={0} value={0}>
+              全部分类
+            </Option>
+            {cates && cates.length > 0
+              ? cates.map((x: any) => {
+                  return (
+                    <Option key={x.id} value={x.id}>
+                      {x.name}
+                    </Option>
+                  );
+                })
+              : null}
+          </Select>
+          {/* 刷新列表 */}
+          <Button onClick={() => load()}>
+            <SyncOutlined></SyncOutlined>
+            <span>刷新</span>
+          </Button>
+        </div>
 
-      <Table
-        columns={columns}
-        dataSource={data.list}
-        size={'large'}
-        bordered={true}
-        rowKey={'id'}
-        loading={loading}
-        pagination={{
-          position: ['bottomLeft'],
-          current: data.page_now,
-          total: data.count,
-          showSizeChanger: false,
-          onChange: load,
-        }}
-        rowSelection={{
-          type: 'checkbox',
-          onChange: (selectedRowKeys, selectedRows) => {
-            console.log(
-              `selectedRowKeys: ${selectedRowKeys}`,
-              'selectedRows: ',
-              selectedRows,
-            );
-          },
-        }}
-      ></Table>
+        <Table
+          columns={columns}
+          dataSource={data.list}
+          size={'large'}
+          bordered={true}
+          rowKey={'id'}
+          loading={loading}
+          pagination={{
+            position: ['bottomLeft'],
+            current: data.page_now,
+            total: data.count,
+            showSizeChanger: false,
+            onChange: load,
+          }}
+          rowSelection={{
+            type: 'checkbox',
+            onChange: (selectedRowKeys, selectedRows) => {
+              console.log(
+                `selectedRowKeys: ${selectedRowKeys}`,
+                'selectedRows: ',
+                selectedRows,
+              );
+            },
+          }}
+        ></Table>
+      </div>
     </div>
   );
 };
@@ -148,10 +150,10 @@ const columns = [
     dataIndex: 'id',
     render: (id: any) => {
       return (
-        <>
+        <div style={{ width: 120 }}>
           {edit(id)}
           {del(id)}
-        </>
+        </div>
       );
     },
   },

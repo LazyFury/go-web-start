@@ -43,7 +43,9 @@ export default function Sider(props: { collapsed: boolean | undefined }) {
           <Menu.Item key="/post/cate">
             <Link to="/post/cate">分类管理</Link>
           </Menu.Item>
-          <Menu.Item key="8">文章推荐</Menu.Item>
+          <Menu.Item key="/post/recomment">
+            <Link to="/post/recomment">文章推荐</Link>
+          </Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" icon={<NotificationOutlined />} title="系统公告">
           <Menu.Item key="9">option9</Menu.Item>
