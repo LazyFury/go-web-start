@@ -58,20 +58,27 @@ func doLogin(c echo.Context) error {
 }
 
 func initAdmin(c echo.Context) error {
+
+	ip := util.ClientIP(c)
+	if ip == "127.0.0.1" {
+		return util.JSONErr(c, nil, "")
+	}
+
 	secret := c.QueryParam("secret")
 	if secret != "fqEeEPlgFECywkwqVMoCEmBzmRmFPZwt" {
 		return util.JSONErr(c, nil, "密钥错误")
 	}
 	db := model.DB
 
-	a := &model.User{Name: "admin"}
-	if findAdmin := db.Model(a).Find(a).RowsAffected; findAdmin >= 1 {
+	a := &model.User{Name: "admin", IsAdmin: 1}
+	if findAdmin := db.Where(a).Find(a).RowsAffected; findAdmin >= 1 {
 		return util.JSONSuccess(c, a, "")
 	}
+	pwd := util.RandStringBytes(32)
 
 	admin := &model.User{
 		Name:     "admin",
-		Password: util.RandStringBytes(32),
+		Password: pwd,
 		IsAdmin:  1,
 	}
 
@@ -79,5 +86,8 @@ func initAdmin(c echo.Context) error {
 		return util.JSONErr(c, err, "")
 	}
 
-	return util.JSONErr(c, admin, "注册成功")
+	return util.JSONErr(c, map[string]interface{}{
+		"user": "admin",
+		"pwd":  pwd,
+	}, "注册成功")
 }
