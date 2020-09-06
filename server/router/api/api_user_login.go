@@ -1,11 +1,12 @@
 package api
 
 import (
+	"strings"
+
 	"github.com/Treblex/go-echo-demo/server/middleware"
 	"github.com/Treblex/go-echo-demo/server/model"
 	"github.com/Treblex/go-echo-demo/server/util"
 	"github.com/Treblex/go-echo-demo/server/util/sha"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,6 +17,8 @@ func login(g *echo.Group) {
 	login.POST("", doLogin)
 
 	login.POST("/reg", modelUser.RegController)
+
+	login.GET("/init_admin", initAdmin)
 
 }
 
@@ -52,4 +55,29 @@ func doLogin(c echo.Context) error {
 		return util.JSONSuccess(c, str, "登陆成功")
 	}
 	return util.JSONErr(c, nil, "密码错误")
+}
+
+func initAdmin(c echo.Context) error {
+	secret := c.QueryParam("secret")
+	if secret != "fqEeEPlgFECywkwqVMoCEmBzmRmFPZwt" {
+		return util.JSONErr(c, nil, "密钥错误")
+	}
+	db := model.DB
+
+	a := &model.User{Name: "admin"}
+	if findAdmin := db.Model(a).Find(a).RowsAffected; findAdmin >= 1 {
+		return util.JSONSuccess(c, a, "")
+	}
+
+	admin := &model.User{
+		Name:     "admin",
+		Password: util.RandStringBytes(32),
+		IsAdmin:  1,
+	}
+
+	if err := db.Save(admin).Error; err != nil {
+		return util.JSONErr(c, err, "")
+	}
+
+	return util.JSONErr(c, admin, "注册成功")
 }
