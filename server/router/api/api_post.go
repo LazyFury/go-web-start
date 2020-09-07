@@ -10,6 +10,7 @@ import (
 
 var modelPost model.Articles
 var modelPostCate model.ArticlesCate
+var modelPostRec model.ArticlesRec
 
 // Init 初始化
 func post(g *echo.Group) {
@@ -25,6 +26,11 @@ func post(g *echo.Group) {
 func postCate(g *echo.Group) {
 	modelPostCate.BaseControll.Model = &modelPostCate
 	modelPostCate.Install(g, "/post-cates")
+}
+
+func postRec(g *echo.Group) {
+	modelPostRec.BaseControll.Model = &modelPostRec
+	modelPostRec.Install(g, "/post-rec")
 }
 
 // 点赞文章

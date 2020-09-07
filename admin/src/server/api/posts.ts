@@ -9,3 +9,8 @@ export const postCates = {
   ...install('post-cates'),
   list: () => http.get(`/post-cates`),
 };
+
+export const postRec = {
+  ...install('post-rec'),
+  list: () => http.get('/post-rec'),
+};

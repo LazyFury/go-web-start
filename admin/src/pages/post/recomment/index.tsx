@@ -1,5 +1,5 @@
 import useRequest from '@/hooks/useRequest';
-import { postCates } from '@/server/api/posts';
+import { postRec } from '@/server/api/posts';
 import { DeleteOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Drawer, Modal, PageHeader, Table, Tooltip } from 'antd';
 import React, { useState } from 'react';
@@ -7,7 +7,7 @@ import { AddPostCate } from './add';
 
 let { confirm } = Modal;
 export default function() {
-  let { data, load, loading } = useRequest(postCates.list, true);
+  let { data, load, loading } = useRequest(postRec.list, true);
   let [values, setValues] = useState([{}]);
   let [visible, setVisible] = useState(false);
 
@@ -18,7 +18,7 @@ export default function() {
       okText: '确定删除',
       okType: 'danger',
       onOk() {
-        postCates.del(id).then(() => {
+        postRec.del(id).then(() => {
           load();
           setValues([]);
         });
@@ -41,8 +41,8 @@ export default function() {
     <div>
       <PageHeader
         className="site-page-header fff"
-        title="文章分类"
-        subTitle={`共 ${data.length || 0} 文章分类`}
+        title="推荐位管理"
+        subTitle={`共 ${data.length || 0} 推荐位`}
       />
 
       <Drawer width={500} visible={visible} onClose={() => setVisible(false)}>
@@ -58,7 +58,7 @@ export default function() {
       <div className="page-main">
         <div className="action-bar" style={{ margin: '10px 0' }}>
           <Button type="primary" onClick={editCate}>
-            <span>添加分类</span>
+            <span>添加推荐位</span>
           </Button>
           <Button onClick={() => load()}>
             <SyncOutlined></SyncOutlined>
@@ -81,7 +81,7 @@ export default function() {
                     {(() => {
                       if (data.count > 0) {
                         return (
-                          <Tooltip title="该分类下有子文章，不可删除，请先清理文章">
+                          <Tooltip title="该推荐位下有子文章，不可删除，请先清理文章">
                             <span>不可删除</span>
                           </Tooltip>
                         );
@@ -111,7 +111,7 @@ export default function() {
 const columns = [
   { title: 'ID', key: 'id', dataIndex: 'id' },
   {
-    title: '分类名称',
+    title: '推荐位名称',
     key: 'name',
     dataIndex: 'name',
   },

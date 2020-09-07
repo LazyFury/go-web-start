@@ -19,6 +19,7 @@ func Init(g *echo.Group) {
 	//文章
 	post(apiV1)
 	postCate(apiV1)
+	postRec(apiV1)
 	//商品
 	product(apiV1)
 	productCate(apiV1) //商品分类

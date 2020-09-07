@@ -1,10 +1,11 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"fmt"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
 
 	// _ 数据库驱动
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -28,6 +29,7 @@ var autoMigrate = []interface{}{
 	//article
 	&Articles{},
 	&ArticlesCate{},
+	&ArticlesRec{},
 	//ad
 	&AdEvent{},
 	&AdGroup{},

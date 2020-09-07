@@ -4,15 +4,25 @@ import { useEffect, useState } from 'react';
 const useRequest = (
   api: () => Promise<AxiosResponse<any>>,
   autoLoad: boolean | undefined = false,
-): { readonly data: any; load: () => Promise<any> } => {
+): {
+  readonly data: any;
+  load: () => Promise<any>;
+  readonly loading: boolean;
+} => {
   let [data, setData] = useState({});
-
-  const load = () =>
-    api().then(res => {
-      if (res) {
-        setData(res.data);
-      }
-    });
+  let [loading, setLoading] = useState(true);
+  const load = () => {
+    setLoading(true);
+    return api()
+      .then(res => {
+        if (res) {
+          setData(res.data);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     if (autoLoad) {
@@ -20,6 +30,6 @@ const useRequest = (
     }
   }, []);
 
-  return { data, load };
+  return { data, load, loading };
 };
 export default useRequest;
