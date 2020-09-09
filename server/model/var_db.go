@@ -21,6 +21,7 @@ var autoMigrate = []interface{}{
 	//user
 	&User{},
 	&WechatOauth{},
+	&WechatMiniUser{},
 	//goods
 	&Goods{},
 	&GoodCate{},

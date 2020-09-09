@@ -3,12 +3,24 @@ package customtype
 import (
 	"database/sql/driver"
 	"fmt"
+	"strconv"
 	"time"
 )
 
 // NumberTime 时间戳
 type NumberTime struct {
 	time.Time
+}
+
+// UnmarshalJSON UnmarshalJSON
+func (t *NumberTime) UnmarshalJSON(b []byte) error {
+	var str = string(b)
+	num, err := strconv.Atoi(str)
+	if err != nil {
+		return err
+	}
+	t.Time = time.Unix(int64(num/1000), 0)
+	return nil
 }
 
 // MarshalJSON json格式化时间的方法

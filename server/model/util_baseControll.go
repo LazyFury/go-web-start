@@ -1,14 +1,14 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/middleware"
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"math"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
@@ -106,8 +106,13 @@ func (b *BaseControll) Update(c echo.Context) error {
 	return util.JSONErr(c, nil, "不可修改")
 }
 
-// Delete 删除数据 无需重复实现
+// Delete 删除数据
 func (b *BaseControll) Delete(c echo.Context) error {
+	return b.DoDelete(c)
+}
+
+// DoDelete DoDelete
+func (b *BaseControll) DoDelete(c echo.Context) error {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
@@ -366,17 +371,11 @@ func (b *BaseControll) Empty() {
 func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route := g.Group(baseURL)
 
-	if b.Model.IsPublic() {
-		route.GET("", b.model().List)
-		route.GET("/:id", b.model().Detail)
-	} else {
-		route.GET("", b.model().List, middleware.UserJWT)
-		route.GET("/:id", b.model().Detail, middleware.UserJWT)
-	}
-
-	route.POST("", b.model().Add, middleware.AdminJWT)
-	route.PUT("/:id", b.model().Update, middleware.AdminJWT)
-	route.DELETE("/:id", b.model().Delete, middleware.AdminJWT)
+	route.GET("", b.model().List)
+	route.GET("/:id", b.model().Detail)
+	route.POST("", b.model().Add)
+	route.PUT("/:id", b.model().Update)
+	route.DELETE("/:id", b.model().Delete)
 	route.GET("-actions/count", b.model().Count)
 
 	return route

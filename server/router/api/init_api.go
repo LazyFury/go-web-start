@@ -4,6 +4,7 @@ import (
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
 	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/upload"
 
 	"github.com/labstack/echo/v4"
 )
@@ -14,6 +15,9 @@ func Init(g *echo.Group) {
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("", resources)
+	apiV1.POST("/upload", func(c echo.Context) error {
+		return upload.Default(c)
+	})
 	// base
 	login(apiV1)
 	//文章

@@ -1,13 +1,20 @@
 package api
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/Treblex/go-echo-demo/server/middleware"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/util/sha"
+
+	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )
@@ -19,7 +26,8 @@ var code2SessionKeyURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&
 
 type (
 	code2SessionKey struct {
-		OpenID     string `json:"open_id"`
+		OpenID     string `json:"openid"`
+		Unionid    string `json:"unionid"`
 		SessionKey string `json:"session_key"`
 		ErrCode    int    `json:"errcode"`
 		ErrMsg     string `json:"errmsg"`
@@ -33,6 +41,74 @@ type (
 func wehcatMini(g *echo.Group) {
 	mini := g.Group("/wechat-mini")
 	mini.POST("/login", wechatMiniLogin)
+
+	mini.POST("/easy-login", easyLogin)
+}
+
+func easyLogin(c echo.Context) error {
+	jsCode := c.QueryParam("js_code")
+	if jsCode == "" {
+		return util.JSONErr(c, nil, "请输入js_code")
+	}
+
+	// 请求微信服务器
+	url := fmt.Sprintf(code2SessionKeyURL, appid, secret, jsCode)
+	// fmt.Println(url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return util.JSONErr(c, nil, "获取失败")
+	}
+
+	// 解码
+	var m code2SessionKey
+
+	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
+		return util.JSONErr(c, err, "获取微信返回内容失败")
+	}
+	// 获取session失败
+	if m.ErrCode != 0 {
+		return util.JSONErr(c, nil, m.ErrMsg)
+	}
+
+	db := model.DB
+	wechatUser := &model.WechatMiniUser{OpenID: m.OpenID}
+	wechatUser.BaseControll.Model = wechatUser
+	// 登陆
+	if hasOne := wechatUser.HasOne(wechatUser); hasOne {
+		user := &model.User{BaseControll: model.BaseControll{ID: wechatUser.UID}}
+		if err := db.Where(user).Find(user).Error; err == nil {
+			return getJWT(c, user)
+		}
+	}
+
+	// 注册
+	user := &model.User{Name: util.RandStringBytes(6), Password: sha.EnCode(util.RandStringBytes(16))}
+	req := c.Request()
+	ua := req.UserAgent()
+	ip := util.ClientIP(c)
+	user.IP = ip
+	user.Ua = ua
+	user.LoginTime = customtype.LocalTime{Time: time.Now()}
+
+	if err := db.Create(&user).Error; err != nil {
+		return util.JSONErr(c, nil, "创建用户失败")
+	}
+
+	wechatUser.SessionKey = m.SessionKey
+	wechatUser.UID = user.ID
+	wechatUser.Unionid = m.Unionid
+	if err := db.Table(wechatUser.TableName()).Create(&wechatUser).Error; err != nil {
+		return util.JSONErr(c, nil, "创建微信小程序用户失败")
+	}
+
+	return getJWT(c, user)
+
+}
+
+func getJWT(c echo.Context, user *model.User) error {
+	jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin > 0}
+	str, _ := middleware.CreateToken(&jwtUser)
+	return util.JSONSuccess(c, str, "")
 }
 
 func wechatMiniLogin(c echo.Context) error {

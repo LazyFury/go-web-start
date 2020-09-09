@@ -7,7 +7,6 @@ import (
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api"
 	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/upload"
 
 	"github.com/labstack/echo/v4"
 )
@@ -30,10 +29,6 @@ func Start(e *echo.Echo) {
 	// index.POST("/upload", func(c echo.Context) error {
 	// 	return util.UploadCustom(c, util.AcceptsImgExt, "pic")
 	// })
-
-	index.POST("/upload", func(c echo.Context) error {
-		return upload.Default(c)
-	})
 
 	index.GET("/sendMail", func(c echo.Context) error {
 		email := c.QueryParam("email")
