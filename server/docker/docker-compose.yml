@@ -28,6 +28,8 @@ services:
       - mysql_root_password=123456
       - LANG=C.UTF-8
       - default_authentication_plugin=mysql_native_password
+      - character-set-server=utf8mb4
+      - collation-server=utf8mb4_unicode_ci
     volumes:
       - ./mysql/data:/var/lib/mysql
       # - ./config/docker/mysql/conf/my.conf:/etc/mysql/my.cnf
