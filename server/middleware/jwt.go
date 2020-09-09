@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -10,6 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
@@ -24,7 +25,7 @@ type UserInfo struct {
 
 var (
 	// SECRET jwt
-	SECRET string = util.RandStringBytes(32)
+	SECRET string = util.RandStringBytes(8)
 )
 
 // AdminJWT 管理后台用户验证
@@ -140,14 +141,14 @@ func CreateToken(user *UserInfo) (tokenstr string, err error) {
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokenstr, err = token.SignedString([]byte(SECRET))
-	fmt.Printf(tokenstr)
 	return
 }
 
 // 解密token方法
 func secret() jwt.Keyfunc {
+	key := []byte(SECRET)
 	return func(token *jwt.Token) (interface{}, error) {
-		return []byte(SECRET), nil
+		return key, nil
 	}
 }
 

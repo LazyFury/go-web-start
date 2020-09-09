@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+
 	e := app.New()
 	//初始化数据链接
 	if err := model.MysqlConn(config.Global.Mysql.ToString()); err != nil {
