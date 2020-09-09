@@ -90,7 +90,7 @@ func easyLogin(c echo.Context) error {
 	user.Ua = ua
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 
-	if err := db.Create(&user).Error; err != nil {
+	if err := db.Table(user.TableName()).Create(&user).Error; err != nil {
 		return util.JSONErr(c, nil, "创建用户失败")
 	}
 
