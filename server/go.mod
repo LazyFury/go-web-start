@@ -7,6 +7,7 @@ require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/armon/go-metrics v0.3.3 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/eduncan911/podcast v1.4.2 // indirect
@@ -47,6 +48,7 @@ require (
 	go.etcd.io/bbolt v1.3.5 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
 	golang.org/x/net v0.0.0-20200822124328-c89045814202
+	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
 	golang.org/x/tools v0.0.0-20200727233628-55644ead90ce // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
