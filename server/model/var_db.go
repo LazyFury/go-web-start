@@ -41,6 +41,10 @@ var autoMigrate = []interface{}{
 
 	// 订单
 	&Order{},
+
+	// 预约
+	&Appointment{},
+	&AppointmentLog{},
 }
 
 // MysqlConn InitDB
