@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
 	"github.com/Treblex/go-echo-demo/server/util"
@@ -9,14 +10,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// var uploader = upload.NewEchoUploader()
+var aliUploader = upload.NewAliOssUploader(config.Global.AliOss)
+
 // Init  api Version 1.0 初始化
 func Init(g *echo.Group) {
+
 	apiV1 := g.Group("/api/v1")
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("", resources)
 	apiV1.POST("/upload", func(c echo.Context) error {
-		return upload.Default(c)
+		url, err := aliUploader.Default(c)
+		if err != nil {
+			return util.JSONErr(c, nil, err.Error())
+		}
+		return util.JSONSuccess(c, url, "上传成功")
 	})
 	// base
 	login(apiV1)

@@ -2,7 +2,7 @@ package upload
 
 import (
 	"errors"
-	"fmt"
+	"io"
 	"mime/multipart"
 	"path"
 	"path/filepath"
@@ -10,37 +10,40 @@ import (
 	"time"
 
 	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/oss"
 
 	"github.com/labstack/echo/v4"
 )
 
+// UploadMethod 拷贝文件到本地 或者 上传到oss的方法。返回url
+type uploadMethod func(name string, file io.Reader) (url string, err error)
+
+// 从request中获取到file
+type getFile func(httpContext interface{}) (file *multipart.FileHeader, err error)
+
+// Uploader Uploader
+type Uploader struct {
+	BaseDir      string
+	UploadMethod uploadMethod
+	GetFile      getFile
+}
+
 // Default 默认上传类型和文件夹
-func Default(c echo.Context) error {
-	return Custom(c, []string{}, "")
+func (u *Uploader) Default(c echo.Context) (path string, err error) {
+	return u.Custom(c, []string{}, "")
 }
 
 // Custom 自定义上传类型和目录
-func Custom(c echo.Context, acceptsExt []string, folder string) error {
-	file, err := c.FormFile("file")
+func (u *Uploader) Custom(httpContext interface{}, acceptsExt []string, folder string) (path string, err error) {
+	file, err := u.GetFile(httpContext)
 	if err != nil {
-		return util.JSONErr(c, err, "上传错误") //未获取到文件流
+		return
 	}
-
-	link, err := uploadBase(file, acceptsExt, folder)
-	if err != nil {
-		fmt.Println(err)
-		errMsg := fmt.Sprintf("%s", err)
-		if errMsg == "" {
-			errMsg = "上传失败"
-		}
-		return util.JSONErr(c, nil, errMsg)
-	}
-	return util.JSONSuccess(c, link, "上传成功")
+	path, err = u.uploadBase(file, acceptsExt, folder)
+	return
 }
 
 // acceptsExt  这里是一个扩展到类型，默认到图片，视频 压缩包类型，已经写在默认方法中了
-func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName string) (fileName string, err error) {
+func (u *Uploader) uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName string) (url string, err error) {
 	pathExt := path.Ext(file.Filename)
 
 	folder := ""
@@ -77,7 +80,7 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 	defer src.Close() //函数结束时自动关闭文件
 
 	//创建文件夹
-	dir, err := util.GetDir("./static/upload/"+folder+"/", time.Now().Format("2006_01_02"))
+	dir, err := util.GetDir(path.Join(u.BaseDir, folder), time.Now().Format("2006_01_02"))
 	if err != nil {
 		err = errors.New("创建文件夹失败")
 		return
@@ -86,31 +89,14 @@ func uploadBase(file *multipart.FileHeader, acceptsExt []string, folderName stri
 	// 随机文件名 + 文件后缀
 	randName := util.RandStringBytes(32) + pathExt
 	// Destination
-	fileName = filepath.Join(dir, randName)
+	fileName := filepath.Join(dir, randName)
 
-	path := oss.AliyunOssUpload(fileName, src)
-	if path == "" {
+	url, err = u.UploadMethod(fileName, src)
+	if url == "" {
 		err = errors.New("上传失败")
 		return
 	}
-	fileName = path
 	return
-
-	// // 创建空文件
-	// dst, err := os.Create(fileName)
-	// if err != nil {
-	// 	err = errors.New("创建文件失败")
-	// 	return
-	// }
-	// defer dst.Close()
-	// // Copy文件流到新建到文件
-	// if _, err = io.Copy(dst, src); err != nil {
-	// 	err = errors.New("拷贝文件至目标失败")
-	// 	return
-	// }
-	// // 拼接文件地址，不带协议头，方便处理http 到https升级 ， 其实也没找到协议头在哪儿，req对象里没有返回到空字符串
-	// fileName = fmt.Sprintf("/%s", fileName)
-	// return
 }
 
 // 在数组中
