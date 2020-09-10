@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"os"
-
-	"github.com/labstack/echo/v4"
 )
 
 func defaultUpload(fileName string, src io.Reader) (path string, err error) {
@@ -27,9 +26,7 @@ func defaultUpload(fileName string, src io.Reader) (path string, err error) {
 	return
 }
 
-func defaultGetFile(httpContext interface{}) (file *multipart.FileHeader, err error) {
-	if c, ok := httpContext.(echo.Context); ok {
-		file, err = c.FormFile("file")
-	}
+func defaultGetFile(req *http.Request) (header *multipart.FileHeader, err error) {
+	_, header, err = req.FormFile("file")
 	return
 }

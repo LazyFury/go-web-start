@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"mime/multipart"
+	"net/http"
 	"path"
 	"path/filepath"
 	"strings"
@@ -18,7 +19,7 @@ import (
 type uploadMethod func(name string, file io.Reader) (url string, err error)
 
 // 从request中获取到file
-type getFile func(httpContext interface{}) (file *multipart.FileHeader, err error)
+type getFile func(httpContext *http.Request) (file *multipart.FileHeader, err error)
 
 // Uploader Uploader
 type Uploader struct {
@@ -29,11 +30,11 @@ type Uploader struct {
 
 // Default 默认上传类型和文件夹
 func (u *Uploader) Default(c echo.Context) (path string, err error) {
-	return u.Custom(c, []string{}, "")
+	return u.Custom(c.Request(), []string{}, "")
 }
 
 // Custom 自定义上传类型和目录
-func (u *Uploader) Custom(httpContext interface{}, acceptsExt []string, folder string) (path string, err error) {
+func (u *Uploader) Custom(httpContext *http.Request, acceptsExt []string, folder string) (path string, err error) {
 	file, err := u.GetFile(httpContext)
 	if err != nil {
 		return
