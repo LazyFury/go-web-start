@@ -1,11 +1,12 @@
 package config
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/wechat"
 	"encoding/json"
 	"log"
 	"os"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/wechat"
 )
 
 // Global 全局配置
@@ -20,6 +21,13 @@ func initConfig() *configType {
 	return t
 }
 
+type aliyunOss struct {
+	Endpoint        string `json:"endpoint"`
+	AccessKeyID     string `json:"access_key_id"`
+	AccessKeySecret string `json:"Access_key_secret"`
+	URL             string `json:"url"`
+}
+
 type configType struct {
 	TablePrefix string `json:"table_prefix"` //数据库表前缀
 
@@ -28,6 +36,7 @@ type configType struct {
 	Mysql    mysql     `json:"mysql"`    // 数据库链接
 	Mail     util.Mail `json:"mail"`
 	WechatMP wechat.MP `json:"wechat"`
+	AliOss   aliyunOss `json:"ali_oss"` //阿里云oss
 }
 
 // ReadConfig 读取配置 初始化时运行 绑定为全局变量

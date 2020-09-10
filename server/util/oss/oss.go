@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
@@ -14,8 +15,8 @@ func AliyunOssUpload(name string, file io.Reader) string {
 			fmt.Printf(fmt.Sprintf("Err:%x", err))
 		}
 	}()
-
-	client, err := oss.New("oss-cn-beijing.aliyuncs.com", "s36RGPs6Tw378idZ", "mqrzXqwASefnnfLQEZKocmhyYplA9I")
+	conf := config.Global.AliOss
+	client, err := oss.New(conf.Endpoint, conf.AccessKeyID, conf.AccessKeySecret)
 	if err != nil {
 		panic(err)
 	}
@@ -28,5 +29,5 @@ func AliyunOssUpload(name string, file io.Reader) string {
 		panic(err)
 	}
 
-	return "https://suke100.oss-cn-beijing.aliyuncs.com/" + name
+	return conf.URL + name
 }
