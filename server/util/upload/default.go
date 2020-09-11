@@ -21,7 +21,7 @@ func defaultUpload(fileName string, src io.Reader) (path string, err error) {
 	if _, err := io.Copy(dst, src); err != nil {
 		err = errors.New("拷贝文件至目标失败")
 	}
-	// 拼接文件地址，不带协议头，方便处理http 到https升级 ， 其实也没找到协议头在哪儿，req对象里没有返回到空字符串
+	// 相对目录
 	path = fmt.Sprintf("/%s", fileName)
 	return
 }

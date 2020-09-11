@@ -5,6 +5,8 @@ type Null struct {
 	BaseControll
 }
 
+var _ Model = &Null{}
+
 // Pointer Pointer
 func (n *Null) Pointer() interface{} { return nil }
 
