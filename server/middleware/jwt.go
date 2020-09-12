@@ -25,7 +25,7 @@ type UserInfo struct {
 
 var (
 	// SECRET jwt
-	SECRET string = util.RandStringBytes(8)
+	SECRET string = "secret" //util.RandStringBytes(8)
 )
 
 // AdminJWT 管理后台用户验证

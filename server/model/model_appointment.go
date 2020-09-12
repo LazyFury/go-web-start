@@ -25,6 +25,8 @@ type Appointment struct {
 	WalkParallel bool                  `json:"walk_parallel" gorm:"default:0"`
 }
 
+var _ Model = &Appointment{}
+
 // Pointer Pointer
 func (a *Appointment) Pointer() interface{} {
 	return &Appointment{}
