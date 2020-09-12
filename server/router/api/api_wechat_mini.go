@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Treblex/go-echo-demo/server/config"
+
 	"github.com/Treblex/go-echo-demo/server/middleware"
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"github.com/Treblex/go-echo-demo/server/util/sha"
@@ -18,9 +20,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 )
-
-var appid = "wx2e3ad7f8f3558963"
-var secret = "0493d2ec984ba126909ba24e449ddc5b"
 
 var code2SessionKeyURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
 
@@ -38,11 +37,51 @@ type (
 	}
 )
 
+var mini = &config.Global.WechatMini
+
 func wehcatMini(g *echo.Group) {
 	mini := g.Group("/wechat-mini")
 	mini.POST("/login", wechatMiniLogin)
 
 	mini.POST("/easy-login", easyLogin)
+
+	mini.POST("/sendMsg", sendMsg, middleware.UserJWT)
+}
+func sendMsg(c echo.Context) error {
+	uid := c.Get("userId").(float64)
+	db := model.DB
+
+	var user = model.User{BaseControll: model.BaseControll{ID: uint(uid)}}
+	if notfoundUser := db.Model(&user).Find(&user).RecordNotFound(); notfoundUser {
+		return util.JSONErr(c, nil, "没找到用户")
+	}
+
+	var miniUser = model.WechatMiniUser{UID: user.ID}
+	if notfoundUser := db.Model(&miniUser).Find(&miniUser).RecordNotFound(); notfoundUser {
+		return util.JSONErr(c, nil, "没找到用户")
+	}
+
+	err := mini.SendSubscribeMessage(miniUser.OpenID, "LEe5SuSVcBC2wei1XW9QwouVZ79T5p3DK-8QfA3ecxM", "https://wechat.com", map[string]interface{}{
+		"thing1": map[string]string{
+			"value": user.Name,
+		},
+		"thing2": map[string]string{
+			"value": "测试数据当前",
+		},
+		"time3": map[string]string{
+			"value": "2019年10月1日 15:01",
+		},
+		"thing4": map[string]string{
+			"value": "thing4",
+		},
+		"phone_number5": map[string]string{
+			"value": "+86-0766-66888866",
+		},
+	})
+	if err != nil {
+		return util.JSONErr(c, err, "")
+	}
+	return util.JSONSuccess(c, nil, "")
 }
 
 func easyLogin(c echo.Context) error {
@@ -52,7 +91,7 @@ func easyLogin(c echo.Context) error {
 	}
 
 	// 请求微信服务器
-	url := fmt.Sprintf(code2SessionKeyURL, appid, secret, jsCode)
+	url := fmt.Sprintf(code2SessionKeyURL, mini.Appid, mini.Appsecret, jsCode)
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -128,7 +167,7 @@ func wechatMiniLogin(c echo.Context) error {
 	}
 
 	// 请求微信服务器
-	url := fmt.Sprintf(code2SessionKeyURL, appid, secret, jsCode)
+	url := fmt.Sprintf(code2SessionKeyURL, mini.Appid, mini.Appsecret, jsCode)
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
