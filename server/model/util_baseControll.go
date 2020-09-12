@@ -38,7 +38,7 @@ type Model interface {
 	Install(g *echo.Group, baseURL string) *echo.Group
 
 	// 处理列表返回结果
-	Result(data interface{}) interface{}
+	Result(data interface{}, userID uint) interface{}
 
 	// 是否公开数据，私有数据查询是需要用户id 或者超级管理员权限
 	// 用户id字段统一为UserID json:user_id
@@ -82,7 +82,7 @@ func (b *BaseControll) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // Result 处理列表返回结果
-func (b *BaseControll) Result(data interface{}) interface{} {
+func (b *BaseControll) Result(data interface{}, userID uint) interface{} {
 	return data
 }
 
@@ -217,7 +217,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 
-	p = b.model().Result(p)
+	p = b.model().Result(p, uint(userID))
 
 	return util.JSONSuccess(c, p, "")
 }

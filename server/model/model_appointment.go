@@ -2,9 +2,11 @@ package model
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/jinzhu/gorm"
 
 	"github.com/Treblex/go-echo-demo/server/util"
 	"github.com/labstack/echo/v4"
@@ -27,19 +29,56 @@ type Appointment struct {
 
 var _ Model = &Appointment{}
 
+type showAppointment struct {
+	*Appointment
+	Count     int  `json:"count"`
+	Applied   bool `json:"applied"` //已申请
+	AmIAuthor bool `json:"am_i_author"`
+}
+
 // Pointer Pointer
 func (a *Appointment) Pointer() interface{} {
-	return &Appointment{}
+	return &showAppointment{}
 }
 
 // PointerList PointerList
 func (a *Appointment) PointerList() interface{} {
-	return &[]Appointment{}
+	return &[]showAppointment{}
 }
 
 // TableName TableName
 func (a *Appointment) TableName() string {
 	return TableName("appointment")
+}
+
+// Joins Joins
+func (a *Appointment) Joins(db *gorm.DB) *gorm.DB {
+	db = db.Select("*")
+	log := &AppointmentLog{}
+	db = db.Joins(fmt.Sprintf("left join (select count(id) count,appointment_id from `%s` group by `appointment_id`) t1 on `t1`.`appointment_id`=`%s`.`id`", log.TableName(), a.TableName()))
+	return db
+}
+
+// Result 处理返回值
+func (a *Appointment) Result(data interface{}, userID uint) interface{} {
+	// 如果是列表
+	var _, ok = reflect.ValueOf(data).Elem().Interface().([]showAppointment)
+
+	// 如果是详情
+	item, ok := reflect.ValueOf(data).Elem().Interface().(showAppointment)
+	if ok {
+		item.AmIAuthor = userID == item.UID
+
+		log := &AppointmentLog{}
+		log.BaseControll.Model = log
+		hasOne := log.HasOne(log)
+
+		item.Applied = hasOne
+
+		return item
+	}
+
+	return data
 }
 
 // Add add

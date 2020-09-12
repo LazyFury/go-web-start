@@ -1,10 +1,11 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype/message"
 	"fmt"
 	"reflect"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype/message"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
@@ -82,7 +83,7 @@ func (m *Message) getMoreField(v *selectMessage) {
 }
 
 // Result 处理返回值
-func (m *Message) Result(data interface{}) interface{} {
+func (m *Message) Result(data interface{}, userID uint) interface{} {
 	var val, ok = reflect.ValueOf(data).Elem().Interface().([]selectMessage)
 	// 如果是列表
 	if ok {

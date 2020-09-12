@@ -40,8 +40,8 @@ func (a *AppointmentLog) TableName() string {
 	return TableName("appointment_log")
 }
 
-// Search Search
-func (a *AppointmentLog) Search(db *gorm.DB, key string) *gorm.DB {
+// Joins Joins
+func (a *AppointmentLog) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("*")
 	appointment := &Appointment{}
 	db = db.Joins(fmt.Sprintf("left join (select id a_id,`title`,`desc`,`address`,`start_time`,`end_time`,`max_num` from `%s`) t2 on t2.`a_id`=`%s`.`appointment_id`", appointment.TableName(), a.TableName()))
@@ -57,6 +57,10 @@ func (a *AppointmentLog) Add(c echo.Context) error {
 	}
 	if log.AppointmentID == 0 {
 		return util.JSONErr(c, nil, "必须输入活动id")
+	}
+
+	if hasOne := a.HasOne(log); hasOne {
+		return util.JSONErr(c, nil, "已预约,请不要重复预约")
 	}
 
 	uid := c.Get("userId").(float64)
