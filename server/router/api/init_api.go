@@ -21,7 +21,14 @@ func Init(g *echo.Group) {
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("", resources)
 	apiV1.POST("/upload", func(c echo.Context) error {
-		url, err := aliUploader.Default(c)
+		url, err := aliUploader.Default(c.Request())
+		if err != nil {
+			return util.JSONErr(c, nil, err.Error())
+		}
+		return util.JSONSuccess(c, url, "上传成功")
+	})
+	apiV1.POST("/upload-head-pic", func(c echo.Context) error {
+		url, err := aliUploader.Custom(c.Request(), upload.AcceptsImgExt, "head_pic")
 		if err != nil {
 			return util.JSONErr(c, nil, err.Error())
 		}
