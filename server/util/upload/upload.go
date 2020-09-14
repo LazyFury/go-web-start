@@ -9,10 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"github.com/Treblex/go-echo-demo/server/util"
-
-	"github.com/labstack/echo/v4"
 )
 
 // UploadMethod 拷贝文件到本地 或者 上传到oss的方法。返回url
@@ -29,8 +25,8 @@ type Uploader struct {
 }
 
 // Default 默认上传类型和文件夹
-func (u *Uploader) Default(c echo.Context) (path string, err error) {
-	return u.Custom(c.Request(), []string{}, "")
+func (u *Uploader) Default(httpContext *http.Request) (path string, err error) {
+	return u.Custom(httpContext, []string{}, "default")
 }
 
 // Custom 自定义上传类型和目录
@@ -81,14 +77,14 @@ func (u *Uploader) uploadBase(file *multipart.FileHeader, acceptsExt []string, f
 	defer src.Close() //函数结束时自动关闭文件
 
 	//创建文件夹
-	dir, err := util.GetDir(path.Join(u.BaseDir, folder), time.Now().Format("2006_01_02"))
+	dir, err := GetDir(path.Join(u.BaseDir, folder), time.Now().Format("2006_01_02"))
 	if err != nil {
 		err = errors.New("创建文件夹失败")
 		return
 	}
 
 	// 随机文件名 + 文件后缀
-	randName := util.RandStringBytes(32) + pathExt
+	randName := RandStringBytes(32) + pathExt
 	// Destination
 	fileName := filepath.Join(dir, randName)
 
@@ -98,16 +94,4 @@ func (u *Uploader) uploadBase(file *multipart.FileHeader, acceptsExt []string, f
 		return
 	}
 	return
-}
-
-// 在数组中
-func inArray(arr []string, item string) (inArr bool) {
-	index := -1
-	item = strings.ToLower(item)
-	for i, x := range arr {
-		if item == x {
-			index = i
-		}
-	}
-	return index > -1
 }
