@@ -18,7 +18,6 @@ import (
 func New() *echo.Echo {
 	e := echo.New() //echo实例
 
-	e.Pre(middleware.RemoveTrailingSlash())                                        //删除url反斜杠
 	e.Use(middleware.Gzip())                                                       //gzip压缩
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(midd.LogMiddleware())
@@ -52,7 +51,7 @@ func New() *echo.Echo {
 
 	// 静态目录
 	e.Static("/static", "static")
-	e.Static("", "h5")
+	e.Static("/", "h5")
 
 	// 请求信息
 	e.GET("requestInfo", requestInfo)
