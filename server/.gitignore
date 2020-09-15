@@ -9,7 +9,7 @@ __debug_bin
 go-runtime/
 go-path/
 docker/mysql/data
-server/config/config.json
+config.json
 
 .vscode/
 .idea/
