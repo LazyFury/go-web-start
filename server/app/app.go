@@ -49,10 +49,6 @@ func New() *echo.Echo {
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
 
-	// 静态目录
-	e.Static("/static", "static")
-	e.Static("/", "h5")
-
 	// 请求信息
 	e.GET("requestInfo", requestInfo)
 
