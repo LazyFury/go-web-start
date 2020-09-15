@@ -18,6 +18,7 @@ import (
 func New() *echo.Echo {
 	e := echo.New() //echo实例
 
+	e.Pre(slash)                                                                   //反斜杠处理
 	e.Use(middleware.Gzip())                                                       //gzip压缩
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
 	// e.Use(midd.LogMiddleware())
@@ -26,7 +27,7 @@ func New() *echo.Echo {
 	e.Use(middleware.Secure())         //安全
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(util.RandStringBytes(32))))) //session
-	e.Use(sessionInit())
+	e.Use(sessionInit)
 	//跨域
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},

@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"net/http"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )
