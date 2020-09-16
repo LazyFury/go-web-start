@@ -9,6 +9,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/armon/go-metrics v0.3.3 // indirect
+	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/eduncan911/podcast v1.4.2 // indirect
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6

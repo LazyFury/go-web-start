@@ -1,13 +1,10 @@
 package app
 
 import (
-	"html/template"
 	"os"
 
-	"github.com/Treblex/go-echo-demo/server/router"
 	"github.com/Treblex/go-echo-demo/server/util"
 
-	"github.com/Masterminds/sprig"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -45,18 +42,15 @@ func New() *echo.Echo {
 	// }))
 
 	// 绑定渲染模版方法
-	e.Renderer = &util.TemplateRenderer{
-		Templates: template.Must(util.ParseGlob(template.New("base").Funcs(util.TemplateFuns).Funcs(sprig.FuncMap()), "template", "*.html")),
-	}
+	// e.Renderer = &util.TemplateRenderer{
+	// 	Templates: template.Must(util.ParseGlob(template.New("base").Funcs(util.TemplateFuns).Funcs(sprig.FuncMap()), "template", "*.html")),
+	// }
 
 	// 错误处理
 	e.HTTPErrorHandler = httpErrorHandler
 
 	// 请求信息
 	e.GET("requestInfo", requestInfo)
-
-	// 注册路由
-	router.Start(e)
 
 	// 启动服务
 	// e.Logger.Error(e.Start(fmt.Sprintf(":%d", config.Global.Port)))
