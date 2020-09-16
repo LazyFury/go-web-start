@@ -120,7 +120,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
         setState(() {
           offset += (offset > 0) ? -step : step;
         });
-        print('object $step $milliseconds');
+        // print('object $step $milliseconds');
         if (offset.abs() - step <= step) {
           setState(() {
             offset = 0;
@@ -190,7 +190,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
 
   void onPanUpdate(e) {
     if (onReset) return;
-    print("update:${e.localPosition.dx.toString()} target: $target ");
+    // print("update:${e.localPosition.dx.toString()} target: $target ");
     var move = (e.localPosition.dx - target) * 0.75;
     setState(() {
       print(offset);
@@ -211,7 +211,7 @@ class SlidingEventsStatus extends State<SlidingEvents> {
 
       offset += move;
       target = e.localPosition.dx;
-      print(offset);
+      // print(offset);
     });
   }
 

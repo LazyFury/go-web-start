@@ -59,7 +59,7 @@ class CartStatue extends State<Cart> {
   resetAllSliding() {
     Utils.setTimeout(Duration(milliseconds: 50), () {
       if (canClose) {
-        print("全局重置 $canClose");
+        // print("全局重置 $canClose");
         eventBus.fire(new SlidingEventsBus("reset"));
       }
       setState(() {
