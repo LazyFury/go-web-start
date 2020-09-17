@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutterproject/utils/utils.dart';
 import 'package:flutterproject/widgets/easyUse.dart';
 import 'package:flutterproject/widgets/layout.dart';
 import 'package:flutterproject/widgets/swiper.dart';
@@ -32,7 +33,9 @@ class HomeState extends State<Home> {
         children: <Widget>[
           Expanded(
             child: EasyRefresh(
-              onRefresh: () async {},
+              onRefresh: () async {
+                await Utils.setTimeout(Duration(seconds: 10), () {});
+              },
               onLoad: () async {
                 print('onload');
               },

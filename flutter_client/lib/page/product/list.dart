@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutterproject/utils/statusBar.dart';
 import 'package:flutterproject/widgets/easyUse.dart';
 import 'package:flutterproject/widgets/layout.dart';
 import 'package:flutterproject/widgets/touchView.dart';
@@ -107,21 +108,59 @@ class ProductListState extends State<ProductList> {
   }
 
   Future<bool> showXConfirm() {
+    Widget button(text, onTap) {
+      return Expanded(
+        child: TouchView(
+          child: Container(
+            height: 30,
+            child: Center(
+              child: Text(
+                text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          onTap: onTap,
+        ),
+      );
+    }
+
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
-        return Center(
-          child: Container(
-            width: 200,
-            height: 100,
-            decoration: BoxDecoration(color: Colors.white),
-            child: FlatButton(
-              child: Text("知道了"),
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: screenSize(context).width * .64,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      children: [
+                        Text('title'),
+                        Text("asdsdddd"),
+                        Row(
+                          children: [
+                            button('text', () {}),
+                            button('text', () {
+                              Navigator.of(context).pop(true);
+                            }),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
+          ],
         );
       },
     );

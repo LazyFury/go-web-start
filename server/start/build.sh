@@ -1,7 +1,7 @@
 #! /bin/bash
 rm -r ./dist/
 # 创建文件夹
-mkdir -p  dist/{config,h5,static,template}
+mkdir -p  dist/{config,wwwroot,template}
 echo '编译项目中..'$1
 export TempDir=./dist
 export GOOS=''
@@ -37,11 +37,10 @@ eval  GOOS=$GOOS   go build -o $TempDir/$File
 echo ' - 拷贝配置文件...'
 cp -r config/config.json $TempDir/config/config.json
 # cp -r config/database.db $TempDir/config/database.db
-cp -r docker/zoneinfo.zip $TempDir/config/zoneinfo.zip
-echo ' - 拷贝前端目录...'
-cp -r h5/* $TempDir/h5
+cp -r ../docker/zoneinfo.zip $TempDir/config/zoneinfo.zip
+
 echo ' - 拷贝资源文件...'
-cp -r static/* $TempDir/static
+cp -r wwwroot/* $TempDir/wwwroot
 echo ' - 拷贝模板文件...'
 cp -r template/* $TempDir/template
 echo ' - 创建日志目录...'

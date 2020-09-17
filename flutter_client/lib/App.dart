@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/page/tabbar/user.dart';
 import 'package:flutterproject/utils/iconFont.dart';
 
@@ -21,8 +22,17 @@ class App extends StatefulWidget {
 class AppStatus extends State<App> {
   int current = 0;
 
+  @override
   initState() {
     super.initState();
+
+    EasyRefresh.defaultHeader = ClassicalHeader(
+        refreshReadyText: "松开刷新",
+        refreshText: "下拉刷新",
+        refreshedText: "刷新成功",
+        refreshingText: "正在刷新",
+        refreshFailedText: "请求失败",
+        infoText: "最后更新于 %T");
   }
 
   List<Widget> pages = [
