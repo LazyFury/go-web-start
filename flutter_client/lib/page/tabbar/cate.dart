@@ -143,7 +143,12 @@ class CateStatus extends State<Cate> {
   List<Widget> tmenu() {
     var list = List<Map<String, Object>>.from(cates[current]['tmenu']);
     if (list.length == 0) {
-      return [noData(height: 300, title: "暂无内容")];
+      return [
+        Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Container(child: noData(height: 200, title: "暂无内容")),
+        )
+      ];
     }
     return list.asMap().entries.map((e) {
       return Container(
@@ -177,7 +182,9 @@ class CateStatus extends State<Cate> {
   List<Widget> thirdMenu(tmenu) {
     var list = List<Map<String, Object>>.from(tmenu);
     if (list.length == 0) {
-      return [Container(child: Center(child: noData(title: "暂无下级分类")))];
+      return [
+        Container(child: Center(child: noData(title: "暂无下级分类", height: 120)))
+      ];
     }
     return list.asMap().entries.map(
       (e) {

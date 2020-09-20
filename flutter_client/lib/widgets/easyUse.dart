@@ -14,13 +14,15 @@ Widget noData({double height = 100, String title = ""}) => Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            height: height > 240 ? height / 2 : height - 30,
-            child: Image(
-              image: AssetImage(
-                "static/image/noData.png",
+          Expanded(
+            child: Container(
+              height: height > 280 ? height / 2 : height - 30,
+              child: Image(
+                image: AssetImage(
+                  "static/image/noData.png",
+                ),
+                fit: BoxFit.cover,
               ),
-              fit: BoxFit.cover,
             ),
           ),
           Container(
