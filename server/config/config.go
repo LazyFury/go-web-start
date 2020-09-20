@@ -5,9 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/Treblex/go-echo-demo/server/util/mail"
 	"github.com/Treblex/go-echo-demo/server/util/upload"
-
-	"github.com/Treblex/go-echo-demo/server/util"
 	"github.com/Treblex/go-echo-demo/server/util/wechat"
 )
 
@@ -29,7 +28,7 @@ type configType struct {
 	BaseURL    string            `json:"base_url"` // 网站根目录
 	Port       int               `json:"port"`     //端口
 	Mysql      mysql             `json:"mysql"`    // 数据库链接
-	Mail       util.Mail         `json:"mail"`
+	Mail       mail.Mail         `json:"mail"`
 	WechatMP   wechat.MP         `json:"wechat"`
 	WechatMini wechat.Mini       `json:"wechat_mini"`
 	AliOss     upload.AliOssConf `json:"ali_oss"` //阿里云oss
