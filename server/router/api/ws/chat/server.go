@@ -1,11 +1,14 @@
 package chat
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/util/mlog"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
@@ -25,14 +28,14 @@ var (
 func WsServer(c echo.Context) error {
 	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
-		util.Logger.Print("upgrade:", err)
+		fmt.Print("upgrade:", err)
 		return err
 	}
 	defer util.Recover()
 	defer ws.Close()
 
 	ws.SetCloseHandler(func(code int, text string) error {
-		fmt.Printf("\nSetCloseHandler Err %v %v \n", code, text)
+		mlog.Error("SetCloseHandler Err %v %v ", code, text)
 		// chat.removeByWsConn(ws)
 		return nil
 	})
@@ -58,7 +61,7 @@ func received(chat *Chat, ws *websocket.Conn) {
 	for {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
-			fmt.Println("close:", err)
+			mlog.Error("close:", err)
 			break
 		}
 		var info UserSubmit
@@ -68,7 +71,7 @@ func received(chat *Chat, ws *websocket.Conn) {
 		}
 
 		if info.Action != "ping" {
-			util.Logger.Printf("收到消息: %v \n", info.toString())
+			mlog.Info("收到消息: %v \n", info.toString())
 		}
 
 		chat.handleMessage(&info, ws)

@@ -24,6 +24,7 @@ github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdko
 github.com/Shyp/generate-tls-cert v0.0.0-20180217183001-cd913b339294/go.mod h1:yTfammXKX1AuKQjY4Kgo+Zoy7mRIAKx6HUa/SCtmNDg=
 github.com/Treblex/go-echo-demo v0.0.0-20200904045851-813ac257aeb4 h1:WhSrV7cgLG3sVyW3XKp6eUoTHZx/+RXs2plOJgX3dNw=
 github.com/Treblex/go-echo-demo v0.0.0-20200904080106-1b236f66ced2 h1:68//VaCjUbcKRhP7ukB4jo3f312JGu6bNaNzxmLgA4k=
+github.com/Treblex/go-echo-demo v0.0.0-20200921005153-63b4d83e6d76 h1:apWmIy7AfkwLJ8q1FZl2yZ0WABWEf8Ik2Z9hgxKySJQ=
 github.com/Treblex/go-echo-demo/server v0.0.0-20200904045851-813ac257aeb4/go.mod h1:MAdSeQxEnrUrV/nFmMaGrtIP3mW2nAh2ZVsFLKs9fDg=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4 h1:GpyHnIy4P3pUoWGaOlZY8/YFBQ452qOC0lRJ1Ko2Ip0=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4/go.mod h1:AmuSd4dY+QPJ3bcCtBDY1kCXxwKsvteT3VOYoDEDZco=
@@ -33,6 +34,7 @@ github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904045851-813ac257aeb4 h
 github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904045851-813ac257aeb4/go.mod h1:FJjJDLCS7MvVOdFwI2/ioc9AxiDuiOQ9tL4lppcOzh8=
 github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904080106-1b236f66ced2 h1:S/GdKLC4kWQRlwLrxeVqZcfCGwEr0gESQn6icXa+oWk=
 github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904080106-1b236f66ced2/go.mod h1:FJjJDLCS7MvVOdFwI2/ioc9AxiDuiOQ9tL4lppcOzh8=
+github.com/Treblex/go-echo-demo/server/util v0.0.0-20200904093613-cc5224b80b50 h1:062STKneA2EGVMJ5DQekdwtDdofUoUg8BNLXxIY0Cbc=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
@@ -92,6 +94,8 @@ github.com/docker/libkv v0.2.1/go.mod h1:r5hEwHwW8dr0TFBYGCarMNbrQOiwL1xoqDYZ/Jq
 github.com/eduncan911/podcast v1.4.2 h1:S+fsUlbR2ULFou2Mc52G/MZI8JVJHedbxLQnoA+MY/w=
 github.com/eduncan911/podcast v1.4.2/go.mod h1:mSxiK1z5KeNO0YFaQ3ElJlUZbbDV9dA7R9c1coeeXkc=
 github.com/erikstmartin/go-testdb v0.0.0-20160219214506-8d10e4a1bae5/go.mod h1:a2zkGnVExMxdzMo3M0Hi/3sEU+cWnZpSni0O6/Yb/P0=
+github.com/fatedier/beego v1.7.2 h1:kVw3oKiXccInqG+Z/7l8zyRQXrsCQEfcUxgzfGK+R8g=
+github.com/fatedier/beego v1.7.2/go.mod h1:wx3gB6dbIfBRcucp94PI9Bt3I0F2c/MyNEWuhzpWiwk=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
 github.com/fatih/color v1.9.0/go.mod h1:eQcE1qtQxscV5RaZvpXrrb8Drkc3/DdQ+uUYCNjL+zU=
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=

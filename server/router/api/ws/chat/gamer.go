@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Treblex/go-echo-demo/server/util/mlog"
 	"github.com/gorilla/websocket"
 )
 
@@ -21,12 +22,12 @@ type (
 )
 
 func (g *Gamer) Write() {
-	fmt.Printf("初始化用户监听消息\n")
+	mlog.Info("初始化用户监听消息\n")
 
 	defer func() {
 		if r := recover(); r != nil {
 			err := r.(error)
-			fmt.Println(err.Error())
+			mlog.Error(err.Error())
 		}
 	}()
 
@@ -49,7 +50,7 @@ func (g *Gamer) Write() {
 
 func (g *Gamer) remove() {
 	g.Ws.Close()
-	close(g.WriteList)
+	// close(g.WriteList)
 	g.isDone <- true
 }
 

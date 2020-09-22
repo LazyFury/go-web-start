@@ -8,7 +8,7 @@ import (
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/model"
 	"github.com/Treblex/go-echo-demo/server/router"
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/mlog"
 
 	"github.com/fvbock/endless"
 )
@@ -32,8 +32,8 @@ func main() {
 	server := endless.NewServer(fmt.Sprintf(":%d", config.Global.Port), e)
 	err := server.ListenAndServe()
 	if err != nil {
-		util.Logger.Println(err)
+		mlog.Error(err.Error())
 	}
-	fmt.Printf("stopd\n")
+	mlog.Error("stopd\n")
 	os.Exit(0)
 }

@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"bytes"
 	"io"
 	"os"
@@ -9,6 +8,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/mlog"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
@@ -212,7 +214,7 @@ func LoggerWithConfig(config LoggerConfig) echo.MiddlewareFunc {
 			}
 
 			// _, err = config.Output.Write(buf.Bytes())
-			util.Logger.Print(string(buf.Bytes()))
+			mlog.Info(string(buf.Bytes()))
 			return
 		}
 	}
