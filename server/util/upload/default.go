@@ -9,6 +9,12 @@ import (
 	"os"
 )
 
+// DefaultUpload 默认上传拷贝文件
+var DefaultUpload = defaultUpload
+
+// DefaultGetFile 默认从http请求读取文件流到方法
+var DefaultGetFile = defaultGetFile
+
 func defaultUpload(fileName string, src io.Reader) (path string, err error) {
 	// 创建空文件
 	dst, err := os.Create(fileName)
