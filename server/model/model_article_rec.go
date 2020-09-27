@@ -94,41 +94,19 @@ func (a *ArticlesRec) List(c echo.Context) error {
 
 // Add 添加分类
 func (a *ArticlesRec) Add(c echo.Context) error {
-	cate := &ArticlesRec{}
+	rec := &ArticlesRec{}
 
-	if err := c.Bind(cate); err != nil {
+	if err := c.Bind(rec); err != nil {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
-	cate.Name = strings.Trim(cate.Name, " ")
-	if cate.Name == "" {
+	rec.Name = strings.Trim(rec.Name, " ")
+	if rec.Name == "" {
 		return util.JSONErr(c, nil, "名称不可空")
 	}
 
-	ids := strings.Split(cate.IDs, ",")
-	if cate.IDs == "" || len(ids) <= 0 {
-		return util.JSONErr(c, nil, "请选择推荐文章")
-	}
-
-	db := DB
-	article := &Articles{}
-	articles := []Articles{}
-	row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
-	if row.Error != nil {
-		return util.JSONErr(c, row.Error, "")
-	}
-
-	if len(articles) <= 0 {
-		return util.JSONErr(c, nil, "选择了无效的文章")
-	}
-	ids = []string{}
-	for _, id := range articles {
-		ids = append(ids, fmt.Sprintf("%d", id.ID))
-	}
-
-	cate.IDs = strings.Join(ids, ",")
-	cate.Empty()
-	return a.BaseControll.DoAdd(c, cate)
+	rec.Empty()
+	return a.BaseControll.DoAdd(c, rec)
 }
 
 // Update 添加分类
@@ -137,6 +115,29 @@ func (a *ArticlesRec) Update(c echo.Context) error {
 
 	if err := c.Bind(rec); err != nil {
 		return util.JSONErr(c, err, "参数错误")
+	}
+
+	ids := strings.Split(rec.IDs, ",")
+	if rec.IDs != "" || len(ids) >= 0 {
+		db := DB
+		article := &Articles{}
+		articles := []Articles{}
+		row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
+		if row.Error != nil {
+			return util.JSONErr(c, row.Error, "")
+		}
+
+		if len(articles) <= 0 {
+			return util.JSONErr(c, nil, "选择了无效的文章")
+		}
+		ids = []string{}
+		for _, id := range articles {
+			ids = append(ids, fmt.Sprintf("%d", id.ID))
+		}
+
+		rec.IDs = strings.Join(ids, ",")
+	} else {
+		rec.IDs = "0"
 	}
 
 	rec.Empty()
