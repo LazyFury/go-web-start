@@ -3,6 +3,7 @@ import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
 import config from '@/utils/config';
 import {
+  CheckOutlined,
   DeleteOutlined,
   EditOutlined,
   PaperClipOutlined,
@@ -18,12 +19,33 @@ let { confirm } = Modal;
 let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
 let setCate_id: React.Dispatch<React.SetStateAction<string>>;
 
-export default () => {
+let numbers: number[] = [];
+
+var 补集 = (a: number[], b: number[]) =>
+  a
+    .filter(function(v) {
+      return !(b.indexOf(v) > -1);
+    })
+    .concat(
+      b.filter(function(v) {
+        return !(a.indexOf(v) > -1);
+      }),
+    );
+
+const Post = (props: {
+  showSelect?: boolean;
+  selectedKeys?: number[];
+  selectConfirm?: (keys: number[]) => void;
+}) => {
   /**
    * @init
    */
   let [cid, setCid] = useState('');
   setCate_id = setCid;
+
+  let [selectedRowKeys_, setSelectedRowKeys] = useState(
+    props.selectedKeys || numbers,
+  );
 
   // 获取文章列表
   let { data, load, loading, reset } = useDataList(
@@ -64,6 +86,19 @@ export default () => {
 
       <div className="page-main">
         <div className="action-bar" style={{ margin: '10px 0' }}>
+          {props.showSelect && (
+            <Button
+              type="primary"
+              onClick={() => {
+                props.selectConfirm && props.selectConfirm(selectedRowKeys_);
+                setSelectedRowKeys([]);
+              }}
+            >
+              <CheckOutlined />
+              确定选择
+            </Button>
+          )}
+
           {/* 选择分类 */}
           <Select
             allowClear
@@ -97,7 +132,7 @@ export default () => {
           dataSource={data.list}
           size={'large'}
           bordered={true}
-          rowKey={'id'}
+          rowKey={record => record.id}
           loading={loading}
           pagination={{
             position: ['bottomLeft'],
@@ -106,16 +141,39 @@ export default () => {
             showSizeChanger: false,
             onChange: load,
           }}
-          rowSelection={{
-            type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
-              console.log(
-                `selectedRowKeys: ${selectedRowKeys}`,
-                'selectedRows: ',
-                selectedRows,
-              );
-            },
-          }}
+          rowSelection={
+            (props.showSelect && {
+              type: 'checkbox',
+              selectedRowKeys: selectedRowKeys_,
+              onSelectAll: (selected: boolean, selectedRows, changeRows) => {
+                let ids = [];
+                if (!selected) {
+                  ids = changeRows.map(x => x.id);
+                  setSelectedRowKeys(补集(selectedRowKeys_, ids));
+                }
+              },
+
+              onSelect: (item, selected: boolean, selectedRows: any[]) => {
+                console.log(item, selected);
+                let key = item.id;
+                let selectedKeys = selectedRowKeys_;
+                if (!selected) {
+                  let index = selectedKeys.indexOf(key);
+                  if (index > -1) {
+                    selectedKeys.splice(index, 1);
+                  }
+                }
+                setSelectedRowKeys(selectedKeys);
+              },
+              onChange: (selectedRowKeys, selectedRows) => {
+                let keys = selectedRows.map(x => x.id);
+                setSelectedRowKeys([
+                  ...new Set([...selectedRowKeys_, ...keys]),
+                ]);
+              },
+            }) ||
+            undefined
+          }
         ></Table>
       </div>
     </div>
@@ -225,3 +283,5 @@ function confirmDel(id: number) {
     },
   });
 }
+
+export default Post;
