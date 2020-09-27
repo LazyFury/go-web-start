@@ -1,10 +1,11 @@
-package config
+package mysql
 
 import (
 	"fmt"
 )
 
-type mysql struct {
+// Mysql Mysql
+type Mysql struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Host     string `json:"host"`
@@ -13,7 +14,8 @@ type mysql struct {
 	Param    string `json:"param"`
 }
 
-func (m *mysql) ToString() string {
+// ToString ToString
+func (m *Mysql) ToString() string {
 	format := "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True"
 	return fmt.Sprintf(format, m.User, m.Password, m.Host, m.Port, m.Database) + m.Param
 }
