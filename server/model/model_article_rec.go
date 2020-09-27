@@ -118,7 +118,7 @@ func (a *ArticlesRec) Update(c echo.Context) error {
 	}
 
 	ids := strings.Split(rec.IDs, ",")
-	if rec.IDs != "" || len(ids) >= 0 {
+	if rec.IDs != "" || len(ids) > 0 {
 		db := DB
 		article := &Articles{}
 		articles := []Articles{}
