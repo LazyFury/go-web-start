@@ -15,15 +15,15 @@ fi
 
 
 tmp_path=$1
-  echo "building..."
+  echo "🤡正在编译..."
   go build -o $tmp_path
 
 pid=$(ps -ef |grep $tmp_path |grep -v grep | grep -v 'run.sh' |  awk '{print $2}');
-echo "查找运行中 $tmp_path 的进程..."
+echo "🤔查找运行中 $tmp_path 的进程..."
 
 if [ ! -n "$pid" ]
 then
-  echo "没有运行中的进程";
+  echo "🥱没有运行中的进程";
   # echo "restarting..."
   # nohup  $tmp_path >> ./log/nohup.log &
   # exec $tmp_path >> ./log/nohup.log & #2>&1 & 
@@ -32,9 +32,16 @@ then
 else
   for i in `echo $pid`
     do
-      echo "kill 进程pid $i 通知原进程fork子进程"
-      kill -s 9 $i;
+      echo "👹kill 进程pid $i " #通知原进程fork子进程
+      kill -9 $i;
     done
 fi
-exec $tmp_path >> ./log/nohup.log & #2>&1 & 
+
+# 偷个懒 不检测文件夹是否存在
+mkdir log
+touch log/nohup.log
+
+
+echo '🤖启动编译产物'
+nohup "$tmp_path"  >> ./log/nohup.log  2>&1 &
 echo 'done.'
