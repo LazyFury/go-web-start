@@ -16,7 +16,7 @@ var aliUploader = upload.NewAliOssUploader(config.Global.AliOss)
 // Init  api Version 1.0 初始化
 func Init(g *echo.Group) {
 
-	apiV1 := g.Group("/api/v1")
+	apiV1 := g.Group("/v1")
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("", resources)
