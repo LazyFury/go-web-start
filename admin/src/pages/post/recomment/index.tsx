@@ -61,7 +61,7 @@ export default function() {
       render: (count: number, item: any) => {
         return (
           <div>
-            <span>{count} </span>
+            <span>({count}) </span>
             <a
               onClick={() => {
                 setShowChoosePost(true);

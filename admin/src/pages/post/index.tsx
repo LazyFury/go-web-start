@@ -43,9 +43,7 @@ const Post = (props: {
   let [cid, setCid] = useState('');
   setCate_id = setCid;
 
-  let [selectedRowKeys_, setSelectedRowKeys] = useState(
-    props.selectedKeys || numbers,
-  );
+  let [selectedRowKeys_, setSelectedRowKeys] = useState(numbers);
 
   // 获取文章列表
   let { data, load, loading, reset } = useDataList(
@@ -64,6 +62,10 @@ const Post = (props: {
   useEffect(() => {
     reset();
   }, [cid]);
+
+  useEffect(() => {
+    setSelectedRowKeys(props.selectedKeys || []);
+  }, [props.selectedKeys]);
 
   /**
    * @methods
