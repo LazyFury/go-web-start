@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/router/api"
+	api "github.com/Treblex/go-echo-demo/server/router/api/v1"
 	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"

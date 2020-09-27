@@ -25,6 +25,7 @@ github.com/Shyp/generate-tls-cert v0.0.0-20180217183001-cd913b339294/go.mod h1:y
 github.com/Treblex/go-echo-demo v0.0.0-20200904045851-813ac257aeb4 h1:WhSrV7cgLG3sVyW3XKp6eUoTHZx/+RXs2plOJgX3dNw=
 github.com/Treblex/go-echo-demo v0.0.0-20200904080106-1b236f66ced2 h1:68//VaCjUbcKRhP7ukB4jo3f312JGu6bNaNzxmLgA4k=
 github.com/Treblex/go-echo-demo v0.0.0-20200921005153-63b4d83e6d76 h1:apWmIy7AfkwLJ8q1FZl2yZ0WABWEf8Ik2Z9hgxKySJQ=
+github.com/Treblex/go-echo-demo v0.0.0-20200927090302-02e423a26539 h1:JqtAyLE07zmMgrjNWE6OdDQOalI7cgsczvqK2KkG7C4=
 github.com/Treblex/go-echo-demo/server v0.0.0-20200904045851-813ac257aeb4/go.mod h1:MAdSeQxEnrUrV/nFmMaGrtIP3mW2nAh2ZVsFLKs9fDg=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4 h1:GpyHnIy4P3pUoWGaOlZY8/YFBQ452qOC0lRJ1Ko2Ip0=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4/go.mod h1:AmuSd4dY+QPJ3bcCtBDY1kCXxwKsvteT3VOYoDEDZco=
