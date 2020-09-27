@@ -117,27 +117,31 @@ func (a *ArticlesRec) Update(c echo.Context) error {
 		return util.JSONErr(c, err, "参数错误")
 	}
 
-	ids := strings.Split(rec.IDs, ",")
-	if rec.IDs != "" || len(ids) > 0 {
-		db := DB
-		article := &Articles{}
-		articles := []Articles{}
-		row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
-		if row.Error != nil {
-			return util.JSONErr(c, row.Error, "")
+	// 为0 清空选择的文章，不为0时需要验证文章可用性
+	if rec.IDs != "0" {
+		ids := strings.Split(rec.IDs, ",")
+		if ids[0] == "" {
+			ids = ids[1:]
 		}
+		if len(ids) > 0 {
+			db := DB
+			article := &Articles{}
+			articles := []Articles{}
+			row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
+			if row.Error != nil {
+				return util.JSONErr(c, row.Error, "")
+			}
 
-		if len(articles) <= 0 {
-			return util.JSONErr(c, nil, "选择了无效的文章")
-		}
-		ids = []string{}
-		for _, id := range articles {
-			ids = append(ids, fmt.Sprintf("%d", id.ID))
-		}
+			if len(articles) <= 0 {
+				return util.JSONErr(c, nil, "选择了无效的文章")
+			}
+			ids = []string{}
+			for _, id := range articles {
+				ids = append(ids, fmt.Sprintf("%d", id.ID))
+			}
 
-		rec.IDs = strings.Join(ids, ",")
-	} else {
-		rec.IDs = "0"
+			rec.IDs = strings.Join(ids, ",")
+		}
 	}
 
 	rec.Empty()
