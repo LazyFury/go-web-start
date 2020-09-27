@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutterproject/widgets/safeMode.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 class UserCenter extends StatefulWidget {
@@ -72,10 +73,11 @@ class _UserCenter extends State<UserCenter> {
                       padding: EdgeInsets.all(10),
                       child: Text(
                         "hello world! there is a new flutter app demo positioned,let`s test it.cool! it`s runing!",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontFamily: "Regular"),
+                        style: GoogleFonts.secularOne(
+                            textStyle: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                        )),
                         maxLines: 3,
                         overflow: TextOverflow.clip,
                       ),

@@ -11,7 +11,7 @@ class SearchPage extends StatelessWidget {
       title: "搜索",
       child: EasyRefresh(
         onRefresh: () async {},
-        child: Text("hello this is a search page!"),
+        child: Text("hello this is a search page! haha😄h"),
       ),
     );
   }

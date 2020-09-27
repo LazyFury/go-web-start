@@ -27,6 +27,8 @@ dependencies:
   event_bus:
   lottie: ^0.5.1
   provider:
+  barcode_scan: any
+  google_fonts:
   
 
   # The following adds the Cupertino Icons font to your application.

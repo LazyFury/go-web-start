@@ -1,3 +1,4 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterproject/utils/color.dart';
@@ -5,6 +6,7 @@ import 'package:flutterproject/utils/iconFont.dart';
 import 'package:flutterproject/widgets/safeMode.dart';
 import 'package:flutterproject/widgets/touchView.dart';
 import 'package:flutterproject/page/search.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'utils/color.dart';
 
 Widget searchBar(context, {bool scan = false}) => Container(
@@ -59,11 +61,9 @@ TouchView addrView() {
 
 TouchView scanView(context) {
   return TouchView(
-    onTap: () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) {
-        return SearchPage(context);
-      }));
+    onTap: () async {
+      var result = await BarcodeScanner.scan(options: ScanOptions());
+      print(result);
     },
     child: Icon(IconFont.scanQR, color: CustomTheme.primaryColor, size: 28),
   );
@@ -84,8 +84,9 @@ Expanded borderRadiusInput(context) {
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Text(
-                '搜索您想要找的商品名称',
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+                '搜索您想要找的商品名称～ ',
+                style: GoogleFonts.peddana(
+                    textStyle: TextStyle(color: Colors.grey, fontSize: 12)),
               ),
             ),
           ],
