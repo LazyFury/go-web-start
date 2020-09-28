@@ -14,7 +14,7 @@
 
     <script>
         function wechatLogin(){
-            window.location.href="/api/v1/wechat/redirect?callback="+encodeURIComponent("/api/v1/wechat/login")
+            window.location.href="/api/v1/wechat/redirect?callback="+encodeURIComponent(location.origin+"/api/v1/wechat/login")
         }
       function jsConfig() {
         fetch("/api/v1/wechat/js-api-config?url=" + window.location.href, {
