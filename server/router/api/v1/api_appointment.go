@@ -10,7 +10,7 @@ var modelAppointment model.Appointment
 var modelAppointmentLog model.AppointmentLog
 
 func appointment(g *echo.Group) {
-	modelAppointment.BaseControll.Model = &modelAppointment
+	modelAppointment.SetController(&modelAppointment)
 	modelAppointmentGroup := g.Group("/appointment", middleware.UserJWT)
 	modelAppointment.Install(modelAppointmentGroup, "")
 

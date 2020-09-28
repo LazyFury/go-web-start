@@ -18,6 +18,13 @@ type ArticlesCate struct {
 	Desc string `json:"desc"`
 }
 
+// NewArticleCate 文章分类
+func NewArticleCate() *ArticlesCate {
+	c := &ArticlesCate{}
+	c.BaseControll.Model = c
+	return c
+}
+
 // PointerList 列表
 func (a *ArticlesCate) PointerList() interface{} {
 	return &[]struct {

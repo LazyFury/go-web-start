@@ -68,6 +68,11 @@ func (b *BaseControll) model() Model {
 	return b.Model
 }
 
+// SetController SetController
+func (b *BaseControll) SetController(m Model) {
+	b.Model = m
+}
+
 // IsPublic IsPublic
 func (b *BaseControll) IsPublic() bool { return true }
 

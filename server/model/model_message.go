@@ -40,6 +40,13 @@ type selectMessage struct {
 	Articles  selectArticle `json:"article,omitempty"`
 }
 
+// NewMessage NewMessage
+func NewMessage() *Message {
+	m := &Message{}
+	m.BaseControll.Model = m
+	return m
+}
+
 // PointerList PointerList
 func (m *Message) PointerList() interface{} {
 	return &[]selectMessage{}

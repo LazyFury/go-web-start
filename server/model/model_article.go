@@ -1,11 +1,13 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"fmt"
+	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/util/customtype"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -22,7 +24,7 @@ type (
 		Email          string           `json:"email"`
 		Cover          string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
 		Tag            customtype.Array `json:"tag" gorm:"type:varchar(255)"`
-		Like           int              `json:"like"`
+		LikeCount      int              `json:"like_count"`
 		AlreadyLikedIt bool             `json:"already_liked_it" gorm:"-"` //判断当前用户是否点赞
 
 		CateID int `json:"cate_id" gorm:"column:cate_id"`
@@ -33,6 +35,13 @@ type (
 		A        string `json:"content,omitempty"`
 	}
 )
+
+// NewArticle 新建文章类型
+func NewArticle() *Articles {
+	a := &Articles{}
+	a.BaseControll.Model = a
+	return a
+}
 
 // PointerList 列表
 func (a *Articles) PointerList() interface{} {
@@ -65,6 +74,17 @@ func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
 	cate := &ArticlesCate{}
 	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
 	return db
+}
+
+// Result Result
+func (a *Articles) Result(data interface{}, userID uint) interface{} {
+
+	item, ok := reflect.ValueOf(data).Elem().Interface().(selectArticle)
+	if ok {
+		return item
+	}
+
+	return data
 }
 
 //List 文章列表

@@ -26,6 +26,13 @@ type showArticleRec struct {
 	Count int        `json:"count"`
 }
 
+// NewArticleRec 推荐文章
+func NewArticleRec() *ArticlesRec {
+	rec := &ArticlesRec{}
+	rec.BaseControll.Model = rec
+	return rec
+}
+
 // PointerList 列表
 func (a *ArticlesRec) PointerList() interface{} {
 	return &[]showArticleRec{}
