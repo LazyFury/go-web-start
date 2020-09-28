@@ -1,14 +1,15 @@
 package wechat
 
 import (
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/util"
 	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/labstack/echo/v4"
 )
@@ -101,7 +102,7 @@ func wechatRedirect(c echo.Context) (err error) {
 		host = "https://"
 	}
 	host += c.Request().Host
-	redirectURI := host + "/wechat/login"
+	redirectURI := host + "/api/v1/wechat/login"
 
 	callbackURL := c.QueryParam("callback")
 	if callbackURL != "" {
