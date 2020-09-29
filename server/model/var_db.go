@@ -31,6 +31,7 @@ var autoMigrate = []interface{}{
 	&Articles{},
 	&ArticlesCate{},
 	&ArticlesRec{},
+	&ArticlesTag{},
 	//ad
 	&AdEvent{},
 	&AdGroup{},

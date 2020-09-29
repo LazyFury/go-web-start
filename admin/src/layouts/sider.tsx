@@ -39,12 +39,15 @@ export default function Sider(props: { collapsed: boolean | undefined }) {
           <Menu.Item key="/post/add">
             <Link to="/post/add">发布文章</Link>
           </Menu.Item>
-          <Menu.Item key="6">Tag管理</Menu.Item>
+
           <Menu.Item key="/post/cate">
             <Link to="/post/cate">分类管理</Link>
           </Menu.Item>
           <Menu.Item key="/post/recomment">
             <Link to="/post/recomment">推荐管理</Link>
+          </Menu.Item>
+          <Menu.Item key="/post/tag">
+            <Link to="/post/tag">标签统计</Link>
           </Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" icon={<NotificationOutlined />} title="系统公告">

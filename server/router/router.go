@@ -1,9 +1,6 @@
 package router
 
 import (
-	"net/http"
-	"os"
-
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api"
 	"github.com/Treblex/go-echo-demo/server/util"
@@ -40,15 +37,6 @@ func Start(e *echo.Echo) {
 			return util.JSONErr(c, err, "发送失败")
 		}
 		return util.JSONSuccess(c, nil, "发送成功")
-	})
-
-	index.GET("/video", func(c echo.Context) (err error) {
-		video, err := os.Open("./static/hello.m3u8")
-		if err != nil {
-			return util.JSONErr(c, nil, "未找到文件")
-		}
-		defer video.Close()
-		return c.Stream(http.StatusOK, "application/x-mpegURL", video)
 	})
 
 }

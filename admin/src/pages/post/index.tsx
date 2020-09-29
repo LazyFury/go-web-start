@@ -2,6 +2,7 @@ import { useDataList } from '@/hooks/useDataList';
 import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
 import config from '@/utils/config';
+import { randomColor } from '@/utils/utils';
 import {
   CheckOutlined,
   DeleteOutlined,
@@ -9,7 +10,7 @@ import {
   PaperClipOutlined,
   SyncOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, PageHeader, Select, Table, Tooltip } from 'antd';
+import { Button, Modal, PageHeader, Select, Table, Tag, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'umi';
 import './index.less';
@@ -134,7 +135,7 @@ const Post = (props: {
           dataSource={data.list}
           size={'large'}
           bordered={true}
-          rowKey={record => record.id}
+          rowKey={'id'}
           loading={loading}
           pagination={{
             position: ['bottomLeft'],
@@ -201,7 +202,17 @@ const columns = [
     render: filterCate,
   },
   { title: '作者', key: 'author', dataIndex: 'author' },
-  { title: '文章标签', key: 'tag', dataIndex: 'tag' },
+  {
+    title: '文章标签',
+    key: 'tag',
+    dataIndex: 'tag',
+    render: (tag: any[]) =>
+      tag.slice(0, 3).map((text: string) => (
+        <Tag key={text} style={{ marginBottom: '4px' }} color={randomColor()}>
+          {text}
+        </Tag>
+      )),
+  },
   { title: '创建时间', key: 'created_at', dataIndex: 'created_at' },
   { title: '更新时间', key: 'updated_at', dataIndex: 'updated_at' },
   {

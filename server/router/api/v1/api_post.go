@@ -22,3 +22,8 @@ func postRec(g *echo.Group) {
 	modelPostRec := model.NewArticleRec()
 	modelPostRec.Install(g, "/post-rec")
 }
+
+func postTag(g *echo.Group) {
+	modelPostTag := model.NewArticleTag()
+	modelPostTag.Install(g, "/post-tags")
+}

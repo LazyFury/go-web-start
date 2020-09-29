@@ -1,14 +1,24 @@
 import useRequest from '@/hooks/useRequest';
-import { postCates, posts } from '@/server/api/posts';
-import { Button, Form, Input, PageHeader, Select } from 'antd';
+import { postCates, posts, postTags } from '@/server/api/posts';
+import {
+  Button,
+  Col,
+  Drawer,
+  Form,
+  Input,
+  PageHeader,
+  Row,
+  Select,
+} from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import React, { useState } from 'react';
 // import 'react-quill/dist/quill.snow.css';
 import { history, useLocation } from 'umi';
 import './add.less';
+import AddPostTag from './tag/add';
 
-const layout = {
-  labelCol: { span: 2 },
+const layout: { labelCol: { span: number }; wrapperCol: { span: number } } = {
+  labelCol: { span: 4 },
   wrapperCol: { span: 12 },
 };
 const { Option } = Select;
@@ -18,39 +28,62 @@ export default () => {
   let param: any = useLocation();
   let { id } = param.query;
   let [isEdit] = useState(Boolean(id));
-  let { data: cate, load: loadCate } = useRequest(postCates.list, true);
-  const [form] = Form.useForm();
 
+  // 添加标签抽屉
+  let [showAddTags, setShowAddTags] = useState(false);
+  // 分类
+  let { data: cate, load: loadCate } = useRequest(postCates.list, true);
+  // tag
+  let { data: tags, load: loadTags } = useRequest(postTags.list, true);
+  const [form] = Form.useForm();
+  const init = () => {
+    loadCate();
+    loadTags();
+  };
   const onFinish = (values: any) => {
+    console.log(values);
     (() => {
       if (isEdit) {
         return posts.update(id, { ...values, content });
       }
-      return posts.add({ ...values, content, tag: values.tag.split(',') });
+      return posts.add({ ...values, content });
     })().then(() => {
       history.push('/post');
     });
   };
   const onReset = () => {};
 
+  function handleChange(value: any) {
+    console.log(`selected ${value}`);
+  }
+
   return (
-    <div>
+    <div className="page-main">
       <PageHeader
         className="site-page-header fff"
         title={isEdit ? '修改文章' : '发布文章'}
         subTitle=""
       />
+
+      <Drawer
+        width={500}
+        visible={showAddTags}
+        onClose={() => setShowAddTags(false)}
+      >
+        <AddPostTag
+          callback={() => {
+            setShowAddTags(false);
+            init();
+          }}
+        ></AddPostTag>
+      </Drawer>
+
       <Form {...layout} form={form} onFinish={onFinish}>
         <Form.Item name="title" label="文章标题" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
-        <Form.Item
-          labelCol={{ span: 2 }}
-          wrapperCol={{ span: 4 }}
-          name="cate_id"
-          label="文章分类"
-        >
+        <Form.Item name="cate_id" label="文章分类" rules={[{ required: true }]}>
           <Select allowClear placeholder="请选择文章分类">
             {cate && cate.length > 0
               ? cate.map(
@@ -70,21 +103,11 @@ export default () => {
           <TextArea />
         </Form.Item>
 
-        <Form.Item
-          name="author"
-          wrapperCol={{ span: 4 }}
-          label="文章作者"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="author" label="文章作者" rules={[{ required: false }]}>
           <Input />
         </Form.Item>
 
-        <Form.Item
-          name="email"
-          wrapperCol={{ span: 4 }}
-          label="作者邮箱"
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="email" label="作者邮箱">
           <Input />
         </Form.Item>
 
@@ -98,9 +121,38 @@ export default () => {
         </Row> */}
 
         <Form.Item name="tag" label="标签" rules={[{ required: true }]}>
-          <Input />
+          <Select
+            mode="multiple"
+            style={{ width: '100%', marginRight: '10px' }}
+            placeholder="选择文章标签..."
+            optionLabelProp="label"
+          >
+            {tags instanceof Array &&
+              tags.map(tag => {
+                return (
+                  <Option key={tag.id} value={tag.val}>
+                    {tag.val || '~'}
+                  </Option>
+                );
+              })}
+          </Select>
         </Form.Item>
-        <Form.Item className="submit" wrapperCol={{ offset: 2, span: 16 }}>
+
+        <Row style={{ marginBottom: '20px', marginTop: '-10px' }}>
+          <Col span={layout.wrapperCol.span} offset={layout.labelCol.span}>
+            <Button type="dashed" onClick={() => setShowAddTags(true)}>
+              添加标签
+            </Button>
+          </Col>
+        </Row>
+
+        <Form.Item
+          className="submit"
+          wrapperCol={{
+            offset: layout.labelCol.span,
+            span: layout.wrapperCol.span,
+          }}
+        >
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

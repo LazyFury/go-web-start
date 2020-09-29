@@ -14,3 +14,8 @@ export const postRec = {
   ...install('post-rec'),
   list: () => http.get('/post-rec'),
 };
+
+export const postTags = {
+  ...install('post-tags'),
+  list: () => http.get('/post-tags'),
+};
