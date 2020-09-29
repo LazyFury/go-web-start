@@ -19,3 +19,5 @@ export const randomColor = () => {
   let color = colors[random];
   return color;
 };
+
+export const emptyPromise = () => new Promise((resolve, reject) => resolve());

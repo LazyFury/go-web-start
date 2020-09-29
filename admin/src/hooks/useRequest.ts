@@ -1,8 +1,7 @@
-import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 
 const useRequest = (
-  api: () => Promise<AxiosResponse<any>>,
+  api: () => Promise<any>,
   autoLoad: boolean | undefined = false,
 ): {
   readonly data: any;
