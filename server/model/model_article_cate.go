@@ -29,7 +29,8 @@ func NewArticleCate() *ArticlesCate {
 func (a *ArticlesCate) PointerList() interface{} {
 	return &[]struct {
 		*ArticlesCate
-		Count int `json:"count"`
+		Count    int `json:"count"`
+		TagCount int `json:"tag_count"`
 	}{}
 }
 
@@ -51,6 +52,9 @@ func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("*")
 	article := &Articles{}
 	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", article.TableName(), a.TableName()))
+
+	tag := &ArticlesTag{}
+	db = db.Joins(fmt.Sprintf("left join (select count(id) tag_count,`cate_id` `tag_cate_id` from `%s` group by `tag_cate_id`) a2 on `%s`.`id`=`a2`.`tag_cate_id`", tag.TableName(), a.TableName()))
 	return db
 }
 
@@ -99,5 +103,11 @@ func (a *ArticlesCate) Delete(c echo.Context) error {
 	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
 		return util.JSONErr(c, nil, "该分类下还有文章，不能删除")
 	}
+
+	tag := &ArticlesTag{}
+	if hasTag := db.Model(tag).Where(map[string]interface{}{"cate_id": id}).Find(tag).RowsAffected; hasTag > 0 {
+		return util.JSONErr(c, nil, "该分类下有标签,无法删除")
+	}
+
 	return a.BaseControll.Delete(c)
 }
