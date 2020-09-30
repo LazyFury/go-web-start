@@ -72,6 +72,7 @@ func (a *ArticlesTag) countArticles(tag *showArticlesTag) {
 
 // Result Result
 func (a *ArticlesTag) Result(data interface{}, userID uint) interface{} {
+	// TODO:反射获取Interface之前需要判断是否是指针类型
 	arr, ok := reflect.ValueOf(data).Elem().Interface().([]showArticlesTag)
 	if ok {
 		for i := range arr {
