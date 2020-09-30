@@ -79,9 +79,9 @@ export default function() {
                     <a onClick={() => editCate(data)}>编辑</a>
                     <span> / </span>
                     {(() => {
-                      if (data.count > 0) {
+                      if (data.count > 0 || data.tag_count > 0) {
                         return (
-                          <Tooltip title="该分类下有子文章，不可删除，请先清理文章">
+                          <Tooltip title="该分类下有子文章或子标签，不可删除，请先清理文章">
                             <span>不可删除</span>
                           </Tooltip>
                         );
@@ -122,6 +122,7 @@ const columns = [
   },
   { title: '描述', key: 'desc', dataIndex: 'desc' },
   { title: '文章统计', key: 'count', dataIndex: 'count' },
+  { title: '标签统计', key: 'tag_count', dataIndex: 'tag_count' },
   {
     title: '更新时间',
     key: 'updated_at',

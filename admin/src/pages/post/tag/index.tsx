@@ -18,7 +18,11 @@ export default () => {
         {tags instanceof Array &&
           tags.map(tag => {
             return (
-              <Tag key={tag.id} color={randomColor()}>
+              <Tag
+                key={tag.id}
+                color={randomColor()}
+                style={{ marginBottom: '10px' }}
+              >
                 {tag.val || '~'}({tag.count})
               </Tag>
             );
