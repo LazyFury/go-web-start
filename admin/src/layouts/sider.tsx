@@ -2,6 +2,7 @@ import {
   HomeOutlined,
   LaptopOutlined,
   NotificationOutlined,
+  PictureOutlined,
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -50,6 +51,16 @@ export default function Sider(props: { collapsed: boolean | undefined }) {
             <Link to="/post/tag">标签统计</Link>
           </Menu.Item>
         </SubMenu>
+
+        <SubMenu key="ad" icon={<PictureOutlined />} title="广告位管理">
+          <Menu.Item key="/ads/groups">
+            <Link to="/ads/groups">广告位管理</Link>
+          </Menu.Item>
+          <Menu.Item key="/ads/events">
+            <Link to="/ads/events">事件管理</Link>
+          </Menu.Item>
+        </SubMenu>
+
         <SubMenu key="sub3" icon={<NotificationOutlined />} title="系统公告">
           <Menu.Item key="9">option9</Menu.Item>
           <Menu.Item key="10">option10</Menu.Item>

@@ -20,9 +20,11 @@ services:
     # command: /bin/sh -c "while true;do echo hello world!;sleep 1;done;"
     command: /bin/bash -c  "chmod +x /root/wait-for-it.sh;/root/wait-for-it.sh mysql:3306 -- echo mysql launch success;cd /root/app/server;chmod +x ./run.sh;while true;do echo hello world!;sleep 1;done;" #./run.sh ./debug_bin;
   mysql:
-    image: mysql
+    image: mysql:8
     ports:
       - 1233:3306
+    security_opt:
+      - seccomp:unconfined
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=false
       - mysql_root_password=123456
@@ -30,6 +32,6 @@ services:
       - default_authentication_plugin=mysql_native_password
       - character-set-server=utf8mb4
       - collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./mysql/data:/var/lib/mysql
+    # volumes:
+      # - ./mysql/data:/var/lib/mysql
       # - ./config/docker/mysql/conf/my.conf:/etc/mysql/my.cnf
