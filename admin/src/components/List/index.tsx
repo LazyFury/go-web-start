@@ -79,7 +79,7 @@ export default function(props: {
           onClick={() => {
             props.onRefresh instanceof Function && props.onRefresh();
           }}
-          icon={<SyncOutlined />}
+          icon={<SyncOutlined spin={props.loading} />}
         />
 
         <Popover content={AlignSet()} trigger="click" placement="bottom">

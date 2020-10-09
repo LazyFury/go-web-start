@@ -4,7 +4,7 @@ import { useDataList } from '@/hooks/useDataList';
 import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
 import config from '@/utils/config';
-import { randomColor } from '@/utils/utils';
+import { randomColor, 补集 } from '@/utils/utils';
 import {
   CheckOutlined,
   DeleteOutlined,
@@ -24,17 +24,6 @@ let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
 let setCate_id: React.Dispatch<React.SetStateAction<string>>;
 
 let numbers: number[] = [];
-
-var 补集 = (a: number[], b: number[]) =>
-  a
-    .filter(function(v) {
-      return !(b.indexOf(v) > -1);
-    })
-    .concat(
-      b.filter(function(v) {
-        return !(a.indexOf(v) > -1);
-      }),
-    );
 
 const Post = (props: {
   showSelect?: boolean;
