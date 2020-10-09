@@ -104,7 +104,7 @@ const Post = (props: {
     );
   };
 
-  const tableConfig: { props: TableProps<any> } = {
+  const tableConfig: TableProps<any> = {
     columns: columns,
     dataSource: data.list,
     bordered: true,
