@@ -1,3 +1,5 @@
+import List from '@/components/List';
+import PageMain from '@/components/PageMain';
 import { useDataList } from '@/hooks/useDataList';
 import useRequest from '@/hooks/useRequest';
 import { postCates, posts } from '@/server/api/posts';
@@ -8,11 +10,12 @@ import {
   DeleteOutlined,
   EditOutlined,
   PaperClipOutlined,
-  SyncOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, PageHeader, Select, Table, Tag, Tooltip } from 'antd';
+import { Button, Modal, Select, Tag, Tooltip } from 'antd';
+import { TableProps } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'umi';
+import { history, Link } from 'umi';
 import './index.less';
 
 const { Option } = Select;
@@ -47,7 +50,7 @@ const Post = (props: {
   let [selectedRowKeys_, setSelectedRowKeys] = useState(numbers);
 
   // 获取文章列表
-  let { data, load, loading, reset } = useDataList(
+  let { data, load, reload, loading, reset } = useDataList(
     page => posts.list({ page, cid }),
     false,
   );
@@ -75,22 +78,99 @@ const Post = (props: {
     setCid(value);
   };
 
+  const selecteCate = () => {
+    return (
+      <Select
+        key="selectCate"
+        allowClear
+        placeholder="请选择文章分类"
+        value={cid || '全部分类'}
+        onChange={cateSelectChange}
+      >
+        {/* cid 使用usestate， 默认值为0而不是空 */}
+        <Option key={0} value={0}>
+          全部分类
+        </Option>
+        {cates && cates.length > 0
+          ? cates.map((x: any) => {
+              return (
+                <Option key={x.id} value={x.id}>
+                  {x.name}
+                </Option>
+              );
+            })
+          : null}
+      </Select>
+    );
+  };
+
+  const tableConfig: { props: TableProps<any> } = {
+    columns: columns,
+    dataSource: data.list,
+    bordered: true,
+    rowKey: 'id',
+    loading,
+    pagination: {
+      position: ['bottomLeft'],
+      current: data.page_now,
+      total: data.count,
+      showSizeChanger: false,
+      onChange: load,
+    },
+    rowSelection:
+      (props.showSelect && {
+        type: 'checkbox',
+        selectedRowKeys: selectedRowKeys_,
+        onSelectAll: (
+          selected: boolean,
+          selectedRows: any,
+          changeRows: any[],
+        ) => {
+          let ids = [];
+          if (!selected) {
+            ids = changeRows.map(x => x.id);
+            setSelectedRowKeys(补集(selectedRowKeys_, ids));
+          }
+        },
+
+        onSelect: (
+          item: { id: any },
+          selected: boolean,
+          selectedRows: any[],
+        ) => {
+          console.log(item, selected);
+          let key = item.id;
+          let selectedKeys = selectedRowKeys_;
+          if (!selected) {
+            let index = selectedKeys.indexOf(key);
+            if (index > -1) {
+              selectedKeys.splice(index, 1);
+            }
+          }
+          setSelectedRowKeys(selectedKeys);
+        },
+        onChange: (_selectedRowKeys: any, selectedRows: any[]) => {
+          let keys = selectedRows.map(x => x.id);
+          setSelectedRowKeys([...new Set([...selectedRowKeys_, ...keys])]);
+        },
+      }) ||
+      undefined,
+  };
   /**
    * @render
    */
   return (
-    <div>
-      <PageHeader
-        style={{ padding: '20rpx 0' }}
-        // onBack={() => null}
-        title="文章管理"
-        subTitle={`共${data.count}篇文章，${data.page_count}页，当前${data.page_now}页`}
-      />
-
-      <div className="page-main">
-        <div className="action-bar" style={{ margin: '10px 0' }}>
-          {props.showSelect && (
+    <PageMain
+      title="文章管理"
+      subTitle={`共${data.count}篇文章，${data.page_count}页，当前${data.page_now}页`}
+    >
+      <List
+        onRefresh={reload}
+        loading={loading}
+        leftActions={[
+          (props.showSelect && (
             <Button
+              key="select"
               type="primary"
               onClick={() => {
                 props.selectConfirm && props.selectConfirm(selectedRowKeys_);
@@ -100,86 +180,24 @@ const Post = (props: {
               <CheckOutlined />
               确定选择
             </Button>
-          )}
+          )) || (
+            <Button
+              key="add"
+              type="primary"
+              onClick={() => {
+                history.push('/post/add');
+              }}
+            >
+              <PlusOutlined />
+              <span>添加文章</span>
+            </Button>
+          ),
 
-          {/* 选择分类 */}
-          <Select
-            allowClear
-            placeholder="请选择文章分类"
-            value={cid || '全部分类'}
-            onChange={cateSelectChange}
-          >
-            {/* cid 使用usestate， 默认值为0而不是空 */}
-            <Option key={0} value={0}>
-              全部分类
-            </Option>
-            {cates && cates.length > 0
-              ? cates.map((x: any) => {
-                  return (
-                    <Option key={x.id} value={x.id}>
-                      {x.name}
-                    </Option>
-                  );
-                })
-              : null}
-          </Select>
-          {/* 刷新列表 */}
-          <Button onClick={() => load()}>
-            <SyncOutlined></SyncOutlined>
-            <span>刷新</span>
-          </Button>
-        </div>
-
-        <Table
-          columns={columns}
-          dataSource={data.list}
-          size={'large'}
-          bordered={true}
-          rowKey={'id'}
-          loading={loading}
-          pagination={{
-            position: ['bottomLeft'],
-            current: data.page_now,
-            total: data.count,
-            showSizeChanger: false,
-            onChange: load,
-          }}
-          rowSelection={
-            (props.showSelect && {
-              type: 'checkbox',
-              selectedRowKeys: selectedRowKeys_,
-              onSelectAll: (selected: boolean, selectedRows, changeRows) => {
-                let ids = [];
-                if (!selected) {
-                  ids = changeRows.map(x => x.id);
-                  setSelectedRowKeys(补集(selectedRowKeys_, ids));
-                }
-              },
-
-              onSelect: (item, selected: boolean, selectedRows: any[]) => {
-                console.log(item, selected);
-                let key = item.id;
-                let selectedKeys = selectedRowKeys_;
-                if (!selected) {
-                  let index = selectedKeys.indexOf(key);
-                  if (index > -1) {
-                    selectedKeys.splice(index, 1);
-                  }
-                }
-                setSelectedRowKeys(selectedKeys);
-              },
-              onChange: (selectedRowKeys, selectedRows) => {
-                let keys = selectedRows.map(x => x.id);
-                setSelectedRowKeys([
-                  ...new Set([...selectedRowKeys_, ...keys]),
-                ]);
-              },
-            }) ||
-            undefined
-          }
-        ></Table>
-      </div>
-    </div>
+          selecteCate(),
+        ]}
+        table={tableConfig}
+      ></List>
+    </PageMain>
   );
 };
 
@@ -187,14 +205,6 @@ const Post = (props: {
 const columns = [
   { title: 'ID', key: 'id', dataIndex: 'id' },
   { title: '文章标题', key: 'title', dataIndex: 'title', render: title },
-  // {
-  //   title: '简介',
-  //   key: 'desc',
-  //   dataIndex: 'desc',
-  //   render(desc: any) {
-  //     return <div>{desc || '暂无内容....'}</div>;
-  //   },
-  // },
   {
     title: '分类',
     key: 'cate',

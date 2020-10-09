@@ -1,7 +1,9 @@
+import List from '@/components/List';
+import PageMain from '@/components/PageMain';
 import useRequest from '@/hooks/useRequest';
 import { postRec } from '@/server/api/posts';
-import { DeleteOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Drawer, Modal, PageHeader, Table, Tooltip } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Drawer, Modal, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import { AddPostCate } from './add';
 import { PostsChoose } from './posts-choose';
@@ -87,13 +89,7 @@ export default function() {
   ];
 
   return (
-    <div>
-      <PageHeader
-        className="site-page-header fff"
-        title="推荐位管理"
-        subTitle={`共 ${data.length || 0} 推荐位`}
-      />
-
+    <PageMain title="推荐位管理" subTitle={`共 ${data.length || 0} 推荐位`}>
       <Drawer width={500} visible={visible} onClose={() => setVisible(false)}>
         <AddPostCate
           onsubmit={() => {
@@ -115,19 +111,17 @@ export default function() {
         <PostsChoose id={chooseId} />
       </Drawer>
 
-      <div className="page-main">
-        <div className="action-bar" style={{ margin: '10px 0' }}>
+      <List
+        onRefresh={load}
+        loading={loading}
+        leftActions={[
           <Button type="primary" onClick={editCate}>
+            <PlusOutlined />
             <span>添加推荐位</span>
-          </Button>
-          <Button onClick={() => load()}>
-            <SyncOutlined></SyncOutlined>
-            <span>刷新</span>
-          </Button>
-        </div>
-
-        <Table
-          columns={[
+          </Button>,
+        ]}
+        table={{
+          columns: [
             ...columns,
             {
               title: '操作',
@@ -153,17 +147,16 @@ export default function() {
                 );
               },
             },
-          ]}
-          dataSource={data instanceof Array ? data : []}
-          size={'large'}
-          bordered={true}
-          loading={loading}
-          rowKey={'id'}
-          pagination={{
+          ],
+          dataSource: data instanceof Array ? data : [],
+          bordered: true,
+          loading,
+          rowKey: 'id',
+          pagination: {
             total: data.length,
-          }}
-        ></Table>
-      </div>
-    </div>
+          },
+        }}
+      />
+    </PageMain>
   );
 }

@@ -1,4 +1,4 @@
-import { Breadcrumb, Layout as ALayout } from 'antd';
+import { Layout as ALayout } from 'antd';
 import React, { useState } from 'react';
 import { history } from 'umi';
 import Header from './header';
@@ -40,11 +40,9 @@ const Layout = (props: {
         {/* sider */}
         <Sider collapsed={collapsed}></Sider>
         <ALayout style={{ padding: '20px' }}>
-          <Breadcrumb></Breadcrumb>
+          {/* <Breadcrumb></Breadcrumb> */}
           {/* content */}
-          <ALayout.Content className="fff" style={{ padding: '20px' }}>
-            {props.children}
-          </ALayout.Content>
+          <ALayout.Content className="">{props.children}</ALayout.Content>
         </ALayout>
       </ALayout>
     </ALayout>
