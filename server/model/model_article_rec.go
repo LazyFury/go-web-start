@@ -22,8 +22,8 @@ type ArticlesRec struct {
 type showArticleRec struct {
 	*ArticlesRec
 	// *EmptySystemFiled
-	List  []Articles `json:"list"`
-	Count int        `json:"count"`
+	List  []selectArticle `json:"list"`
+	Count int             `json:"count"`
 }
 
 // NewArticleRec 推荐文章
@@ -56,9 +56,11 @@ func (a *ArticlesRec) Joins(db *gorm.DB) *gorm.DB {
 func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	ids := strings.Split(item.IDs, ",")
 	article := &Articles{}
-	articles := []Articles{}
+	articles := []selectArticle{}
 	db := DB
-	row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
+	db = db.Table(article.TableName())
+	db = article.Joins(db)
+	row := db.Where("id IN (?)", ids).Find(&articles)
 	if row.Error == nil && len(articles) > 0 {
 		item.List = articles
 	}
@@ -66,7 +68,7 @@ func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	l := len(articles)
 	item.Count = l
 	if l == 0 {
-		item.List = []Articles{}
+		item.List = []selectArticle{}
 	}
 
 	fmt.Println(item)
