@@ -34,6 +34,11 @@ type (
 		CateName string `json:"cate_name"`
 		// A        string `json:"content,omitempty"`
 	}
+	selectListArticle struct {
+		*Articles
+		CateName string `json:"cate_name"`
+		A        string `json:"content,omitempty"`
+	}
 )
 
 // NewArticle 新建文章类型
@@ -45,7 +50,7 @@ func NewArticle() *Articles {
 
 // PointerList 列表
 func (a *Articles) PointerList() interface{} {
-	return &[]selectArticle{}
+	return &[]selectListArticle{}
 }
 
 // Pointer 实例
