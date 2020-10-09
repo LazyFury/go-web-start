@@ -32,7 +32,7 @@ type (
 	selectArticle struct {
 		*Articles
 		CateName string `json:"cate_name"`
-		A        string `json:"content,omitempty"`
+		// A        string `json:"content,omitempty"`
 	}
 )
 

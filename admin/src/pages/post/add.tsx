@@ -3,9 +3,9 @@ import useRequest from '@/hooks/useRequest';
 import { postCates, posts, postTags } from '@/server/api/posts';
 import { emptyPromise } from '@/utils/utils';
 import { Button, Col, Drawer, Form, Input, Row, Select, Spin } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import React, { useState } from 'react';
-// import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { history, useLocation } from 'umi';
 import './add.less';
 import AddPostTag from './tag/add';
@@ -26,7 +26,13 @@ export default () => {
     if (!id) {
       return emptyPromise();
     }
-    return posts.detail(id);
+    return posts.detail(id).then(res => {
+      if (res) {
+        let { content } = res.data;
+        setContent(content);
+      }
+      return res;
+    });
   }, true);
   // 添加标签抽屉
   let [showAddTags, setShowAddTags] = useState(false);
@@ -108,12 +114,13 @@ export default () => {
               </Select>
             </Form.Item>
 
-            <Form.Item
-              name="desc"
-              label="文章简介"
-              rules={[{ required: true }]}
-            >
-              <TextArea />
+            <Form.Item label="文章简介">
+              <ReactQuill
+                theme="snow"
+                style={{ height: '300px' }}
+                value={content || ''}
+                onChange={setContent}
+              />
             </Form.Item>
 
             <Form.Item
