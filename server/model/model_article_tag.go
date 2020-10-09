@@ -66,7 +66,7 @@ func (a *ArticlesTag) countArticles(tag *showArticlesTag) {
 	var count int
 	db := DB
 	article := &Articles{}
-	db.Table(article.TableName()).Where("tag like ?", "%"+tag.Val+"%").Count(&count)
+	db.Table(article.TableName()).Where("tag like ? AND `deleted_at` IS NULL", "%"+tag.Val+"%").Count(&count)
 	tag.Count = count
 }
 
