@@ -1,10 +1,12 @@
 package model
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/jinzhu/gorm"
 
 	"github.com/labstack/echo/v4"
 )
@@ -21,6 +23,7 @@ func (a *AdEvent) PointerList() interface{} {
 	return &[]struct {
 		*AdEvent
 		// *EmptySystemFiled
+		Count int `json:"count"`
 	}{}
 }
 
@@ -32,6 +35,14 @@ func (a *AdEvent) Pointer() interface{} {
 // TableName TableName
 func (a *AdEvent) TableName() string {
 	return TableName("ad_events")
+}
+
+// Joins Joins
+func (a *AdEvent) Joins(db *gorm.DB) *gorm.DB {
+	db = db.Select("*")
+	ad := &Ad{}
+	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`event_id` from `%s` group by `event_id`) t1 on t1.`event_id`=`%s`.`id`", ad.TableName(), a.TableName()))
+	return db
 }
 
 // List 列表
