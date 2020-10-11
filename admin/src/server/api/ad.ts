@@ -9,7 +9,9 @@ export const ads = {
 export const adEvents = {
   ...install('ad-events'),
   // override
-  list: () => http.get('/ads'),
+  list: () => http.get('/ad-events'),
 };
 
-export const adGroup = { ...install('ad-groups') };
+export const adGroups = {
+  ...install('ad-groups'),
+};

@@ -52,7 +52,7 @@ export default function Sider(props: { collapsed: boolean | undefined }) {
           </Menu.Item>
         </SubMenu>
 
-        <SubMenu key="ad" icon={<PictureOutlined />} title="广告位管理">
+        <SubMenu key="ads" icon={<PictureOutlined />} title="广告位管理">
           <Menu.Item key="/ads/groups">
             <Link to="/ads/groups">广告位管理</Link>
           </Menu.Item>

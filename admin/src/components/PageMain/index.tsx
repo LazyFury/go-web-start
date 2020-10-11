@@ -1,5 +1,6 @@
-import { Card, Divider, PageHeader } from 'antd';
+import { Card, Col, Divider, Typography } from 'antd';
 import React from 'react';
+const { Text, Title } = Typography;
 
 export default function(props: {
   children: React.ReactNode;
@@ -9,12 +10,10 @@ export default function(props: {
   return (
     <div>
       <Card bordered>
-        <PageHeader
-          style={{ padding: '0' }}
-          // onBack={() => null}
-          title={props.title}
-          subTitle={props.subTitle}
-        />
+        <Col>
+          <Title level={3}>{props.title}</Title>
+          <Text type="secondary">{props.subTitle}</Text>
+        </Col>
       </Card>
 
       <Divider dashed style={{ margin: '10px 0' }} />
