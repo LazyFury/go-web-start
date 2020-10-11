@@ -7,15 +7,33 @@ const layout: { labelCol: { span: number }; wrapperCol: { span: number } } = {
   wrapperCol: { span: 16 },
 };
 
-export const AddADEvent = () => {
+export const AddADEvent = (props: {
+  onSubmit: () => void;
+  values: { name: string; value: any }[];
+}) => {
   const formFinish = (e: any) => {
-    adEvents.add(e);
+    const finish = () => {
+      props.onSubmit instanceof Function && props.onSubmit();
+    };
+    let { value: id }: { value: any } =
+      props.values?.filter(x => x.name == 'id')[0] || {};
+
+    if (id) {
+      adEvents.update(id, e).then(finish);
+    } else {
+      adEvents.add(e).then(finish);
+    }
   };
   return (
     <div className="page-main">
       <PageHeader title="添加事件"></PageHeader>
 
-      <Form className="add-form" {...layout} onFinish={formFinish}>
+      <Form
+        className="add-form"
+        {...layout}
+        onFinish={formFinish}
+        fields={props.values}
+      >
         <Form.Item name="event" label="Event" rules={[{ required: true }]}>
           <Input placeholder="仅支持英文字符串" />
         </Form.Item>

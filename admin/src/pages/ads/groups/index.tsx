@@ -5,14 +5,20 @@ import { adGroups } from '@/server/api/ad';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Drawer, Modal, Space, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import { AddAdGroup } from './components';
+import { AddAdGroup } from './components/add';
+import { Detail } from './components/detail';
 let { confirm } = Modal;
 export default function Groups() {
   let { data, load, loading } = useDataList(
     p => adGroups.list({ page: p }),
     true,
   );
+  // 编辑分组
   let [visible, setVisible] = useState(false);
+
+  // 查看详情
+  let [detailVisible, setDetailVisible] = useState(false);
+
   let values: { name: string; value: any }[] = [];
   let [selectValues, setSelectValues] = useState(values);
 
@@ -44,7 +50,13 @@ export default function Groups() {
         return (
           <Space>
             <span>{`(${count}/${record.max_count})`}</span>
-            <a onClick={() => {}}>添加广告</a>
+            <a
+              onClick={() => {
+                setDetailVisible(true);
+              }}
+            >
+              添加广告
+            </a>
           </Space>
         );
       },
@@ -124,6 +136,15 @@ export default function Groups() {
           }}
         ></AddAdGroup>
       </Drawer>
+
+      <Drawer
+        width={1000}
+        visible={detailVisible}
+        onClose={() => setDetailVisible(false)}
+      >
+        <Detail></Detail>
+      </Drawer>
+
       <List
         leftActions={leftActions()}
         onRefresh={load}

@@ -13,6 +13,8 @@ export default function AdEvents() {
   let { data, load, loading } = useRequest(adEvents.list, true);
 
   let [visible, setVisible] = useState(false);
+  let defaultValues: { name: string; value: any }[] = [];
+  let [values, setValues] = useState(defaultValues);
 
   const deleteEvent = (id: number) => {
     confirm({
@@ -27,6 +29,16 @@ export default function AdEvents() {
       },
     });
   };
+
+  function edit(data: any = {}) {
+    data = { event: '', desc: '', ...data };
+    setValues(
+      Object.keys(data).map(x => {
+        return { name: x, value: data[x] };
+      }),
+    );
+    setVisible(true);
+  }
 
   const columns = [
     { title: 'ID', key: 'id', dataIndex: 'id' },
@@ -43,24 +55,18 @@ export default function AdEvents() {
       dataIndex: 'created_at',
     },
     {
+      title: '统计',
+      key: 'count',
+      dataIndex: 'count',
+    },
+    {
       title: '操作',
       key: 'action',
       dataIndex: 'id',
       render: (id: number, data: any) => {
         return (
           <Space style={{ width: 120 }}>
-            <a
-              onClick={() => {
-                //   setSelectValues(
-                //     Object.keys(data).map(x => {
-                //       return { name: x, value: data[x] };
-                //     }),
-                //   );
-                setVisible(true);
-              }}
-            >
-              编辑
-            </a>
+            <a onClick={() => edit(data)}>编辑</a>
             <span> / </span>
             {(() => {
               if (data.count > 0 || data.tag_count > 0) {
@@ -83,15 +89,27 @@ export default function AdEvents() {
       title="事件管理"
       subTitle="广告位事件，需要与前端约定如何处理事件"
     >
-      <Drawer width={500} visible={visible} onClose={() => setVisible(false)}>
-        <AddADEvent></AddADEvent>
+      <Drawer
+        width={500}
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+      >
+        <AddADEvent
+          onSubmit={() => {
+            setVisible(false);
+            load();
+          }}
+          values={values}
+        ></AddADEvent>
       </Drawer>
 
       <List
         onRefresh={load}
         loading={loading}
         leftActions={[
-          <Button key="add" type="primary" onClick={() => setVisible(true)}>
+          <Button key="add" type="primary" onClick={() => edit()}>
             <PlusOutlined />
             添加事件
           </Button>,
@@ -102,6 +120,9 @@ export default function AdEvents() {
           bordered: true,
           rowKey: 'id',
           dataSource: (data instanceof Array && data) || undefined,
+          pagination: {
+            total: data.length,
+          },
         }}
       />
     </PageMain>
