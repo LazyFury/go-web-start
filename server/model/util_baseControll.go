@@ -369,7 +369,7 @@ func (b *BaseControll) Count(c echo.Context) error {
 func (b *BaseControll) Empty() {
 	b.ID = 0
 	b.CreatedAt = customtype.LocalTime{Time: time.Time{}}
-	b.UpdatedAt = customtype.LocalTime{Time: time.Time{}}
+	b.UpdatedAt = customtype.LocalTime{Time: time.Now()}
 }
 
 // Install 快速注册路由

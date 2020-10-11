@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"fmt"
 	"strings"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -12,16 +13,16 @@ import (
 // AdGroup 广告位
 type AdGroup struct {
 	BaseControll
-	IsSigle bool   `json:"is_sigle" gorm:"default:false;comment:'true单图,false多图'"`
-	Name    string `json:"name" gorm:"unique;not null"`
-	Desc    string `json:"desc" gorm:"type:text;comment:'描述';"`
+	IsSigle  bool   `json:"is_sigle" gorm:"default:false;comment:'true单图,false多图'"`
+	Name     string `json:"name" gorm:"unique;not null"`
+	Desc     string `json:"desc" gorm:"type:text;comment:'描述';"`
+	MaxCount int    `json:"max_count" gorm:"default:1"`
 }
 
 // PointerList PointerList
 func (a *AdGroup) PointerList() interface{} {
 	return &[]struct {
 		*AdGroup
-		*EmptySystemFiled
 		Count int `json:"count"`
 	}{}
 }

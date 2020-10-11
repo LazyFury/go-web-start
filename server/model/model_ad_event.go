@@ -1,6 +1,7 @@
 package model
 
 import (
+	"regexp"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util"
@@ -12,13 +13,14 @@ import (
 type AdEvent struct {
 	BaseControll
 	Event string `json:"event" gorm:"not null;unique_index;default:'no_event';comment:'banner事件,字符串，唯一'"`
+	Desc  string `json:"desc" gorm:""`
 }
 
 // PointerList PointerList
 func (a *AdEvent) PointerList() interface{} {
 	return &[]struct {
 		*AdEvent
-		*EmptySystemFiled
+		// *EmptySystemFiled
 	}{}
 }
 
@@ -48,6 +50,10 @@ func (a *AdEvent) Add(c echo.Context) error {
 	adEvent.Event = strings.Trim(adEvent.Event, " ")
 	if adEvent.Event == "" {
 		return util.JSONErr(c, nil, "event定义不可空")
+	}
+
+	if match, _ := regexp.MatchString("^[A-Za-z]+$", adEvent.Event); !match {
+		return util.JSONErr(c, nil, "仅支持英文字符串")
 	}
 
 	hasOne := a.BaseControll.HasOne(map[string]interface{}{
