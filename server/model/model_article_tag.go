@@ -60,7 +60,7 @@ func (a *ArticlesTag) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
-// TODO:统计文章数量，后期准备优化为定时更新 或者手动更新
+// TODO:统计文章数量，后期准备优化为定时更新 或者手动更新 或重新设计数据表
 // 想要使用左连接查询解决 但是没有找到方案
 func (a *ArticlesTag) countArticles(tag *showArticlesTag) {
 	var count int
