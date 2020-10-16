@@ -14,4 +14,5 @@ export const adEvents = {
 
 export const adGroups = {
   ...install('ad-groups'),
+  list: () => http.get('/ad-groups'),
 };

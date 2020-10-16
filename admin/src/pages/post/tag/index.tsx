@@ -8,7 +8,10 @@ import React from 'react';
 export default () => {
   let { data: tags, load: loadTags } = useRequest(postTags.list, true);
   return (
-    <PageMain title="标签统计" subTitle={``}>
+    <PageMain
+      title="标签统计"
+      subTitle={`这个接口设计有性能问题，计数使用的程序内遍历，需要重新设计数据表结构`}
+    >
       <div>
         {tags instanceof Array &&
           tags.map(tag => {

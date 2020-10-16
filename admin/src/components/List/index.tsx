@@ -17,6 +17,7 @@ import {
 import { SizeType } from 'antd/es/config-provider/SizeContext';
 import { CheckboxOptionType } from 'antd/lib/checkbox';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import confirm from 'antd/lib/modal/confirm';
 import Table, { ColumnsType, TableProps } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
 import './index.less';
@@ -100,12 +101,22 @@ export default function(props: {
 
         <IconBtn
           title="导出数据"
-          onClick={() => {}}
+          onClick={exportData}
           icon={<DownloadOutlined />}
         />
         {/* </Space> */}
       </Row>
     );
+  };
+
+  const exportData = () => {
+    confirm({
+      title: '温馨提示',
+      content: `
+        还没搞，没确定方案，前端生成 or 后端处理？ 
+        暂定选择日期区间，后端查询数据，前端生成表格，有时间做
+        `,
+    });
   };
 
   const ItemSet = () => {

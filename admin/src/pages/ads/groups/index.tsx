@@ -1,20 +1,20 @@
 import List from '@/components/List';
 import PageMain from '@/components/PageMain';
-import { useDataList } from '@/hooks/useDataList';
+import useRequest from '@/hooks/useRequest';
 import { adGroups } from '@/server/api/ad';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Drawer, Modal, Space, Tooltip } from 'antd';
+import { Button, Drawer, Modal, Space, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
 import { AddAdGroup } from './components/add';
 import { Detail } from './components/detail';
 let { confirm } = Modal;
+const { Paragraph } = Typography;
 export default function Groups() {
-  let { data, load, loading } = useDataList(
-    p => adGroups.list({ page: p }),
-    true,
-  );
+  let { data, load, loading } = useRequest(adGroups.list, true);
   // 编辑分组
   let [visible, setVisible] = useState(false);
+
+  let [chooseId, setChooseId] = useState(0);
 
   // 查看详情
   let [detailVisible, setDetailVisible] = useState(false);
@@ -41,7 +41,16 @@ export default function Groups() {
     { title: 'ID', key: 'id', dataIndex: 'id' },
     { title: '广告位标题', key: 'name', dataIndex: 'name' },
 
-    { title: '介绍', key: 'desc', dataIndex: 'desc' },
+    {
+      title: '介绍',
+      key: 'desc',
+      dataIndex: 'desc',
+      width: 400,
+      rows: 2,
+      render: (desc: React.ReactNode) => (
+        <Paragraph ellipsis={{ rows: 2, expandable: false }}>{desc}</Paragraph>
+      ),
+    },
     {
       title: '统计',
       key: 'count',
@@ -53,6 +62,7 @@ export default function Groups() {
             <a
               onClick={() => {
                 setDetailVisible(true);
+                setChooseId(record.id);
               }}
             >
               添加广告
@@ -126,8 +136,18 @@ export default function Groups() {
     </Button>,
   ];
   return (
-    <PageMain title="广告位管理" subTitle="全局通用的banner 海报管理">
-      <Drawer width={500} visible={visible} onClose={() => setVisible(false)}>
+    <PageMain
+      title="广告位管理"
+      subTitle="全局通用的banner 海报管理,最大数量用于前端判断轮播图或者固定位海报，这里后台暂时没有限制最大数量，由前端处理"
+    >
+      <Drawer
+        width={800}
+        visible={visible}
+        onClose={() => {
+          setVisible(false);
+          load();
+        }}
+      >
         <AddAdGroup
           values={selectValues}
           callback={() => {
@@ -142,7 +162,7 @@ export default function Groups() {
         visible={detailVisible}
         onClose={() => setDetailVisible(false)}
       >
-        <Detail></Detail>
+        <Detail id={chooseId}></Detail>
       </Drawer>
 
       <List
@@ -151,16 +171,13 @@ export default function Groups() {
         loading={loading}
         table={{
           columns,
-          dataSource: (data.list instanceof Array && data.list) || undefined,
+          dataSource: (data instanceof Array && data) || undefined,
           bordered: true,
           rowKey: 'id',
           loading,
           pagination: {
             position: ['bottomLeft'],
-            current: data.page_now,
-            total: data.count,
-            showSizeChanger: false,
-            onChange: load,
+            total: data.length,
           },
         }}
       ></List>

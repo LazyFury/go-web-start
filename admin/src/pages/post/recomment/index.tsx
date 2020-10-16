@@ -89,7 +89,11 @@ export default function() {
   ];
 
   return (
-    <PageMain title="推荐位管理" subTitle={`共 ${data.length || 0} 推荐位`}>
+    <PageMain
+      title="推荐位管理"
+      subTitle={`共 ${data.length ||
+        0} 推荐位，ps：这里需要加一个按规则推荐，最热 最新 活动 或者考虑放在另外的接口`}
+    >
       <Drawer width={500} visible={visible} onClose={() => setVisible(false)}>
         <AddPostCate
           onsubmit={() => {
