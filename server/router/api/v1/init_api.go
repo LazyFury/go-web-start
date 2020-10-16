@@ -1,6 +1,8 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
@@ -23,14 +25,21 @@ func Init(g *echo.Group) {
 	apiV1.POST("/upload", func(c echo.Context) error {
 		url, err := aliUploader.Default(c.Request())
 		if err != nil {
-			return util.JSONErr(c, nil, err.Error())
+			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
+		}
+		return util.JSONSuccess(c, url, "上传成功")
+	})
+	apiV1.POST("/upload-img", func(c echo.Context) error {
+		url, err := aliUploader.OnlyAcceptsExt(c.Request(), upload.AcceptsImgExt, "image")
+		if err != nil {
+			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
 		}
 		return util.JSONSuccess(c, url, "上传成功")
 	})
 	apiV1.POST("/upload-head-pic", func(c echo.Context) error {
 		url, err := aliUploader.Custom(c.Request(), upload.AcceptsImgExt, "head_pic")
 		if err != nil {
-			return util.JSONErr(c, nil, err.Error())
+			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
 		}
 		return util.JSONSuccess(c, url, "上传成功")
 	})

@@ -45,6 +45,11 @@ func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
+// List 列表
+func (a *AdGroup) List(c echo.Context) error {
+	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(nil), "")
+}
+
 // Detail 分组详情
 func (a *AdGroup) Detail(c echo.Context) error {
 	db := DB
@@ -113,6 +118,15 @@ func (a *AdGroup) Update(c echo.Context) error {
 
 	if err := c.Bind(adGroup); err != nil {
 		return util.JSONErr(c, err, "参数错误")
+	}
+
+	ad := &Ad{GroupID: adGroup.ID}
+	ads := []Ad{}
+	db := DB
+	if err := db.Table(ad.TableName()).Where(ad).Find(&ads).Error; err == nil {
+		if len(ads) > adGroup.MaxCount {
+			adGroup.MaxCount = len(ads)
+		}
 	}
 
 	adGroup.Empty()

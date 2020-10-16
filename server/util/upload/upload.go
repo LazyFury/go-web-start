@@ -30,12 +30,26 @@ func (u *Uploader) Default(httpContext *http.Request) (path string, err error) {
 }
 
 // Custom 自定义上传类型和目录
-func (u *Uploader) Custom(httpContext *http.Request, acceptsExt []string, folder string) (path string, err error) {
+func (u *Uploader) Custom(httpContext *http.Request, acceptsExt []string, folder string) (url string, err error) {
 	file, err := u.GetFile(httpContext)
 	if err != nil {
 		return
 	}
-	path, err = u.uploadBase(file, acceptsExt, folder)
+	return u.uploadBase(file, acceptsExt, folder)
+}
+
+// OnlyAcceptsExt 限制类型 比如：仅图片
+func (u *Uploader) OnlyAcceptsExt(httpContext *http.Request, acceptsExt []string, folder string) (url string, err error) {
+	file, err := u.GetFile(httpContext)
+	if err != nil {
+		return
+	}
+	pathExt := path.Ext(file.Filename)
+	// 自定义类型  覆盖前边的
+	if inArray(acceptsExt, strings.Trim(pathExt, ".")) {
+		return u.uploadBase(file, acceptsExt, folder)
+	}
+	err = errors.New("不允许上传这种类型的文件")
 	return
 }
 

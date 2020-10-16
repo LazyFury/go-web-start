@@ -149,6 +149,8 @@ func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 	if where != nil {
 		row = row.Where(where)
 	}
+	orderBy := "created_at desc,id desc"
+	row = row.Order(orderBy)
 
 	row = b.model().Joins(row)
 

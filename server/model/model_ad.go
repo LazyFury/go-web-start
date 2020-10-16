@@ -1,9 +1,10 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"fmt"
 	"strings"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -20,8 +21,8 @@ type Ad struct {
 type selectAds struct {
 	*Ad
 	*EmptySystemFiled
-	Y         string `json:"event_id,omitempty"`
-	X         string `json:"id,omitempty"`
+	Y string `json:"event_id,omitempty"`
+	// X         string `json:"id,omitempty"`
 	Event     string `json:"event"`
 	GroupName string `json:"group_name,omitempty"`
 	Type      int    `json:"type,omitempty"`
@@ -44,7 +45,7 @@ func (a *Ad) TableName() string {
 
 // Joins 查询
 func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("`title`,`param`,`event_id`,`code`,IFNULL(`event`,'no_event') `event`,`group_id`") //`group_name`,`type`
+	db = db.Select("`title`,`param`,`event_id`,`code`,IFNULL(`event`,'no_event') `event`,`group_id`,`id`") //`group_name`,`type`
 	// 连接事件
 	event := &AdEvent{}
 	db = db.Joins(fmt.Sprintf("left join (select `id` e_id,`event` from `%s`) t2 on t2.`e_id`=`%s`.`event_id`", event.TableName(), a.TableName()))
