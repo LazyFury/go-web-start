@@ -1,8 +1,8 @@
 import PageMain from '@/components/PageMain';
-import { defaultUploadProps } from '@/components/Upload/Upload';
+import { Uploader } from '@/components/Upload/Upload';
 import useRequest from '@/hooks/useRequest';
 import { adEvents, adGroups, ads } from '@/server/api/ad';
-import { Button, Form, Input, Select, Upload } from 'antd';
+import { Button, Form, Input, Select } from 'antd';
 import React from 'react';
 
 const { Option } = Select;
@@ -90,7 +90,7 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
           </Select>
         </Form.Item>
         <Form.Item name="img" label="上传图片" rules={[{ required: true }]}>
-          <Upload {...defaultUploadProps}>upload</Upload>
+          <Uploader />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 4 }}>

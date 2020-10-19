@@ -21,8 +21,16 @@ http.interceptors.request.use((config: AxiosRequestConfig) => {
   return _config;
 });
 
-http.interceptors.response.use(interceptorsResponse);
-
+http.interceptors.response.use(interceptorsResponse, onrejectionhandled);
+function onrejectionhandled(err: any) {
+  if (err.response) {
+    let res = err?.response?.data;
+    message.error(res?.msg || '请求失败1');
+    handleErrCode(res?.code, res);
+    return;
+  }
+  message.error('请求失败');
+}
 function interceptorsResponse(res: any) {
   // console.log(res);
   let data: any = res.data;
@@ -39,12 +47,12 @@ function interceptorsResponse(res: any) {
     return result;
   } else {
     message.error({ content: msg });
-    handleErrCode(code);
+    handleErrCode(code, data);
   }
   return Promise.reject({ err: res, text: '请求失败' });
 }
 
-function handleErrCode(code: number) {
+function handleErrCode(code: number, data: any) {
   switch (code) {
     case -101:
     case -102:

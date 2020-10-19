@@ -1,26 +1,75 @@
-import config from '@/utils/config';
-import { message } from 'antd';
-import { UploadProps } from 'antd/lib/upload/interface';
+import { http } from '@/server/request';
+import { CloudUploadOutlined } from '@ant-design/icons';
+import { Row } from 'antd';
+import Button from 'antd/es/button/button';
+import React, { useState } from 'react';
 
-export const defaultUploadProps: UploadProps<any> = {
-  name: 'file',
-  multiple: true,
-  action: config.baseURL + '/upload-img',
-  transformFile: file => {
-    return file;
-  },
-  onChange: (info: any) => {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} 上传成功`);
-    } else if (status === 'error') {
-      message.error(
-        `${info.file.name} ${info?.file?.response?.msg ||
-          '不是正确到文件类型'} `,
-      );
-    }
-  },
+interface uploadValues {
+  url: string;
+  file: uploadFile;
+  status: 1 | 2 | 3 | 4;
+}
+
+interface uploadProps {
+  value?: uploadValues[];
+  onchange?: (value: uploadValues[]) => void;
+}
+
+class uploadFile {
+  event: Event;
+  el: HTMLFormElement;
+  files: File[];
+  constructor(e: Event) {
+    this.event = e;
+    this.el = this.event?.path[0] || null;
+    this.files = this.el?.files;
+  }
+
+  get formData() {
+    var formData = new FormData();
+    this.files?.forEach(x => {
+      formData.append('file', x);
+    });
+    return formData;
+  }
+}
+export const Uploader: React.FC<uploadProps> = ({ value, onchange }) => {
+  let [list, setList] = useState(value);
+  const addFile = (file: uploadValues) => {
+    setList([...(list || []), file]);
+    onchange && list && onchange(list);
+  };
+  const chooseFile = () => {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = false;
+    input.onchange = e => {
+      let file = new uploadFile(e);
+      console.log(file);
+      http
+        .post('/upload-img', file.formData, {
+          headers: { 'Content-Type': 'multipart/form-data;' },
+          transformRequest: [data => data],
+          onUploadProgress: e => {
+            let complete = (((e.loaded / e.total) * 100) | 0) + '%';
+            console.log(complete);
+          },
+        })
+        .then(res => {
+          addFile({ url: res.data, file: file, status: 1 });
+        });
+      input.remove();
+    };
+    input.click();
+  };
+  return (
+    <Row>
+      <Button onClick={chooseFile}>
+        <CloudUploadOutlined />
+        upload file
+      </Button>
+
+      {JSON.stringify(list)}
+    </Row>
+  );
 };

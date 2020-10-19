@@ -1,12 +1,12 @@
-import { login } from '@/server/api/users';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { register } from '@/server/api/users';
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Row } from 'antd';
 import React from 'react';
 import { history } from 'umi';
 import './index.less';
 export default function Login() {
   const onFinish = (values: any) => {
-    login(values).then(() => {
+    register(values).then(() => {
       history.go(-1);
     });
   };
@@ -14,11 +14,11 @@ export default function Login() {
     <Row style={{ minHeight: '64vh' }}>
       <Col style={{ margin: 'auto' }}>
         <Col>
-          <h1>用户登陆 </h1>
+          <h1>用户注册 </h1>
         </Col>
         <Form onFinish={onFinish} className="login-form">
           <Form.Item
-            name="username"
+            name="name"
             rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input prefix={<UserOutlined />} placeholder="请输入用户名"></Input>
@@ -33,26 +33,12 @@ export default function Login() {
               placeholder="请输入密码"
             />
           </Form.Item>
-          <Form.Item>
-            <Row>
-              <Col flex={1}>
-                没有账号？
-                <a
-                  onClick={() => {
-                    history.push('/login/register');
-                  }}
-                >
-                  立即注册
-                </a>
-              </Col>
-              <a
-                onClick={() => {
-                  history.push('/login/forgot');
-                }}
-              >
-                忘记密码
-              </a>
-            </Row>
+          <Form.Item name="email">
+            <Input
+              prefix={<MailOutlined />}
+              placeholder="请输入邮件（非必需）"
+              type="email"
+            />
           </Form.Item>
           <Form.Item>
             <Button htmlType="submit" type="primary" style={{ width: '100%' }}>

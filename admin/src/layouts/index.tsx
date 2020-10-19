@@ -4,7 +4,7 @@ import { history } from 'umi';
 import Header from './header';
 import Sider from './sider';
 
-let noLayout = ['/login', '/login/forget'];
+let noLayout = ['/login', '/login/forgot', '/login/register'];
 
 const Layout = (props: {
   location: any;

@@ -13,3 +13,7 @@ export const login = (data: any) => {
     return res;
   });
 };
+
+export const register = (data: any) => {
+  return http.post('/login/reg', data).then(res => {});
+};
