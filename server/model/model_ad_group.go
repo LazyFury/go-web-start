@@ -13,7 +13,7 @@ import (
 // AdGroup 广告位
 type AdGroup struct {
 	BaseControll
-	IsSigle  bool   `json:"is_sigle" gorm:"default:false;comment:'true单图,false多图'"`
+	// IsSigle  bool   `json:"is_sigle" gorm:"default:false;comment:'true单图,false多图'"`
 	Name     string `json:"name" gorm:"unique;not null"`
 	Desc     string `json:"desc" gorm:"type:text;comment:'描述';"`
 	MaxCount int    `json:"max_count" gorm:"default:1"`
