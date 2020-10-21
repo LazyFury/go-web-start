@@ -12,7 +12,7 @@ interface uploadValues {
 
 interface uploadProps {
   value?: uploadValues[];
-  onchange?: (value: uploadValues[]) => void;
+  onChange?: (value: uploadValues[]) => void;
 }
 
 class uploadFile {
@@ -33,11 +33,13 @@ class uploadFile {
     return formData;
   }
 }
-export const Uploader: React.FC<uploadProps> = ({ value, onchange }) => {
-  let [list, setList] = useState(value);
+export const Uploader: React.FC<uploadProps> = ({ value, onChange }) => {
+  let [list, setList] = useState(value || []);
   const addFile = (file: uploadValues) => {
-    setList([...(list || []), file]);
-    onchange && list && onchange(list);
+    let arr = [...(list || []), file];
+    setList(arr);
+    console.log(arr);
+    onChange && onChange(arr);
   };
   const chooseFile = () => {
     let input = document.createElement('input');
@@ -56,7 +58,7 @@ export const Uploader: React.FC<uploadProps> = ({ value, onchange }) => {
           },
         })
         .then(res => {
-          addFile({ url: res.data, file: file, status: 1 });
+          res?.data && addFile({ url: res.data, file: file, status: 1 });
         });
       input.remove();
     };

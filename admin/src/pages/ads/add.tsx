@@ -2,8 +2,9 @@ import PageMain from '@/components/PageMain';
 import { Uploader } from '@/components/Upload/Upload';
 import useRequest from '@/hooks/useRequest';
 import { adEvents, adGroups, ads } from '@/server/api/ad';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, Space } from 'antd';
 import React from 'react';
+import { history } from 'umi';
 
 const { Option } = Select;
 
@@ -24,8 +25,13 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
   );
 
   const formFinish = (e: any) => {
+    // TODO:重构上传方法
+    e.image =
+      e?.image?.map((x: { url: any }) => x.url).filter(Boolean)[0] || '';
     ads.add(e).then(res => {
-      props.onsubmit();
+      props.onsubmit instanceof Function
+        ? props.onsubmit()
+        : history.push('/ads/groups');
     });
   };
 
@@ -81,15 +87,42 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
             {groups && groups.length > 0
               ? groups.map((x: any) => {
                   return (
-                    <Option value={x.id} key={x.id + '-group'}>
-                      {x.name}
+                    <Option
+                      value={x.id}
+                      key={x.id + '-group'}
+                      disabled={x.count >= x.max_count}
+                    >
+                      <Space>
+                        <span>{x.name}</span>
+                        <span>|</span>
+                        <span>
+                          数量：
+                          {`(${x.count}/${x.max_count})`}
+                        </span>
+                      </Space>
                     </Option>
                   );
                 })
               : null}
           </Select>
         </Form.Item>
-        <Form.Item name="img" label="上传图片" rules={[{ required: true }]}>
+        <Form.Item
+          name="image"
+          label="上传图片"
+          rules={[
+            {
+              required: true,
+              type: 'array',
+              validator: (rule, value) => {
+                if (value && value.length > 0) {
+                  return Promise.resolve();
+                }
+                console.log(rule, value);
+                return Promise.reject('请上传图片');
+              },
+            },
+          ]}
+        >
           <Uploader />
         </Form.Item>
 
