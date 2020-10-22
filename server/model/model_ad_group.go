@@ -41,7 +41,7 @@ func (a *AdGroup) TableName() string {
 func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("*")
 	ad := &Ad{}
-	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
+	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` where `deleted_at`  IS NULL  group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
 	return db
 }
 
