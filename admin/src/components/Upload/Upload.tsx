@@ -1,77 +1,67 @@
-import { http } from '@/server/request';
+import config from '@/utils/config';
 import { CloudUploadOutlined } from '@ant-design/icons';
-import { Row } from 'antd';
+import { message, Upload } from 'antd';
 import Button from 'antd/es/button/button';
 import React, { useState } from 'react';
 
-interface uploadValues {
-  url: string;
-  file: uploadFile;
-  status: 1 | 2 | 3 | 4;
-}
-
 interface uploadProps {
-  value?: uploadValues[];
-  onChange?: (value: uploadValues[]) => void;
+  value?: string[] | string;
+  onChange?: (value: string[] | string) => void;
+  multiple: boolean;
 }
 
-class uploadFile {
-  event: Event;
-  el: HTMLFormElement;
-  files: File[];
-  constructor(e: Event) {
-    this.event = e;
-    this.el = this.event?.path[0] || null;
-    this.files = this.el?.files;
-  }
+export const Uploader: React.FC<uploadProps> = ({
+  value,
+  onChange,
+  multiple,
+}) => {
+  let [fileArr, setFileArr] = useState<any[]>([]);
 
-  get formData() {
-    var formData = new FormData();
-    this.files?.forEach(x => {
-      formData.append('file', x);
-    });
-    return formData;
-  }
-}
-export const Uploader: React.FC<uploadProps> = ({ value, onChange }) => {
-  let [list, setList] = useState(value || []);
-  const addFile = (file: uploadValues) => {
-    let arr = [...(list || []), file];
-    setList(arr);
-    console.log(arr);
-    onChange && onChange(arr);
+  const updateValue = (arr: any[]) => {
+    if (onChange) {
+      if (!multiple) {
+        onChange(arr[0]?.response?.data || '');
+      } else {
+        onChange(
+          arr.map((x: { response: { data: any } }) => x?.response?.data),
+        );
+      }
+    }
   };
-  const chooseFile = () => {
-    let input = document.createElement('input');
-    input.type = 'file';
-    input.multiple = false;
-    input.onchange = e => {
-      let file = new uploadFile(e);
-      console.log(file);
-      http
-        .post('/upload-img', file.formData, {
-          headers: { 'Content-Type': 'multipart/form-data;' },
-          transformRequest: [data => data],
-          onUploadProgress: e => {
-            let complete = (((e.loaded / e.total) * 100) | 0) + '%';
-            console.log(complete);
-          },
-        })
-        .then(res => {
-          res?.data && addFile({ url: res.data, file: file, status: 1 });
-        });
-      input.remove();
-    };
-    input.click();
+  const handleChange = (info: any) => {
+    let _fileList = [...info.fileList];
+    _fileList = _fileList.slice(-1);
+    setFileArr(_fileList);
+
+    updateValue(_fileList);
+
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} 上传成功`);
+    } else if (info.file.status === 'error') {
+      message.error(
+        `${info.file.name} ${info.file?.response?.msg || '上传失败'} `,
+      );
+    }
   };
+  const props = {
+    name: 'file',
+    action: config.baseURL + '/upload-img',
+    headers: {
+      authorization: 'authorization-text',
+    },
+    multiple: multiple,
+    onChange: handleChange,
+  };
+
   return (
-    <Row>
-      <Button onClick={chooseFile}>
+    <Upload {...props} fileList={fileArr}>
+      <Button>
         <CloudUploadOutlined />
         upload file
       </Button>
-
-      {JSON.stringify(list)}
-    </Row>
+    </Upload>
   );
 };

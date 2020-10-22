@@ -160,7 +160,10 @@ export default function Groups() {
       <Drawer
         width={1000}
         visible={detailVisible}
-        onClose={() => setDetailVisible(false)}
+        onClose={() => {
+          setDetailVisible(false);
+          load();
+        }}
       >
         <Detail id={chooseId}></Detail>
       </Drawer>

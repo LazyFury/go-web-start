@@ -26,8 +26,7 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
 
   const formFinish = (e: any) => {
     // TODO:重构上传方法
-    e.image =
-      e?.image?.map((x: { url: any }) => x.url).filter(Boolean)[0] || '';
+    console.log(e);
     ads.add(e).then(res => {
       props.onsubmit instanceof Function
         ? props.onsubmit()
@@ -81,7 +80,6 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
             placeholder="请选择广告位"
             onFocus={() => loadGroup()}
             loading={groupLoading}
-            defaultValue={props.id}
             disabled={Boolean(props.id)}
           >
             {groups && groups.length > 0
@@ -112,18 +110,10 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
           rules={[
             {
               required: true,
-              type: 'array',
-              validator: (rule, value) => {
-                if (value && value.length > 0) {
-                  return Promise.resolve();
-                }
-                console.log(rule, value);
-                return Promise.reject('请上传图片');
-              },
             },
           ]}
         >
-          <Uploader />
+          <Uploader multiple={false} />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 4 }}>
