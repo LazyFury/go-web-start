@@ -21,7 +21,7 @@ dist/
 tmp/*
 main
 *.out
-*/static/upload 
+*/static/upload
 log
 __debug_bin
 go-runtime/
