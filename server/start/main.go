@@ -20,8 +20,7 @@ func main() {
 	if err := model.MysqlConn(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
 	}
-	defer model.DB.Close() //退出时释放链接
-
+	defer model.DB.Close() //退出时释放连接
 	// 静态目录
 	e.Static("/", "wwwroot")
 
