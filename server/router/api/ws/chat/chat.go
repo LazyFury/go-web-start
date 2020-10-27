@@ -1,9 +1,10 @@
 package chat
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"math/rand"
 	"sync"
+
+	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/gorilla/websocket"
 )

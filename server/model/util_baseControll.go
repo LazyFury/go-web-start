@@ -282,7 +282,7 @@ func (b *BaseControll) Count(c echo.Context) error {
 
 	row := db.Table(b.model().TableName())
 
-	//time: 2006-01-02 15:04:05
+	//time: 2006-01-02 15:04:05 开始时间必选，结束时间判空位当前时间
 	start := c.QueryParam("start")
 	end := c.QueryParam("end")
 	if start == "" {
