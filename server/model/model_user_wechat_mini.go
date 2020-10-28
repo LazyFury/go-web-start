@@ -5,7 +5,7 @@ type WechatMiniUser struct {
 	BaseControll
 	UID        uint   `json:"uid"`
 	OpenID     string `json:"openid" gorm:"unique"`
-	Unionid    string `json:"unionid" gorm:"unique"`
+	Unionid    string `json:"unionid" gorm:""`
 	SessionKey string `json:"session_key"`
 }
 
