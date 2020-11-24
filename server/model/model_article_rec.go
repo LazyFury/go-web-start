@@ -22,8 +22,8 @@ type ArticlesRec struct {
 type showArticleRec struct {
 	*ArticlesRec
 	// *EmptySystemFiled
-	List  []selectArticle `json:"list"`
-	Count int             `json:"count"`
+	List  []selectArticle `json:"list" gorm:"-"`
+	Count int             `json:"count" gorm:"-"`
 }
 
 // NewArticleRec 推荐文章
@@ -69,7 +69,7 @@ func (a *ArticlesRec) getArticle(item *showArticleRec) {
 		item.List = []selectArticle{}
 	}
 
-	fmt.Println(item)
+	// fmt.Println(item)
 }
 
 // Result 处理结构
@@ -93,12 +93,7 @@ func (a *ArticlesRec) Result(data interface{}, userID uint) interface{} {
 
 // List 分页
 func (a *ArticlesRec) List(c echo.Context) error {
-	list := &[]ArticlesRec{}
-	listModel := DB.GetObjectsOrEmpty(list, map[string]interface{}{})
-	if err := listModel.All(); err != nil {
-		panic(err)
-	}
-	res := a.Result(list, 0)
+	res := a.Result(a.ListWithOutPaging(nil), 0)
 	return util.JSONSuccess(c, res, "")
 }
 

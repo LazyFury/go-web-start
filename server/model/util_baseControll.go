@@ -254,15 +254,14 @@ func (b *BaseControll) DoAdd(c echo.Context, data interface{}) error {
 // DoUpdate 更新数据  需要实现绑定json的部分以及自定义的验证
 // 必须重写 需要调用empty避免关键字段修改
 func (b *BaseControll) DoUpdate(c echo.Context, data interface{}) error {
-	db := DB
 	id := c.Param("id")
 	if id == "" {
 		return util.JSONErr(c, nil, "参数错误")
 	}
 
-	row := db.Table(b.model().TableName()).Where(map[string]interface{}{
+	row := DB.Table(b.model().TableName()).Where(map[string]interface{}{
 		"id": id,
-	}).Save(data)
+	}).Updates(data)
 
 	if row.Error != nil {
 		return util.JSONErr(c, row.Error.Error(), "更新失败")
@@ -390,5 +389,5 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 
 // HasOne 避免重复
 func (b *BaseControll) HasOne(where interface{}) bool {
-	return !(DB.Table(b.model().TableName()).Where(where).First(b.model().Pointer()).Error == nil)
+	return (DB.Table(b.model().TableName()).Where(where).First(b.model().Pointer()).Error == nil)
 }
