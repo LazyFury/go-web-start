@@ -101,8 +101,9 @@ const Post = (props: {
     loading,
     pagination: {
       position: ['bottomLeft'],
-      current: data.page_now,
-      total: data.count,
+      current: data.page,
+      total: data.total,
+      pageSize: data.size,
       showSizeChanger: false,
       onChange: load,
     },
@@ -151,7 +152,7 @@ const Post = (props: {
   return (
     <PageMain
       title="文章管理"
-      subTitle={`共${data.count}篇文章，${data.page_count}页，当前${data.page_now}页`}
+      subTitle={`共${data.total}篇文章，${data.page_count}页，当前${data.page}页`}
     >
       <List
         onRefresh={reload}

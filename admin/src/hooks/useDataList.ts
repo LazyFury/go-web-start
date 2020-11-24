@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 
 export interface listResult {
   list: Array<any>;
-  page_now: number;
-  page_size: number;
+  page: number;
+  size: number;
   page_count: number;
-  count: number;
+  total: number;
 }
 
 const defaultData: listResult = {
   list: [],
-  page_now: 0,
+  page: 0,
+  size: 0,
   page_count: 0,
-  page_size: 0,
-  count: 0,
+  total: 0,
 };
 
 /**

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -33,8 +34,8 @@ type (
 	}
 	// ObjResult Result
 	ObjResult struct {
-		List interface{} `json:"list"`
 		*Pagination
+		List interface{} `json:"list"`
 	}
 	// Pagination 分页数据
 	Pagination struct {
@@ -74,6 +75,24 @@ func (p *Pagination) SetURLFormat(url string) string {
 // URL 获取url
 func (p *Pagination) URL(page int, size int) string {
 	return fmt.Sprintf(p.URLFormat, page, size)
+}
+
+// MarshalJSON MarshalJSON
+func (o *ObjResult) MarshalJSON() ([]byte, error) {
+	if o != nil {
+		_json, err := json.Marshal(map[string]interface{}{
+			"page":       o.Page,
+			"size":       o.Size,
+			"page_count": o.Pages(),
+			"total":      o.Total,
+			"list":       o.List,
+		})
+		if err != nil {
+			return []byte(""), err
+		}
+		return _json, nil
+	}
+	return []byte(""), nil
 }
 
 // Pages 总页数
