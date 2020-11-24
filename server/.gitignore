@@ -3,7 +3,7 @@ dist/
 tmp/*
 main
 *.out
-*/static/upload 
+*/static/upload
 log
 __debug_bin
 go-runtime/
@@ -20,3 +20,5 @@ cache
 cert.pem
 key.pem
 tmp
+
+.DS_Store
