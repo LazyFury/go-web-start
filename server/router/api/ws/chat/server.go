@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util/mlog"
-
 	"github.com/Treblex/go-echo-demo/server/util"
 
 	"github.com/gorilla/websocket"
@@ -35,7 +33,7 @@ func WsServer(c echo.Context) error {
 	defer ws.Close()
 
 	ws.SetCloseHandler(func(code int, text string) error {
-		mlog.Error("SetCloseHandler Err %v %v ", code, text)
+		fmt.Printf("SetCloseHandler Err %d %s ", code, text)
 		// chat.removeByWsConn(ws)
 		return nil
 	})
@@ -61,7 +59,7 @@ func received(chat *Chat, ws *websocket.Conn) {
 	for {
 		_, message, err := ws.ReadMessage()
 		if err != nil {
-			mlog.Error("close:", err)
+			fmt.Print("close:", err)
 			break
 		}
 		var info UserSubmit
@@ -71,7 +69,7 @@ func received(chat *Chat, ws *websocket.Conn) {
 		}
 
 		if info.Action != "ping" {
-			mlog.Info("收到消息: %v \n", info.toString())
+			fmt.Printf("收到消息: %v \n", info.toString())
 		}
 
 		chat.handleMessage(&info, ws)

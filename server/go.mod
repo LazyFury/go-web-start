@@ -6,8 +6,7 @@ require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.4+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/fatedier/beego v1.7.2
-	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
+
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/sessions v1.2.1
@@ -19,7 +18,6 @@ require (
 	github.com/lib/pq v1.8.0 // indirect
 	github.com/satori/go.uuid v1.2.0 // indirect
 	// github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
-	github.com/valyala/fasttemplate v1.2.1
 	golang.org/x/time v0.0.0-20200630173020-3af7569d3a1e // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

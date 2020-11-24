@@ -1,11 +1,11 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/Treblex/go-echo-demo/server/util/mlog"
 
 	// _ 数据库驱动
 	// _ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -51,7 +51,7 @@ var autoMigrate = []interface{}{
 
 // MysqlConn InitDB
 func MysqlConn(DataBaseConfig string) (err error) {
-	mlog.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
+	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
 	db, err := gorm.Open("mysql", DataBaseConfig)
 	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
@@ -67,7 +67,7 @@ func MysqlConn(DataBaseConfig string) (err error) {
 	db.AutoMigrate(autoMigrate...)
 
 	DB = db
-	mlog.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
+	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
 	return nil
 }
 

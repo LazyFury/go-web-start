@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/util/mlog"
 	"github.com/Treblex/go-echo-demo/server/util/wechat"
 )
 
@@ -23,7 +22,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 	if db.Model(wechatUser).Where(map[string]interface{}{
 		"open_id": wechatInfo.Openid,
 	}).RecordNotFound() {
-		mlog.Printf("没有微信用户账户，准备新建...")
+		fmt.Printf("没有微信用户账户，准备新建...")
 		//如不存在，新建用户
 		info := &model.WechatOauth{}
 		info, err = updateWechatInfo(wechatInfo, true)
@@ -39,7 +38,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 		}
 		db.Find(wechatUser)
 	} else {
-		mlog.Printf("存在微信用户账户(openid:%s),更新状态...", wechatInfo.Openid)
+		fmt.Printf("存在微信用户账户(openid:%s),更新状态...", wechatInfo.Openid)
 		// 如果账号存在则更新微信 token 信息
 		err = db.Model(wechatUser).Updates(wechatInfo).Error
 		if err != nil {

@@ -7,8 +7,6 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-
-	midd "github.com/Treblex/go-echo-demo/server/middleware"
 )
 
 // New 初始化
@@ -26,7 +24,6 @@ func New() *echo.Echo {
 	// response
 	e.Use(middleware.Gzip()) //gzip压缩
 	// e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: os.Stdout})) //日志
-	e.Use(midd.LogMiddleware())
 	e.Use(middleware.Recover()) //错误处理
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte(util.RandStringBytes(32))))) //session
