@@ -58,8 +58,7 @@ func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	article := &Articles{}
 	articles := []selectArticle{}
 
-	db := DB.Table(article.TableName())
-	row := db.Where("id IN (?)", ids).Find(&articles)
+	row := DB.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
 	if row.Error == nil && len(articles) > 0 {
 		item.List = articles
 	}
@@ -94,10 +93,13 @@ func (a *ArticlesRec) Result(data interface{}, userID uint) interface{} {
 
 // List 分页
 func (a *ArticlesRec) List(c echo.Context) error {
-	list := a.BaseControll.ListWithOutPaging(nil)
-	userID, _ := c.Get("userId").(float64)
-	list = a.Result(list, uint(userID))
-	return util.JSONSuccess(c, list, "")
+	list := &[]ArticlesRec{}
+	listModel := DB.GetObjectsOrEmpty(list, map[string]interface{}{})
+	if err := listModel.All(); err != nil {
+		panic(err)
+	}
+	res := a.Result(list, 0)
+	return util.JSONSuccess(c, res, "")
 }
 
 // Add 添加分类

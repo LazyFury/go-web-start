@@ -94,7 +94,7 @@ func (p *Pagination) Range() []Page {
 
 // All 全部数据
 func (o *Objects) All() (err error) {
-	o.Model.Find(o.Obj)
+	err = o.Model.Find(o.Obj).Error
 	return
 }
 
