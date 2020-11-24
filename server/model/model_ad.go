@@ -6,8 +6,8 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/util"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // Ad 广告位
@@ -98,7 +98,7 @@ func (a *Ad) Add(c echo.Context) error {
 	db := DB
 	if db.Model(adGourp).Where(map[string]interface{}{
 		"id": ad.GroupID,
-	}).First(adGourp).RecordNotFound() {
+	}).First(adGourp).Error != nil {
 		return util.JSONErr(c, nil, "分组不存在")
 	}
 

@@ -6,8 +6,8 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/util"
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // AppointmentLog 预约记录

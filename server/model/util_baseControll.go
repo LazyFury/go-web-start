@@ -11,8 +11,8 @@ import (
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
 
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // Model Model
@@ -220,7 +220,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 
 	row = b.model().Joins(row)
 
-	if row.First(p).RecordNotFound() {
+	if row.First(p).Error != nil {
 		return util.JSONErr(c, nil, recordNotFoundTips)
 	}
 
@@ -238,7 +238,6 @@ func (b *BaseControll) DoAdd(c echo.Context, data interface{}) error {
 	code := elem.FieldByName("Code")
 	code.SetString(uuid.New().String())
 
-	db.NewRecord(data)
 	row := db.Create(data)
 
 	if row.Error != nil {
@@ -263,7 +262,7 @@ func (b *BaseControll) DoUpdate(c echo.Context, data interface{}) error {
 
 	row := db.Table(b.model().TableName()).Where(map[string]interface{}{
 		"id": id,
-	}).Update(data)
+	}).Save(data)
 
 	if row.Error != nil {
 		return util.JSONErr(c, row.Error.Error(), "更新失败")
@@ -333,7 +332,7 @@ func (b *BaseControll) Count(c echo.Context) error {
 	}
 
 	// 统计总数量
-	var n int
+	var n int64
 	row = row.Count(&n)
 	// 查询近n (天，周，月) 数据
 	row = row.Select("DATE_FORMAT(created_at,'" + dateFormat + "') date,count(*) count")
@@ -391,6 +390,5 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 
 // HasOne 避免重复
 func (b *BaseControll) HasOne(where interface{}) bool {
-	db := DB
-	return !db.Table(b.model().TableName()).Where(where).First(b.model().Pointer()).RecordNotFound()
+	return !(DB.Table(b.model().TableName()).Where(where).First(b.model().Pointer()).Error == nil)
 }

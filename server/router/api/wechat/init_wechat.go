@@ -75,16 +75,16 @@ func userInfo(c echo.Context) (err error) {
 	if newID < 1 {
 		return util.JSONErr(c, nil, "用户id不可为空")
 	}
-	user := model.WechatOauth{BaseControll: model.BaseControll{ID: uint(newID)}}
+	user := &model.WechatOauth{BaseControll: model.BaseControll{ID: uint(newID)}}
 
 	db := model.DB
-	if db.Find(&user).RecordNotFound() {
+	if db.Where(user).Find(user).Error != nil {
 		return util.JSONErr(c, err, "未找到用户")
 	}
 	// token := user.AccessToken
 	fmt.Println(time.Now().Unix())
 	if user.CreatedAt.Unix()-time.Now().Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
-		info, err := updateWechatInfo(&user, false)
+		info, err := updateWechatInfo(user, false)
 		if err != nil {
 			return util.JSONErr(c, nil, err.Error())
 		}

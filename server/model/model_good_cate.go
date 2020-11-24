@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"github.com/Treblex/go-echo-demo/server/util"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -61,7 +61,7 @@ func (cate *GoodCate) List(c echo.Context) error {
 }
 
 // 循环获取自分类
-func (cate *GoodCate) getCateTmenu(item *catelist, db *gorm.DB) (tmenu []catelist) {
+func (cate *GoodCate) getCateTmenu(item *catelist, db *GormDB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
 	db.Table(cate.TableName()).Where(&GoodCate{ParentID: parentID}).Find(&tmenu)
@@ -92,9 +92,9 @@ func (cate *GoodCate) Add(c echo.Context) error {
 	// 查询分类是否存在 parentID为空时是一级分类
 	if _cate.ParentID > 0 {
 		cateParent := &GoodCate{BaseControll: BaseControll{ID: uint(_cate.ParentID)}}
-		empty := db.First(cateParent).RecordNotFound()
+		row := db.First(cateParent)
 		// fmt.Println(empty)
-		if empty {
+		if row.Error != nil {
 			return util.JSONErr(c, nil, "上级分类不存在")
 		}
 		_cate.Level = cateParent.Level + 1
@@ -105,7 +105,7 @@ func (cate *GoodCate) Add(c echo.Context) error {
 	}
 
 	// 禁止同名
-	if repeat := db.Where(&GoodCate{Name: _cate.Name}).Find(&GoodCate{}).RecordNotFound(); !repeat {
+	if repeat := db.Where(&GoodCate{Name: _cate.Name}).Find(&GoodCate{}).Error == nil; repeat {
 		return util.JSONErr(c, nil, "已存在相同分类")
 	}
 

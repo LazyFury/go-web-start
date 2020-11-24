@@ -29,7 +29,7 @@ Go 语言在线练习场，讲解很细
 [gorm 官方文档](https://gorm.io/)
 
 ```go
-        "github.com/jinzhu/gorm" //数据库操作框架 支持模型和链式操作 不用写sql了
+        "gorm.io/gorm" //数据库操作框架 支持模型和链式操作 不用写sql了
         _ "github.com/go-sql-driver/mysql" //go语言sql驱动
 
         db, err := gorm.Open("mysql", config.DataBase)

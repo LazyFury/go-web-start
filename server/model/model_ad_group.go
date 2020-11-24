@@ -6,8 +6,8 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/util"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // AdGroup 广告位
@@ -61,7 +61,7 @@ func (a *AdGroup) Detail(c echo.Context) error {
 	group := &AdGroup{}
 	if db.Model(group).Where(map[string]interface{}{
 		"id": id,
-	}).First(group).RecordNotFound() {
+	}).First(group).Error != nil {
 		return util.JSONErr(c, nil, "广告位不存在")
 	}
 

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/labstack/echo/v4"
 )

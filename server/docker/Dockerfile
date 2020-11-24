@@ -7,5 +7,5 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone
 
 RUN go get -u github.com/cosmtrek/air
-RUN go get -u github.com/jinzhu/gorm
+RUN go get -u gorm.io/gorm
 RUN go get -u github.com/labstack/echo/v4

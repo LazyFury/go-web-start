@@ -8,9 +8,9 @@ import (
 	"github.com/Treblex/go-echo-demo/server/util/customtype/message"
 
 	"github.com/google/uuid"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
+	"gorm.io/gorm"
 )
 
 // Message 客户意见反馈
@@ -185,7 +185,6 @@ func writeLogs(data map[string]interface{}) error {
 		},
 	}
 
-	db.NewRecord(msg)
 	err := db.Create(msg).Error
 	return err
 }

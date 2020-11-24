@@ -21,7 +21,7 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 	//使用唯一openid查询用户
 	if db.Model(wechatUser).Where(map[string]interface{}{
 		"open_id": wechatInfo.Openid,
-	}).RecordNotFound() {
+	}).Error != nil {
 		fmt.Printf("没有微信用户账户，准备新建...")
 		//如不存在，新建用户
 		info := &model.WechatOauth{}

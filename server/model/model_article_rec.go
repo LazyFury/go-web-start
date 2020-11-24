@@ -7,8 +7,8 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/util"
 
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // ArticlesRec 文章分类
@@ -57,9 +57,8 @@ func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	ids := strings.Split(item.IDs, ",")
 	article := &Articles{}
 	articles := []selectArticle{}
-	db := DB
-	db = db.Table(article.TableName())
-	db = article.Joins(db)
+
+	db := DB.Table(article.TableName())
 	row := db.Where("id IN (?)", ids).Find(&articles)
 	if row.Error == nil && len(articles) > 0 {
 		item.List = articles

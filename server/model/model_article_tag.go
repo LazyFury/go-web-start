@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 // ArticlesTag 文章Tag
@@ -20,7 +20,7 @@ type showArticlesTag struct {
 	*ArticlesTag
 
 	CateName string `json:"cate_name" gorm:""`
-	Count    int    `json:"count" gorm:""`
+	Count    int64  `json:"count" gorm:""`
 }
 
 var _ Model = &ArticlesTag{}
@@ -63,7 +63,7 @@ func (a *ArticlesTag) Joins(db *gorm.DB) *gorm.DB {
 // TODO:统计文章数量，后期准备优化为定时更新 或者手动更新 或重新设计数据表
 // 想要使用左连接查询解决 但是没有找到方案
 func (a *ArticlesTag) countArticles(tag *showArticlesTag) {
-	var count int
+	var count int64
 	db := DB
 	article := &Articles{}
 	db.Table(article.TableName()).Where("tag like ? AND `deleted_at` IS NULL", "%"+tag.Val+"%").Count(&count)

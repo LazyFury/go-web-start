@@ -52,12 +52,12 @@ func sendMsg(c echo.Context) error {
 	db := model.DB
 
 	var user = model.User{BaseControll: model.BaseControll{ID: uint(uid)}}
-	if notfoundUser := db.Model(&user).Find(&user).RecordNotFound(); notfoundUser {
+	if notfoundUser := db.Model(&user).Find(&user).Error != nil; notfoundUser {
 		return util.JSONErr(c, nil, "没找到用户")
 	}
 
 	var miniUser = model.WechatMiniUser{UID: user.ID}
-	if notfoundUser := db.Model(&miniUser).Find(&miniUser).RecordNotFound(); notfoundUser {
+	if notfoundUser := db.Model(&miniUser).Find(&miniUser).Error != nil; notfoundUser {
 		return util.JSONErr(c, nil, "没找到用户")
 	}
 

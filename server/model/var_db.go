@@ -6,15 +6,12 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
-
 	// _ 数据库驱动
-	// _ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
+	// _ "gorm.io/gorm/dialects/sqlite"
 )
 
 // DB DB
-var DB *gorm.DB
+var DB *GormDB = &GormDB{}
 
 // 需要自动迁移的表
 var autoMigrate = []interface{}{
@@ -50,23 +47,20 @@ var autoMigrate = []interface{}{
 }
 
 // MysqlConn InitDB
-func MysqlConn(DataBaseConfig string) (err error) {
+func MysqlConn(dsn string) (err error) {
 	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
-	db, err := gorm.Open("mysql", DataBaseConfig)
+	err = DB.ConnectMysql(dsn)
 	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
 		return
 	}
 
-	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return TableName(defaultTableName)
-	}
+	// gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+	// 	return TableName(defaultTableName)
+	// }
 
-	db.LogMode(true)
+	DB.AutoMigrate(autoMigrate...)
 
-	db.AutoMigrate(autoMigrate...)
-
-	DB = db
 	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
 	return nil
 }

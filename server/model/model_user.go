@@ -155,7 +155,7 @@ func (u *User) Frozen(c echo.Context) error {
 func (u *User) HasUser() error {
 	db := DB
 	row := db.Where(u).First(u)
-	if row.RecordNotFound() {
+	if row.Error != nil {
 		return errors.New("用户不存在")
 	}
 	return nil

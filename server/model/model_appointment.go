@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/Treblex/go-echo-demo/server/util"
 	"github.com/labstack/echo/v4"
@@ -129,7 +129,7 @@ func (a *Appointment) Delete(c echo.Context) error {
 		"id":  id,
 		"uid": uid,
 	}
-	if nofund := db.Table(a.TableName()).Where(where).Find(a.Pointer()).RecordNotFound(); nofund {
+	if nofund := db.Table(a.TableName()).Where(where).Find(a.Pointer()).Error != nil; nofund {
 		return util.JSONErr(c, nil, "删除失败,没有权限")
 	}
 
