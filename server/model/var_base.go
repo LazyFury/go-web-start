@@ -87,10 +87,9 @@ func (o *ObjResult) MarshalJSON() ([]byte, error) {
 			"total":      o.Total,
 			"list":       o.List,
 		})
-		if err != nil {
-			return []byte(""), err
+		if err == nil {
+			return _json, nil
 		}
-		return _json, nil
 	}
 	return []byte(""), nil
 }
