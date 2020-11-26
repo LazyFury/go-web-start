@@ -15,6 +15,9 @@ func New() *gin.Engine {
 
 	g.Use(gin.Logger())
 
+	// 静态目录
+	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
+
 	// recover panic
 	g.Use(gin.Recovery())
 
@@ -35,9 +38,6 @@ func New() *gin.Engine {
 
 	g.RemoveExtraSlash = true
 	g.RedirectTrailingSlash = true
-
-	// 静态目录
-	g.Use(static.Serve("/static", static.LocalFile("static", false)))
 
 	// 注册路由
 	router.Start(g)
