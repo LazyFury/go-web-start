@@ -79,17 +79,14 @@ func (p *Pagination) URL(page int, size int) string {
 
 // MarshalJSON MarshalJSON
 func (o *ObjResult) MarshalJSON() ([]byte, error) {
-	if o != nil {
-		_json, err := json.Marshal(map[string]interface{}{
-			"page":       o.Page,
-			"size":       o.Size,
-			"page_count": o.Pages(),
-			"total":      o.Total,
-			"list":       o.List,
-		})
-		if err == nil {
-			return _json, nil
-		}
+	if _json, err := json.Marshal(map[string]interface{}{
+		"page":       o.Page,
+		"size":       o.Size,
+		"page_count": o.Pages(),
+		"total":      o.Total,
+		"list":       o.List,
+	}); err == nil {
+		return _json, nil
 	}
 	return []byte(""), nil
 }

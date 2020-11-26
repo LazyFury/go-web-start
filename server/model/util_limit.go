@@ -18,7 +18,9 @@ func DataBaselimit(limit int, page int, where interface{}, _model Model, key str
 	}
 
 	listModel.Model = _model.Search(listModel.Model, key)
-	if err := listModel.Paging(page, limit); err != nil {
+	if err := listModel.Paging(page, limit, func(db *gorm.DB) *gorm.DB {
+		return _model.Joins(db)
+	}); err != nil {
 		// pass; result empty array
 	}
 	return listModel.Result

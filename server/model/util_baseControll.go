@@ -194,7 +194,7 @@ func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
 
 // GetDetail 获取某一条数据
 func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) error {
-	db := DB
+
 	if recordNotFoundTips == "" {
 		recordNotFoundTips = "内容不存在"
 	}
@@ -208,7 +208,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	where := map[string]interface{}{
 		"id": id,
 	}
-	row := db.Table(b.model().TableName()).Where(where)
+	row := DB.DB.Table(b.model().TableName()).Where(where)
 
 	userID, _ := c.Get("userId").(float64)
 	isAdmin, _ := c.Get("isAdmin").(bool)

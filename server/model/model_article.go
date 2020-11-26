@@ -75,9 +75,8 @@ func (a *Articles) Search(db *gorm.DB, key string) *gorm.DB {
 func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
 	// left join 需要手动拼接字段了,gorm默认都是slect tableName.*
 	// db = db.Select("id,title,cate_id,cate_name,created_at,updated_at,author,email,cover,tag,`like`,`desc`")
-	db = db.Select("*")
 	cate := &ArticlesCate{}
-	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
+	db = db.Select([]string{"*"}).Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
 	return db
 }
 

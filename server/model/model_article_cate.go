@@ -39,6 +39,8 @@ func (a *ArticlesCate) Pointer() interface{} {
 	return &struct {
 		*ArticlesCate
 		*EmptySystemFiled
+		Count    int `json:"count"`
+		TagCount int `json:"tag_count"`
 	}{}
 }
 
@@ -51,10 +53,10 @@ func (a *ArticlesCate) TableName() string {
 func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
 	db = db.Select("*")
 	article := &Articles{}
-	db = db.Joins(fmt.Sprintf("left join (select count(id) count,`cate_id` from `%s` where `%s`.`deleted_at` IS NULL group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", article.TableName(), article.TableName(), a.TableName()))
+	db = db.Joins(fmt.Sprintf("left join (select count(1) count,`cate_id` from `%s` where `%s`.`deleted_at` IS NULL group by `cate_id`) a1 on `%s`.`id`=`a1`.`cate_id`", article.TableName(), article.TableName(), a.TableName()))
 
 	tag := &ArticlesTag{}
-	db = db.Joins(fmt.Sprintf("left join (select count(id) tag_count,`cate_id` `tag_cate_id` from `%s` group by `tag_cate_id`) a2 on `%s`.`id`=`a2`.`tag_cate_id`", tag.TableName(), a.TableName()))
+	db = db.Joins(fmt.Sprintf("left join (select count(1) tag_count,`cate_id` `tag_cate_id` from `%s` group by `tag_cate_id`) a2 on `%s`.`id`=`a2`.`tag_cate_id`", tag.TableName(), a.TableName()))
 	return db
 }
 
