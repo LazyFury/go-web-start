@@ -183,11 +183,8 @@ func (b *BaseControll) GetList(c *gin.Context, where interface{}) {
 	p, _ := strconv.Atoi(page)
 	size, _ := strconv.Atoi(limit)
 
-	// 用户信息
-	user := c.MustGet("user").(*User)
-
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.model(), key, orderBy, uint(user.ID), user.IsAdmin == 1)
+	list := DataBaselimit(size, p, where, b.model(), key, orderBy, 0, false)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
 }
 

@@ -36,11 +36,12 @@ func Recover(c *gin.Context) {
 		// 	code = int(result.Code)
 		// }
 		//返回内容
-		if ReqFromHTML(c) {
-			c.HTML(code, "404.tmpl", result)
-		} else {
-			c.JSON(code, result)
-		}
+		// if ReqFromHTML(c) {
+		// 	c.HTML(code, "error.html", nil)
+		// } else {
+		// 	c.JSON(code, result)
+		// }
+		c.JSON(code, result)
 
 		log.Printf("\n\n\x1b[31m[Custom Debug Result]: URL:%s ;\nErr: %v \x1b[0m\n\n", c.Request.URL.RequestURI(), result)
 
