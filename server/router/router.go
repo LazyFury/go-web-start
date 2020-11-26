@@ -1,15 +1,15 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api"
-	"github.com/Treblex/go-echo-demo/server/util"
-
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
 // Start 入口
-func Start(e *echo.Echo) {
+func Start(e *gin.Engine) {
 	// baseURl 默认值 / Group的url末尾有斜杠时 get post绑定路由时不要加斜杠  无法识别 //xx 类似 传递下一级group时没有这个问题
 	baseURL := config.Global.BaseURL
 	if baseURL == "/" {
@@ -23,20 +23,16 @@ func Start(e *echo.Echo) {
 	// 入口
 	index := g
 
-	// index.POST("/upload", func(c echo.Context) error {
-	// 	return util.UploadCustom(c, util.AcceptsImgExt, "pic")
-	// })
-
-	index.GET("/sendMail", func(c echo.Context) error {
-		email := c.QueryParam("email")
+	index.GET("/sendMail", func(c *gin.Context) {
+		email := c.Query("email")
 		if email == "" {
-			return util.JSONErr(c, nil, "发送邮箱不可空")
+			panic("发送邮箱不可空")
 		}
 		err := config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
-			return util.JSONErr(c, err, "发送失败")
+			panic("发送失败")
 		}
-		return util.JSONSuccess(c, nil, "发送成功")
+		c.JSON(http.StatusOK, gin.H{"message": "发送成功"})
 	})
 
 }

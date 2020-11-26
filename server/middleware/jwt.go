@@ -1,146 +1,103 @@
 package middleware
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-
+	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/simple-daily/models"
+	"github.com/Treblex/simple-daily/utils"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
-// UserInfo jwt UserInfo type
-type UserInfo struct {
-	ID      float64 `json:"id"`
-	Name    string  `json:"name"`
-	IsAdmin bool    `json:"isAdmin"`
+func handleErr(c *gin.Context, err string) {
+	if utils.ReqFromHTML(c) {
+		c.Redirect(http.StatusFound, "/login")
+		return
+	}
+	c.AbortWithStatusJSON(http.StatusForbidden, utils.JSON(utils.AuthedError, err, nil))
+	return
 }
 
-var (
-	// SECRET jwt
-	SECRET string = "secret" //util.RandStringBytes(8)
+// Auth 用户认证中间件
+var Auth gin.HandlerFunc = func(c *gin.Context) {
+	log.Printf("auth middleware")
+	token, err := getToken(c)
+	if err != nil || token == "" {
+		handleErr(c, "")
+		return
+	}
+	user, err := parseToken(token)
+	if err != nil {
+		handleErr(c, "解析token错误")
+		return
+	}
+	c.Set("user", user)
+}
+
+const (
+	// SECRET SECRET
+	SECRET string = "asdhjsdhhdhdhdhsasd"
 )
 
-// AdminJWT 管理后台用户验证
-var AdminJWT echo.MiddlewareFunc = baseJWT(adminCheckToken)
+func getToken(c *gin.Context) (token string, err error) {
+	// query
+	token = c.Query("token")
+	req := c.Request
+	if token != "" {
+		return
+	}
 
-// CheckToken 检查token可用
-func adminCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
-	user, err := parseToken(tokenString)
+	// post
+	token = c.PostForm("token")
+	if token != "" {
+		return
+	}
+
+	token = req.FormValue("token")
+	if token != "" {
+		return
+	}
+
+	// header
+	token = req.Header.Get("token")
+	if token != "" {
+		return
+	}
+
+	// cookie
+	token, err = c.Cookie("token")
 	if err != nil {
-		return util.JSONErrJustCode(c, util.LogTimeOut)
-	}
-	if user.ID == 0 {
-		return util.JSONErrJustCode(c, util.LogTimeOut)
-	}
-	if !user.IsAdmin {
-		return util.JSONErrJustCode(c, http.StatusUnauthorized)
-	}
-	fmt.Println(user)
-	c.Set("userId", user.ID)
-	c.Set("userName", user.Name)
-	c.Set("isAdmin", user.IsAdmin)
-	return next(c)
-}
-
-// UserJWT 普通用户验证
-var UserJWT echo.MiddlewareFunc = baseJWT(userCheckToken)
-
-// CheckToken 检查token可用
-func userCheckToken(next echo.HandlerFunc, c echo.Context, tokenString string) error {
-	user, err := parseToken(tokenString)
-	if err != nil {
-		return util.JSONErrJustCode(c, util.LogTimeOut)
-	}
-	if user.ID == 0 {
-		return util.JSONErrJustCode(c, util.LogTimeOut)
-	}
-	// if !user.IsAdmin {
-	// 	return util.JSONErrJustCode(c, http.StatusUnauthorized)
-	// }
-	// fmt.Println(user)
-	c.Set("userId", user.ID)
-	c.Set("userName", user.Name)
-	c.Set("isAdmin", user.IsAdmin)
-	return next(c)
-}
-
-// JWT 验证
-func baseJWT(callback func(next echo.HandlerFunc, c echo.Context, token string) error) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		fmt.Printf("\n>>>>>>>Base Check>>>>>>>>>\n")
-		return func(c echo.Context) error {
-			var token string = getToken(c)
-
-			if token != "" {
-				return callback(next, c, token)
-			}
-
-			return util.JSONErrJustCode(c, util.Logout)
-		}
-	}
-}
-
-// 获取token
-func getToken(c echo.Context) (token string) {
-	// token in GET url
-	token = c.QueryParam("token")
-	if token != "" {
-		return token
+		return
 	}
 
-	type tokenPostJSON struct {
-		Token string
-	}
-	r := c.Request()
-	// token in POST Body
-	t := tokenPostJSON{}
+	// post json token内不做了，需要拷贝一份body，对性能有一些影响
 
-	var bodyBytes []byte = make([]byte, 0)
-	if c.Request().Body != nil {
-		bodyBytes, _ = ioutil.ReadAll(r.Body)
-	}
-	r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-
-	err := json.Unmarshal(bodyBytes, &t)
-	if err == nil && t.Token != "" {
-		// fmt.Printf("拦截json  %v \n", t)
-		return t.Token
-	}
-
-	// token in header
-	token = r.Header.Get("token")
-	if token != "" {
-		return token
-	}
-	// Authorization in token
-	token = r.Header.Get("Authorization")
-	if token != "" {
-		return token
-	}
-	return ""
+	return
 }
 
 // CreateToken 创建token
-func CreateToken(user *UserInfo) (tokenstr string, err error) {
+func CreateToken(u model.User) (token string, err error) {
+	return CreateTokenMaxAge(u, int64(60*60*24))
+}
+
+// CreateTokenMaxAge 创建token
+func CreateTokenMaxAge(u model.User, maxAge int64) (tokens string, err error) {
 	//自定义claim
 	claim := jwt.MapClaims{
-		"id":       user.ID,
-		"username": user.Name,
-		"is_admin": user.IsAdmin,
-		"nbf":      time.Now().Unix(),            //指定时间之前 token不可用
-		"iat":      time.Now().Unix(),            //签发时间
-		"exp":      time.Now().Unix() + 60*60*24, //过期时间 24小时
+		"id":      u.ID,
+		"nick":    u.Name,
+		"headPic": "",
+		"nbf":     time.Now().Unix(),          //指定时间之前 token不可用
+		"iat":     time.Now().Unix(),          //签发时间
+		"exp":     time.Now().Unix() + maxAge, //过期时间 24小时
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
-	tokenstr, err = token.SignedString([]byte(SECRET))
+	tokens, err = token.SignedString([]byte(SECRET))
 	return
 }
 
@@ -153,16 +110,15 @@ func secret() jwt.Keyfunc {
 }
 
 //ParseToken 解密token
-func parseToken(tokenss string) (user *UserInfo, err error) {
-	user = &UserInfo{}
-	token, err := jwt.Parse(tokenss, secret())
+func parseToken(tokens string) (user *models.UserModel, err error) {
+	token, err := jwt.Parse(tokens, secret())
 	if err != nil {
 		err = errors.New("解析token出错")
 		return
 	}
 	claim, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		err = errors.New("cannot convert claim to mapclaim")
+		err = errors.New("cannot convert claim to map claim")
 		return
 	}
 	//验证token，如果token被修改过则为false
@@ -170,12 +126,12 @@ func parseToken(tokenss string) (user *UserInfo, err error) {
 		err = errors.New("token is invalid")
 		return
 	}
-
-	user.ID = claim["id"].(float64) // uint64(claim["id"].(float64))
-	user.Name = claim["username"].(string)
-	user.IsAdmin = claim["is_admin"].(bool)
+	user = &models.UserModel{}
+	user.ID = uint(claim["id"].(float64)) // uint64(claim["id"].(float64))
+	user.Nick = claim["nick"].(string)
+	user.HeadPic = claim["headPic"].(string)
 
 	exp := int64(claim["exp"].(float64))
-	fmt.Println(user, "过期时间=====", time.Unix(exp, 0).Format(customtype.DefaultTimeLayout))
+	fmt.Println(user.Nick, "过期时间=====", time.Unix(exp, 0).Format("2001-01-02 15:04:05"))
 	return
 }

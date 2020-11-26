@@ -2,13 +2,13 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-
-	"github.com/labstack/echo/v4"
 )
 
 // AdEvent banner事件
@@ -46,46 +46,46 @@ func (a *AdEvent) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // List 列表
-func (a *AdEvent) List(c echo.Context) error {
-	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(nil), "")
+func (a *AdEvent) List(c *gin.Context) {
+	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(nil)))
 }
 
 // Add AdEventd
-func (a *AdEvent) Add(c echo.Context) error {
+func (a *AdEvent) Add(c *gin.Context) {
 	adEvent := &AdEvent{}
 
 	if err := c.Bind(adEvent); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	adEvent.Event = strings.Trim(adEvent.Event, " ")
 	if adEvent.Event == "" {
-		return util.JSONErr(c, nil, "event定义不可空")
+		panic("event定义不可空")
 	}
 
 	if match, _ := regexp.MatchString("^[A-Za-z]+$", adEvent.Event); !match {
-		return util.JSONErr(c, nil, "仅支持英文字符串")
+		panic("仅支持英文字符串")
 	}
 
 	hasOne := a.BaseControll.HasOne(map[string]interface{}{
 		"event": adEvent.Event,
 	})
 	if hasOne {
-		return util.JSONErr(c, nil, "不可添加,已存在相同的事件")
+		panic("不可添加,已存在相同的事件")
 	}
 
 	adEvent.Empty()
-	return a.BaseControll.DoAdd(c, adEvent)
+	a.BaseControll.DoAdd(c, adEvent)
 }
 
 // Update Update
-func (a *AdEvent) Update(c echo.Context) error {
+func (a *AdEvent) Update(c *gin.Context) {
 	adEvent := &AdEvent{}
 
 	if err := c.Bind(adEvent); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	adEvent.Empty()
-	return a.BaseControll.DoUpdate(c, adEvent)
+	a.BaseControll.DoUpdate(c, adEvent)
 }

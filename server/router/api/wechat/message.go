@@ -1,7 +1,6 @@
 package wechat
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"bytes"
 	"crypto/sha1"
 	"encoding/json"
@@ -15,7 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -23,11 +23,11 @@ var (
 )
 
 //服务端验证token绑定
-func signatureCheck(c echo.Context) (err error) {
-	echostr := c.QueryParam("echostr")
-	signature := c.QueryParam("signature")
-	timestamp := c.QueryParam("timestamp")
-	nonce := c.QueryParam("nonce")
+func signatureCheck(c *gin.Context) {
+	echostr := c.Query("echostr")
+	signature := c.Query("signature")
+	timestamp := c.Query("timestamp")
+	nonce := c.Query("nonce")
 
 	tmpArr := []string{"hello world", timestamp, nonce}
 	sort.Strings(tmpArr)
@@ -36,9 +36,10 @@ func signatureCheck(c echo.Context) (err error) {
 	str := fmt.Sprintf("%x", b)
 	log.Println(str)
 	if signature == str {
-		return c.HTML(http.StatusOK, echostr)
+		c.String(http.StatusOK, echostr)
+		return
 	}
-	return util.JSONErr(c, nil, "解密失败")
+	c.JSON(http.StatusOK, utils.JSONError("解密失败", nil))
 }
 
 type (
@@ -69,21 +70,21 @@ type (
 )
 
 // 处理微信消息
-func handleWechatMessage(c echo.Context) (err error) {
+func handleWechatMessage(c *gin.Context) {
 	data := messageXML{}
-	b, err := ioutil.ReadAll(c.Request().Body)
+	b, err := ioutil.ReadAll(c.Request.Body)
 	if err = xml.Unmarshal(b, &data); err != nil {
 		log.Printf("%+v\n", err)
-		return util.JSONErr(c, nil, "err")
+		panic(err)
 	}
 	log.Println(data)
 	result := messageXML{FromUserName: data.ToUserName, ToUserName: data.FromUserName, MsgType: "text", Content: "你好", CreateTime: time.Now().Unix()}
 	b, err = xml.Marshal(&result)
 	log.Println(string(b))
-	return c.Blob(http.StatusOK, "text/xml", b)
+	c.XML(http.StatusOK, b)
 }
 
-func sendTemplateMsgHandler(c echo.Context) error {
+func sendTemplateMsgHandler(c *gin.Context) {
 	post := &templateMsg{
 		ToUser:     "oUsta6PmPtCCs-XSuw02Q07p1OB0",
 		URL:        "http://blog.abadboy.cn",
@@ -96,9 +97,9 @@ func sendTemplateMsgHandler(c echo.Context) error {
 		}}
 	data, err := sendTemplateMsg(post)
 	if err != nil {
-		return util.JSONErr(c, data, fmt.Sprintf("%s", err.Error()))
+		panic(err)
 	}
-	return util.JSONSuccess(c, nil, "发送成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("发送成功", data))
 }
 
 func sendTemplateMsg(postData *templateMsg) (body *templateReturn, err error) {

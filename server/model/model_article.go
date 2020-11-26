@@ -6,10 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -76,7 +75,7 @@ func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
 	// left join 需要手动拼接字段了,gorm默认都是slect tableName.*
 	// db = db.Select("id,title,cate_id,cate_name,created_at,updated_at,author,email,cover,tag,`like`,`desc`")
 	cate := &ArticlesCate{}
-	db = db.Select([]string{"*"}).Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
+	db = db.Joins(fmt.Sprintf("left join (select name cate_name,id cid from `%s`) cate on cate.cid=`%s`.`cate_id`", cate.TableName(), a.TableName()))
 	return db
 }
 
@@ -92,52 +91,52 @@ func (a *Articles) Result(data interface{}, userID uint) interface{} {
 }
 
 //List 文章列表
-func (a *Articles) List(c echo.Context) error {
-	cid := c.QueryParam("cid")
+func (a *Articles) List(c *gin.Context) {
+	cid := c.Query("cid")
 	if cid != "" {
 		cateID, err := strconv.Atoi(cid)
 		if err == nil && cateID > 0 {
-			return a.BaseControll.GetList(c, &Articles{CateID: cateID})
+			a.BaseControll.GetList(c, &Articles{CateID: cateID})
+			return
 		}
 	}
-	return a.BaseControll.GetList(c, nil)
+	a.BaseControll.GetList(c, nil)
 }
 
 // Detail 文章详情
-func (a *Articles) Detail(c echo.Context) error {
-	return a.BaseControll.GetDetail(c, "文章不存在")
+func (a *Articles) Detail(c *gin.Context) {
+	a.BaseControll.GetDetail(c, "文章不存在")
 }
 
 // Add 添加
-func (a *Articles) Add(c echo.Context) error {
+func (a *Articles) Add(c *gin.Context) {
 	article := &Articles{}
 
 	if err := c.Bind(article); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	article.Title = strings.Trim(article.Title, " ")
 	if article.Title == "" {
-		return util.JSONErr(c, nil, "文章标题不可空")
+		panic("文章标题不可空")
 	}
 
 	if article.CateID == 0 {
-		return util.JSONErr(c, nil, "请选择文章分类")
+		panic("请选择文章分类")
 	}
 
 	article.Empty()
-
-	return a.BaseControll.DoAdd(c, article)
+	a.BaseControll.DoAdd(c, article)
 }
 
 // Update Update
-func (a *Articles) Update(c echo.Context) error {
+func (a *Articles) Update(c *gin.Context) {
 	article := &Articles{}
 
 	if err := c.Bind(article); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	article.Empty()
-	return a.BaseControll.DoUpdate(c, article)
+	a.BaseControll.DoUpdate(c, article)
 }

@@ -1,12 +1,12 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"strconv"
 	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
+
 	"gorm.io/gorm"
 )
 
@@ -49,55 +49,56 @@ func (g *Goods) TableName() string {
 }
 
 //List 文章列表
-func (g *Goods) List(c echo.Context) error {
-	cid := c.QueryParam("cid")
+func (g *Goods) List(c *gin.Context) {
+	cid := c.Query("cid")
 	if cid != "" {
 		cateID, err := strconv.Atoi(cid)
 		if err == nil && cateID > 0 {
-			return g.BaseControll.GetList(c, &Goods{Cid: uint(cateID)})
+			g.BaseControll.GetList(c, &Goods{Cid: uint(cateID)})
+			return
 		}
 	}
-	return g.BaseControll.GetList(c, nil)
+	g.BaseControll.GetList(c, nil)
 }
 
 // Detail 商品详情
-func (g *Goods) Detail(c echo.Context) error {
-	return g.BaseControll.GetDetail(c, "商品不存在")
+func (g *Goods) Detail(c *gin.Context) {
+	g.BaseControll.GetDetail(c, "商品不存在")
 }
 
 // Add 添加商品
-func (g *Goods) Add(c echo.Context) error {
+func (g *Goods) Add(c *gin.Context) {
 	good := &Goods{}
 
 	if err := c.Bind(good); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	if good.Cid == 0 {
-		return util.JSONErr(c, nil, "请选择商品分类")
+		panic("请选择商品分类")
 	}
 	good.Title = strings.Trim(good.Title, " ")
 	if good.Title == "" {
-		return util.JSONErr(c, nil, "商品标题不可空")
+		panic("商品标题不可空")
 	}
 
 	var zeroMoney customtype.Money
 	if good.Price == zeroMoney {
-		return util.JSONErr(c, nil, "请填写商品价格")
+		panic("请填写商品价格")
 	}
 
 	good.Empty()
-	return g.BaseControll.DoAdd(c, good)
+	g.BaseControll.DoAdd(c, good)
 }
 
 // Update 添加商品
-func (g *Goods) Update(c echo.Context) error {
+func (g *Goods) Update(c *gin.Context) {
 	good := &Goods{}
 
 	if err := c.Bind(good); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	good.Empty()
-	return g.BaseControll.DoUpdate(c, good)
+	g.BaseControll.DoUpdate(c, good)
 }

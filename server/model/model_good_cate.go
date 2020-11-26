@@ -1,11 +1,11 @@
 package model
 
 import (
+	"net/http"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 )
 
 //GoodCate 商品分类表
@@ -48,7 +48,7 @@ func (cate *GoodCate) TableName() string {
 }
 
 // List 列表
-func (cate *GoodCate) List(c echo.Context) error {
+func (cate *GoodCate) List(c *gin.Context) {
 	db := DB
 	list := []catelist{}
 
@@ -57,7 +57,7 @@ func (cate *GoodCate) List(c echo.Context) error {
 	for i, item := range list {
 		list[i].Tmenu = cate.getCateTmenu(&item, db)
 	}
-	return util.JSONSuccess(c, list, "获取成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("获取成功", list))
 }
 
 // 循环获取自分类
@@ -74,17 +74,17 @@ func (cate *GoodCate) getCateTmenu(item *catelist, db *GormDB) (tmenu []catelist
 }
 
 // Add 添加
-func (cate *GoodCate) Add(c echo.Context) error {
+func (cate *GoodCate) Add(c *gin.Context) {
 	db := DB
 	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	_cate.Name = strings.Trim(_cate.Name, " ")
 	if _cate.Name == "" {
-		return util.JSONErr(c, nil, "分类名称不可空")
+		panic("分类名称不可空")
 	}
 
 	_cate.Level = 1 //禁止手动设置level
@@ -95,51 +95,51 @@ func (cate *GoodCate) Add(c echo.Context) error {
 		row := db.First(cateParent)
 		// fmt.Println(empty)
 		if row.Error != nil {
-			return util.JSONErr(c, nil, "上级分类不存在")
+			panic("上级分类不存在")
 		}
 		_cate.Level = cateParent.Level + 1
 	}
 	// 限制层级
 	if _cate.Level > 3 {
-		return util.JSONErr(c, nil, "最多3级分类，不可添加子分类")
+		panic("最多3级分类，不可添加子分类")
 	}
 
 	// 禁止同名
 	if repeat := db.Where(&GoodCate{Name: _cate.Name}).Find(&GoodCate{}).Error == nil; repeat {
-		return util.JSONErr(c, nil, "已存在相同分类")
+		panic("已存在相同分类")
 	}
 
-	return cate.BaseControll.DoAdd(c, _cate)
+	cate.BaseControll.DoAdd(c, _cate)
 }
 
 // Update 更新
-func (cate *GoodCate) Update(c echo.Context) error {
+func (cate *GoodCate) Update(c *gin.Context) {
 	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	_cate.ParentID = 0
 	_cate.Level = 0
 	_cate.Empty()
-	return cate.BaseControll.DoUpdate(c, _cate)
+	cate.BaseControll.DoUpdate(c, _cate)
 }
 
 // Delete 删除
-func (cate *GoodCate) Delete(c echo.Context) error {
+func (cate *GoodCate) Delete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
-	if hasGoods := db.Model(cate.Pointer()).Where(map[string]interface{}{"cid": id}).Find(cate.Pointer()).RowsAffected; hasGoods > 0 {
-		return util.JSONErr(c, nil, "分类下有商品，无法删除")
+	if hasGoods := db.Model(cate.Pointer()).Where(map[string]interface{}{"cid": id}).First(cate.Pointer()).RowsAffected; hasGoods > 0 {
+		panic("分类下有商品，无法删除")
 	}
-	if hasCates := db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": id}).Find(cate.Pointer()).RowsAffected; hasCates > 0 {
-		return util.JSONErr(c, nil, "分类下有其他分类，无法删除")
+	if hasCates := db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": id}).First(cate.Pointer()).RowsAffected; hasCates > 0 {
+		panic("分类下有其他分类，无法删除")
 	}
 
-	return cate.BaseControll.Delete(c)
+	cate.BaseControll.Delete(c)
 }

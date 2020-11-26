@@ -10,15 +10,13 @@ import (
 	"time"
 
 	"github.com/Treblex/go-echo-demo/server/config"
-
 	"github.com/Treblex/go-echo-demo/server/middleware"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/Treblex/go-echo-demo/server/util/sha"
-
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/tools/sha"
+	"github.com/Treblex/go-echo-demo/server/utils"
 
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 )
 
 var code2SessionKeyURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
@@ -39,26 +37,26 @@ type (
 
 var mini = &config.Global.WechatMini
 
-func wehcatMini(g *echo.Group) {
+func wehcatMini(g *gin.RouterGroup) {
 	mini := g.Group("/wechat-mini")
 	mini.POST("/login", wechatMiniLogin)
 
 	mini.POST("/easy-login", easyLogin)
 
-	mini.POST("/sendMsg", sendMsg, middleware.UserJWT)
+	mini.POST("/sendMsg", sendMsg, middleware.Auth)
 }
-func sendMsg(c echo.Context) error {
-	uid := c.Get("userId").(float64)
+func sendMsg(c *gin.Context) {
+	auth := c.MustGet("user").(*model.User)
 	db := model.DB
 
-	var user = model.User{BaseControll: model.BaseControll{ID: uint(uid)}}
+	var user = model.User{BaseControll: model.BaseControll{ID: auth.ID}}
 	if notfoundUser := db.Model(&user).Find(&user).Error != nil; notfoundUser {
-		return util.JSONErr(c, nil, "没找到用户")
+		panic("没找到用户")
 	}
 
 	var miniUser = model.WechatMiniUser{UID: user.ID}
 	if notfoundUser := db.Model(&miniUser).Find(&miniUser).Error != nil; notfoundUser {
-		return util.JSONErr(c, nil, "没找到用户")
+		panic("没找到用户")
 	}
 
 	err := mini.SendSubscribeMessage(miniUser.OpenID, "LEe5SuSVcBC2wei1XW9QwouVZ79T5p3DK-8QfA3ecxM", "https://wechat.com", map[string]interface{}{
@@ -79,15 +77,15 @@ func sendMsg(c echo.Context) error {
 		},
 	})
 	if err != nil {
-		return util.JSONErr(c, err, "")
+		panic(err)
 	}
-	return util.JSONSuccess(c, nil, "")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", nil))
 }
 
-func easyLogin(c echo.Context) error {
-	jsCode := c.QueryParam("js_code")
+func easyLogin(c *gin.Context) {
+	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		return util.JSONErr(c, nil, "请输入js_code")
+		panic("请输入js_code")
 	}
 
 	// 请求微信服务器
@@ -95,18 +93,18 @@ func easyLogin(c echo.Context) error {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		return util.JSONErr(c, nil, "获取失败")
+		panic("获取失败")
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		return util.JSONErr(c, err, "获取微信返回内容失败")
+		panic("获取微信返回内容失败")
 	}
 	// 获取session失败
 	if m.ErrCode != 0 {
-		return util.JSONErr(c, nil, m.ErrMsg)
+		panic(utils.JSONError("", m))
 	}
 
 	db := model.DB
@@ -116,54 +114,54 @@ func easyLogin(c echo.Context) error {
 	if hasOne := wechatUser.HasOne(wechatUser); hasOne {
 		user := &model.User{BaseControll: model.BaseControll{ID: wechatUser.UID}}
 		if err := db.Where(user).Find(user).Error; err == nil {
-			return getJWT(c, user)
+			getJWT(c, user)
+			return
 		}
 	}
 
 	// 注册
-	user := &model.User{Name: util.RandStringBytes(6), Password: sha.EnCode(util.RandStringBytes(16))}
-	req := c.Request()
+	user := &model.User{Name: utils.RandStringBytes(6), Password: sha.EnCode(utils.RandStringBytes(16))}
+	req := c.Request
 	ua := req.UserAgent()
-	ip := util.ClientIP(c)
+	ip := c.ClientIP()
 	user.IP = ip
 	user.Ua = ua
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 
 	if err := db.Table(user.TableName()).Create(&user).Error; err != nil {
-		return util.JSONErr(c, nil, "创建用户失败")
+		panic("创建用户失败")
 	}
 
 	wechatUser.SessionKey = m.SessionKey
 	wechatUser.UID = user.ID
 	wechatUser.Unionid = m.Unionid
 	if err := db.Table(wechatUser.TableName()).Create(&wechatUser).Error; err != nil {
-		return util.JSONErr(c, nil, "创建微信小程序用户失败")
+		panic("创建微信小程序用户失败")
 	}
 
-	return getJWT(c, user)
+	getJWT(c, user)
 
 }
 
-func getJWT(c echo.Context, user *model.User) error {
-	jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin > 0}
-	str, _ := middleware.CreateToken(&jwtUser)
-	return util.JSONSuccess(c, str, "")
+func getJWT(c *gin.Context, user *model.User) {
+	str, _ := middleware.CreateToken(*user)
+	c.JSON(http.StatusOK, utils.JSONSuccess("", str))
 }
 
-func wechatMiniLogin(c echo.Context) error {
-	jsCode := c.QueryParam("js_code")
+func wechatMiniLogin(c *gin.Context) {
+	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		return util.JSONErr(c, nil, "请输入js_code")
+		panic("请输入js_code")
 	}
 
 	var param wechatLoginParams
 
 	if err := c.Bind(&param); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	if param.EncryptedData == "" || param.Iv == "" {
-		return util.JSONErr(c, nil, "请传入用户信息")
+		panic("请传入用户信息")
 	}
 
 	// 请求微信服务器
@@ -171,23 +169,23 @@ func wechatMiniLogin(c echo.Context) error {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		return util.JSONErr(c, nil, "获取失败")
+		panic(err)
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		return util.JSONErr(c, err, "获取微信返回内容失败")
+		panic(utils.JSONError("获取微信返回内容失败", err))
 	}
 
 	// 获取session失败
 	if m.ErrCode != 0 {
-		return util.JSONErr(c, nil, m.ErrMsg)
+		panic(utils.JSONError(m.ErrMsg, m))
 	}
 
 	if m.SessionKey == "" {
-		return util.JSONErr(c, nil, "获取session_key失败")
+		panic("获取session_key失败")
 	}
 
 	// baseDecode
@@ -201,10 +199,10 @@ func wechatMiniLogin(c echo.Context) error {
 	var info map[string]interface{}
 
 	if err := json.Unmarshal(result, &info); err != nil {
-		return util.JSONErr(c, nil, "解码用户信息失败")
+		panic("解码用户信息失败")
 	}
 
-	return util.JSONSuccess(c, info, "")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", info))
 }
 
 func wechatMiniDecoder(str string, key []byte, iv string) []byte {

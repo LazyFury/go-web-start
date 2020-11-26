@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/Treblex/go-echo-demo/server/util/mail"
-	"github.com/Treblex/go-echo-demo/server/util/mysql"
-	"github.com/Treblex/go-echo-demo/server/util/upload"
-	"github.com/Treblex/go-echo-demo/server/util/wechat"
+	"github.com/Treblex/go-echo-demo/server/tools/mail"
+	"github.com/Treblex/go-echo-demo/server/tools/mysql"
+	"github.com/Treblex/go-echo-demo/server/tools/upload"
+	"github.com/Treblex/go-echo-demo/server/tools/wechat"
 )
 
 // Global 全局配置

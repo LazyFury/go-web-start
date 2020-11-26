@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -84,9 +85,9 @@ func (a *ArticlesTag) Result(data interface{}, userID uint) interface{} {
 }
 
 // List 列表
-func (a *ArticlesTag) List(c echo.Context) error {
+func (a *ArticlesTag) List(c *gin.Context) {
 	where := map[string]interface{}{}
-	cid := c.QueryParam("cate_id")
+	cid := c.Query("cate_id")
 	if cid == "" {
 		where = nil
 	} else {
@@ -94,27 +95,33 @@ func (a *ArticlesTag) List(c echo.Context) error {
 	}
 
 	list := a.ListWithOutPaging(where)
-	userID, _ := c.Get("userId").(float64)
-	list = a.Result(list, uint(userID))
-	return util.JSONSuccess(c, list, "")
+	user, _ := c.MustGet("userId").(User)
+	list = a.Result(list, user.ID)
+	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
 }
 
 // Add Add
-func (a *ArticlesTag) Add(c echo.Context) error {
+func (a *ArticlesTag) Add(c *gin.Context) {
 	tag := &ArticlesTag{}
 
 	if err := c.Bind(tag); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	if tag.CateID == 0 {
-		return util.JSONErr(c, nil, "请选择分类")
+		panic("请选择分类")
 	}
 
 	if strings.Trim(tag.Val, " ") == "" {
-		return util.JSONErr(c, nil, "请输入标签名称")
+		panic("请输入标签名称")
+	}
+
+	if err := DB.Where(map[string]interface{}{
+		"val": tag.Val,
+	}).First(tag).Error; err == nil {
+		panic("已存在相同的标签")
 	}
 
 	tag.Empty()
-	return a.DoAdd(c, tag)
+	a.DoAdd(c, tag)
 }

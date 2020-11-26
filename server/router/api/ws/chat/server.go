@@ -6,10 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/labstack/echo/v4"
 )
 
 var (
@@ -23,13 +21,12 @@ var (
 )
 
 // WsServer server
-func WsServer(c echo.Context) error {
-	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+func WsServer(c *gin.Context) {
+	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		fmt.Print("upgrade:", err)
-		return err
+		panic(err)
 	}
-	defer util.Recover()
 	defer ws.Close()
 
 	ws.SetCloseHandler(func(code int, text string) error {
@@ -38,7 +35,7 @@ func WsServer(c echo.Context) error {
 		return nil
 	})
 
-	id := c.QueryParam("token")
+	id := c.Query("token")
 	user := chat.getUser(id, ws)
 	// fmt.Println(user)
 
@@ -46,12 +43,9 @@ func WsServer(c echo.Context) error {
 	go received(chat, ws)
 
 	<-user.isDone
-	return nil
 }
 
 func received(chat *Chat, ws *websocket.Conn) {
-	defer util.Recover()
-
 	defer func() {
 		chat.removeByWsConn(ws) //SetCloseHandler 在safari无法触发，可能浏览器做了优化，同样的在地址蓝输入链接的时候ws链接就已经建立成功了，不像chrome可以明确触发进入和离开的事件(safari升级解决了这个问题)
 	}()

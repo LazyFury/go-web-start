@@ -2,11 +2,11 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -57,27 +57,27 @@ func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // List 列表
-func (a *Ad) List(c echo.Context) error {
-	groupID := c.QueryParam("group_id")
+func (a *Ad) List(c *gin.Context) {
+	groupID := c.Query("group_id")
 	if groupID == "" {
-		return util.JSONErr(c, nil, "请选择分组")
+		panic("请选择分组")
 	}
-	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(map[string]interface{}{
+	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": groupID,
-	}), "")
+	})))
 }
 
 // Add Add
-func (a *Ad) Add(c echo.Context) error {
+func (a *Ad) Add(c *gin.Context) {
 	ad := &Ad{}
 
 	if err := c.Bind(ad); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	ad.Title = strings.Trim(ad.Title, " ")
 	if ad.Title == "" {
-		return util.JSONErr(c, nil, "广告位标题不可空")
+		panic("广告位标题不可空")
 	}
 
 	if ad.EventID > 0 {
@@ -86,12 +86,12 @@ func (a *Ad) Add(c echo.Context) error {
 		if !event.HasOne(map[string]interface{}{
 			"id": ad.EventID,
 		}) {
-			return util.JSONErr(c, nil, "事件不存在")
+			panic("事件不存在")
 		}
 	}
 
 	if ad.GroupID == 0 {
-		return util.JSONErr(c, nil, "请选择广告位分组")
+		panic("请选择广告位分组")
 	}
 
 	adGourp := &AdGroup{}
@@ -99,7 +99,7 @@ func (a *Ad) Add(c echo.Context) error {
 	if db.Model(adGourp).Where(map[string]interface{}{
 		"id": ad.GroupID,
 	}).First(adGourp).Error != nil {
-		return util.JSONErr(c, nil, "分组不存在")
+		panic("分组不存在")
 	}
 
 	// if adGourp.IsSigle {
@@ -111,17 +111,17 @@ func (a *Ad) Add(c echo.Context) error {
 	// }
 
 	ad.Empty()
-	return a.BaseControll.DoAdd(c, ad)
+	a.BaseControll.DoAdd(c, ad)
 }
 
 // Update  更新
-func (a *Ad) Update(c echo.Context) error {
+func (a *Ad) Update(c *gin.Context) {
 	ad := &Ad{}
 
 	if err := c.Bind(ad); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	ad.Empty()
-	return a.BaseControll.DoUpdate(c, ad)
+	a.BaseControll.DoUpdate(c, ad)
 }

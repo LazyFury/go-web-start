@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
 type rss struct {
@@ -83,13 +83,12 @@ func newRss(p podcast) *rss {
 	}
 }
 
-func podcastRouter(g *echo.Group) {
+func podcastRouter(g *gin.RouterGroup) {
 	pod := g.Group("/podcast")
-
 	pod.GET("/test", testPodcast)
 }
 
-func testPodcast(c echo.Context) error {
+func testPodcast(c *gin.Context) {
 
 	pod := newRss(podcast{
 		Title:       "test",
@@ -129,5 +128,5 @@ func testPodcast(c echo.Context) error {
 		},
 	})
 
-	return c.XMLPretty(http.StatusOK, pod, "	")
+	c.XML(http.StatusOK, pod)
 }

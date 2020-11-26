@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype/message"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype/message"
+	"github.com/gin-gonic/gin"
 
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/color"
 	"gorm.io/gorm"
 )
@@ -111,18 +110,18 @@ func (m *Message) Result(data interface{}, userID uint) interface{} {
 }
 
 // Add Add
-func (m *Message) Add(c echo.Context) error {
-	return util.JSONErr(c, nil, "不可手动添加")
+func (m *Message) Add(c *gin.Context) {
+	panic("不可手动添加")
 }
 
 // Update Update
-func (m *Message) Update(c echo.Context) error {
-	return util.JSONErr(c, nil, "记录日志，不可修改")
+func (m *Message) Update(c *gin.Context) {
+	panic("记录日志，不可修改")
 }
 
 // Delete Delete
-func (m *Message) Delete(c echo.Context) error {
-	return util.JSONErr(c, nil, "不可删除")
+func (m *Message) Delete(c *gin.Context) {
+	panic("不可删除")
 }
 
 var (

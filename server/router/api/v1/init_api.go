@@ -6,42 +6,43 @@ import (
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/upload"
+	"github.com/Treblex/go-echo-demo/server/tools/upload"
 
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 )
 
 // var uploader = upload.NewEchoUploader()
 var aliUploader = upload.NewAliOssUploader(config.Global.AliOss)
 
 // Init  api Version 1.0 初始化
-func Init(g *echo.Group) {
+func Init(g *gin.RouterGroup) {
 
 	apiV1 := g.Group("/v1")
+
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("", resources)
-	apiV1.POST("/upload", func(c echo.Context) error {
-		url, err := aliUploader.Default(c.Request())
+	apiV1.POST("/upload", func(c *gin.Context) {
+		url, err := aliUploader.Default(c.Request)
 		if err != nil {
-			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
+			panic(err)
 		}
-		return util.JSONSuccess(c, url, "上传成功")
+		c.JSON(http.StatusOK, utils.JSONSuccess("", url))
 	})
-	apiV1.POST("/upload-img", func(c echo.Context) error {
-		url, err := aliUploader.OnlyAcceptsExt(c.Request(), upload.AcceptsImgExt, "image")
+	apiV1.POST("/upload-img", func(c *gin.Context) {
+		url, err := aliUploader.OnlyAcceptsExt(c.Request, upload.AcceptsImgExt, "image")
 		if err != nil {
-			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
+			panic(err)
 		}
-		return util.JSONSuccess(c, url, "上传成功")
+		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
 	})
-	apiV1.POST("/upload-head-pic", func(c echo.Context) error {
-		url, err := aliUploader.Custom(c.Request(), upload.AcceptsImgExt, "head_pic")
+	apiV1.POST("/upload-head-pic", func(c *gin.Context) {
+		url, err := aliUploader.Custom(c.Request, upload.AcceptsImgExt, "head_pic")
 		if err != nil {
-			return util.JSONBase(c, nil, err.Error(), http.StatusInternalServerError, http.StatusInternalServerError)
+			panic(err)
 		}
-		return util.JSONSuccess(c, url, "上传成功")
+		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
 	})
 	// base
 	login(apiV1)
@@ -90,8 +91,7 @@ type resource struct {
 	Doc  string `json:"doc"`
 }
 
-func resources(c echo.Context) error {
-
+func resources(c *gin.Context) {
 	res := []resource{
 		{"文章", "/api/v1/posts", ""},
 		{"商品", "/api/v1/goods", ""},
@@ -99,7 +99,7 @@ func resources(c echo.Context) error {
 		{"广告", "/api/v1/ads", ""},
 	}
 
-	return util.JSONSuccess(c, map[string]interface{}{
+	c.JSON(http.StatusOK, utils.JSONSuccess("", map[string]interface{}{
 		"resources": res,
-	}, "")
+	}))
 }

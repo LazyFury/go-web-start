@@ -1,22 +1,23 @@
 package api
 
 import (
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/util"
+	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 )
 
-func configRouter(g *echo.Group) {
+func configRouter(g *gin.RouterGroup) {
 	conf := g.Group("/config")
 
-	conf.GET("", func(c echo.Context) error {
-		return util.JSONSuccess(c, config.Global, "")
+	conf.GET("", func(c *gin.Context) {
+		c.JSON(http.StatusOK, utils.JSONSuccess("", config.Global))
 	})
 	conf.POST("/save", writeConfig)
 }
 
 // 写配置 TODO:todo
-func writeConfig(c echo.Context) error {
-	return util.JSONSuccess(c, nil, "更新设置成功")
+func writeConfig(c *gin.Context) {
+	c.JSON(http.StatusOK, utils.JSONSuccess("更新设置成功", nil))
 }

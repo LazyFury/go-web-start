@@ -5,11 +5,10 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
 	"gorm.io/gorm"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 )
 
 // Appointment 预约
@@ -82,8 +81,7 @@ func (a *Appointment) Result(data interface{}, userID uint) interface{} {
 }
 
 // Add add
-func (a *Appointment) Add(c echo.Context) error {
-	defer util.APIRcovery(c)
+func (a *Appointment) Add(c *gin.Context) {
 	appointment := &Appointment{}
 
 	if err := c.Bind(appointment); err != nil {
@@ -101,37 +99,35 @@ func (a *Appointment) Add(c echo.Context) error {
 		panic("请输入地址")
 	}
 
-	userID, _ := c.Get("userId").(float64)
+	user, _ := c.MustGet("userId").(*User)
 
-	appointment.UID = uint(userID)
-
-	fmt.Println(userID)
+	appointment.UID = user.ID
 
 	appointment.Empty()
-	return a.DoAdd(c, appointment)
+	a.DoAdd(c, appointment)
 }
 
 // List List
-func (a *Appointment) List(c echo.Context) error {
-	uid := c.Get("userId").(float64)
-	return a.GetList(c, map[string]interface{}{
-		"uid": uint(uid),
+func (a *Appointment) List(c *gin.Context) {
+	user := c.MustGet("user").(*User)
+	a.GetList(c, map[string]interface{}{
+		"uid": user.ID,
 	})
 }
 
 // Delete Delete
-func (a *Appointment) Delete(c echo.Context) error {
+func (a *Appointment) Delete(c *gin.Context) {
 	id := c.Param("id")
-	uid := c.Get("userId").(float64)
+	user := c.MustGet("user").(*User)
 
 	db := DB
 	where := map[string]interface{}{
 		"id":  id,
-		"uid": uid,
+		"uid": user.ID,
 	}
 	if nofund := db.Table(a.TableName()).Where(where).Find(a.Pointer()).Error != nil; nofund {
-		return util.JSONErr(c, nil, "删除失败,没有权限")
+		panic("删除失败,没有权限")
 	}
 
-	return a.DoDelete(c)
+	a.DoDelete(c)
 }

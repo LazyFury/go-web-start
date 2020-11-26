@@ -1,7 +1,6 @@
-package util
+package utils
 
 import (
-	"fmt"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -10,13 +9,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 )
-
-// APIRcovery APIRcovery
-func APIRcovery(c echo.Context) {
-	if err := recover(); err != nil {
-		JSONErr(c, nil, fmt.Sprintf("%s", err))
-	}
-}
 
 // ClientIP 尽最大努力实现获取客户端 IP
 // 解析 X-Real-IP 和 X-Forwarded-For 以便于反向代理（nginx 或 haproxy）可以正常工作。

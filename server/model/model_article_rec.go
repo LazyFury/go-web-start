@@ -2,12 +2,13 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -92,34 +93,34 @@ func (a *ArticlesRec) Result(data interface{}, userID uint) interface{} {
 }
 
 // List 分页
-func (a *ArticlesRec) List(c echo.Context) error {
+func (a *ArticlesRec) List(c *gin.Context) {
 	res := a.Result(a.ListWithOutPaging(nil), 0)
-	return util.JSONSuccess(c, res, "")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", res))
 }
 
 // Add 添加分类
-func (a *ArticlesRec) Add(c echo.Context) error {
+func (a *ArticlesRec) Add(c *gin.Context) {
 	rec := &ArticlesRec{}
 
 	if err := c.Bind(rec); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	rec.Name = strings.Trim(rec.Name, " ")
 	if rec.Name == "" {
-		return util.JSONErr(c, nil, "名称不可空")
+		panic("名称不可空")
 	}
 
 	rec.Empty()
-	return a.BaseControll.DoAdd(c, rec)
+	a.BaseControll.DoAdd(c, rec)
 }
 
 // Update 添加分类
-func (a *ArticlesRec) Update(c echo.Context) error {
+func (a *ArticlesRec) Update(c *gin.Context) {
 	rec := &ArticlesRec{}
 
 	if err := c.Bind(rec); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	// 为0 清空选择的文章，不为0时需要验证文章可用性
@@ -134,11 +135,11 @@ func (a *ArticlesRec) Update(c echo.Context) error {
 			articles := []Articles{}
 			row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
 			if row.Error != nil {
-				return util.JSONErr(c, row.Error, "")
+				panic(row.Error)
 			}
 
 			if len(articles) <= 0 {
-				return util.JSONErr(c, nil, "选择了无效的文章")
+				panic("选择了无效的文章")
 			}
 			ids = []string{}
 			for _, id := range articles {
@@ -150,19 +151,19 @@ func (a *ArticlesRec) Update(c echo.Context) error {
 	}
 
 	rec.Empty()
-	return a.BaseControll.DoUpdate(c, rec)
+	a.BaseControll.DoUpdate(c, rec)
 }
 
 // Delete 删除
-func (a *ArticlesRec) Delete(c echo.Context) error {
+func (a *ArticlesRec) Delete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 	article := &Articles{}
 	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
-		return util.JSONErr(c, nil, "该推荐位下还有文章，不能删除")
+		panic("该推荐位下还有文章，不能删除")
 	}
-	return a.BaseControll.Delete(c)
+	a.BaseControll.Delete(c)
 }

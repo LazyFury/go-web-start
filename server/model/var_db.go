@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"
 )

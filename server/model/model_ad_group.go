@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -46,23 +47,23 @@ func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // List 列表
-func (a *AdGroup) List(c echo.Context) error {
-	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(nil), "")
+func (a *AdGroup) List(c *gin.Context) {
+	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(nil)))
 }
 
 // Detail 分组详情
-func (a *AdGroup) Detail(c echo.Context) error {
+func (a *AdGroup) Detail(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	group := &AdGroup{}
 	if db.Model(group).Where(map[string]interface{}{
 		"id": id,
 	}).First(group).Error != nil {
-		return util.JSONErr(c, nil, "广告位不存在")
+		panic("广告位不存在")
 	}
 
 	ad := &Ad{}
@@ -86,38 +87,38 @@ func (a *AdGroup) Detail(c echo.Context) error {
 		Count:   count,
 	}
 
-	return util.JSONSuccess(c, result, "")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", result))
 }
 
 // Add AdGroupd
-func (a *AdGroup) Add(c echo.Context) error {
+func (a *AdGroup) Add(c *gin.Context) {
 	adGroup := &AdGroup{}
 
 	if err := c.Bind(adGroup); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	adGroup.Name = strings.Trim(adGroup.Name, " ")
 	if adGroup.Name == "" {
-		return util.JSONErr(c, nil, "分组标题不可空")
+		panic("分组标题不可空")
 	}
 
 	if a.BaseControll.HasOne(map[string]interface{}{
 		"name": adGroup.Name,
 	}) {
-		return util.JSONErr(c, nil, "已存在相同的分类")
+		panic("已存在相同的分类")
 	}
 
 	adGroup.Empty()
-	return a.BaseControll.DoAdd(c, adGroup)
+	a.BaseControll.DoAdd(c, adGroup)
 }
 
 // Update Update
-func (a *AdGroup) Update(c echo.Context) error {
+func (a *AdGroup) Update(c *gin.Context) {
 	adGroup := &AdGroup{}
 
 	if err := c.Bind(adGroup); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	ad := &Ad{GroupID: adGroup.ID}
@@ -130,5 +131,5 @@ func (a *AdGroup) Update(c echo.Context) error {
 	}
 
 	adGroup.Empty()
-	return a.BaseControll.DoUpdate(c, adGroup)
+	a.BaseControll.DoUpdate(c, adGroup)
 }

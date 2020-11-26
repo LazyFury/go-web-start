@@ -2,16 +2,16 @@ package model
 
 import (
 	"math"
+	"net/http"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -28,14 +28,14 @@ type Model interface {
 	// 列表的补充条件
 	Joins(db *gorm.DB) *gorm.DB
 	// 列表，增，查，删，改, 统计
-	List(c echo.Context) error
-	Detail(c echo.Context) error
-	Delete(c echo.Context) error
-	Add(c echo.Context) error
-	Update(c echo.Context) error
-	Count(c echo.Context) error
+	List(c *gin.Context)
+	Detail(c *gin.Context)
+	Delete(c *gin.Context)
+	Add(c *gin.Context)
+	Update(c *gin.Context)
+	Count(c *gin.Context)
 	// 快速注册路由
-	Install(g *echo.Group, baseURL string) *echo.Group
+	Install(g *gin.RouterGroup, baseURL string) *gin.RouterGroup
 
 	// 处理列表返回结果
 	Result(data interface{}, userID uint) interface{}
@@ -92,36 +92,36 @@ func (b *BaseControll) Result(data interface{}, userID uint) interface{} {
 }
 
 // List 数据列表
-func (b *BaseControll) List(c echo.Context) error {
-	return b.GetList(c, nil)
+func (b *BaseControll) List(c *gin.Context) {
+	b.GetList(c, nil)
 }
 
 // Detail 详情
-func (b *BaseControll) Detail(c echo.Context) error {
-	return b.GetDetail(c, "")
+func (b *BaseControll) Detail(c *gin.Context) {
+	b.GetDetail(c, "")
 }
 
 // Add Add
-func (b *BaseControll) Add(c echo.Context) error {
-	return util.JSONErr(c, nil, "不可添加")
+func (b *BaseControll) Add(c *gin.Context) {
+	panic("不可添加")
 }
 
 // Update Update
-func (b *BaseControll) Update(c echo.Context) error {
-	return util.JSONErr(c, nil, "不可修改")
+func (b *BaseControll) Update(c *gin.Context) {
+	panic("不可修改")
 }
 
 // Delete 删除数据
-func (b *BaseControll) Delete(c echo.Context) error {
-	return b.DoDelete(c)
+func (b *BaseControll) Delete(c *gin.Context) {
+	b.DoDelete(c)
 }
 
 // DoDelete DoDelete
-func (b *BaseControll) DoDelete(c echo.Context) error {
+func (b *BaseControll) DoDelete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	p := b.model().Pointer()
@@ -130,14 +130,14 @@ func (b *BaseControll) DoDelete(c echo.Context) error {
 	}).Delete(p)
 
 	if row.Error != nil {
-		return util.JSONErr(c, nil, "删除失败")
+		panic("删除失败")
 	}
 
 	if row.RowsAffected <= 0 {
-		return util.JSONErr(c, nil, "删除失败,数据不存在")
+		panic("删除失败,数据不存在")
 	}
 
-	return util.JSONSuccess(c, nil, "删除成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("删除成功", nil))
 }
 
 // ListWithOutPaging 直接取所有数据不分页
@@ -164,36 +164,35 @@ func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 }
 
 // GetList 获取列表
-func (b *BaseControll) GetList(c echo.Context, where interface{}) (err error) {
-	page := c.QueryParam("page")
+func (b *BaseControll) GetList(c *gin.Context, where interface{}) {
+	page := c.Query("page")
 	if page == "" {
 		page = "1"
 	}
-	limit := c.QueryParam("limit")
+	limit := c.Query("limit")
 	if limit == "" {
 		limit = "10"
 	}
-	orderBy := c.QueryParam("order")
+	orderBy := c.Query("order")
 	if orderBy == "" {
 		orderBy = "created_at desc,id desc"
 	}
-	key := c.QueryParam("key")
+	key := c.Query("key")
 
 	// 转化类型
 	p, _ := strconv.Atoi(page)
 	size, _ := strconv.Atoi(limit)
 
 	// 用户信息
-	userID, _ := c.Get("userId").(float64)
-	isAdmin, _ := c.Get("isAdmin").(bool)
+	user := c.MustGet("user").(*User)
 
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.model(), key, orderBy, uint(userID), isAdmin)
-	return util.JSONSuccess(c, list, "")
+	list := DataBaselimit(size, p, where, b.model(), key, orderBy, uint(user.ID), user.IsAdmin == 1)
+	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
 }
 
 // GetDetail 获取某一条数据
-func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) error {
+func (b *BaseControll) GetDetail(c *gin.Context, recordNotFoundTips string) {
 
 	if recordNotFoundTips == "" {
 		recordNotFoundTips = "内容不存在"
@@ -201,7 +200,7 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	p := b.model().Pointer()
@@ -210,28 +209,27 @@ func (b *BaseControll) GetDetail(c echo.Context, recordNotFoundTips string) erro
 	}
 	row := DB.DB.Table(b.model().TableName()).Where(where)
 
-	userID, _ := c.Get("userId").(float64)
-	isAdmin, _ := c.Get("isAdmin").(bool)
-	if !b.model().IsPublic() && !isAdmin {
+	user := c.MustGet("user").(*User)
+	if !b.model().IsPublic() && user.IsAdmin != 1 {
 		row = row.Where(map[string]interface{}{
-			"user_id": userID,
+			"user_id": user.ID,
 		})
 	}
 
 	row = b.model().Joins(row)
 
 	if row.First(p).Error != nil {
-		return util.JSONErr(c, nil, recordNotFoundTips)
+		panic(recordNotFoundTips)
 	}
 
-	p = b.model().Result(p, uint(userID))
+	p = b.model().Result(p, user.ID)
 
-	return util.JSONSuccess(c, p, "")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", p))
 }
 
 // DoAdd 添加 需要实现绑定json的部分以及自定义的验证
 // 必须重写 需要调用empty避免关键字段修改
-func (b *BaseControll) DoAdd(c echo.Context, data interface{}) error {
+func (b *BaseControll) DoAdd(c *gin.Context, data interface{}) {
 	db := DB
 
 	elem := reflect.ValueOf(data).Elem()
@@ -241,22 +239,22 @@ func (b *BaseControll) DoAdd(c echo.Context, data interface{}) error {
 	row := db.Create(data)
 
 	if row.Error != nil {
-		return util.JSONErr(c, row.Error.Error(), "添加失败")
+		panic(row.Error)
 	}
 
 	if row.RowsAffected <= 0 {
-		return util.JSONErr(c, nil, "添加失败，没有更改")
+		panic("添加失败，没有更改")
 	}
 
-	return util.JSONSuccess(c, nil, "提交成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("添加成功", nil))
 }
 
 // DoUpdate 更新数据  需要实现绑定json的部分以及自定义的验证
 // 必须重写 需要调用empty避免关键字段修改
-func (b *BaseControll) DoUpdate(c echo.Context, data interface{}) error {
+func (b *BaseControll) DoUpdate(c *gin.Context, data interface{}) {
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	row := DB.Table(b.model().TableName()).Where(map[string]interface{}{
@@ -264,30 +262,30 @@ func (b *BaseControll) DoUpdate(c echo.Context, data interface{}) error {
 	}).Updates(data)
 
 	if row.Error != nil {
-		return util.JSONErr(c, row.Error.Error(), "更新失败")
+		panic(row.Error)
 	}
 
 	if row.RowsAffected <= 0 {
-		return util.JSONErr(c, nil, "没有更改")
+		panic("没有更改")
 	}
 
-	return util.JSONSuccess(c, nil, "更新成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("更新成功", nil))
 }
 
 // Count 统计表
-func (b *BaseControll) Count(c echo.Context) error {
+func (b *BaseControll) Count(c *gin.Context) {
 	db := DB
 
 	row := db.Table(b.model().TableName())
 
 	//time: 2006-01-02 15:04:05 开始时间必选，结束时间判空位当前时间
-	start := c.QueryParam("start")
-	end := c.QueryParam("end")
+	start := c.Query("start")
+	end := c.Query("end")
 	if start == "" {
-		return util.JSONErr(c, nil, "请选择查询开始时间")
+		panic("请选择查询开始时间")
 	}
 	//type: year,month,week,day
-	queryType := c.QueryParam("type")
+	queryType := c.Query("type")
 	if queryType == "" {
 		queryType = "day"
 	}
@@ -303,10 +301,10 @@ func (b *BaseControll) Count(c echo.Context) error {
 	}
 
 	if err != nil {
-		return util.JSONErr(c, err, "时间格式错误")
+		panic(err)
 	}
 
-	row = row.Where("`created_at` BETWEEN ? AND ?", startTime.Format(util.TimeZone()), endTime.Format(util.TimeZone()))
+	row = row.Where("`created_at` BETWEEN ? AND ?", startTime, endTime)
 
 	list := []struct {
 		Date       string  `json:"date"`
@@ -357,12 +355,12 @@ func (b *BaseControll) Count(c echo.Context) error {
 	}
 
 	if row.Error != nil {
-		return util.JSONErr(c, nil, "")
+		panic(row.Error)
 	}
-	return util.JSONSuccess(c, map[string]interface{}{
+	c.JSON(http.StatusOK, utils.JSONSuccess("", map[string]interface{}{
 		"total": &n,
 		"list":  list,
-	}, "")
+	}))
 }
 
 // Empty 基础参数id,CreatedAt,UpdatedAt置空，避免更新时修改到
@@ -373,7 +371,7 @@ func (b *BaseControll) Empty() {
 }
 
 // Install 快速注册路由
-func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
+func (b *BaseControll) Install(g *gin.RouterGroup, baseURL string) *gin.RouterGroup {
 	route := g.Group(baseURL)
 
 	route.GET("", b.model().List)
@@ -381,7 +379,7 @@ func (b *BaseControll) Install(g *echo.Group, baseURL string) *echo.Group {
 	route.POST("", b.model().Add)
 	route.PUT("/:id", b.model().Update)
 	route.DELETE("/:id", b.model().Delete)
-	route.GET("-actions/count", b.model().Count)
+	// route.GET("-actions/count", b.model().Count)
 
 	return route
 

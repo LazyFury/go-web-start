@@ -2,16 +2,15 @@ package model
 
 import (
 	"errors"
-	"fmt"
+	"net/http"
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/Treblex/go-echo-demo/server/util/sha"
-	"github.com/Treblex/go-echo-demo/server/util/wechat"
-
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/tools/sha"
+	"github.com/Treblex/go-echo-demo/server/tools/wechat"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 )
 
 // User 用户更新
@@ -54,57 +53,57 @@ func (u *User) TableName() string {
 }
 
 // Detail 用户信息
-func (u *User) Detail(c echo.Context) error {
-	return u.BaseControll.GetDetail(c, "用户不存在")
+func (u *User) Detail(c *gin.Context) {
+	u.BaseControll.GetDetail(c, "用户不存在")
 }
 
 // Add 添加
-func (u *User) Add(c echo.Context) error {
+func (u *User) Add(c *gin.Context) {
 	user := &User{}
 
 	if err := c.Bind(user); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic(utils.JSONError("参数错误", err))
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Name == "" {
-		return util.JSONErr(c, nil, "用户名不可空")
+		panic(utils.JSONError("用户名不可空", nil))
 	}
 	if user.Password == "" {
-		return util.JSONErr(c, nil, "用户密码不可空")
+		panic(utils.JSONError("用户密码不可空", nil))
 	}
 
 	user.Password = sha.EnCode(user.Password)
 
-	req := c.Request()
+	req := c.Request
 	ua := req.UserAgent()
-	ip := util.ClientIP(c)
+	ip := c.ClientIP()
 	user.IP = ip
 	user.Ua = ua
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 	user.Status = 1
 
 	user.Empty()
-	return u.BaseControll.DoAdd(c, user)
+	u.BaseControll.DoAdd(c, user)
 }
 
 // RegController AddUser
-func (u *User) RegController(c echo.Context) error {
-	return u.Add(c)
+func (u *User) RegController(c *gin.Context) {
+	u.Add(c)
 }
 
 // Update 更新
-func (u *User) Update(c echo.Context) error {
+func (u *User) Update(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(user); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic(utils.JSONError("参数错误", err))
 	}
 
 	_u := &User{BaseControll: BaseControll{ID: uint(user.ID)}}
 	err := _u.HasUser()
 	if err != nil {
-		return util.JSONErr(c, nil, err.Error())
+		panic(err)
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
@@ -113,7 +112,7 @@ func (u *User) Update(c echo.Context) error {
 	}
 
 	user.Empty()
-	return u.BaseControll.DoUpdate(c, user)
+	u.BaseControll.DoUpdate(c, user)
 }
 
 // DelUser 删除用户
@@ -131,24 +130,24 @@ func (u *User) DelUser() (interface{}, error) {
 }
 
 // Frozen 冻结用户
-func (u *User) Frozen(c echo.Context) error {
+func (u *User) Frozen(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(&user); err != nil {
-		return util.JSONErr(c, nil, fmt.Sprintf("%s", err))
+		panic(err)
 	}
 
 	db := DB
 	row := db.Model(&User{BaseControll: BaseControll{ID: user.ID}}).Update("status", user.Status)
 	if row.Error != nil {
-		return util.JSONErr(c, nil, "操作失败")
+		panic("操作失败")
 	}
 
 	if user.Status == 0 {
-		return util.JSONSuccess(c, nil, "冻结用户")
+		panic("冻结用户")
 	}
 
-	return util.JSONSuccess(c, nil, "解冻用户")
+	c.JSON(http.StatusOK, utils.JSONSuccess("解冻用户", nil))
 }
 
 // HasUser 查找用户
@@ -162,26 +161,26 @@ func (u *User) HasUser() error {
 }
 
 // RepeatOfEmail RepeatOfEmail
-func (u *User) RepeatOfEmail(c echo.Context) error {
+func (u *User) RepeatOfEmail(c *gin.Context) {
 	user := new(User)
-	email := c.QueryParam("email")
+	email := c.Query("email")
 	user.Email = email
 	err := user.HasUser()
 	if err != nil {
-		return util.JSONSuccess(c, nil, "没有重复")
-
+		c.JSON(http.StatusOK, utils.JSONSuccess("没有重复", nil))
+		return
 	}
-	return util.JSON(c, nil, "邮箱已被使用,尝试找回密码或者使用其他邮箱", -1)
+	c.JSON(http.StatusOK, utils.JSON(utils.RepeatEmail, "", nil))
 }
 
 // RepeatOfName RepeatOfName
-func (u *User) RepeatOfName(c echo.Context) error {
+func (u *User) RepeatOfName(c *gin.Context) {
 	user := new(User)
-	name := c.QueryParam("name")
+	name := c.Query("name")
 	user.Name = name
 	err := user.HasUser()
 	if err != nil {
-		return util.JSONSuccess(c, nil, "没有重复")
+		panic("没有重复")
 	}
-	return util.JSON(c, nil, "用户名已存在", -1002)
+	c.JSON(http.StatusOK, utils.JSON(utils.RepeatUserName, "", nil))
 }

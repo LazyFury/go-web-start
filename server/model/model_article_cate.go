@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/util"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 
-	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
@@ -61,55 +62,55 @@ func (a *ArticlesCate) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // List 分页
-func (a *ArticlesCate) List(c echo.Context) error {
-	return util.JSONSuccess(c, a.BaseControll.ListWithOutPaging(nil), "")
+func (a *ArticlesCate) List(c *gin.Context) {
+	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(nil)))
 }
 
 // Add 添加分类
-func (a *ArticlesCate) Add(c echo.Context) error {
+func (a *ArticlesCate) Add(c *gin.Context) {
 	cate := &ArticlesCate{}
 
 	if err := c.Bind(cate); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	cate.Name = strings.Trim(cate.Name, " ")
 	if cate.Name == "" {
-		return util.JSONErr(c, nil, "分类名称不可空")
+		panic("分类名称不可空")
 	}
 
 	cate.Empty()
-	return a.BaseControll.DoAdd(c, cate)
+	a.BaseControll.DoAdd(c, cate)
 }
 
 // Update 添加分类
-func (a *ArticlesCate) Update(c echo.Context) error {
+func (a *ArticlesCate) Update(c *gin.Context) {
 	cate := &ArticlesCate{}
 
 	if err := c.Bind(cate); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	cate.Empty()
-	return a.BaseControll.DoUpdate(c, cate)
+	a.BaseControll.DoUpdate(c, cate)
 }
 
 // Delete 删除
-func (a *ArticlesCate) Delete(c echo.Context) error {
+func (a *ArticlesCate) Delete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 	article := &Articles{}
 	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
-		return util.JSONErr(c, nil, "该分类下还有文章，不能删除")
+		panic("该分类下还有文章，不能删除")
 	}
 
 	tag := &ArticlesTag{}
 	if hasTag := db.Model(tag).Where(map[string]interface{}{"cate_id": id}).Find(tag).RowsAffected; hasTag > 0 {
-		return util.JSONErr(c, nil, "该分类下有标签,无法删除")
+		panic("该分类下有标签,无法删除")
 	}
 
-	return a.BaseControll.Delete(c)
+	a.BaseControll.Delete(c)
 }

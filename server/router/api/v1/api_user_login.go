@@ -1,17 +1,18 @@
 package api
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/middleware"
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/sha"
-
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/tools/sha"
+	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/gin-gonic/gin"
 )
 
-func login(g *echo.Group) {
+func login(g *gin.RouterGroup) {
+
 	login := g.Group("/login")
 
 	login.POST("", doLogin)
@@ -22,61 +23,65 @@ func login(g *echo.Group) {
 
 }
 
-func doLogin(c echo.Context) error {
+func doLogin(c *gin.Context) {
 	var u = &struct {
 		UserName string `json:"username"`
 		Password string `json:"password"`
 	}{}
 
 	if err := c.Bind(u); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 
 	u.UserName = strings.Trim(u.UserName, " ")
 	if u.UserName == "" {
-		return util.JSONErr(c, nil, "用户昵称不可空")
+		panic("用户昵称不可空")
 	}
 
 	u.Password = strings.Trim(u.Password, " ")
 	if u.Password == "" {
-		return util.JSONErr(c, nil, "用户密码不可空")
+		panic("用户密码不可空")
 	}
 
 	user := model.User{Name: u.UserName}
 
 	err := user.HasUser()
 	if err != nil {
-		return util.JSONErr(c, nil, "用户不存在")
+		panic("用户不存在")
 	}
 	password := sha.EnCode(u.Password)
 	if user.Password == password {
-		jwtUser := middleware.UserInfo{ID: float64(user.ID), Name: user.Name, IsAdmin: user.IsAdmin > 0}
-		str, _ := middleware.CreateToken(&jwtUser)
-		return util.JSONSuccess(c, str, "登陆成功")
+		str, _ := middleware.CreateToken(user)
+		c.JSON(http.StatusOK, utils.JSONSuccess(
+			"",
+			str,
+		))
+		return
 	}
-	return util.JSONErr(c, nil, "密码错误")
+	panic("密码错误")
 }
 
-func initAdmin(c echo.Context) error {
+func initAdmin(c *gin.Context) {
 
-	ip := util.ClientIP(c)
+	ip := c.ClientIP()
 	ip = strings.Split(ip, ":")[0]
 	if ip != "127.0.0.1" {
-		return util.JSONErr(c, ip, "")
+		panic(ip)
 	}
 
-	secret := c.QueryParam("secret")
+	secret := c.Query("secret")
 	if secret != "fqEeEPlgFECywkwqVMoCEmBzmRmFPZwt" {
-		return util.JSONErr(c, nil, "密钥错误")
+		panic("密钥错误")
 	}
 	db := model.DB
 
 	a := &model.User{Name: "admin", IsAdmin: 1}
 	if findAdmin := db.Where(a).Find(a).RowsAffected; findAdmin >= 1 {
 		a.Password = sha.AesDecryptCFB(a.Password)
-		return util.JSONSuccess(c, a, "")
+		c.JSON(http.StatusOK, utils.JSONSuccess("", a))
+		return
 	}
-	pwd := util.RandStringBytes(16)
+	pwd := utils.RandStringBytes(16)
 
 	admin := &model.User{
 		Name:     "admin",
@@ -85,8 +90,8 @@ func initAdmin(c echo.Context) error {
 	}
 
 	if err := db.Save(admin).Error; err != nil {
-		return util.JSONErr(c, err, "")
+		panic(err)
 	}
 	admin.Password = sha.AesDecryptCFB(admin.Password)
-	return util.JSONErr(c, admin, "注册成功")
+	c.JSON(http.StatusOK, utils.JSONSuccess("", admin))
 }

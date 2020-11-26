@@ -1,10 +1,9 @@
 package model
 
 import (
-	"github.com/Treblex/go-echo-demo/server/util"
 	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
 // Feedback 客户意见反馈
@@ -33,32 +32,32 @@ func (f *Feedback) TableName() string {
 }
 
 // Add 添加文章
-func (f *Feedback) Add(c echo.Context) error {
+func (f *Feedback) Add(c *gin.Context) {
 	feedback := &Feedback{}
 
 	if err := c.Bind(feedback); err != nil {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	if strings.Trim(feedback.Reason, " ") == "" {
-		return util.JSONErr(c, nil, "请选择反馈原因")
+		panic("请选择反馈原因")
 	}
 	if strings.Trim(feedback.Content, " ") == "" {
-		return util.JSONErr(c, nil, "请填写反馈描述")
+		panic("请填写反馈描述")
 	}
 
 	feedback.Empty()
-	return f.BaseControll.DoAdd(c, feedback)
+	f.BaseControll.DoAdd(c, feedback)
 }
 
 // Update 添加文章
-func (f *Feedback) Update(c echo.Context) error {
+func (f *Feedback) Update(c *gin.Context) {
 	feedback := &Feedback{}
 
 	if err := c.Bind(feedback); err != nil {
-		return util.JSONErr(c, nil, "参数错误")
+		panic("参数错误")
 	}
 
 	feedback.Empty()
-	return f.BaseControll.DoUpdate(c, feedback)
+	f.BaseControll.DoUpdate(c, feedback)
 }

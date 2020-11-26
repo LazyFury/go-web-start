@@ -2,13 +2,12 @@ package api
 
 import (
 	"github.com/Treblex/go-echo-demo/server/model"
-
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
 var modelOrder model.Order
 
-func order(g *echo.Group) {
+func order(g *gin.RouterGroup) {
 	modelOrder.BaseControll.Model = &modelOrder
 	modelOrder.Install(g, "/orders")
 }

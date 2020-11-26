@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/util"
-	"github.com/Treblex/go-echo-demo/server/util/customtype"
-	"github.com/labstack/echo/v4"
+	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -49,29 +48,29 @@ func (a *AppointmentLog) Joins(db *gorm.DB) *gorm.DB {
 }
 
 // Add Add
-func (a *AppointmentLog) Add(c echo.Context) error {
+func (a *AppointmentLog) Add(c *gin.Context) {
 	log := &AppointmentLog{}
 
 	if err := c.Bind(log); err != nil {
-		return util.JSONErr(c, err, "参数错误")
+		panic("参数错误")
 	}
 	if log.AppointmentID == 0 {
-		return util.JSONErr(c, nil, "必须输入活动id")
+		panic("必须输入活动id")
 	}
 
 	if hasOne := a.HasOne(log); hasOne {
-		return util.JSONErr(c, nil, "已预约,请不要重复预约")
+		panic("已预约,请不要重复预约")
 	}
 
-	uid := c.Get("userId").(float64)
+	user := c.MustGet("user").(*User)
 	status := 1
 	time := customtype.NumberTime{Time: time.Now()}
 
-	log.UID = uint(uid)
+	log.UID = user.ID
 	log.Status = status
 	log.AppointmentTime = time
 
 	log.Empty()
 
-	return a.DoAdd(c, log)
+	a.DoAdd(c, log)
 }
