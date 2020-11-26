@@ -7,6 +7,7 @@ import (
 	"math"
 	"strconv"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -55,6 +56,18 @@ type (
 		*gorm.DB
 	}
 )
+
+// GetUser GetUser
+func GetUser(c *gin.Context) *User {
+	_user, exists := c.Get("user")
+	if exists {
+		user, ok := _user.(*User)
+		if ok {
+			return user
+		}
+	}
+	panic(utils.JSON(utils.AuthedError, "请先登录", nil))
+}
 
 // ConnectMysql 链接mysql
 func (g *GormDB) ConnectMysql(dsn string) (err error) {

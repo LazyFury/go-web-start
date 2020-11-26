@@ -2,26 +2,44 @@ package app
 
 import (
 	"net/http"
-	"strings"
 
-	"github.com/labstack/echo/v4"
+	"github.com/gin-gonic/gin"
 )
 
 // 自己尝试的cors配置实现
-func cosr() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			req := c.Request()
-			res := c.Response()
-			res.Header().Set(echo.HeaderAccessControlAllowOrigin, "*")
-			res.Header().Set(echo.HeaderAccessControlAllowMethods, strings.Join([]string{"GET", "POST", "DELETE", "PUT", "OPTIONS"}, ","))
-			res.Header().Set(echo.HeaderAccessControlAllowCredentials, "true")
-			res.Header().Set(echo.HeaderAccessControlAllowHeaders, strings.Join([]string{"token", echo.HeaderContentType}, ","))
+func cosr(c *gin.Context) {
+	req := c.Request
+	origin := c.Request.Header.Get("Origin")
+	if len(origin) == 0 {
+		// request is not a CORS request
+		return
+	}
+	host := c.Request.Host
 
-			if req.Method == http.MethodOptions {
-				return c.NoContent(http.StatusNoContent)
-			}
-			return next(c)
+	if origin == "http://"+host || origin == "https://"+host {
+		// request is not a CORS request but have origin header.
+		// for example, use fetch api
+		return
+	}
+
+	allowOrigins := []string{"*"}
+	inAllow := 0
+	for i, o := range allowOrigins {
+		if origin == o || o == "*" {
+			inAllow = i + 1
 		}
+	}
+	if inAllow == 0 {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	c.Header("Access-Control-Allow-Origin", origin)
+	c.Header("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTION")
+	c.Header("Access-Control-Allow-Credentials", "true")
+	c.Header("Access-Control-Allow-Headers", "authorization,token,content-type")
+
+	if req.Method == http.MethodOptions {
+		c.Status(http.StatusNoContent)
 	}
 }

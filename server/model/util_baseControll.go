@@ -4,7 +4,6 @@ import (
 	"math"
 	"net/http"
 	"reflect"
-	"strconv"
 	"strings"
 	"time"
 
@@ -165,14 +164,7 @@ func (b *BaseControll) ListWithOutPaging(where interface{}) interface{} {
 
 // GetList 获取列表
 func (b *BaseControll) GetList(c *gin.Context, where interface{}) {
-	page := c.Query("page")
-	if page == "" {
-		page = "1"
-	}
-	limit := c.Query("limit")
-	if limit == "" {
-		limit = "10"
-	}
+
 	orderBy := c.Query("order")
 	if orderBy == "" {
 		orderBy = "created_at desc,id desc"
@@ -180,12 +172,25 @@ func (b *BaseControll) GetList(c *gin.Context, where interface{}) {
 	key := c.Query("key")
 
 	// 转化类型
-	p, _ := strconv.Atoi(page)
-	size, _ := strconv.Atoi(limit)
+	page, size := GetPagingParams(c)
 
 	// 请求数据
-	list := DataBaselimit(size, p, where, b.model(), key, orderBy, 0, false)
-	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
+	list := b.model().PointerList()
+	listModel := DB.GetObjectsOrEmpty(list, where, func(db *gorm.DB) *gorm.DB {
+		return db.Order(orderBy)
+	})
+
+	if !b.model().IsPublic() {
+		listModel.Model = listModel.Model.Where(map[string]interface{}{})
+	}
+
+	listModel.Model = b.model().Search(listModel.Model, key)
+	if err := listModel.Paging(page, size, func(db *gorm.DB) *gorm.DB {
+		return b.model().Joins(db).Select([]string{"*"})
+	}); err != nil {
+		// pass; result empty array
+	}
+	c.JSON(http.StatusOK, utils.JSONSuccess("", listModel.Result))
 }
 
 // GetDetail 获取某一条数据
@@ -204,22 +209,13 @@ func (b *BaseControll) GetDetail(c *gin.Context, recordNotFoundTips string) {
 	where := map[string]interface{}{
 		"id": id,
 	}
-	row := DB.DB.Table(b.model().TableName()).Where(where)
-
-	user := c.MustGet("user").(*User)
-	if !b.model().IsPublic() && user.IsAdmin != 1 {
-		row = row.Where(map[string]interface{}{
-			"user_id": user.ID,
-		})
-	}
-
-	row = b.model().Joins(row)
-
-	if row.First(p).Error != nil {
+	if err := DB.GetObjectOrNotFound(p, where, func(db *gorm.DB) *gorm.DB {
+		return b.model().Joins(db).Select([]string{"*"})
+	}); err != nil {
 		panic(recordNotFoundTips)
 	}
 
-	p = b.model().Result(p, user.ID)
+	p = b.model().Result(p, 0)
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("", p))
 }

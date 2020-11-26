@@ -5,7 +5,6 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/router"
 	"github.com/Treblex/go-echo-demo/server/utils"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
@@ -15,8 +14,8 @@ func New() *gin.Engine {
 	g := gin.New()
 
 	g.Use(gin.Logger())
-
-	g.Use(cors.Default())
+	// g.Use(cors.Default())
+	g.Use(cosr)
 
 	// 静态目录
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
@@ -32,6 +31,10 @@ func New() *gin.Engine {
 	g.HandleMethodNotAllowed = true
 
 	g.NoMethod(func(c *gin.Context) {
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
 		panic(utils.JSON(http.StatusMethodNotAllowed, "", nil))
 	})
 

@@ -95,8 +95,7 @@ func (a *ArticlesTag) List(c *gin.Context) {
 	}
 
 	list := a.ListWithOutPaging(where)
-	user, _ := c.MustGet("userId").(User)
-	list = a.Result(list, user.ID)
+	list = a.Result(list, 0)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
 }
 
