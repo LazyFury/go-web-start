@@ -2,13 +2,13 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 
-	"github.com/Treblex/go-echo-demo/server/utils/customtype/message"
+	"github.com/Treblex/go-echo-demo/server/model/message"
 	"github.com/gin-gonic/gin"
 
 	"github.com/google/uuid"
-	"github.com/labstack/gommon/color"
 	"gorm.io/gorm"
 )
 
@@ -35,8 +35,8 @@ type selectMessage struct {
 	OrderID uint        `json:"order_id,omitempty"`
 	Order   interface{} `json:"order,omitempty"`
 	// 文章
-	ArticleID uint          `json:"article_id,omitempty"`
-	Articles  selectArticle `json:"article,omitempty"`
+	ArticleID uint     `json:"article_id,omitempty"`
+	Articles  Articles `json:"article,omitempty"`
 }
 
 // NewMessage NewMessage
@@ -78,7 +78,7 @@ func (m *Message) Joins(db *gorm.DB) *gorm.DB {
 func (m *Message) getMoreField(v *selectMessage) {
 	db := DB
 	// 绑定文章信息
-	a := selectArticle{}
+	a := Articles{}
 	row := db.Table(a.TableName()).Where(map[string]interface{}{
 		"id": v.ArticleID,
 	})
@@ -141,9 +141,8 @@ func (m *Message) AddArticleLog(fromID uint, articleID uint, action int) {
 func (m *Message) AddUserActionLog(data map[string]interface{}) {
 	err := writeLogs(data)
 	if err != nil {
-		color.Printf(color.Red("\n用户通知记录 Err:%s \n"), err.Error())
+		log.Printf("\n用户通知记录 Err:%s \n", err.Error())
 	}
-	return
 }
 func writeLogs(data map[string]interface{}) error {
 

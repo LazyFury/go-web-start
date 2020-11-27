@@ -14,6 +14,20 @@ import (
 	"gorm.io/gorm"
 )
 
+// Controller ModelInterface
+type Controller interface {
+	Validator() error
+	TableName() string
+	Object() interface{}
+	Objects() interface{}
+	// Where 搜索条件
+	Search(db *gorm.DB, key string) *gorm.DB
+	// 查询的补充条件
+	Joins(db *gorm.DB) *gorm.DB
+	// 处理列表返回结果
+	Result(data interface{}) interface{}
+}
+
 // Model Model
 type Model interface {
 	// PointerList return gorm.model数组类型，用户分页查询绑定数据

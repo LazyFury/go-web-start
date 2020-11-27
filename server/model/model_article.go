@@ -1,13 +1,12 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
-	"strconv"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
-	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
 )
@@ -16,46 +15,52 @@ type (
 	// Articles 文章模型
 	Articles struct {
 		BaseControll
-		Title          string           `json:"title" gorm:"not null"`
-		Desc           string           `json:"desc"`
-		Author         string           `json:"author" gorm:"DEFAULT:'佚名'"`
-		Content        string           `json:"content" gorm:"type:text"`
-		Email          string           `json:"email"`
-		Cover          string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
-		Tag            customtype.Array `json:"tag" gorm:"type:varchar(255)"`
-		LikeCount      int              `json:"like_count"`
-		AlreadyLikedIt bool             `json:"already_liked_it" gorm:"-"` //判断当前用户是否点赞
-
-		CateID int `json:"cate_id" gorm:"column:cate_id"`
-	}
-	selectArticle struct {
-		*Articles
-		CateName string `json:"cate_name"`
-		// A        string `json:"content,omitempty"`
-	}
-	selectListArticle struct {
-		*Articles
-		CateName string `json:"cate_name"`
-		A        string `json:"content,omitempty"`
+		Title   string           `json:"title" gorm:"not null"`
+		Desc    string           `json:"desc"`
+		Author  string           `json:"author" gorm:"DEFAULT:'佚名'"`
+		Content string           `json:"content" gorm:"type:text"`
+		Email   string           `json:"email"`
+		Cover   string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
+		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255)"`
+		CateID  uint             `json:"cate_id" gorm:"column:cate_id"`
+		UserID
 	}
 )
 
-// NewArticle 新建文章类型
-func NewArticle() *Articles {
-	a := &Articles{}
-	a.BaseControll.Model = a
-	return a
+// Validator 验证
+func (a *Articles) Validator() error {
+	a.Title = strings.Trim(a.Title, " ")
+	if a.Title == "" {
+		return errors.New("文章标题不可空")
+	}
+	if a.CateID == 0 {
+		return errors.New("请选择文章分类")
+	}
+
+	if len(a.Tag) == 0 {
+		return errors.New("请至少选择一个标签")
+	}
+	return nil
 }
 
-// PointerList 列表
-func (a *Articles) PointerList() interface{} {
-	return &[]selectListArticle{}
+// Object 自身
+func (a *Articles) Object() interface{} {
+	return &struct {
+		Articles
+		CateName string `json:"cate_name" gorm:"->"`
+	}{}
 }
 
-// Pointer 实例
-func (a *Articles) Pointer() interface{} {
-	return &selectArticle{}
+// Objects 自身列表
+func (a *Articles) Objects() interface{} {
+	return &[]struct {
+		Articles
+		CateName string `json:"cate_name"  gorm:"->"`
+		A        string `json:"content,omitempty"`
+	}{}
 }
+
+var _ Controller = &Articles{}
 
 // TableName 表名
 func (a *Articles) TableName() string {
@@ -79,64 +84,13 @@ func (a *Articles) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
-// Result Result
-func (a *Articles) Result(data interface{}, userID uint) interface{} {
+// Result sql查询完成之后调用这里绑定额外的数据
+func (a *Articles) Result(data interface{}) interface{} {
 
-	item, ok := reflect.ValueOf(data).Elem().Interface().(selectArticle)
+	item, ok := reflect.ValueOf(data).Elem().Interface().(Articles)
 	if ok {
 		return item
 	}
 
 	return data
-}
-
-//List 文章列表
-func (a *Articles) List(c *gin.Context) {
-	cid := c.Query("cid")
-	if cid != "" {
-		cateID, err := strconv.Atoi(cid)
-		if err == nil && cateID > 0 {
-			a.BaseControll.GetList(c, &Articles{CateID: cateID})
-			return
-		}
-	}
-	a.BaseControll.GetList(c, nil)
-}
-
-// Detail 文章详情
-func (a *Articles) Detail(c *gin.Context) {
-	a.BaseControll.GetDetail(c, "文章不存在")
-}
-
-// Add 添加
-func (a *Articles) Add(c *gin.Context) {
-	article := &Articles{}
-
-	if err := c.Bind(article); err != nil {
-		panic("参数错误")
-	}
-
-	article.Title = strings.Trim(article.Title, " ")
-	if article.Title == "" {
-		panic("文章标题不可空")
-	}
-
-	if article.CateID == 0 {
-		panic("请选择文章分类")
-	}
-
-	article.Empty()
-	a.BaseControll.DoAdd(c, article)
-}
-
-// Update Update
-func (a *Articles) Update(c *gin.Context) {
-	article := &Articles{}
-
-	if err := c.Bind(article); err != nil {
-		panic("参数错误")
-	}
-
-	article.Empty()
-	a.BaseControll.DoUpdate(c, article)
 }

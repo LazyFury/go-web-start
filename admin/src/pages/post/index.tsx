@@ -21,7 +21,7 @@ import './index.less';
 const { Option } = Select;
 let { confirm } = Modal;
 let resetTableData: () => Promise<void>; //在其他组件中使用重置列表
-let setCate_id: React.Dispatch<React.SetStateAction<string>>;
+let setCate_id: React.Dispatch<React.SetStateAction<number>>;
 
 let numbers: number[] = [];
 
@@ -33,14 +33,14 @@ const Post = (props: {
   /**
    * @init
    */
-  let [cid, setCid] = useState('');
+  let [cid, setCid] = useState(0);
   setCate_id = setCid;
 
   let [selectedRowKeys_, setSelectedRowKeys] = useState(numbers);
 
   // 获取文章列表
   let { data, load, reload, loading, reset } = useDataList(
-    page => posts.list({ page, cid }),
+    page => posts.list({ page, cid: cid || '' }),
     false,
   );
 
@@ -63,7 +63,7 @@ const Post = (props: {
   /**
    * @methods
    */
-  const cateSelectChange = (value: string) => {
+  const cateSelectChange = (value: number) => {
     setCid(value);
   };
 
@@ -73,7 +73,7 @@ const Post = (props: {
         key="selectCate"
         allowClear
         placeholder="请选择文章分类"
-        value={cid || '全部分类'}
+        value={cid || 0}
         onChange={cateSelectChange}
       >
         {/* cid 使用usestate， 默认值为0而不是空 */}

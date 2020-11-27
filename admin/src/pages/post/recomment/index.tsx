@@ -119,7 +119,7 @@ export default function() {
         onRefresh={load}
         loading={loading}
         leftActions={[
-          <Button type="primary" onClick={editCate}>
+          <Button key="add" type="primary" onClick={editCate}>
             <PlusOutlined />
             <span>添加推荐位</span>
           </Button>,

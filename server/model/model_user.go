@@ -13,6 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UserID UserID
+type UserID struct {
+	UserID uint `json:"user_id"`
+}
+
 // User 用户更新
 type User struct {
 	BaseControll

@@ -35,7 +35,7 @@ func cosr(c *gin.Context) {
 	}
 
 	c.Header("Access-Control-Allow-Origin", origin)
-	c.Header("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTION")
+	c.Header("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTION,PATCH")
 	c.Header("Access-Control-Allow-Credentials", "true")
 	c.Header("Access-Control-Allow-Headers", "authorization,token,content-type")
 

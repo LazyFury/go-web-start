@@ -9,7 +9,7 @@ export function install(name: string) {
     del: (id: number) => http.delete(`/${name}/${id}`),
     detail: (id: number) => http.get(`/${name}/${id}`),
     add: (data: object) => http.post(`/${name}`, data),
-    update: (id: any, data: object) => http.put(`/${name}/${id}`, data),
+    update: (id: any, data: object) => http.patch(`/${name}/${id}`, data),
     total: (params: object) => http.get(`/${name}-actions/count`, { params }),
   };
 }

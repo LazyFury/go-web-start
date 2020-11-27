@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -15,33 +16,37 @@ import (
 // ArticlesRec 文章分类
 type ArticlesRec struct {
 	BaseControll
-	Name string `json:"name"`
+	Name string `json:"name" gorm:"unique;not null"`
 	Key  string `json:"key"`
 	IDs  string `json:"article_ids"`
 	Desc string `json:"desc"`
 }
 type showArticleRec struct {
-	*ArticlesRec
+	ArticlesRec
 	// *EmptySystemFiled
-	List  []selectArticle `json:"list" gorm:"-"`
-	Count int             `json:"count" gorm:"-"`
+	List  []Articles `json:"list" gorm:"-"`
+	Count int        `json:"count" gorm:"-"`
 }
 
-// NewArticleRec 推荐文章
-func NewArticleRec() *ArticlesRec {
-	rec := &ArticlesRec{}
-	rec.BaseControll.Model = rec
-	return rec
+var _ Controller = &ArticlesRec{}
+
+// Object Object
+func (a *ArticlesRec) Object() interface{} {
+	return &showArticleRec{}
 }
 
-// PointerList 列表
-func (a *ArticlesRec) PointerList() interface{} {
+// Objects Object
+func (a *ArticlesRec) Objects() interface{} {
 	return &[]showArticleRec{}
 }
 
-// Pointer 实例
-func (a *ArticlesRec) Pointer() interface{} {
-	return &showArticleRec{}
+// Validator Validator
+func (a *ArticlesRec) Validator() error {
+	a.Name = strings.Trim(a.Name, " ")
+	if a.Name == "" {
+		return errors.New("请输入推荐位名称")
+	}
+	return nil
 }
 
 // TableName 表名
@@ -57,7 +62,7 @@ func (a *ArticlesRec) Joins(db *gorm.DB) *gorm.DB {
 func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	ids := strings.Split(item.IDs, ",")
 	article := &Articles{}
-	articles := []selectArticle{}
+	articles := []Articles{}
 
 	row := DB.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
 	if row.Error == nil && len(articles) > 0 {
@@ -67,14 +72,14 @@ func (a *ArticlesRec) getArticle(item *showArticleRec) {
 	l := len(articles)
 	item.Count = l
 	if l == 0 {
-		item.List = []selectArticle{}
+		item.List = []Articles{}
 	}
 
 	// fmt.Println(item)
 }
 
 // Result 处理结构
-func (a *ArticlesRec) Result(data interface{}, userID uint) interface{} {
+func (a *ArticlesRec) Result(data interface{}) interface{} {
 	interf := reflect.ValueOf(data).Elem().Interface()
 	arr, ok := interf.([]showArticleRec)
 	if ok {
@@ -94,7 +99,7 @@ func (a *ArticlesRec) Result(data interface{}, userID uint) interface{} {
 
 // List 分页
 func (a *ArticlesRec) List(c *gin.Context) {
-	res := a.Result(a.ListWithOutPaging(nil), 0)
+	res := a.Result(a.ListWithOutPaging(nil))
 	c.JSON(http.StatusOK, utils.JSONSuccess("", res))
 }
 

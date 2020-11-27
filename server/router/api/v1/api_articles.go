@@ -7,8 +7,8 @@ import (
 
 // Init 初始化
 func post(g *gin.RouterGroup) {
-	var modelPost = model.NewArticle()
-	modelPost.Install(g, "/posts") //list,detail,add,update,delete
+	// var modelPost = model.NewArticle()
+	// modelPost.Install(g, "/posts") //list,detail,add,update,delete
 }
 
 // 文章分类
@@ -18,8 +18,8 @@ func postCate(g *gin.RouterGroup) {
 }
 
 func postRec(g *gin.RouterGroup) {
-	modelPostRec := model.NewArticleRec()
-	modelPostRec.Install(g, "/post-rec")
+	// modelPostRec := model.NewArticleRec()
+	// modelPostRec.Install(g, "/post-rec")
 }
 
 func postTag(g *gin.RouterGroup) {

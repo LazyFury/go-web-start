@@ -57,8 +57,8 @@ type (
 	}
 )
 
-// GetUser GetUser
-func GetUser(c *gin.Context) *User {
+// GetUserOrLogin GetUser
+func GetUserOrLogin(c *gin.Context) *User {
 	_user, exists := c.Get("user")
 	if exists {
 		user, ok := _user.(*User)
@@ -67,6 +67,18 @@ func GetUser(c *gin.Context) *User {
 		}
 	}
 	panic(utils.JSON(utils.AuthedError, "请先登录", nil))
+}
+
+// GetUserOrEmpty GetUser
+func GetUserOrEmpty(c *gin.Context) *User {
+	_user, exists := c.Get("user")
+	if exists {
+		user, ok := _user.(*User)
+		if ok {
+			return user
+		}
+	}
+	return &User{}
 }
 
 // ConnectMysql 链接mysql

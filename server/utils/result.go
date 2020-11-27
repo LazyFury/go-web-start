@@ -35,6 +35,8 @@ const (
 	RepeatEmail
 	// RepeatUserName 用户名已存在
 	RepeatUserName
+	// BindJSONErr 绑定json失败
+	BindJSONErr
 )
 
 // ErrorCodeText 错误提示
@@ -46,6 +48,7 @@ var ErrorCodeText = map[ErrCode]string{
 	NotFound:       "没有数据",
 	RepeatEmail:    "邮箱已存在",
 	RepeatUserName: "用户名已存在",
+	BindJSONErr:    "绑定失败,请检查参数",
 }
 
 // BuildBy BuildBy

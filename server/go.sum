@@ -27,6 +27,7 @@ github.com/Treblex/go-echo-demo v0.0.0-20200904080106-1b236f66ced2 h1:68//VaCjUb
 github.com/Treblex/go-echo-demo v0.0.0-20200921005153-63b4d83e6d76 h1:apWmIy7AfkwLJ8q1FZl2yZ0WABWEf8Ik2Z9hgxKySJQ=
 github.com/Treblex/go-echo-demo v0.0.0-20200927090302-02e423a26539 h1:JqtAyLE07zmMgrjNWE6OdDQOalI7cgsczvqK2KkG7C4=
 github.com/Treblex/go-echo-demo v0.0.0-20201126020231-2171a995d1a8 h1:IyCmH2xR073AMkgmR503901BqhA9XLmL6Qy46mWv7OY=
+github.com/Treblex/go-echo-demo v0.0.0-20201126103825-40d862704b28 h1:9iXfeSEnKuL5OsEfaH1Qs5Bxxi5B/LU7DvDcB0w6A40=
 github.com/Treblex/go-echo-demo/server v0.0.0-20200904045851-813ac257aeb4/go.mod h1:MAdSeQxEnrUrV/nFmMaGrtIP3mW2nAh2ZVsFLKs9fDg=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4 h1:GpyHnIy4P3pUoWGaOlZY8/YFBQ452qOC0lRJ1Ko2Ip0=
 github.com/Treblex/go-echo-demo/server/model v0.0.0-20200904045851-813ac257aeb4/go.mod h1:AmuSd4dY+QPJ3bcCtBDY1kCXxwKsvteT3VOYoDEDZco=
@@ -287,6 +288,8 @@ github.com/imdario/mergo v0.3.9/go.mod h1:2EnlNZ0deacrJVfApfmtdGgDfMuh/nq6Ok1EcJ
 github.com/inconshreveable/mousetrap v1.0.0 h1:Z8tu5sraLXCXIcARxBp/8cbvlwVa7Z1NHg9XEKhtSvM=
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/jedib0t/go-pretty v4.3.0+incompatible/go.mod h1:XemHduiw8R651AF9Pt4FwCTKeG3oo7hrHJAoznj9nag=
+github.com/jinzhu/gorm v1.9.16 h1:+IyIjPEABKRpsu/F8OvDPy9fyQlgsg2luMV2ZIH5i5o=
+github.com/jinzhu/gorm v1.9.16/go.mod h1:G3LB3wezTOWM2ITLzPxEXgSkOXAntiLHS7UdBefADcs=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.0.1/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Treblex/go-echo-demo/server/config"
+	"github.com/Treblex/go-echo-demo/server/controller"
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
 	"github.com/Treblex/go-echo-demo/server/tools/upload"
@@ -47,6 +48,9 @@ func Init(g *gin.RouterGroup) {
 	// base
 	login(apiV1)
 	//文章
+	controller.NewArticleController().Install(apiV1, "/articles")
+	controller.NewArticleRecController().Install(apiV1, "/article-recs")
+
 	post(apiV1)
 	postCate(apiV1)
 	postRec(apiV1)

@@ -21,10 +21,10 @@ func New() *gin.Engine {
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
 
 	// recover panic
-	g.Use(gin.Recovery())
+	g.Use(gin.Recovery()) //保证panic时不cash
 
 	g.Use(func(c *gin.Context) {
-		defer utils.Recover(c)
+		defer utils.Recover(c) //panic时处理自定义错误
 		c.Next()
 	})
 

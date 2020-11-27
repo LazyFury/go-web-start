@@ -2,7 +2,7 @@ import { http } from '../request';
 import { install } from './easy_install';
 
 export const posts = {
-  ...install('posts'),
+  ...install('articles'),
 };
 
 export const postCates = {
@@ -11,8 +11,8 @@ export const postCates = {
 };
 
 export const postRec = {
-  ...install('post-rec'),
-  list: () => http.get('/post-rec'),
+  ...install('article-recs'),
+  list: () => http.get('/article-recs-all'),
 };
 
 export const postTags = {
