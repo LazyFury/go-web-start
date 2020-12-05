@@ -17,29 +17,35 @@ type ArticlesTag struct {
 	Val    string `json:"val" gorm:"not null;index;unique"`
 	CateID uint   `json:"cate_id" gorm:"conment:'分类id，暂时公用文章分类'"`
 }
+
 type showArticlesTag struct {
-	*ArticlesTag
+	ArticlesTag
 
-	CateName string `json:"cate_name" gorm:""`
-	Count    int64  `json:"count" gorm:""`
+	CateName string `json:"cate_name" gorm:"->"`
+	Count    int64  `json:"count" gorm:"->"`
 }
 
-var _ Model = &ArticlesTag{}
+var _ Controller = &ArticlesTag{}
 
-// NewArticleTag 新建文章标签
-func NewArticleTag() *ArticlesTag {
-	a := &ArticlesTag{}
-	a.BaseControll.Model = a
-	return a
+// Validator Validator
+func (a *ArticlesTag) Validator() error {
+	if a.CateID == 0 {
+		panic("请选择分类")
+	}
+	a.Val = strings.Trim(a.Val, " ")
+	if a.Val == "" {
+		panic("请输入标签名称")
+	}
+	return nil
 }
 
-// Pointer Pointer
-func (a *ArticlesTag) Pointer() interface{} {
+// Object Object
+func (a *ArticlesTag) Object() interface{} {
 	return &ArticlesTag{}
 }
 
-// PointerList PointerList
-func (a *ArticlesTag) PointerList() interface{} {
+// Objects Objects
+func (a *ArticlesTag) Objects() interface{} {
 	return &[]showArticlesTag{}
 }
 
@@ -72,7 +78,7 @@ func (a *ArticlesTag) countArticles(tag *showArticlesTag) {
 }
 
 // Result Result
-func (a *ArticlesTag) Result(data interface{}, userID uint) interface{} {
+func (a *ArticlesTag) Result(data interface{}) interface{} {
 	// TODO:反射获取Interface之前需要判断是否是指针类型
 	arr, ok := reflect.ValueOf(data).Elem().Interface().([]showArticlesTag)
 	if ok {
@@ -95,32 +101,6 @@ func (a *ArticlesTag) List(c *gin.Context) {
 	}
 
 	list := a.ListWithOutPaging(where)
-	list = a.Result(list, 0)
+	list = a.Result(list)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
-}
-
-// Add Add
-func (a *ArticlesTag) Add(c *gin.Context) {
-	tag := &ArticlesTag{}
-
-	if err := c.Bind(tag); err != nil {
-		panic("参数错误")
-	}
-
-	if tag.CateID == 0 {
-		panic("请选择分类")
-	}
-
-	if strings.Trim(tag.Val, " ") == "" {
-		panic("请输入标签名称")
-	}
-
-	if err := DB.Where(map[string]interface{}{
-		"val": tag.Val,
-	}).First(tag).Error; err == nil {
-		panic("已存在相同的标签")
-	}
-
-	tag.Empty()
-	a.DoAdd(c, tag)
 }

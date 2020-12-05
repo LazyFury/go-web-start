@@ -50,11 +50,8 @@ func Init(g *gin.RouterGroup) {
 	//文章
 	controller.NewArticleController().Install(apiV1, "/articles")
 	controller.NewArticleRecController().Install(apiV1, "/article-recs")
-
-	post(apiV1)
-	postCate(apiV1)
-	postRec(apiV1)
-	postTag(apiV1)
+	controller.NewArticleCategoryController().Install(apiV1, "/article-cates")
+	controller.NewArticleTagController().Install(apiV1, "/article-tags")
 	//商品
 	product(apiV1)
 	productCate(apiV1) //商品分类

@@ -31,12 +31,11 @@ func (a *ArticleController) Install(g *gin.RouterGroup, path string) {
 func (a *ArticleController) ListPaging(c *gin.Context) {
 	cid := c.DefaultQuery("cid", "")
 	a.DefaultListPaging(c, func(db *gorm.DB) *gorm.DB {
+		query := map[string]interface{}{}
 		if cid != "" {
-			db = db.Where(map[string]interface{}{
-				"cate_id": cid,
-			})
+			query["cate_id"] = cid
 		}
-		return db
+		return db.Where(query)
 	})
 }
 
@@ -55,9 +54,114 @@ type ArticleRecController struct {
 	*Controller
 }
 
-var _ BaseInterface = &ArticleRecController{}
+// Install Install
+func (a *ArticleRecController) Install(g *gin.RouterGroup, path string) {
+	Install(g, a, path)
+}
 
-// Detail Detail
-func (a *ArticleRecController) Detail(c *gin.Context) {
-	a.Controller.Detail(c)
+// Delete 删除
+func (a *ArticleRecController) Delete(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		panic("请输入推荐位id")
+	}
+
+	rec := model.ArticlesRec{}
+	if err := a.DB.GetObjectOrNotFound(&rec, map[string]interface{}{
+		"id": id,
+	}); err != nil {
+		panic("推荐位不存在")
+	}
+
+	articles := []model.Articles{}
+	if err := a.DB.GetObjectsOrEmpty(&articles, nil, func(db *gorm.DB) *gorm.DB {
+		return db.Where("id in (?)", rec.IDs)
+	}).All(); err != nil {
+		panic(err)
+	}
+	if len(articles) > 0 {
+		panic("该推荐位下有文章，不可删除")
+	}
+	a.Controller.Delete(c)
+}
+
+// NewArticleCategoryController NewArticleCategoryController
+func NewArticleCategoryController() *ArticleCategoryController {
+	return &ArticleCategoryController{
+		Controller: &Controller{
+			DB:    model.DB,
+			Model: &model.ArticlesCate{},
+		},
+	}
+}
+
+// ArticleCategoryController ArticleCategoryController
+type ArticleCategoryController struct {
+	*Controller
+}
+
+// Install Install
+func (a *ArticleCategoryController) Install(g *gin.RouterGroup, path string) {
+	Install(g, a, path)
+}
+
+// Delete 删除
+func (a *ArticleCategoryController) Delete(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		panic("请输入分类id")
+	}
+
+	articles := []model.Articles{}
+	if err := a.DB.GetObjectsOrEmpty(&articles, map[string]interface{}{
+		"cate_id": id,
+	}).All(); err != nil {
+		panic(err)
+	}
+	if len(articles) > 0 {
+		panic("该分类下有文章，不可删除")
+	}
+
+	tags := []model.ArticlesTag{}
+	if err := a.DB.GetObjectsOrEmpty(&tags, map[string]interface{}{
+		"cate_id": id,
+	}).All(); err != nil {
+		panic(err)
+	}
+	if len(tags) > 0 {
+		panic("该分类下有标签，不可删除")
+	}
+	a.Controller.Delete(c)
+}
+
+// NewArticleTagController NewArticleTagController
+func NewArticleTagController() *ArticleTagController {
+	return &ArticleTagController{
+		Controller: &Controller{
+			DB:    model.DB,
+			Model: &model.ArticlesTag{},
+		},
+	}
+}
+
+// ArticleTagController ArticleTagController
+type ArticleTagController struct {
+	*Controller
+}
+
+// Install Install
+func (a *ArticleTagController) Install(g *gin.RouterGroup, path string) {
+	Install(g, a, path)
+}
+
+// List List
+func (a *ArticleTagController) List(c *gin.Context) {
+	cid := c.DefaultQuery("cid", "")
+	a.DefaultListPaging(c, func(db *gorm.DB) *gorm.DB {
+		query := map[string]interface{}{}
+		if cid != "" {
+			query["cate_id"] = cid
+		}
+		return db.Where(query)
+	})
 }

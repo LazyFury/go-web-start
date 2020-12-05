@@ -6,8 +6,8 @@ export const posts = {
 };
 
 export const postCates = {
-  ...install('post-cates'),
-  list: () => http.get(`/post-cates`),
+  ...install('article-cates'),
+  list: () => http.get(`/article-cates-all`),
 };
 
 export const postRec = {
@@ -16,6 +16,6 @@ export const postRec = {
 };
 
 export const postTags = {
-  ...install('post-tags'),
-  list: () => http.get('/post-tags'),
+  ...install('article-tags'),
+  list: () => http.get('/article-tags-all'),
 };

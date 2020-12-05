@@ -64,7 +64,7 @@ type BaseControll struct {
 	Code      string               `json:"code"`
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
-	DeletedAt *time.Time           `json:"deleted_at,omitempty" sql:"index"`
+	DeletedAt gorm.DeletedAt       `json:"deleted_at,omitempty" gorm:"index"`
 	Model     Model                `json:"-" gorm:"-"`
 }
 
