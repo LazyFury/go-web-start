@@ -10,6 +10,6 @@ export function install(name: string) {
     detail: (id: number) => http.get(`/${name}/${id}`),
     add: (data: object) => http.post(`/${name}`, data),
     update: (id: any, data: object) => http.patch(`/${name}/${id}`, data),
-    total: (params: object) => http.get(`/${name}-actions/count`, { params }),
+    total: (params: object) => http.get(`/${name}-count`, { params }),
   };
 }

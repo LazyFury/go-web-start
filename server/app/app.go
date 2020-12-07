@@ -35,11 +35,11 @@ func New() *gin.Engine {
 			c.AbortWithStatus(http.StatusNoContent)
 			return
 		}
-		panic(utils.JSON(http.StatusMethodNotAllowed, "", nil))
+		panic(utils.NoMethod)
 	})
 
 	g.NoRoute(func(c *gin.Context) {
-		panic(utils.JSON(http.StatusNotFound, "", nil))
+		panic(utils.NoRoute)
 	})
 
 	g.RemoveExtraSlash = true

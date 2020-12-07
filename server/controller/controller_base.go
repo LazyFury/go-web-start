@@ -2,7 +2,10 @@ package controller
 
 import (
 	"io"
+	"math"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/Treblex/go-echo-demo/server/model"
 	"github.com/Treblex/go-echo-demo/server/utils"
@@ -18,6 +21,7 @@ type BaseInterface interface {
 	Add(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
+	Count(c *gin.Context)
 	// Install Install
 	Install(g *gin.RouterGroup, path string)
 }
@@ -42,6 +46,7 @@ func (t *Controller) Install(g *gin.RouterGroup, path string) {
 func Install(g *gin.RouterGroup, c BaseInterface, path string) {
 	route := g.Group(path)
 	g.GET(path+"-all", c.ListAll)
+	g.GET(path+"-count", c.Count)
 	route.GET("", c.ListPaging)
 	route.GET("/:id", c.Detail)
 	route.POST("", c.Add)
@@ -168,6 +173,96 @@ func (t *Controller) Detail(c *gin.Context) {
 	}
 	obj = t.Model.Result(obj)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", obj))
+}
+
+// Count Count
+func (t *Controller) Count(c *gin.Context) {
+
+	row := t.DB.Table(t.Model.TableName())
+
+	//time: 2006-01-02 15:04:05 开始时间必选，结束时间判空位当前时间
+	start := c.Query("start")
+	end := c.Query("end")
+	if start == "" {
+		panic("请选择查询开始时间")
+	}
+	//type: year,month,week,day
+	queryType := c.Query("type")
+	if queryType == "" {
+		queryType = "day"
+	}
+	queryType = strings.ToLower(queryType)
+
+	// 按时间查询
+	startTime, err := time.Parse("2006-01-02 15:04:05", start)
+	var endTime time.Time
+	if end != "" {
+		endTime, err = time.Parse("2006-01-02 15:04:05", end)
+	} else {
+		endTime = time.Now()
+	}
+
+	if err != nil {
+		panic(err)
+	}
+
+	row = row.Where("`created_at` BETWEEN ? AND ?", startTime, endTime)
+
+	list := []struct {
+		Date       string  `json:"date"`
+		Count      int     `json:"count"`
+		Offset     int     `json:"offset"`
+		GrowthRate float64 `json:"growth_rate"`
+		// GrowthRateStr string  `json:"growth_rate_str"`
+		List interface{} `json:"list,omitempty"`
+	}{}
+
+	dateFormat := "%Y-%m-%d"
+
+	queryTypes := map[string]string{
+		"day":   "%Y-%m-%d",
+		"week":  "%Y-%u",
+		"month": "%Y-%m",
+		"year":  "%Y",
+	}
+
+	if format := queryTypes[queryType]; format != "" {
+		dateFormat = format
+	}
+
+	// 统计总数量
+	var n int64
+	row = row.Count(&n)
+	// 查询近n (天，周，月) 数据
+	row = row.Select("DATE_FORMAT(created_at,'" + dateFormat + "') date,count(*) count")
+	row = row.Group("date").Order("date asc").Find(&list)
+	// 计算近n天数据的增加或者减少
+	var defaultCount int
+	for i, item := range list {
+		list[i].Offset = item.Count - defaultCount
+		if defaultCount > 0 {
+			list[i].GrowthRate = math.Floor(float64(list[i].Offset)/float64(defaultCount)*10000) / 100
+		} else {
+			list[i].GrowthRate = 100
+		}
+		// list[i].GrowthRateStr = fmt.Sprintf("%.2f%%", list[i].GrowthRate)
+		defaultCount = item.Count
+
+		// if item.Count > 0 {
+		// 	l := b.model().PointerList()
+		// 	row = DB
+		// 	row.Table(b.model().TableName()).Where("DATE_FORMAT(created_at,'"+dateFormat+"') = ?", item.Date).Find(l)
+		// 	list[i].List = &l
+		// }
+	}
+
+	if row.Error != nil {
+		panic(row.Error)
+	}
+	c.JSON(http.StatusOK, utils.JSONSuccess("", map[string]interface{}{
+		"total": &n,
+		"list":  list,
+	}))
 }
 
 // ListPaging 处理通用 page size orderby search

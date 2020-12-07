@@ -16,10 +16,16 @@ import (
 
 // Controller ModelInterface
 type Controller interface {
+	// add update 验证
 	Validator() error
+	// 表名
 	TableName() string
+	// 自身实例 用于found one
 	Object() interface{}
+	// 自身实例 用于found list
 	Objects() interface{}
+
+	// 以下三个方法用于辅助默认方法实现curd，过于复杂的直接override
 	// Where 搜索条件
 	Search(db *gorm.DB, key string) *gorm.DB
 	// 查询的补充条件

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -37,6 +38,11 @@ func (a *ArticleController) ListPaging(c *gin.Context) {
 		}
 		return db.Where(query)
 	})
+}
+
+// ListAll ListAll
+func (a *ArticleController) ListAll(c *gin.Context) {
+	panic(utils.NoRoute)
 }
 
 // NewArticleRecController NewArticleRecController

@@ -21,6 +21,10 @@ const (
 	Success ErrCode = 1
 	// Errors 失败
 	Errors ErrCode = -1
+	// NoRoute NoRoute
+	NoRoute ErrCode = http.StatusNotFound
+	// NoMethod NoMethod
+	NoMethod ErrCode = http.StatusMethodNotAllowed
 )
 const (
 	// LoginSuccess 登陆成功
@@ -41,14 +45,21 @@ const (
 
 // ErrorCodeText 错误提示
 var ErrorCodeText = map[ErrCode]string{
-	Success:        "获取成功",
-	Errors:         "遇到错误",
+	// base
+	Success: "获取成功",
+	Errors:  "遇到错误",
+
+	// business
 	LoginSuccess:   "登陆成功",
 	AuthedError:    "登陆超时",
 	NotFound:       "没有数据",
 	RepeatEmail:    "邮箱已存在",
 	RepeatUserName: "用户名已存在",
 	BindJSONErr:    "绑定失败,请检查参数",
+
+	// system
+	NoRoute:  "路由不存在",
+	NoMethod: "方法不存在",
 }
 
 // BuildBy BuildBy
