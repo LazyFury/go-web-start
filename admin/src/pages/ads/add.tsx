@@ -1,5 +1,6 @@
 import PageMain from '@/components/PageMain';
 import { Uploader } from '@/components/Upload/Upload';
+import { useDataList } from '@/hooks/useDataList';
 import useRequest from '@/hooks/useRequest';
 import { adEvents, adGroups, ads } from '@/server/api/ad';
 import { Button, Form, Input, Select, Space } from 'antd';
@@ -19,8 +20,8 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
     true,
   );
 
-  let { data: groups, load: loadGroup, loading: groupLoading } = useRequest(
-    adGroups.list,
+  let { data: groups, load: loadGroup, loading: groupLoading } = useDataList(
+    page => adGroups.list({ page }),
     true,
   );
 
@@ -82,8 +83,8 @@ const AddAd = (props: { id?: number; onsubmit: () => void }) => {
             loading={groupLoading}
             disabled={Boolean(props.id)}
           >
-            {groups && groups.length > 0
-              ? groups.map((x: any) => {
+            {groups && groups.total > 0
+              ? groups.list.map((x: any) => {
                   return (
                     <Option
                       value={x.id}

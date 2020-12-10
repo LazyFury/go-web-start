@@ -21,8 +21,8 @@ type (
 		Content string           `json:"content" gorm:"type:text"`
 		Email   string           `json:"email"`
 		Cover   string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
-		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255)"`
-		CateID  uint             `json:"cate_id" gorm:"column:cate_id"`
+		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255);not null"`
+		CateID  uint             `json:"cate_id" gorm:"column:cate_id;not null"`
 		UserID
 	}
 )

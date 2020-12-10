@@ -1,6 +1,6 @@
 import List from '@/components/List';
 import PageMain from '@/components/PageMain';
-import useRequest from '@/hooks/useRequest';
+import { useDataList } from '@/hooks/useDataList';
 import { adGroups } from '@/server/api/ad';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Drawer, Modal, Space, Tooltip, Typography } from 'antd';
@@ -10,7 +10,10 @@ import { Detail } from './components/detail';
 let { confirm } = Modal;
 const { Paragraph } = Typography;
 export default function Groups() {
-  let { data, load, loading } = useRequest(adGroups.list, true);
+  let { data, load, loading } = useDataList(
+    page => adGroups.list({ page }),
+    true,
+  );
   // 编辑分组
   let [visible, setVisible] = useState(false);
 
@@ -174,13 +177,13 @@ export default function Groups() {
         loading={loading}
         table={{
           columns,
-          dataSource: (data instanceof Array && data) || undefined,
+          dataSource: data.list,
           bordered: true,
           rowKey: 'id',
           loading,
           pagination: {
             position: ['bottomLeft'],
-            total: data.length,
+            total: data.total,
           },
         }}
       ></List>

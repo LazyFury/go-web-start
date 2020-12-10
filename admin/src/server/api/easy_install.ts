@@ -1,3 +1,4 @@
+import { List, Result } from '../interface';
 import { http } from '../request';
 /**
  * install 快速注册路由
@@ -5,7 +6,8 @@ import { http } from '../request';
  */
 export function install(name: string) {
   return {
-    list: (params: object) => http.get('/' + name, { params }),
+    list: (params: object) =>
+      http.get<Result<List<any>>>('/' + name, { params }),
     del: (id: number) => http.delete(`/${name}/${id}`),
     detail: (id: number) => http.get(`/${name}/${id}`),
     add: (data: object) => http.post(`/${name}`, data),

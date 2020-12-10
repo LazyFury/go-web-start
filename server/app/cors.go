@@ -37,7 +37,7 @@ func cosr(c *gin.Context) {
 	c.Header("Access-Control-Allow-Origin", origin)
 	c.Header("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE,OPTION,PATCH")
 	c.Header("Access-Control-Allow-Credentials", "true")
-	c.Header("Access-Control-Allow-Headers", "authorization,token,content-type")
+	c.Header("Access-Control-Allow-Headers", "authorization,token,content-type,x-requested-with")
 
 	if req.Method == http.MethodOptions {
 		c.Status(http.StatusNoContent)

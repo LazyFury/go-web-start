@@ -3,6 +3,7 @@ package model
 import (
 	"fmt"
 	"net/http"
+	"reflect"
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
@@ -19,19 +20,50 @@ type AdGroup struct {
 	Desc     string `json:"desc" gorm:"type:text;comment:'描述';"`
 	MaxCount int    `json:"max_count" gorm:"default:1"`
 }
-
-// PointerList PointerList
-func (a *AdGroup) PointerList() interface{} {
-	return &[]struct {
-		*AdGroup
-		Count int `json:"count"`
-	}{}
+type selectAdGroup struct {
+	AdGroup
+	Count int          `json:"count" gorm:"->"`
+	List  *[]selectAds `json:"list,omitempty" gorm:"-"`
 }
 
-// Pointer Pointer
-func (a *AdGroup) Pointer() interface{} {
-	return &AdGroup{}
+//Validator Validator
+func (a *AdGroup) Validator() error {
+	a.Name = strings.Trim(a.Name, " ")
+	if a.Name == "" {
+		panic("分组标题不可空")
+	}
+	return nil
 }
+
+//Object Object
+func (a *AdGroup) Object() interface{} {
+	return &selectAdGroup{}
+}
+
+//Objects Objects
+func (a *AdGroup) Objects() interface{} {
+	return &[]selectAdGroup{}
+}
+
+//Result Result
+func (a *AdGroup) Result(data interface{}) interface{} {
+	var obj = reflect.ValueOf(data).Elem().Interface()
+
+	if _obj, ok := obj.(selectAdGroup); ok {
+		_obj.List = &[]selectAds{}
+		ad := &selectAds{}
+		adsModel := DB.GetObjectsOrEmpty(_obj.List, map[string]interface{}{
+			"group_id": _obj.ID,
+		}, ad.Joins)
+		if err := adsModel.All(); err == nil {
+			_obj.List, _ = ad.Result(_obj.List).(*[]selectAds)
+			return _obj
+		}
+	}
+	return data
+}
+
+var _ Controller = &AdGroup{}
 
 // TableName TableName
 func (a *AdGroup) TableName() string {
@@ -40,7 +72,6 @@ func (a *AdGroup) TableName() string {
 
 // Joins 统计
 func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
-	db = db.Select("*")
 	ad := &Ad{}
 	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` where `deleted_at`  IS NULL  group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
 	return db
@@ -52,43 +83,43 @@ func (a *AdGroup) List(c *gin.Context) {
 }
 
 // Detail 分组详情
-func (a *AdGroup) Detail(c *gin.Context) {
-	db := DB
-	id := c.Param("id")
-	if id == "" {
-		panic("参数错误")
-	}
-
-	group := &AdGroup{}
-	if db.Model(group).Where(map[string]interface{}{
-		"id": id,
-	}).First(group).Error != nil {
-		panic("广告位不存在")
-	}
-
-	ad := &Ad{}
-	ad.BaseControll.Model = ad
-
-	list, _ := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
-		"group_id": id,
-	}).(*[]selectAds)
-	count := len(*list)
-	// fmt.Printf("%v\n\n", reflect.TypeOf(list).Elem().Kind())
-	// fmt.Printf("%v\n\n", reflect.ValueOf(list).Elem())
-
-	result := &struct {
-		*AdGroup
-		*EmptySystemFiled
-		Count int          `json:"count"`
-		List  *[]selectAds `json:"list"`
-	}{
-		AdGroup: group,
-		List:    list,
-		Count:   count,
-	}
-
-	c.JSON(http.StatusOK, utils.JSONSuccess("", result))
-}
+//func (a *AdGroup) Detail(c *gin.Context) {
+//	db := DB
+//	id := c.Param("id")
+//	if id == "" {
+//		panic("参数错误")
+//	}
+//
+//	group := &AdGroup{}
+//	if db.Model(group).Where(map[string]interface{}{
+//		"id": id,
+//	}).First(group).Error != nil {
+//		panic("广告位不存在")
+//	}
+//
+//	ad := &Ad{}
+//	ad.BaseControll.Model = ad
+//
+//	list, _ := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
+//		"group_id": id,
+//	}).(*[]selectAds)
+//	count := len(*list)
+//	// fmt.Printf("%v\n\n", reflect.TypeOf(list).Elem().Kind())
+//	// fmt.Printf("%v\n\n", reflect.ValueOf(list).Elem())
+//
+//	result := &struct {
+//		*AdGroup
+//		*EmptySystemFiled
+//		Count int          `json:"count"`
+//		List  *[]selectAds `json:"list"`
+//	}{
+//		AdGroup: group,
+//		List:    list,
+//		Count:   count,
+//	}
+//
+//	c.JSON(http.StatusOK, utils.JSONSuccess("", result))
+//}
 
 // Add AdGroupd
 func (a *AdGroup) Add(c *gin.Context) {

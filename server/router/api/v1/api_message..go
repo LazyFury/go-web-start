@@ -8,6 +8,6 @@ import (
 var modelMessage model.Message
 
 func messages(g *gin.RouterGroup) {
-	modelMessage.BaseControll.Model = &modelMessage
-	modelMessage.Install(g, "/messages")
+	// modelMessage.BaseControll.Model = &modelMessage
+	// modelMessage.Install(g, "/messages")
 }

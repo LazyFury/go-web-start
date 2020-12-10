@@ -15,7 +15,7 @@ const useRequest = (
     return api()
       .then(res => {
         if (res) {
-          setData(res.data);
+          setData(res.data.data);
         }
       })
       .finally(() => {

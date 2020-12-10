@@ -37,14 +37,14 @@ function interceptorsResponse(res: any) {
   let success: boolean = [200, 1, 201].includes(data.code);
   let msg: string = data.message || '';
   const code: number = data.code;
-  let result = data;
+  // let result = data;
   // 成功;
   if (success) {
     let ignore = ['请求成功'];
     if (!ignore.includes(msg)) {
       message.success({ content: msg });
     }
-    return result;
+    return res;
   } else {
     message.error({ content: msg });
     handleErrCode(code, data);

@@ -1,32 +1,23 @@
+import { List, Result } from '@/server/interface';
 import { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-
-export interface listResult {
-  list: Array<any>;
-  page: number;
-  size: number;
-  page_count: number;
-  total: number;
-}
-
-const defaultData: listResult = {
+let defaultData: List<any> = {
   list: [],
-  page: 0,
-  size: 0,
-  page_count: 0,
+  page: 1,
+  page_count: 1,
   total: 0,
+  size: 10,
 };
-
 /**
  * @获取数据列表hooks
  * @param api
  * @see https://xxx.com
  */
 export function useDataList(
-  api: (page: number) => Promise<AxiosResponse<listResult>>,
+  api: (page: number) => Promise<AxiosResponse<Result<List<any>>>>,
   autoLoad: boolean | undefined = true,
 ): {
-  readonly data: listResult;
+  readonly data: List<any>;
   load: (p?: number | undefined) => Promise<void>;
   reset: () => Promise<void>;
   reload: () => Promise<void>;
@@ -40,7 +31,8 @@ export function useDataList(
     setLoading(true);
     const res = await api(p || page);
     if (res) {
-      setData(res.data);
+      console.log(res);
+      setData(res.data.data);
       setPage(p || page++);
     }
     setLoading(false);

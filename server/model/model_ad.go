@@ -13,20 +13,19 @@ import (
 // Ad 广告位
 type Ad struct {
 	BaseControll
-	Title   string `json:"title"`
-	Param   string `json:"param" gorm:"comment:'参数，商品id 分类id url'"` //参数，商品id 分类id url
-	EventID uint   `json:"event_id"`
-	GroupID uint   `json:"group_id"`
+	Title   string `json:"title" gorm:"not null"`
+	Param   string `json:"param" gorm:"comment:'参数，商品id 分类id url';not null"` //参数，商品id 分类id url
+	EventID uint   `json:"event_id" gorm:"not null"`
+	GroupID uint   `json:"group_id" gorm:"not null"`
 	Image   string `json:"image"`
 }
+
 type selectAds struct {
-	*Ad
-	*EmptySystemFiled
-	Y string `json:"event_id,omitempty"`
+	Ad
 	// X         string `json:"id,omitempty"`
-	Event     string `json:"event"`
-	GroupName string `json:"group_name,omitempty"`
-	Type      int    `json:"type,omitempty"`
+	Event     string `json:"event" gorm:"->"`
+	GroupName string `json:"group_name,omitempty" gorm:"->"`
+	Type      int    `json:"type,omitempty" gorm:"->"`
 }
 
 // PointerList PointerList
@@ -34,9 +33,54 @@ func (a *Ad) PointerList() interface{} {
 	return &[]selectAds{}
 }
 
-// Pointer Pointer
-func (a *Ad) Pointer() interface{} {
+var _ Controller = &Ad{}
+
+//Result Result
+func (a *Ad) Result(data interface{}) interface{} {
+	return data
+}
+
+//Validator Validator
+func (a *Ad) Validator() error {
+	a.Title = strings.Trim(a.Title, " ")
+	if a.Title == "" {
+		panic("广告位标题不可空")
+	}
+
+	if a.EventID == 0 {
+		panic("请选择广告位事件")
+	}
+
+	if a.EventID > 0 {
+		event := &AdEvent{}
+		if err := DB.GetObjectOrNotFound(event, map[string]interface{}{
+			"id": a.EventID,
+		}); err != nil {
+			panic("事件不存在")
+		}
+	}
+
+	if a.GroupID == 0 {
+		panic("请选择广告位分组")
+	}
+
+	adGourp := &AdGroup{}
+	if err := DB.GetObjectOrNotFound(adGourp, map[string]interface{}{
+		"id": a.GroupID,
+	}); err != nil {
+		panic("分组不存在")
+	}
+	return nil
+}
+
+//Object Object
+func (a *Ad) Object() interface{} {
 	return &selectAds{}
+}
+
+//Objects Objects
+func (a *Ad) Objects() interface{} {
+	return &[]selectAds{}
 }
 
 // TableName TableName
@@ -65,63 +109,4 @@ func (a *Ad) List(c *gin.Context) {
 	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": groupID,
 	})))
-}
-
-// Add Add
-func (a *Ad) Add(c *gin.Context) {
-	ad := &Ad{}
-
-	if err := c.Bind(ad); err != nil {
-		panic("参数错误")
-	}
-
-	ad.Title = strings.Trim(ad.Title, " ")
-	if ad.Title == "" {
-		panic("广告位标题不可空")
-	}
-
-	if ad.EventID > 0 {
-		event := &AdEvent{}
-		event.BaseControll.Model = event
-		if !event.HasOne(map[string]interface{}{
-			"id": ad.EventID,
-		}) {
-			panic("事件不存在")
-		}
-	}
-
-	if ad.GroupID == 0 {
-		panic("请选择广告位分组")
-	}
-
-	adGourp := &AdGroup{}
-	db := DB
-	if db.Model(adGourp).Where(map[string]interface{}{
-		"id": ad.GroupID,
-	}).First(adGourp).Error != nil {
-		panic("分组不存在")
-	}
-
-	// if adGourp.IsSigle {
-	// 	if a.HasOne(map[string]interface{}{
-	// 		"group_id": ad.GroupID,
-	// 	}) {
-	// 		return util.JSONErr(c, nil, "此分组为单图广告位，不可继续添加")
-	// 	}
-	// }
-
-	ad.Empty()
-	a.BaseControll.DoAdd(c, ad)
-}
-
-// Update  更新
-func (a *Ad) Update(c *gin.Context) {
-	ad := &Ad{}
-
-	if err := c.Bind(ad); err != nil {
-		panic("参数错误")
-	}
-
-	ad.Empty()
-	a.BaseControll.DoUpdate(c, ad)
 }

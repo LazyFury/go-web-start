@@ -15,7 +15,7 @@ import (
 
 // UserID UserID
 type UserID struct {
-	UserID uint `json:"user_id"`
+	UserID uint `json:"user_id" gorm:"not null"`
 }
 
 // User 用户更新

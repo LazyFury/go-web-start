@@ -32,6 +32,8 @@ type Controller interface {
 	Joins(db *gorm.DB) *gorm.DB
 	// 处理列表返回结果
 	Result(data interface{}) interface{}
+
+	SetCode() error
 }
 
 // Model Model
@@ -78,6 +80,12 @@ type BaseControll struct {
 type EmptySystemFiled struct {
 	A string `json:"created_at,omitempty"`
 	B string `json:"updated_at,omitempty"`
+}
+
+// SetCode SetCode
+func (b *BaseControll) SetCode() error {
+	b.Code = uuid.New().String()
+	return nil
 }
 
 func (b *BaseControll) model() Model {

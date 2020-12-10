@@ -111,6 +111,9 @@ func (t *Controller) Add(c *gin.Context) {
 	if err := obj.Validator(); err != nil {
 		panic(err)
 	}
+
+	obj.SetCode()
+
 	if err := t.DB.Create(obj).Error; err != nil {
 		panic(err)
 	}
@@ -129,7 +132,10 @@ func (t *Controller) DefaultListPaging(c *gin.Context, midd model.Middleware) {
 		func(db *gorm.DB) *gorm.DB { return db.Select([]string{"*"}) },
 		func(db *gorm.DB) *gorm.DB {
 			return t.Model.Joins(db)
-		}, midd, t.checkUser(c))
+		}, midd, t.checkUser(c),
+		func(db *gorm.DB) *gorm.DB {
+			return db.Order("updated_at desc,created_at desc,id desc")
+		})
 }
 
 func (t *Controller) checkUser(c *gin.Context) model.Middleware {
@@ -168,6 +174,10 @@ func (t *Controller) Detail(c *gin.Context) {
 		"id": id,
 	}, func(db *gorm.DB) *gorm.DB {
 		return t.Model.Joins(db).Select([]string{"*"})
+	}, func(db *gorm.DB) *gorm.DB {
+		return db.Or(map[string]interface{}{
+			"code": id,
+		})
 	}, t.checkUser(c)); err != nil {
 		panic(utils.NotFound)
 	}

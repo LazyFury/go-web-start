@@ -3,7 +3,7 @@ import { install } from './easy_install';
 
 export const ads = {
   ...install('ads'),
-  list: () => http.get('/ads'),
+  // list: () => http.get('/ads'),
 };
 
 export const adEvents = {
@@ -14,5 +14,5 @@ export const adEvents = {
 
 export const adGroups = {
   ...install('ad-groups'),
-  list: () => http.get('/ad-groups'),
+  // list: () => http.get('/ad-groups'),
 };

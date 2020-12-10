@@ -23,7 +23,7 @@ func Init(g *gin.RouterGroup) {
 
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
-	apiV1.GET("", resources)
+	apiV1.GET("/", resources)
 	apiV1.POST("/upload", func(c *gin.Context) {
 		url, err := aliUploader.Default(c.Request)
 		if err != nil {
@@ -58,17 +58,17 @@ func Init(g *gin.RouterGroup) {
 	// 订单
 	order(apiV1)
 	// banner 广告位
-	ad(apiV1)
-	adEvent(apiV1)
-	adGroup(apiV1)
+	controller.NewAdController().Install(apiV1, "/ads")
+	controller.NewAdGroupController().Install(apiV1, "/ad-groups")
+	controller.NewAdEventController().Install(apiV1, "/ad-events")
 
 	// 用户
 	user(apiV1)
 	// 意见反馈
-	feedback(apiV1)
+	controller.NewFeedbackController().Install(apiV1, "/feedbacks")
 
 	// 用户消息
-	messages(apiV1)
+	controller.NewMessageController().Install(apiV1, "/messages")
 
 	wechat.Init(apiV1)
 
