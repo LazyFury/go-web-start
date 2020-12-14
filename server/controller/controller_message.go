@@ -9,3 +9,11 @@ func NewMessageController() *Controller {
 		Model: &model.Message{},
 	}
 }
+
+// NewMessageTemplateController NewMessageTemplateController
+func NewMessageTemplateController() *Controller {
+	return &Controller{
+		DB:    model.DB,
+		Model: &model.MessageTemplate{},
+	}
+}

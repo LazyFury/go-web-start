@@ -69,7 +69,7 @@ type Model interface {
 // BaseControll 空方法用户数据模型继承方法
 type BaseControll struct {
 	ID        uint                 `json:"id" gorm:"primary_key"`
-	Code      string               `json:"code"`
+	Code      string               `json:"code" gorm:"primary_key;index;unique;not null"` //
 	CreatedAt customtype.LocalTime `json:"created_at"`
 	UpdatedAt customtype.LocalTime `json:"updated_at"`
 	DeletedAt gorm.DeletedAt       `json:"deleted_at,omitempty" gorm:"index"`
@@ -84,7 +84,12 @@ type EmptySystemFiled struct {
 
 // SetCode SetCode
 func (b *BaseControll) SetCode() error {
-	b.Code = uuid.New().String()
+	uuid, _ := uuid.NewUUID()
+	_uuid := uuid.String()
+	_uuid = strings.ToLower(_uuid)
+	_uuid = strings.ReplaceAll(_uuid, "-", "")
+	// _uuid = base64.RawURLEncoding.EncodeToString([]byte(_uuid))
+	b.Code = _uuid
 	return nil
 }
 

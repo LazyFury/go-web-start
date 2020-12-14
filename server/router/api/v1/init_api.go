@@ -66,9 +66,9 @@ func Init(g *gin.RouterGroup) {
 	user(apiV1)
 	// 意见反馈
 	controller.NewFeedbackController().Install(apiV1, "/feedbacks")
-
 	// 用户消息
 	controller.NewMessageController().Install(apiV1, "/messages")
+	controller.NewMessageTemplateController().Install(apiV1, "/message-templates")
 
 	wechat.Init(apiV1)
 

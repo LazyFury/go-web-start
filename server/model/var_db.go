@@ -37,6 +37,7 @@ var autoMigrate = []interface{}{
 	&Feedback{},
 	// message
 	&Message{},
+	&MessageTemplate{},
 
 	// 订单
 	&Order{},
