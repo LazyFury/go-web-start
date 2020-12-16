@@ -81,9 +81,6 @@ func Init(g *gin.RouterGroup) {
 	// xml 播客解析测试
 	podcastRouter(apiV1)
 
-	// 预约
-	appointment(apiV1)
-
 }
 
 type resource struct {

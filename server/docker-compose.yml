@@ -24,13 +24,14 @@ services:
       - 1233:3306
     security_opt:
       - seccomp:unconfined
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=false
-      - mysql_root_password=123456
+      - MYSQL_ROOT_PASSWORD=sukeaiya
       - LANG=C.UTF-8
       - default_authentication_plugin=mysql_native_password
       - character-set-server=utf8mb4
       - collation-server=utf8mb4_unicode_ci
-    volumes:
-      - ./docker/mysql/data:/var/lib/mysql
+
     # - ./config/docker/mysql/conf/my.conf:/etc/mysql/my.cnf
