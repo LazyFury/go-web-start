@@ -22,3 +22,4 @@ key.pem
 tmp
 
 .DS_Store
+vendor

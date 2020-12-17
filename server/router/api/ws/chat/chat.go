@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"sync"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/tools"
 	"github.com/gorilla/websocket"
 )
 
@@ -113,7 +113,7 @@ func (c *Chat) updateUser(user *Gamer, ws *websocket.Conn) {
 
 // createUser 创建用户
 func (c *Chat) createUser(ws *websocket.Conn) (user *Gamer) {
-	var id = utils.RandStringBytes(32)
+	var id = tools.RandStringBytes(32)
 	var name = randName[rand.Intn(len(randName))]
 	user = &Gamer{
 		ID:   id,

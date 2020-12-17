@@ -6,8 +6,9 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/middleware"
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/tools/sha"
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/tools"
+	"github.com/Treblex/simple-daily/utils/sha"
 	"github.com/gin-gonic/gin"
 )
 
@@ -81,7 +82,7 @@ func initAdmin(c *gin.Context) {
 		c.JSON(http.StatusOK, utils.JSONSuccess("", a))
 		return
 	}
-	pwd := utils.RandStringBytes(16)
+	pwd := tools.RandStringBytes(16)
 
 	admin := &model.User{
 		Name:     "admin",

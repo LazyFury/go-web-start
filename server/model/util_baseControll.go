@@ -9,6 +9,7 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -34,6 +35,7 @@ type Controller interface {
 	Result(data interface{}) interface{}
 
 	SetCode() error
+	SetUser(c *gin.Context) error
 }
 
 // Model Model
@@ -90,6 +92,28 @@ func (b *BaseControll) SetCode() error {
 	_uuid = strings.ReplaceAll(_uuid, "-", "")
 	// _uuid = base64.RawURLEncoding.EncodeToString([]byte(_uuid))
 	b.Code = _uuid
+	return nil
+}
+
+// SetUser SetUser
+func (b *BaseControll) SetUser(c *gin.Context) error {
+
+	obj := reflect.ValueOf(b.model()).Elem()
+	ref := obj.FieldByNameFunc(func(s string) bool {
+		fieldNames := []string{"user_id", "to_user"}
+		for _, str := range fieldNames {
+			if str == s {
+				return true
+			}
+		}
+		return false
+	})
+	user := GetUserOrLogin(c)
+
+	if ref.CanSet() {
+		ref.SetUint(uint64(user.ID))
+	}
+
 	return nil
 }
 
@@ -205,7 +229,7 @@ func (b *BaseControll) GetList(c *gin.Context, where interface{}) {
 	key := c.Query("key")
 
 	// 转化类型
-	page, size := GetPagingParams(c)
+	page, size := xmodel.GetPagingParams(c)
 
 	// 请求数据
 	list := b.model().PointerList()

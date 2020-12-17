@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/tools/wechat"
+	"github.com/Treblex/go-web-template/tools/wechat"
 )
 
 func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth, err error) {

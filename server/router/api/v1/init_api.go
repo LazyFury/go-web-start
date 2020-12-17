@@ -7,7 +7,7 @@ import (
 	"github.com/Treblex/go-echo-demo/server/controller"
 	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
 	"github.com/Treblex/go-echo-demo/server/router/api/ws"
-	"github.com/Treblex/go-echo-demo/server/tools/upload"
+	"github.com/Treblex/go-web-template/tools/upload"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/gin-gonic/gin"
@@ -91,7 +91,8 @@ type resource struct {
 
 func resources(c *gin.Context) {
 	res := []resource{
-		{"文章", "/api/v1/posts", ""},
+		{"文章", "/api/v1/articles", ""},
+		{"消息", "/api/v1/messages", ""},
 		{"商品", "/api/v1/goods", ""},
 		{"订单", "/api/v1/orders", ""},
 		{"广告", "/api/v1/ads", ""},

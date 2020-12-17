@@ -6,12 +6,10 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-template/xmodel"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"
 )
-
-// DB DB
-var DB *GormDB = &GormDB{}
 
 // 需要自动迁移的表
 var autoMigrate = []interface{}{
@@ -42,6 +40,9 @@ var autoMigrate = []interface{}{
 	// 订单
 	&Order{},
 }
+
+// DB DB
+var DB *xmodel.GormDB = &xmodel.GormDB{}
 
 // MysqlConn InitDB
 func MysqlConn(dsn string) (err error) {

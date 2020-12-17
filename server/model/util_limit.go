@@ -1,11 +1,12 @@
 package model
 
 import (
+	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
 )
 
 // DataBaselimit  mysql数据分页
-func DataBaselimit(limit int, page int, where interface{}, _model Model, key string, orderBy string, userID uint, isAdmin bool) *ObjResult {
+func DataBaselimit(limit int, page int, where interface{}, _model Model, key string, orderBy string, userID uint, isAdmin bool) *xmodel.ObjResult {
 	list := _model.PointerList()
 	listModel := DB.GetObjectsOrEmpty(list, where, func(db *gorm.DB) *gorm.DB {
 		return db.Order(orderBy)

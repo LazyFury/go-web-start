@@ -1,54 +1,21 @@
 package config
 
 import (
-	"encoding/json"
-	"log"
-	"os"
-
-	"github.com/Treblex/go-echo-demo/server/tools/mail"
-	"github.com/Treblex/go-echo-demo/server/tools/mysql"
-	"github.com/Treblex/go-echo-demo/server/tools/upload"
-	"github.com/Treblex/go-echo-demo/server/tools/wechat"
+	"github.com/Treblex/go-web-template/config"
+	"github.com/Treblex/go-web-template/tools/mail"
+	"github.com/Treblex/go-web-template/tools/mysql"
+	"github.com/Treblex/go-web-template/tools/upload"
+	"github.com/Treblex/go-web-template/tools/wechat"
 )
 
 // Global 全局配置
-var Global *configType = initConfig()
-
-func initConfig() *configType {
-	t := &configType{}
-	//读取配置文件
-	if err := t.ReadConfig(); err != nil {
-		panic(err)
-	}
-	return t
-}
+var Global *configType = config.ReadConfig(&configType{}, "./config/config.json").(*configType)
 
 type configType struct {
-	TablePrefix string `json:"table_prefix"` //数据库表前缀
-
-	BaseURL    string            `json:"base_url"` // 网站根目录
-	Port       int               `json:"port"`     //端口
-	Mysql      mysql.Mysql       `json:"mysql"`    // 数据库链接
+	config.BaseConfig
+	Mysql      mysql.Mysql       `json:"mysql"` // 数据库链接
 	Mail       mail.Mail         `json:"mail"`
 	WechatMP   wechat.MP         `json:"wechat"`
 	WechatMini wechat.Mini       `json:"wechat_mini"`
 	AliOss     upload.AliOssConf `json:"ali_oss"` //阿里云oss
-}
-
-// ReadConfig 读取配置 初始化时运行 绑定为全局变量
-// 在我使用 ReadConfig 命名函数的时候 编辑器提示了错误， 函数应该和结构体configType保存一直的大写或者小写 以保证其他包的调用者可以使用这个函数
-func (c *configType) ReadConfig() (err error) {
-	f, err := os.Open("./config/config.json")
-	defer f.Close()
-	if err != nil {
-		log.Fatalln("打开配置文件错误，请创建 config/config.json 参考(config-defaultjson")
-		return
-	}
-	conf := &configType{}
-	if err = json.NewDecoder(f).Decode(c); err != nil {
-		return err
-	}
-
-	c = conf
-	return nil
 }

@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/Treblex/go-echo-demo/server/model"
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/controller"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -10,22 +11,21 @@ import (
 // NewArticleController NewArticleController
 func NewArticleController() *ArticleController {
 	return &ArticleController{
-		Controller: &Controller{
-			DB:     model.DB,
-			Model:  &model.Articles{},
-			isUser: false,
+		Controller: &controller.Controller{
+			DB:    model.DB,
+			Model: &model.Articles{},
 		},
 	}
 }
 
 // ArticleController ArticleController
 type ArticleController struct {
-	*Controller
+	*controller.Controller
 }
 
 // Install Install
 func (a *ArticleController) Install(g *gin.RouterGroup, path string) {
-	Install(g, a, path)
+	controller.Install(g, a, path)
 }
 
 // ListPaging ListPagin
@@ -48,7 +48,7 @@ func (a *ArticleController) ListAll(c *gin.Context) {
 // NewArticleRecController NewArticleRecController
 func NewArticleRecController() *ArticleRecController {
 	return &ArticleRecController{
-		Controller: &Controller{
+		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesRec{},
 		},
@@ -57,12 +57,12 @@ func NewArticleRecController() *ArticleRecController {
 
 // ArticleRecController ArticleController
 type ArticleRecController struct {
-	*Controller
+	*controller.Controller
 }
 
 // Install Install
 func (a *ArticleRecController) Install(g *gin.RouterGroup, path string) {
-	Install(g, a, path)
+	controller.Install(g, a, path)
 }
 
 // Delete 删除
@@ -94,7 +94,7 @@ func (a *ArticleRecController) Delete(c *gin.Context) {
 // NewArticleCategoryController NewArticleCategoryController
 func NewArticleCategoryController() *ArticleCategoryController {
 	return &ArticleCategoryController{
-		Controller: &Controller{
+		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesCate{},
 		},
@@ -103,12 +103,12 @@ func NewArticleCategoryController() *ArticleCategoryController {
 
 // ArticleCategoryController ArticleCategoryController
 type ArticleCategoryController struct {
-	*Controller
+	*controller.Controller
 }
 
 // Install Install
 func (a *ArticleCategoryController) Install(g *gin.RouterGroup, path string) {
-	Install(g, a, path)
+	controller.Install(g, a, path)
 }
 
 // Delete 删除
@@ -143,7 +143,7 @@ func (a *ArticleCategoryController) Delete(c *gin.Context) {
 // NewArticleTagController NewArticleTagController
 func NewArticleTagController() *ArticleTagController {
 	return &ArticleTagController{
-		Controller: &Controller{
+		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesTag{},
 		},
@@ -152,12 +152,12 @@ func NewArticleTagController() *ArticleTagController {
 
 // ArticleTagController ArticleTagController
 type ArticleTagController struct {
-	*Controller
+	*controller.Controller
 }
 
 // Install Install
 func (a *ArticleTagController) Install(g *gin.RouterGroup, path string) {
-	Install(g, a, path)
+	controller.Install(g, a, path)
 }
 
 // List List

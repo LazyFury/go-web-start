@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 )
 
@@ -61,7 +62,7 @@ func (cate *GoodCate) List(c *gin.Context) {
 }
 
 // 循环获取自分类
-func (cate *GoodCate) getCateTmenu(item *catelist, db *GormDB) (tmenu []catelist) {
+func (cate *GoodCate) getCateTmenu(item *catelist, db *xmodel.GormDB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
 	db.Table(cate.TableName()).Where(&GoodCate{ParentID: parentID}).Find(&tmenu)

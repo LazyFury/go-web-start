@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+
 	g := app.New()
 
 	//初始化数据链接

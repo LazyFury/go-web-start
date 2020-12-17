@@ -5,6 +5,7 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/router"
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ func New() *gin.Engine {
 
 	g.Use(gin.Logger())
 	// g.Use(cors.Default())
-	g.Use(cosr)
+	g.Use(tools.Cors)
 
 	// 静态目录
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))

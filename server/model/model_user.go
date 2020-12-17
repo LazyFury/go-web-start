@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/tools/sha"
-	"github.com/Treblex/go-echo-demo/server/tools/wechat"
 	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-template/tools/wechat"
+	"github.com/Treblex/simple-daily/utils/sha"
 	"github.com/gin-gonic/gin"
 )
 

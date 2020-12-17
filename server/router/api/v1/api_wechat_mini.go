@@ -12,10 +12,10 @@ import (
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/middleware"
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/tools/sha"
 	"github.com/Treblex/go-echo-demo/server/utils"
-
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-template/tools"
+	"github.com/Treblex/simple-daily/utils/sha"
 	"github.com/gin-gonic/gin"
 )
 
@@ -120,7 +120,7 @@ func easyLogin(c *gin.Context) {
 	}
 
 	// 注册
-	user := &model.User{Name: utils.RandStringBytes(6), Password: sha.EnCode(utils.RandStringBytes(16))}
+	user := &model.User{Name: tools.RandStringBytes(6), Password: sha.EnCode(tools.RandStringBytes(16))}
 	req := c.Request
 	ua := req.UserAgent()
 	ip := c.ClientIP()
