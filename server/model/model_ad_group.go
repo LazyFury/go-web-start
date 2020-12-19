@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
@@ -63,7 +64,7 @@ func (a *AdGroup) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ Controller = &AdGroup{}
+var _ xmodel.Controller = &AdGroup{}
 
 // TableName TableName
 func (a *AdGroup) TableName() string {

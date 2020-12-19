@@ -2,6 +2,8 @@ package model
 
 import (
 	"strings"
+
+	"github.com/Treblex/go-web-template/xmodel"
 )
 
 // Feedback 客户意见反馈
@@ -37,7 +39,7 @@ func (f *Feedback) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ Controller = &Feedback{}
+var _ xmodel.Controller = &Feedback{}
 
 // TableName 表名
 func (f *Feedback) TableName() string {

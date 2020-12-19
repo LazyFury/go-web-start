@@ -1,6 +1,10 @@
 package model
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/Treblex/go-web-template/xmodel"
+)
 
 // MessageTemplate MessageTemplate
 type MessageTemplate struct {
@@ -41,4 +45,4 @@ func (m MessageTemplate) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ Controller = &MessageTemplate{}
+var _ xmodel.Controller = &MessageTemplate{}

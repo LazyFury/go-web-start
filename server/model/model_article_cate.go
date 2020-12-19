@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +22,7 @@ type selectArticleCate struct {
 	TagCount int `json:"tag_count" gorm:"->"`
 }
 
-var _ Controller = &ArticlesCate{}
+var _ xmodel.Controller = &ArticlesCate{}
 
 // Validator Validator
 func (a *ArticlesCate) Validator() error {

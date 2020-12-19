@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
 )
 
@@ -55,7 +56,7 @@ func (a *AdEvent) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ Controller = &AdEvent{}
+var _ xmodel.Controller = &AdEvent{}
 
 // TableName TableName
 func (a *AdEvent) TableName() string {

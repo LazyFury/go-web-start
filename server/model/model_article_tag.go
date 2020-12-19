@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -25,7 +26,7 @@ type showArticlesTag struct {
 	Count    int64  `json:"count" gorm:"->"`
 }
 
-var _ Controller = &ArticlesTag{}
+var _ xmodel.Controller = &ArticlesTag{}
 
 // Validator Validator
 func (a *ArticlesTag) Validator() error {

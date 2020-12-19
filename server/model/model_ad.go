@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -33,7 +34,7 @@ func (a *Ad) PointerList() interface{} {
 	return &[]selectAds{}
 }
 
-var _ Controller = &Ad{}
+var _ xmodel.Controller = &Ad{}
 
 //Result Result
 func (a *Ad) Result(data interface{}) interface{} {

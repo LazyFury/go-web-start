@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 
 	"gorm.io/gorm"
@@ -28,7 +29,7 @@ type showArticleRec struct {
 	Count int        `json:"count" gorm:"-"`
 }
 
-var _ Controller = &ArticlesRec{}
+var _ xmodel.Controller = &ArticlesRec{}
 
 // Object Object
 func (a *ArticlesRec) Object() interface{} {
