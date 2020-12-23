@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
 	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
@@ -50,13 +51,13 @@ type SelectMessage struct {
 // Validator Validator
 func (m Message) Validator() error {
 	if m.ToUser == 0 {
-		panic("接收者不可空")
+		utils.Error("接收者不可空")
 	}
 	if m.FromUser == 0 {
-		panic("发送者id不可空")
+		utils.Error("发送者id不可空")
 	}
 	if m.TemplateID == 0 {
-		panic("消息模版id不可空")
+		utils.Error("消息模版id不可空")
 	}
 	return nil
 }

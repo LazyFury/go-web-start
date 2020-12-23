@@ -136,12 +136,12 @@ func (b *BaseControll) Detail(c *gin.Context) {
 
 // Add Add
 func (b *BaseControll) Add(c *gin.Context) {
-	panic("不可添加")
+	utils.Error("不可添加")
 }
 
 // Update Update
 func (b *BaseControll) Update(c *gin.Context) {
-	panic("不可修改")
+	utils.Error("不可修改")
 }
 
 // Delete 删除数据
@@ -154,7 +154,7 @@ func (b *BaseControll) DoDelete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	p := b.model().Pointer()
@@ -163,11 +163,11 @@ func (b *BaseControll) DoDelete(c *gin.Context) {
 	}).Delete(p)
 
 	if row.Error != nil {
-		panic("删除失败")
+		utils.Error("删除失败")
 	}
 
 	if row.RowsAffected <= 0 {
-		panic("删除失败,数据不存在")
+		utils.Error("删除失败,数据不存在")
 	}
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("删除成功", nil))
@@ -236,7 +236,7 @@ func (b *BaseControll) GetDetail(c *gin.Context, recordNotFoundTips string) {
 
 	id := c.Param("id")
 	if id == "" {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	p := b.model().Pointer()
@@ -246,7 +246,7 @@ func (b *BaseControll) GetDetail(c *gin.Context, recordNotFoundTips string) {
 	if err := DB.GetObjectOrNotFound(p, where, func(db *gorm.DB) *gorm.DB {
 		return b.model().Joins(db).Select([]string{"*"})
 	}); err != nil {
-		panic(recordNotFoundTips)
+		utils.Error(recordNotFoundTips)
 	}
 
 	p = b.model().Result(p, 0)
@@ -266,11 +266,11 @@ func (b *BaseControll) DoAdd(c *gin.Context, data interface{}) {
 	row := db.Create(data)
 
 	if row.Error != nil {
-		panic(row.Error)
+		utils.Error(row.Error)
 	}
 
 	if row.RowsAffected <= 0 {
-		panic("添加失败，没有更改")
+		utils.Error("添加失败，没有更改")
 	}
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("添加成功", nil))
@@ -281,7 +281,7 @@ func (b *BaseControll) DoAdd(c *gin.Context, data interface{}) {
 func (b *BaseControll) DoUpdate(c *gin.Context, data interface{}) {
 	id := c.Param("id")
 	if id == "" {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	row := DB.Table(b.model().TableName()).Where(map[string]interface{}{
@@ -289,11 +289,11 @@ func (b *BaseControll) DoUpdate(c *gin.Context, data interface{}) {
 	}).Updates(data)
 
 	if row.Error != nil {
-		panic(row.Error)
+		utils.Error(row.Error)
 	}
 
 	if row.RowsAffected <= 0 {
-		panic("没有更改")
+		utils.Error("没有更改")
 	}
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("更新成功", nil))
@@ -309,7 +309,7 @@ func (b *BaseControll) Count(c *gin.Context) {
 	start := c.Query("start")
 	end := c.Query("end")
 	if start == "" {
-		panic("请选择查询开始时间")
+		utils.Error("请选择查询开始时间")
 	}
 	//type: year,month,week,day
 	queryType := c.Query("type")
@@ -328,7 +328,7 @@ func (b *BaseControll) Count(c *gin.Context) {
 	}
 
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 
 	row = row.Where("`created_at` BETWEEN ? AND ?", startTime, endTime)
@@ -382,7 +382,7 @@ func (b *BaseControll) Count(c *gin.Context) {
 	}
 
 	if row.Error != nil {
-		panic(row.Error)
+		utils.Error(row.Error)
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("", map[string]interface{}{
 		"total": &n,

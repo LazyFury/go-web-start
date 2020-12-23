@@ -5,6 +5,8 @@ import (
 	"crypto/cipher"
 	"encoding/hex"
 	"fmt"
+
+	"github.com/Treblex/go-echo-demo/server/utils"
 )
 
 var (
@@ -29,7 +31,7 @@ func AesDecryptCFB(str string) (decrypted string) {
 	block, _ := aes.NewCipher([]byte(key))
 	encrypted, _ := hex.DecodeString(str)
 	if len(encrypted) < aes.BlockSize {
-		panic("ciphertext too short")
+		utils.Error("ciphertext too short")
 	}
 
 	stream := cipher.NewCFBDecrypter(block, iv)

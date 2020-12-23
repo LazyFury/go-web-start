@@ -80,12 +80,12 @@ func (cate *GoodCate) Add(c *gin.Context) {
 	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	_cate.Name = strings.Trim(_cate.Name, " ")
 	if _cate.Name == "" {
-		panic("分类名称不可空")
+		utils.Error("分类名称不可空")
 	}
 
 	_cate.Level = 1 //禁止手动设置level
@@ -96,18 +96,18 @@ func (cate *GoodCate) Add(c *gin.Context) {
 		row := db.First(cateParent)
 		// fmt.Println(empty)
 		if row.Error != nil {
-			panic("上级分类不存在")
+			utils.Error("上级分类不存在")
 		}
 		_cate.Level = cateParent.Level + 1
 	}
 	// 限制层级
 	if _cate.Level > 3 {
-		panic("最多3级分类，不可添加子分类")
+		utils.Error("最多3级分类，不可添加子分类")
 	}
 
 	// 禁止同名
 	if repeat := db.Where(&GoodCate{Name: _cate.Name}).Find(&GoodCate{}).Error == nil; repeat {
-		panic("已存在相同分类")
+		utils.Error("已存在相同分类")
 	}
 
 	cate.BaseControll.DoAdd(c, _cate)
@@ -118,7 +118,7 @@ func (cate *GoodCate) Update(c *gin.Context) {
 	_cate := &GoodCate{}
 
 	if err := c.Bind(_cate); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	_cate.ParentID = 0
@@ -132,14 +132,14 @@ func (cate *GoodCate) Delete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	if hasGoods := db.Model(cate.Pointer()).Where(map[string]interface{}{"cid": id}).First(cate.Pointer()).RowsAffected; hasGoods > 0 {
-		panic("分类下有商品，无法删除")
+		utils.Error("分类下有商品，无法删除")
 	}
 	if hasCates := db.Model(cate.Pointer()).Where(map[string]interface{}{"parent_id": id}).First(cate.Pointer()).RowsAffected; hasCates > 0 {
-		panic("分类下有其他分类，无法删除")
+		utils.Error("分类下有其他分类，无法删除")
 	}
 
 	cate.BaseControll.Delete(c)

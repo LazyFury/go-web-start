@@ -31,24 +31,24 @@ func doLogin(c *gin.Context) {
 	}{}
 
 	if err := c.Bind(u); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	u.UserName = strings.Trim(u.UserName, " ")
 	if u.UserName == "" {
-		panic("用户昵称不可空")
+		utils.Error("用户昵称不可空")
 	}
 
 	u.Password = strings.Trim(u.Password, " ")
 	if u.Password == "" {
-		panic("用户密码不可空")
+		utils.Error("用户密码不可空")
 	}
 
 	user := model.User{Name: u.UserName}
 
 	err := user.HasUser()
 	if err != nil {
-		panic("用户不存在")
+		utils.Error("用户不存在")
 	}
 	password := sha.EnCode(u.Password)
 	if user.Password == password {
@@ -59,7 +59,7 @@ func doLogin(c *gin.Context) {
 		))
 		return
 	}
-	panic("密码错误")
+	utils.Error("密码错误")
 }
 
 func initAdmin(c *gin.Context) {
@@ -67,12 +67,12 @@ func initAdmin(c *gin.Context) {
 	ip := c.ClientIP()
 	ip = strings.Split(ip, ":")[0]
 	if ip != "127.0.0.1" {
-		panic(ip)
+		utils.Error(ip)
 	}
 
 	secret := c.Query("secret")
 	if secret != "fqEeEPlgFECywkwqVMoCEmBzmRmFPZwt" {
-		panic("密钥错误")
+		utils.Error("密钥错误")
 	}
 	db := model.DB
 
@@ -91,7 +91,7 @@ func initAdmin(c *gin.Context) {
 	}
 
 	if err := db.Save(admin).Error; err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 	admin.Password = sha.AesDecryptCFB(admin.Password)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", admin))

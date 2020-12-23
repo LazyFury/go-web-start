@@ -67,15 +67,15 @@ func (u *User) Add(c *gin.Context) {
 	user := &User{}
 
 	if err := c.Bind(user); err != nil {
-		panic(utils.JSONError("参数错误", err))
+		utils.Error(utils.JSONError("参数错误", err))
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Name == "" {
-		panic(utils.JSONError("用户名不可空", nil))
+		utils.Error(utils.JSONError("用户名不可空", nil))
 	}
 	if user.Password == "" {
-		panic(utils.JSONError("用户密码不可空", nil))
+		utils.Error(utils.JSONError("用户密码不可空", nil))
 	}
 
 	user.Password = sha.EnCode(user.Password)
@@ -102,13 +102,13 @@ func (u *User) Update(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(user); err != nil {
-		panic(utils.JSONError("参数错误", err))
+		utils.Error(utils.JSONError("参数错误", err))
 	}
 
 	_u := &User{BaseControll: BaseControll{ID: uint(user.ID)}}
 	err := _u.HasUser()
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
@@ -139,17 +139,17 @@ func (u *User) Frozen(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(&user); err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 
 	db := DB
 	row := db.Model(&User{BaseControll: BaseControll{ID: user.ID}}).Update("status", user.Status)
 	if row.Error != nil {
-		panic("操作失败")
+		utils.Error("操作失败")
 	}
 
 	if user.Status == 0 {
-		panic("冻结用户")
+		utils.Error("冻结用户")
 	}
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("解冻用户", nil))
@@ -185,7 +185,7 @@ func (u *User) RepeatOfName(c *gin.Context) {
 	user.Name = name
 	err := user.HasUser()
 	if err != nil {
-		panic("没有重复")
+		utils.Error("没有重复")
 	}
 	c.JSON(http.StatusOK, utils.JSON(utils.RepeatUserName, "", nil))
 }

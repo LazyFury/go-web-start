@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
@@ -25,7 +26,7 @@ func WsServer(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		fmt.Print("upgrade:", err)
-		panic(err)
+		utils.Error(err)
 	}
 	defer ws.Close()
 

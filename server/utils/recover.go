@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"regexp"
+	"runtime"
 
 	"gorm.io/gorm"
 
@@ -20,7 +21,13 @@ var DuplicateEntryKey, _ = regexp.Compile(
 	`Duplicate entry '(.*)' for key '(.*)\.(.*)'`,
 )
 
-// Recover 使用defer调用阻止panic中止程序
+// Error Error
+func Error(err interface{}) {
+	log.Println(runtime.Caller(1))
+	panic(err)
+}
+
+// Recover 使用defer调用阻止utils.Error中止程序
 func Recover(c *gin.Context) {
 	if r := recover(); r != nil {
 		result := JSON(http.StatusInternalServerError, "", nil)

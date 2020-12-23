@@ -31,11 +31,11 @@ var _ xmodel.Controller = &ArticlesTag{}
 // Validator Validator
 func (a *ArticlesTag) Validator() error {
 	if a.CateID == 0 {
-		panic("请选择分类")
+		utils.Error("请选择分类")
 	}
 	a.Val = strings.Trim(a.Val, " ")
 	if a.Val == "" {
-		panic("请输入标签名称")
+		utils.Error("请输入标签名称")
 	}
 	return nil
 }

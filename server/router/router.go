@@ -5,6 +5,7 @@ import (
 
 	"github.com/Treblex/go-echo-demo/server/config"
 	"github.com/Treblex/go-echo-demo/server/router/api"
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,11 +27,11 @@ func Start(e *gin.Engine) {
 	index.GET("/sendMail", func(c *gin.Context) {
 		email := c.Query("email")
 		if email == "" {
-			panic("发送邮箱不可空")
+			utils.Error("发送邮箱不可空")
 		}
 		err := config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
-			panic("发送失败")
+			utils.Error("发送失败")
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "发送成功"})
 	})

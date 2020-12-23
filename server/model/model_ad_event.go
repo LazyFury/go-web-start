@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
 )
@@ -21,17 +22,17 @@ func (a *AdEvent) Validator() error {
 
 	a.Event = strings.Trim(a.Event, " ")
 	if a.Event == "" {
-		panic("event定义不可空")
+		utils.Error("event定义不可空")
 	}
 
 	if match, _ := regexp.MatchString("^[A-Za-z]+$", a.Event); !match {
-		panic("仅支持英文字符串")
+		utils.Error("仅支持英文字符串")
 	}
 
 	if DB.GetObjectOrNotFound(&AdEvent{}, map[string]interface{}{
 		"event": a.Event,
 	}) != nil {
-		panic("不可添加,已存在相同的事件")
+		utils.Error("不可添加,已存在相同的事件")
 	}
 
 	return nil

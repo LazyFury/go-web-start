@@ -45,11 +45,11 @@ func (a *Ad) Result(data interface{}) interface{} {
 func (a *Ad) Validator() error {
 	a.Title = strings.Trim(a.Title, " ")
 	if a.Title == "" {
-		panic("广告位标题不可空")
+		utils.Error("广告位标题不可空")
 	}
 
 	if a.EventID == 0 {
-		panic("请选择广告位事件")
+		utils.Error("请选择广告位事件")
 	}
 
 	if a.EventID > 0 {
@@ -57,19 +57,19 @@ func (a *Ad) Validator() error {
 		if err := DB.GetObjectOrNotFound(event, map[string]interface{}{
 			"id": a.EventID,
 		}); err != nil {
-			panic("事件不存在")
+			utils.Error("事件不存在")
 		}
 	}
 
 	if a.GroupID == 0 {
-		panic("请选择广告位分组")
+		utils.Error("请选择广告位分组")
 	}
 
 	adGourp := &AdGroup{}
 	if err := DB.GetObjectOrNotFound(adGourp, map[string]interface{}{
 		"id": a.GroupID,
 	}); err != nil {
-		panic("分组不存在")
+		utils.Error("分组不存在")
 	}
 	return nil
 }
@@ -105,7 +105,7 @@ func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
 func (a *Ad) List(c *gin.Context) {
 	groupID := c.Query("group_id")
 	if groupID == "" {
-		panic("请选择分组")
+		utils.Error("请选择分组")
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(map[string]interface{}{
 		"group_id": groupID,

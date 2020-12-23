@@ -27,21 +27,21 @@ func Init(g *gin.RouterGroup) {
 	apiV1.POST("/upload", func(c *gin.Context) {
 		url, err := aliUploader.Default(c.Request)
 		if err != nil {
-			panic(err)
+			utils.Error(err)
 		}
 		c.JSON(http.StatusOK, utils.JSONSuccess("", url))
 	})
 	apiV1.POST("/upload-img", func(c *gin.Context) {
 		url, err := aliUploader.OnlyAcceptsExt(c.Request, upload.AcceptsImgExt, "image")
 		if err != nil {
-			panic(err)
+			utils.Error(err)
 		}
 		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
 	})
 	apiV1.POST("/upload-head-pic", func(c *gin.Context) {
 		url, err := aliUploader.Custom(c.Request, upload.AcceptsImgExt, "head_pic")
 		if err != nil {
-			panic(err)
+			utils.Error(err)
 		}
 		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
 	})

@@ -31,7 +31,7 @@ type selectAdGroup struct {
 func (a *AdGroup) Validator() error {
 	a.Name = strings.Trim(a.Name, " ")
 	if a.Name == "" {
-		panic("分组标题不可空")
+		utils.Error("分组标题不可空")
 	}
 	return nil
 }
@@ -88,14 +88,14 @@ func (a *AdGroup) List(c *gin.Context) {
 //	db := DB
 //	id := c.Param("id")
 //	if id == "" {
-//		panic("参数错误")
+//		utils.Error("参数错误")
 //	}
 //
 //	group := &AdGroup{}
 //	if db.Model(group).Where(map[string]interface{}{
 //		"id": id,
 //	}).First(group).Error != nil {
-//		panic("广告位不存在")
+//		utils.Error("广告位不存在")
 //	}
 //
 //	ad := &Ad{}
@@ -127,18 +127,18 @@ func (a *AdGroup) Add(c *gin.Context) {
 	adGroup := &AdGroup{}
 
 	if err := c.Bind(adGroup); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	adGroup.Name = strings.Trim(adGroup.Name, " ")
 	if adGroup.Name == "" {
-		panic("分组标题不可空")
+		utils.Error("分组标题不可空")
 	}
 
 	if a.BaseControll.HasOne(map[string]interface{}{
 		"name": adGroup.Name,
 	}) {
-		panic("已存在相同的分类")
+		utils.Error("已存在相同的分类")
 	}
 
 	adGroup.Empty()
@@ -150,7 +150,7 @@ func (a *AdGroup) Update(c *gin.Context) {
 	adGroup := &AdGroup{}
 
 	if err := c.Bind(adGroup); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	ad := &Ad{GroupID: adGroup.ID}

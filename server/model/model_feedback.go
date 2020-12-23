@@ -3,6 +3,7 @@ package model
 import (
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-web-template/xmodel"
 )
 
@@ -16,10 +17,10 @@ type Feedback struct {
 // Validator Validator
 func (f *Feedback) Validator() error {
 	if strings.Trim(f.Reason, " ") == "" {
-		panic("请选择反馈原因")
+		utils.Error("请选择反馈原因")
 	}
 	if strings.Trim(f.Content, " ") == "" {
-		panic("请填写反馈描述")
+		utils.Error("请填写反馈描述")
 	}
 	return nil
 }

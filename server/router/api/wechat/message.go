@@ -75,7 +75,7 @@ func handleWechatMessage(c *gin.Context) {
 	b, err := ioutil.ReadAll(c.Request.Body)
 	if err = xml.Unmarshal(b, &data); err != nil {
 		log.Printf("%+v\n", err)
-		panic(err)
+		utils.Error(err)
 	}
 	log.Println(data)
 	result := messageXML{FromUserName: data.ToUserName, ToUserName: data.FromUserName, MsgType: "text", Content: "你好", CreateTime: time.Now().Unix()}
@@ -97,7 +97,7 @@ func sendTemplateMsgHandler(c *gin.Context) {
 		}}
 	data, err := sendTemplateMsg(post)
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("发送成功", data))
 }

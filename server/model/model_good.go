@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-echo-demo/server/utils/customtype"
 	"github.com/gin-gonic/gin"
 
@@ -71,20 +72,20 @@ func (g *Goods) Add(c *gin.Context) {
 	good := &Goods{}
 
 	if err := c.Bind(good); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	if good.Cid == 0 {
-		panic("请选择商品分类")
+		utils.Error("请选择商品分类")
 	}
 	good.Title = strings.Trim(good.Title, " ")
 	if good.Title == "" {
-		panic("商品标题不可空")
+		utils.Error("商品标题不可空")
 	}
 
 	var zeroMoney customtype.Money
 	if good.Price == zeroMoney {
-		panic("请填写商品价格")
+		utils.Error("请填写商品价格")
 	}
 
 	good.Empty()
@@ -96,7 +97,7 @@ func (g *Goods) Update(c *gin.Context) {
 	good := &Goods{}
 
 	if err := c.Bind(good); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	good.Empty()

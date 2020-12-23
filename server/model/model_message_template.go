@@ -3,6 +3,7 @@ package model
 import (
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-web-template/xmodel"
 )
 
@@ -16,11 +17,11 @@ type MessageTemplate struct {
 // Validator Validator
 func (m MessageTemplate) Validator() error {
 	if strings.Trim(m.Template, " ") == "" {
-		panic("模版内容不可空")
+		utils.Error("模版内容不可空")
 	}
 	m.Name = strings.Trim(m.Name, " ")
 	if m.Name == "" {
-		panic("模版名称不可空")
+		utils.Error("模版名称不可空")
 	}
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/Treblex/go-echo-demo/server/utils"
 	"github.com/Treblex/go-web-template/xmodel"
 	"gorm.io/gorm"
 )
@@ -28,7 +29,7 @@ var _ xmodel.Controller = &ArticlesCate{}
 func (a *ArticlesCate) Validator() error {
 	a.Name = strings.Trim(a.Name, " ")
 	if a.Name == "" {
-		panic("分类名称不可空")
+		utils.Error("分类名称不可空")
 	}
 	return nil
 }

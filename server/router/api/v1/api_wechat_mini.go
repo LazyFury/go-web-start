@@ -51,12 +51,12 @@ func sendMsg(c *gin.Context) {
 
 	var user = model.User{BaseControll: model.BaseControll{ID: auth.ID}}
 	if notfoundUser := db.Model(&user).Find(&user).Error != nil; notfoundUser {
-		panic("没找到用户")
+		utils.Error("没找到用户")
 	}
 
 	var miniUser = model.WechatMiniUser{UID: user.ID}
 	if notfoundUser := db.Model(&miniUser).Find(&miniUser).Error != nil; notfoundUser {
-		panic("没找到用户")
+		utils.Error("没找到用户")
 	}
 
 	err := mini.SendSubscribeMessage(miniUser.OpenID, "LEe5SuSVcBC2wei1XW9QwouVZ79T5p3DK-8QfA3ecxM", "https://wechat.com", map[string]interface{}{
@@ -77,7 +77,7 @@ func sendMsg(c *gin.Context) {
 		},
 	})
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("", nil))
 }
@@ -85,7 +85,7 @@ func sendMsg(c *gin.Context) {
 func easyLogin(c *gin.Context) {
 	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		panic("请输入js_code")
+		utils.Error("请输入js_code")
 	}
 
 	// 请求微信服务器
@@ -93,18 +93,18 @@ func easyLogin(c *gin.Context) {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		panic("获取失败")
+		utils.Error("获取失败")
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		panic("获取微信返回内容失败")
+		utils.Error("获取微信返回内容失败")
 	}
 	// 获取session失败
 	if m.ErrCode != 0 {
-		panic(utils.JSONError("", m))
+		utils.Error(utils.JSONError("", m))
 	}
 
 	db := model.DB
@@ -129,14 +129,14 @@ func easyLogin(c *gin.Context) {
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 
 	if err := db.Table(user.TableName()).Create(&user).Error; err != nil {
-		panic("创建用户失败")
+		utils.Error("创建用户失败")
 	}
 
 	wechatUser.SessionKey = m.SessionKey
 	wechatUser.UID = user.ID
 	wechatUser.Unionid = m.Unionid
 	if err := db.Table(wechatUser.TableName()).Create(&wechatUser).Error; err != nil {
-		panic("创建微信小程序用户失败")
+		utils.Error("创建微信小程序用户失败")
 	}
 
 	getJWT(c, user)
@@ -151,17 +151,17 @@ func getJWT(c *gin.Context, user *model.User) {
 func wechatMiniLogin(c *gin.Context) {
 	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		panic("请输入js_code")
+		utils.Error("请输入js_code")
 	}
 
 	var param wechatLoginParams
 
 	if err := c.Bind(&param); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	if param.EncryptedData == "" || param.Iv == "" {
-		panic("请传入用户信息")
+		utils.Error("请传入用户信息")
 	}
 
 	// 请求微信服务器
@@ -169,23 +169,23 @@ func wechatMiniLogin(c *gin.Context) {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		panic(utils.JSONError("获取微信返回内容失败", err))
+		utils.Error(utils.JSONError("获取微信返回内容失败", err))
 	}
 
 	// 获取session失败
 	if m.ErrCode != 0 {
-		panic(utils.JSONError(m.ErrMsg, m))
+		utils.Error(utils.JSONError(m.ErrMsg, m))
 	}
 
 	if m.SessionKey == "" {
-		panic("获取session_key失败")
+		utils.Error("获取session_key失败")
 	}
 
 	// baseDecode
@@ -199,7 +199,7 @@ func wechatMiniLogin(c *gin.Context) {
 	var info map[string]interface{}
 
 	if err := json.Unmarshal(result, &info); err != nil {
-		panic("解码用户信息失败")
+		utils.Error("解码用户信息失败")
 	}
 
 	c.JSON(http.StatusOK, utils.JSONSuccess("", info))

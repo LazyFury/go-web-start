@@ -35,20 +35,20 @@ func Init(g *gin.RouterGroup) {
 func login(c *gin.Context) {
 	code := c.Query("code")
 	if code == "" {
-		panic("code不可空")
+		utils.Error("code不可空")
 	}
 
 	// 请求微信登陆返回信息
 	WeChatLogin, err := mp.GetUserInfo(code)
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 	// 更新过期时间
 	WeChatLogin.ExpiresIn += time.Now().Unix()
 	// 查询微信用户数据库表
 	WeChatUser, err := wechatDoLogin(&model.WechatOauth{UserInfo: *WeChatLogin})
 	if err != nil {
-		panic(utils.JSONError(err.Error(), WeChatUser))
+		utils.Error(utils.JSONError(err.Error(), WeChatUser))
 	}
 	// 如果uid存在则查询用户 返回用户信息 生产jwt token
 	// TODO: ...
@@ -65,27 +65,27 @@ func login(c *gin.Context) {
 func userInfo(c *gin.Context) {
 	wechatID := c.Query("id")
 	if wechatID == "" {
-		panic("用户id不可空")
+		utils.Error("用户id不可空")
 	}
 	newID, err := strconv.Atoi(wechatID)
 	if err != nil {
-		panic(err)
+		utils.Error(err)
 	}
 	if newID < 1 {
-		panic("用户id不可为空")
+		utils.Error("用户id不可为空")
 	}
 	user := &model.WechatOauth{BaseControll: model.BaseControll{ID: uint(newID)}}
 
 	db := model.DB
 	if db.Where(user).Find(user).Error != nil {
-		panic("未找到用户")
+		utils.Error("未找到用户")
 	}
 	// token := user.AccessToken
 	fmt.Println(time.Now().Unix())
 	if user.CreatedAt.Unix()-time.Now().Unix() > 3600*24*10 || user.Nickname == "" || user.Headimgurl == "" {
 		info, err := updateWechatInfo(user, false)
 		if err != nil {
-			panic(err)
+			utils.Error(err)
 		}
 
 		db.Model(&user).Updates(&info)
@@ -115,13 +115,13 @@ func wechatRedirect(c *gin.Context) {
 func jsAPIConfig(c *gin.Context) {
 	urlStr := c.Query("url")
 	if urlStr == "" {
-		panic("url不可空")
+		utils.Error("url不可空")
 	}
 	urlStr, _ = url.QueryUnescape(urlStr)
 
 	conf, err := mp.JsAPIConfig(urlStr)
 	if err != nil {
-		panic("配置错误")
+		utils.Error("配置错误")
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("请求成功", conf))
 }

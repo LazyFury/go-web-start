@@ -109,12 +109,12 @@ func (a *ArticlesRec) Add(c *gin.Context) {
 	rec := &ArticlesRec{}
 
 	if err := c.Bind(rec); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	rec.Name = strings.Trim(rec.Name, " ")
 	if rec.Name == "" {
-		panic("名称不可空")
+		utils.Error("名称不可空")
 	}
 
 	rec.Empty()
@@ -126,7 +126,7 @@ func (a *ArticlesRec) Update(c *gin.Context) {
 	rec := &ArticlesRec{}
 
 	if err := c.Bind(rec); err != nil {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 
 	// 为0 清空选择的文章，不为0时需要验证文章可用性
@@ -141,11 +141,11 @@ func (a *ArticlesRec) Update(c *gin.Context) {
 			articles := []Articles{}
 			row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
 			if row.Error != nil {
-				panic(row.Error)
+				utils.Error(row.Error)
 			}
 
 			if len(articles) <= 0 {
-				panic("选择了无效的文章")
+				utils.Error("选择了无效的文章")
 			}
 			ids = []string{}
 			for _, id := range articles {
@@ -165,11 +165,11 @@ func (a *ArticlesRec) Delete(c *gin.Context) {
 	db := DB
 	id := c.Param("id")
 	if id == "" {
-		panic("参数错误")
+		utils.Error("参数错误")
 	}
 	article := &Articles{}
 	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
-		panic("该推荐位下还有文章，不能删除")
+		utils.Error("该推荐位下还有文章，不能删除")
 	}
 	a.BaseControll.Delete(c)
 }

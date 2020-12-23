@@ -8,13 +8,15 @@ import (
 // GetUserOrLogin GetUser
 func GetUserOrLogin(c *gin.Context) *User {
 	_user, exists := c.Get("user")
-	if exists {
-		user, ok := _user.(*User)
-		if ok {
-			return user
-		}
+	_panic := func() { utils.Error(utils.JSON(utils.AuthedError, "请先登录", nil)) }
+	if !exists {
+		_panic()
 	}
-	panic(utils.JSON(utils.AuthedError, "请先登录", nil))
+	user, ok := _user.(*User)
+	if !ok {
+		_panic()
+	}
+	return user
 }
 
 // GetUserOrEmpty GetUser

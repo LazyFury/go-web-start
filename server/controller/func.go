@@ -10,9 +10,14 @@ import (
 
 // auth 还没想好参数需要什么，晚点儿写
 func auth(userIDField string, someconfig ...string) controller.Auth {
-	return func(c *gin.Context) xmodel.Middleware {
+	return func(c *gin.Context, must bool) xmodel.Middleware {
 		return func(db *gorm.DB) *gorm.DB {
-			user := model.GetUserOrEmpty(c)
+			var user *model.User
+			if must {
+				user = model.GetUserOrLogin(c)
+			} else {
+				user = model.GetUserOrEmpty(c)
+			}
 			db = db.Where(map[string]interface{}{
 				userIDField: user.ID,
 			})
