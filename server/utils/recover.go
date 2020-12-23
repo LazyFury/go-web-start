@@ -13,7 +13,7 @@ import (
 )
 
 func logError(err interface{}) {
-	log.Printf("\n\n\x1b[31m[Custom Debug Result]: %v \x1b[0m\n\n", err)
+	log.Printf("\n\x1b[31m[Custom Debug Result]: %v \x1b[0m\n\n", err)
 }
 
 // DuplicateEntryKey DuplicateEntryKey
@@ -27,7 +27,7 @@ func Error(err interface{}) {
 	panic(err)
 }
 
-// Recover 使用defer调用阻止utils.Error中止程序
+// Recover 使用defer调用阻止panic中止程序
 func Recover(c *gin.Context) {
 	if r := recover(); r != nil {
 		result := JSON(http.StatusInternalServerError, "", nil)

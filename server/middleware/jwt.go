@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/simple-daily/models"
-	"github.com/Treblex/simple-daily/utils"
+	"github.com/Treblex/go-echo-demo/server/utils"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
@@ -110,7 +110,7 @@ func secret() jwt.Keyfunc {
 }
 
 //ParseToken 解密token
-func parseToken(tokens string) (user *models.UserModel, err error) {
+func parseToken(tokens string) (user *model.User, err error) {
 	token, err := jwt.Parse(tokens, secret())
 	if err != nil {
 		err = errors.New("解析token出错")
@@ -126,12 +126,12 @@ func parseToken(tokens string) (user *models.UserModel, err error) {
 		err = errors.New("token is invalid")
 		return
 	}
-	user = &models.UserModel{}
+	user = &model.User{}
 	user.ID = uint(claim["id"].(float64)) // uint64(claim["id"].(float64))
-	user.Nick = claim["nick"].(string)
-	user.HeadPic = claim["headPic"].(string)
+	user.Name = claim["nick"].(string)
+	// user.HeadPic = claim["headPic"].(string)
 
 	exp := int64(claim["exp"].(float64))
-	fmt.Println(user.Nick, "过期时间=====", time.Unix(exp, 0).Format("2001-01-02 15:04:05"))
+	fmt.Println(user.Name, "过期时间=====", time.Unix(exp, 0).Format("2001-01-02 15:04:05"))
 	return
 }
