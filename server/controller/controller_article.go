@@ -14,6 +14,7 @@ func NewArticleController() *ArticleController {
 		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.Articles{},
+			Auth:  defaultAuth(),
 		},
 	}
 }
@@ -51,6 +52,7 @@ func NewArticleRecController() *ArticleRecController {
 		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesRec{},
+			Auth:  defaultAuth(),
 		},
 	}
 }
@@ -97,6 +99,7 @@ func NewArticleCategoryController() *ArticleCategoryController {
 		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesCate{},
+			Auth:  defaultAuth(),
 		},
 	}
 }

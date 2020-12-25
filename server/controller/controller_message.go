@@ -10,7 +10,7 @@ func NewMessageController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.Message{},
-		Auth:  auth("to_user"),
+		Auth:  authWithFilter("to_user"),
 	}
 }
 
@@ -19,5 +19,6 @@ func NewMessageTemplateController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.MessageTemplate{},
+		Auth:  defaultAuth(),
 	}
 }

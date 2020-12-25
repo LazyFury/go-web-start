@@ -10,5 +10,6 @@ func NewFeedbackController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.Feedback{},
+		Auth:  defaultAuth(),
 	}
 }

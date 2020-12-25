@@ -10,6 +10,7 @@ func NewAdController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.Ad{},
+		Auth:  defaultAuth(),
 	}
 }
 
@@ -18,6 +19,7 @@ func NewAdGroupController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.AdGroup{},
+		Auth:  defaultAuth(),
 	}
 }
 
@@ -26,5 +28,6 @@ func NewAdEventController() *controller.Controller {
 	return &controller.Controller{
 		DB:    model.DB,
 		Model: &model.AdEvent{},
+		Auth:  defaultAuth(),
 	}
 }

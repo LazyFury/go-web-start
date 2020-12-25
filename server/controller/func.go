@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/Treblex/go-web-start/server/model"
 	"github.com/Treblex/go-web-template/controller"
 	"github.com/Treblex/go-web-template/xmodel"
@@ -9,7 +11,7 @@ import (
 )
 
 // auth 还没想好参数需要什么，晚点儿写
-func auth(userIDField string, someconfig ...string) controller.Auth {
+func authWithFilter(userIDField string, someconfig ...string) controller.Auth {
 	return func(c *gin.Context, must bool) xmodel.Middleware {
 		return func(db *gorm.DB) *gorm.DB {
 			var user *model.User
@@ -26,6 +28,18 @@ func auth(userIDField string, someconfig ...string) controller.Auth {
 	}
 }
 
+func justAuth() controller.Auth {
+	return func(c *gin.Context, must bool) xmodel.Middleware {
+		return func(db *gorm.DB) *gorm.DB {
+			//公开的接口，列表和详情不需要验证
+			if c.Request.Method != http.MethodGet {
+				model.GetUserOrLogin(c)
+			}
+			return db
+		}
+	}
+}
+
 func defaultAuth() controller.Auth {
-	return auth("user_id")
+	return justAuth()
 }
