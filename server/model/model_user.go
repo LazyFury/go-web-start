@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
-	"github.com/Treblex/go-echo-demo/server/utils/customtype"
-	"github.com/Treblex/go-echo-demo/server/utils/sha"
+	"github.com/Treblex/go-web-start/server/utils"
+	"github.com/Treblex/go-web-start/server/utils/customtype"
+	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools/wechat"
 	"github.com/gin-gonic/gin"
 )

@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/Treblex/go-echo-demo/server/app"
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-web-start/server/app"
+	"github.com/Treblex/go-web-start/server/config"
+	"github.com/Treblex/go-web-start/server/model"
 )
 
 func main() {

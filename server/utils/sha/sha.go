@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-start/server/utils"
 )
 
 var (

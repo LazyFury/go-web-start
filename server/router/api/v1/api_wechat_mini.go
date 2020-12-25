@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/middleware"
-	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/utils"
-	"github.com/Treblex/go-echo-demo/server/utils/customtype"
-	"github.com/Treblex/go-echo-demo/server/utils/sha"
+	"github.com/Treblex/go-web-start/server/config"
+	"github.com/Treblex/go-web-start/server/middleware"
+	"github.com/Treblex/go-web-start/server/model"
+	"github.com/Treblex/go-web-start/server/utils"
+	"github.com/Treblex/go-web-start/server/utils/customtype"
+	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-gonic/gin"
 )

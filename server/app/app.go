@@ -3,8 +3,8 @@ package app
 import (
 	"net/http"
 
-	"github.com/Treblex/go-echo-demo/server/router"
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-start/server/router"
+	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"

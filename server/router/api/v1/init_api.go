@@ -3,13 +3,13 @@ package api
 import (
 	"net/http"
 
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/controller"
-	"github.com/Treblex/go-echo-demo/server/router/api/wechat"
-	"github.com/Treblex/go-echo-demo/server/router/api/ws"
+	"github.com/Treblex/go-web-start/server/config"
+	"github.com/Treblex/go-web-start/server/controller"
+	"github.com/Treblex/go-web-start/server/router/api/wechat"
+	"github.com/Treblex/go-web-start/server/router/api/ws"
 	"github.com/Treblex/go-web-template/tools/upload"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
 )
 

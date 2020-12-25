@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-start/server/utils/customtype"
 	"github.com/Treblex/go-web-template/xmodel"
 
 	"gorm.io/gorm"

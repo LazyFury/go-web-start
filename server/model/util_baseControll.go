@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
-	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-start/server/utils"
+	"github.com/Treblex/go-web-start/server/utils/customtype"
 	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"

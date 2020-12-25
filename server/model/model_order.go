@@ -1,6 +1,6 @@
 package model
 
-import "github.com/Treblex/go-echo-demo/server/utils/customtype"
+import "github.com/Treblex/go-web-start/server/utils/customtype"
 
 // Order 订单
 type Order struct {

@@ -3,7 +3,7 @@ package v2
 import (
 	"net/http"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
 )
 

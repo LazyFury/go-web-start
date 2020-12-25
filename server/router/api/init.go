@@ -1,8 +1,8 @@
 package api
 
 import (
-	v1 "github.com/Treblex/go-echo-demo/server/router/api/v1"
-	v2 "github.com/Treblex/go-echo-demo/server/router/api/v2"
+	v1 "github.com/Treblex/go-web-start/server/router/api/v1"
+	v2 "github.com/Treblex/go-web-start/server/router/api/v2"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,7 +1,7 @@
 package ws
 
 import (
-	"github.com/Treblex/go-echo-demo/server/router/api/ws/chat"
+	"github.com/Treblex/go-web-start/server/router/api/ws/chat"
 	"github.com/gin-gonic/gin"
 )
 

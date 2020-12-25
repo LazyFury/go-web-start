@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/config"
-	"github.com/Treblex/go-echo-demo/server/utils/customtype"
+	"github.com/Treblex/go-web-start/server/config"
+	"github.com/Treblex/go-web-start/server/utils/customtype"
 	"github.com/Treblex/go-web-template/xmodel"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"

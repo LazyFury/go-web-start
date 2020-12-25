@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/Treblex/go-echo-demo/server/model"
+	"github.com/Treblex/go-web-start/server/model"
 	"github.com/Treblex/go-web-template/controller"
 	"github.com/Treblex/go-web-template/xmodel"
 	"github.com/gin-gonic/gin"

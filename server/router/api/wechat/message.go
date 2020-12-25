@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Treblex/go-echo-demo/server/utils"
+	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
 )
 

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Treblex/go-echo-demo/server/middleware"
-	"github.com/Treblex/go-echo-demo/server/model"
-	"github.com/Treblex/go-echo-demo/server/utils"
-	"github.com/Treblex/go-echo-demo/server/utils/sha"
+	"github.com/Treblex/go-web-start/server/middleware"
+	"github.com/Treblex/go-web-start/server/model"
+	"github.com/Treblex/go-web-start/server/utils"
+	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-gonic/gin"
 )
