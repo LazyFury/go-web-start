@@ -31,7 +31,7 @@ func (a *AdEvent) Validator() error {
 
 	if DB.GetObjectOrNotFound(&AdEvent{}, map[string]interface{}{
 		"event": a.Event,
-	}) != nil {
+	}) == nil {
 		utils.Error("不可添加,已存在相同的事件")
 	}
 
