@@ -46,7 +46,7 @@ func (a *AdEvent) Object() interface{} {
 // Objects Objects
 func (a *AdEvent) Objects() interface{} {
 	return &[]struct {
-		*AdEvent
+		AdEvent
 		// *EmptySystemFiled
 		Count int `json:"count" gorm:"->"`
 	}{}
