@@ -23,7 +23,7 @@ func handleErr(c *gin.Context, err string) {
 	return
 }
 
-// Auth 用户认证中间件
+// Auth 必须登录 后台接口
 var Auth gin.HandlerFunc = func(c *gin.Context) {
 	log.Printf("auth middleware")
 	token, err := getToken(c)
@@ -35,6 +35,19 @@ var Auth gin.HandlerFunc = func(c *gin.Context) {
 	if err != nil {
 		handleErr(c, "解析token错误")
 		return
+	}
+	c.Set("user", user)
+}
+
+// AuthOrNot 兼容前台接口 公开和用户的数据
+var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
+	token, err := getToken(c)
+	if err != nil || token == "" {
+		return
+	}
+	user, err := parseToken(token)
+	if err != nil {
+		panic("解析token失败")
 	}
 	c.Set("user", user)
 }
@@ -65,6 +78,11 @@ func getToken(c *gin.Context) (token string, err error) {
 
 	// header
 	token = req.Header.Get("token")
+	if token != "" {
+		return
+	}
+
+	token = req.Header.Get("Authorization")
 	if token != "" {
 		return
 	}

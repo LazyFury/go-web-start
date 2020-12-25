@@ -5,6 +5,8 @@ github.com/Treblex/go-web-template v1.0.2 h1:jrfK3Om0NkeZ98W4ivynnzqk9ZtbFh5yp3b
 github.com/Treblex/go-web-template v1.0.2/go.mod h1:OT/CCQmYxCuE7fUTVhI9KYlIUJLvFENJly8van7X1l8=
 github.com/Treblex/go-web-template v1.0.3 h1:E6taV8cmDQKnn48wF5epDopuD7iLalKnWpWPKBKAbw4=
 github.com/Treblex/go-web-template v1.0.3/go.mod h1:T4GdchEXOx8dfHyOEVpLQUpSzGiiuhwvnheWIOGXHqA=
+github.com/Treblex/go-web-template v1.0.4 h1:u/lsqRjCLpL+kk7/WLhni3G4tgN+Ryn5N/w1sLZsQwU=
+github.com/Treblex/go-web-template v1.0.4/go.mod h1:T4GdchEXOx8dfHyOEVpLQUpSzGiiuhwvnheWIOGXHqA=
 github.com/Treblex/simple-daily v0.0.0-20201124105944-7a33f07026d4/go.mod h1:+XCq+4xzSmvYIiqWKlNrrUB7EikeQ9jSnNW9cVdf6Lc=
 github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible h1:v5yDfjkRY/kOxu05gkh0/D/2wYxbTFCoTr3JqFI0FLE=
 github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible/go.mod h1:T/Aws4fEfogEE9v+HPhhw+CntffsBHJ8nXQCwKr0/g8=

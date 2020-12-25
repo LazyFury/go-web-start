@@ -5,6 +5,7 @@ import (
 
 	"github.com/Treblex/go-web-start/server/config"
 	"github.com/Treblex/go-web-start/server/controller"
+	"github.com/Treblex/go-web-start/server/middleware"
 	"github.com/Treblex/go-web-start/server/router/api/wechat"
 	"github.com/Treblex/go-web-start/server/router/api/ws"
 	"github.com/Treblex/go-web-template/tools/upload"
@@ -19,7 +20,7 @@ var aliUploader = upload.NewAliOssUploader(config.Global.AliOss)
 // Init  api Version 1.0 初始化
 func Init(g *gin.RouterGroup) {
 
-	apiV1 := g.Group("/v1")
+	apiV1 := g.Group("/v1", middleware.AuthOrNot)
 
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法

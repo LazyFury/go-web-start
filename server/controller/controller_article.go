@@ -149,6 +149,7 @@ func NewArticleTagController() *ArticleTagController {
 		Controller: &controller.Controller{
 			DB:    model.DB,
 			Model: &model.ArticlesTag{},
+			Auth:  defaultAuth(),
 		},
 	}
 }

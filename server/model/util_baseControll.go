@@ -86,7 +86,6 @@ func (b *BaseControll) SetUser(c *gin.Context) error {
 		return false
 	})
 	user := GetUserOrLogin(c)
-
 	if ref.CanSet() {
 		ref.SetUint(uint64(user.ID))
 	}
