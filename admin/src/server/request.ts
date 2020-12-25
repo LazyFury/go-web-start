@@ -54,8 +54,7 @@ function interceptorsResponse(res: any) {
 
 function handleErrCode(code: number, data: any) {
   switch (code) {
-    case -101:
-    case -102:
+    case -100:
       history.push('/login');
       break;
   }
