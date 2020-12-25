@@ -6,7 +6,7 @@ services:
       dockerfile: docker/Dockerfile
     restart: always
     ports:
-      - 1234:8080
+      - 1234:8970
     depends_on:
       - mysql
     links:

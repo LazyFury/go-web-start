@@ -3,6 +3,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/Treblex/go-echo-demo/server v0.0.0-20201216024905-8679e4d0afc5/go.mod h1:u+NJZrdXhKyuachHIuo1Jh6VcvDpEVUDRtMNacsxjl0=
 github.com/Treblex/go-web-template v1.0.2 h1:jrfK3Om0NkeZ98W4ivynnzqk9ZtbFh5yp3bB/ngXYzA=
 github.com/Treblex/go-web-template v1.0.2/go.mod h1:OT/CCQmYxCuE7fUTVhI9KYlIUJLvFENJly8van7X1l8=
+github.com/Treblex/go-web-template v1.0.3 h1:E6taV8cmDQKnn48wF5epDopuD7iLalKnWpWPKBKAbw4=
+github.com/Treblex/go-web-template v1.0.3/go.mod h1:T4GdchEXOx8dfHyOEVpLQUpSzGiiuhwvnheWIOGXHqA=
 github.com/Treblex/simple-daily v0.0.0-20201124105944-7a33f07026d4/go.mod h1:+XCq+4xzSmvYIiqWKlNrrUB7EikeQ9jSnNW9cVdf6Lc=
 github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible h1:v5yDfjkRY/kOxu05gkh0/D/2wYxbTFCoTr3JqFI0FLE=
 github.com/aliyun/aliyun-oss-go-sdk v2.1.5+incompatible/go.mod h1:T/Aws4fEfogEE9v+HPhhw+CntffsBHJ8nXQCwKr0/g8=
