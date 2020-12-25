@@ -8,7 +8,7 @@ export const users = {
 
 export const login = (data: any) => {
   return http.post('/login', data).then(res => {
-    window.localStorage.setItem('token', res.data);
+    window.localStorage.setItem('token', res.data.data);
     history.go(-1);
     return res;
   });
