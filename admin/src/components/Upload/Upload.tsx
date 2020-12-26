@@ -50,7 +50,7 @@ export const Uploader: React.FC<uploadProps> = ({
     name: 'file',
     action: config.baseURL + '/upload-img',
     headers: {
-      authorization: 'authorization-text',
+      Authorization: window.localStorage.getItem('token') || '',
     },
     multiple: multiple,
     onChange: handleChange,

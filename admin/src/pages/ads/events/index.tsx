@@ -1,6 +1,6 @@
 import List from '@/components/List';
 import PageMain from '@/components/PageMain';
-import useRequest from '@/hooks/useRequest';
+import { useDataList } from '@/hooks/useDataList';
 import { adEvents } from '@/server/api/ad';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Drawer, Modal, Space, Tooltip } from 'antd';
@@ -10,7 +10,10 @@ import { AddADEvent } from './components';
 let { confirm } = Modal;
 
 export default function AdEvents() {
-  let { data, load, loading } = useRequest(adEvents.list, true);
+  let { data, load, loading } = useDataList(
+    (page: number) => adEvents.list({ page }),
+    true,
+  );
 
   let [visible, setVisible] = useState(false);
   let defaultValues: { name: string; value: any }[] = [];
@@ -119,9 +122,9 @@ export default function AdEvents() {
           columns,
           bordered: true,
           rowKey: 'id',
-          dataSource: (data instanceof Array && data) || undefined,
+          dataSource: data.list || undefined,
           pagination: {
-            total: data.length,
+            total: data.total,
           },
         }}
       />

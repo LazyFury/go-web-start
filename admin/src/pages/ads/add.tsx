@@ -1,6 +1,5 @@
 import PageMain from '@/components/PageMain';
 import { Uploader } from '@/components/Upload/Upload';
-import { useDataList } from '@/hooks/useDataList';
 import useRequest from '@/hooks/useRequest';
 import { adEvents, adGroups, ads } from '@/server/api/ad';
 import { Button, Form, Input, Select, Space } from 'antd';
@@ -16,12 +15,12 @@ const layout: { labelCol: { span: number }; wrapperCol: { span: number } } = {
 
 const AddAd = (props: { id?: number; onsubmit: () => void }) => {
   let { data: events, load: loadEvent, loading: eventsLoading } = useRequest(
-    adEvents.list,
+    adEvents.all,
     true,
   );
 
-  let { data: groups, load: loadGroup, loading: groupLoading } = useDataList(
-    page => adGroups.list({ page }),
+  let { data: groups, load: loadGroup, loading: groupLoading } = useRequest(
+    adGroups.all,
     true,
   );
 

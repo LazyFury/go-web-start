@@ -12,4 +12,4 @@ require (
 	gorm.io/gorm v1.20.8
 )
 
-// replace github.com/Treblex/go-web-template => ../../go-web-template
+replace github.com/Treblex/go-web-template => ../../go-web-template
