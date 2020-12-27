@@ -76,7 +76,8 @@ func Recover(c *gin.Context) {
 		logError(fmt.Sprintf("URL:%s ;\nErr: %v", c.Request.URL.RequestURI(), result))
 
 		// "打断response继续写入内容"
-		c.AbortWithStatus(http.StatusInternalServerError)
+		// c.AbortWithStatus(http.StatusInternalServerError)
+		c.Abort()
 
 	}
 }

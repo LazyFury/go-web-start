@@ -47,7 +47,7 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 	}
 	user, err := parseToken(token)
 	if err != nil {
-		panic("解析token失败")
+		return
 	}
 	c.Set("user", user)
 }
