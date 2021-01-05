@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Treblex/go-web-start/server/config"
 	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools/wechat"
 	"github.com/gin-gonic/gin"
 )
@@ -57,11 +57,6 @@ func (u *User) TableName() string {
 	return TableName("users")
 }
 
-// Detail 用户信息
-func (u *User) Detail(c *gin.Context) {
-	u.BaseControll.GetDetail(c, "用户不存在")
-}
-
 // Add 添加
 func (u *User) Add(c *gin.Context) {
 	user := &User{}
@@ -78,7 +73,7 @@ func (u *User) Add(c *gin.Context) {
 		utils.Error(utils.JSONError("用户密码不可空", nil))
 	}
 
-	user.Password = sha.EnCode(user.Password)
+	user.Password = config.Global.Sha1.EnCode(user.Password)
 
 	req := c.Request
 	ua := req.UserAgent()
@@ -88,13 +83,6 @@ func (u *User) Add(c *gin.Context) {
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 	user.Status = 1
 
-	user.Empty()
-	u.BaseControll.DoAdd(c, user)
-}
-
-// RegController AddUser
-func (u *User) RegController(c *gin.Context) {
-	u.Add(c)
 }
 
 // Update 更新
@@ -113,11 +101,9 @@ func (u *User) Update(c *gin.Context) {
 
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Password != "" {
-		user.Password = sha.EnCode(user.Password)
+		user.Password = config.Global.Sha1.EnCode(user.Password)
 	}
 
-	user.Empty()
-	u.BaseControll.DoUpdate(c, user)
 }
 
 // DelUser 删除用户

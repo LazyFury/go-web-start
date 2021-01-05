@@ -14,7 +14,6 @@ import (
 	"github.com/Treblex/go-web-start/server/model"
 	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-gonic/gin"
 )
@@ -109,18 +108,18 @@ func easyLogin(c *gin.Context) {
 
 	db := model.DB
 	wechatUser := &model.WechatMiniUser{OpenID: m.OpenID}
-	wechatUser.BaseControll.Model = wechatUser
+	// wechatUser.BaseControll.Model = wechatUser
 	// 登陆
-	if hasOne := wechatUser.HasOne(wechatUser); hasOne {
-		user := &model.User{BaseControll: model.BaseControll{ID: wechatUser.UID}}
-		if err := db.Where(user).Find(user).Error; err == nil {
-			getJWT(c, user)
-			return
-		}
-	}
+	// if hasOne := wechatUser.HasOne(wechatUser); hasOne {
+	// 	user := &model.User{BaseControll: model.BaseControll{ID: wechatUser.UID}}
+	// 	if err := db.Where(user).Find(user).Error; err == nil {
+	// 		getJWT(c, user)
+	// 		return
+	// 	}
+	// }
 
 	// 注册
-	user := &model.User{Name: tools.RandStringBytes(6), Password: sha.EnCode(tools.RandStringBytes(16))}
+	user := &model.User{Name: tools.RandStringBytes(6), Password: config.Global.Sha1.EnCode(tools.RandStringBytes(16))}
 	req := c.Request
 	ua := req.UserAgent()
 	ip := c.ClientIP()

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 	"gorm.io/gorm"
 )
 
@@ -57,7 +57,7 @@ func (a *AdEvent) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ xmodel.Controller = &AdEvent{}
+var _ model.Controller = &AdEvent{}
 
 // TableName TableName
 func (a *AdEvent) TableName() string {

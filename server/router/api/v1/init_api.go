@@ -54,10 +54,10 @@ func Init(g *gin.RouterGroup) {
 	controller.NewArticleCategoryController().Install(apiV1, "/article-cates")
 	controller.NewArticleTagController().Install(apiV1, "/article-tags")
 	//商品
-	product(apiV1)
-	productCate(apiV1) //商品分类
+	// product(apiV1)
+	// productCate(apiV1) //商品分类
 	// 订单
-	order(apiV1)
+	// order(apiV1)
 	// banner 广告位
 	controller.NewAdController().Install(apiV1, "/ads")
 	controller.NewAdGroupController().Install(apiV1, "/ad-groups")

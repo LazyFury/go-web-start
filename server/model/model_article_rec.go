@@ -2,14 +2,10 @@ package model
 
 import (
 	"errors"
-	"fmt"
-	"net/http"
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
-	"github.com/gin-gonic/gin"
+	"github.com/Treblex/go-web-template/model"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +25,7 @@ type showArticleRec struct {
 	Count int        `json:"count" gorm:"-"`
 }
 
-var _ xmodel.Controller = &ArticlesRec{}
+var _ model.Controller = &ArticlesRec{}
 
 // Object Object
 func (a *ArticlesRec) Object() interface{} {
@@ -96,80 +92,4 @@ func (a *ArticlesRec) Result(data interface{}) interface{} {
 		return item
 	}
 	return data
-}
-
-// List 分页
-func (a *ArticlesRec) List(c *gin.Context) {
-	res := a.Result(a.ListWithOutPaging(nil))
-	c.JSON(http.StatusOK, utils.JSONSuccess("", res))
-}
-
-// Add 添加分类
-func (a *ArticlesRec) Add(c *gin.Context) {
-	rec := &ArticlesRec{}
-
-	if err := c.Bind(rec); err != nil {
-		utils.Error("参数错误")
-	}
-
-	rec.Name = strings.Trim(rec.Name, " ")
-	if rec.Name == "" {
-		utils.Error("名称不可空")
-	}
-
-	rec.Empty()
-	a.BaseControll.DoAdd(c, rec)
-}
-
-// Update 添加分类
-func (a *ArticlesRec) Update(c *gin.Context) {
-	rec := &ArticlesRec{}
-
-	if err := c.Bind(rec); err != nil {
-		utils.Error("参数错误")
-	}
-
-	// 为0 清空选择的文章，不为0时需要验证文章可用性
-	if rec.IDs != "0" {
-		ids := strings.Split(rec.IDs, ",")
-		if ids[0] == "" {
-			ids = ids[1:]
-		}
-		if len(ids) > 0 {
-			db := DB
-			article := &Articles{}
-			articles := []Articles{}
-			row := db.Table(article.TableName()).Where("id IN (?)", ids).Find(&articles)
-			if row.Error != nil {
-				utils.Error(row.Error)
-			}
-
-			if len(articles) <= 0 {
-				utils.Error("选择了无效的文章")
-			}
-			ids = []string{}
-			for _, id := range articles {
-				ids = append(ids, fmt.Sprintf("%d", id.ID))
-			}
-
-			rec.IDs = strings.Join(ids, ",")
-		}
-	}
-
-	rec.Empty()
-	a.BaseControll.DoUpdate(c, rec)
-}
-
-// Delete 删除
-func (a *ArticlesRec) Delete(c *gin.Context) {
-	db := DB
-	id := c.Param("id")
-	if id == "" {
-		utils.Error("参数错误")
-	}
-	article := &Articles{}
-	if hasArticle := db.Model(article).Where(map[string]interface{}{"cate_id": id}).Find(article).RowsAffected; hasArticle > 0 {
-		utils.Error("该推荐位下还有文章，不能删除")
-	}
-	a.BaseControll.Delete(c)
 }

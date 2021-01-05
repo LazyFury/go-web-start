@@ -8,7 +8,7 @@ import (
 
 	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 	"gorm.io/gorm"
 )
 
@@ -118,4 +118,4 @@ func (m Message) Joins(db *gorm.DB) *gorm.DB {
 	return db
 }
 
-var _ xmodel.Controller = &Message{}
+var _ model.Controller = &Message{}

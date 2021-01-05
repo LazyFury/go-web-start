@@ -9,6 +9,4 @@ var modelUser model.User
 
 // 用户API
 func user(g *gin.RouterGroup) {
-	modelUser.BaseControll.Model = &modelUser
-	modelUser.Install(g, "/users")
 }

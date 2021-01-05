@@ -6,7 +6,7 @@ import (
 
 	"github.com/Treblex/go-web-start/server/config"
 	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"
 )
@@ -18,10 +18,10 @@ var autoMigrate = []interface{}{
 	&WechatOauth{},
 	&WechatMiniUser{},
 	//goods
-	&Goods{},
-	&GoodCate{},
-	&GoodSku{},
-	&GoodStock{},
+	// &Goods{},
+	// &GoodCate{},
+	// &GoodSku{},
+	// &GoodStock{},
 	//article
 	&Articles{},
 	&ArticlesCate{},
@@ -42,7 +42,7 @@ var autoMigrate = []interface{}{
 }
 
 // DB DB
-var DB *xmodel.GormDB = &xmodel.GormDB{}
+var DB *model.GormDB = &model.GormDB{}
 
 // MysqlConn InitDB
 func MysqlConn(dsn string) (err error) {

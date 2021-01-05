@@ -2,13 +2,11 @@ package model
 
 import (
 	"fmt"
-	"net/http"
 	"reflect"
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
-	"github.com/gin-gonic/gin"
+	"github.com/Treblex/go-web-template/model"
 	"gorm.io/gorm"
 )
 
@@ -26,7 +24,7 @@ type showArticlesTag struct {
 	Count    int64  `json:"count" gorm:"->"`
 }
 
-var _ xmodel.Controller = &ArticlesTag{}
+var _ model.Controller = &ArticlesTag{}
 
 // Validator Validator
 func (a *ArticlesTag) Validator() error {
@@ -89,19 +87,4 @@ func (a *ArticlesTag) Result(data interface{}) interface{} {
 		return arr
 	}
 	return data
-}
-
-// List 列表
-func (a *ArticlesTag) List(c *gin.Context) {
-	where := map[string]interface{}{}
-	cid := c.Query("cate_id")
-	if cid == "" {
-		where = nil
-	} else {
-		where["cate_id"] = cid
-	}
-
-	list := a.ListWithOutPaging(where)
-	list = a.Result(list)
-	c.JSON(http.StatusOK, utils.JSONSuccess("", list))
 }

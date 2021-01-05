@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,13 +23,11 @@ type GoodCate struct {
 // 接口返回的列表 隐藏部分属性
 type showGoodCate struct {
 	*GoodCate
-	*EmptySystemFiled
 }
 
 // 遍历所有子分类的结构体
 type catelist struct {
 	*GoodCate
-	*EmptySystemFiled
 	Tmenu []catelist `json:"tmenu"`
 }
 
@@ -62,7 +60,7 @@ func (cate *GoodCate) List(c *gin.Context) {
 }
 
 // 循环获取自分类
-func (cate *GoodCate) getCateTmenu(item *catelist, db *xmodel.GormDB) (tmenu []catelist) {
+func (cate *GoodCate) getCateTmenu(item *catelist, db *model.GormDB) (tmenu []catelist) {
 	parentID := item.ID
 	tmenu = []catelist{}
 	db.Table(cate.TableName()).Where(&GoodCate{ParentID: parentID}).Find(&tmenu)

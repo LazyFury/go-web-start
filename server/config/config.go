@@ -4,6 +4,7 @@ import (
 	"github.com/Treblex/go-web-template/config"
 	"github.com/Treblex/go-web-template/tools/mail"
 	"github.com/Treblex/go-web-template/tools/mysql"
+	"github.com/Treblex/go-web-template/tools/sha"
 	"github.com/Treblex/go-web-template/tools/upload"
 	"github.com/Treblex/go-web-template/tools/wechat"
 )
@@ -18,4 +19,5 @@ type configType struct {
 	WechatMP   wechat.MP         `json:"wechat"`
 	WechatMini wechat.Mini       `json:"wechat_mini"`
 	AliOss     upload.AliOssConf `json:"ali_oss"` //阿里云oss
+	Sha1       sha.Sha1          `json:"sha1"`
 }

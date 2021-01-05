@@ -2,12 +2,10 @@ package model
 
 import (
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
-	"github.com/gin-gonic/gin"
+	"github.com/Treblex/go-web-template/model"
 	"gorm.io/gorm"
 )
 
@@ -34,7 +32,7 @@ func (a *Ad) PointerList() interface{} {
 	return &[]selectAds{}
 }
 
-var _ xmodel.Controller = &Ad{}
+var _ model.Controller = &Ad{}
 
 //Result Result
 func (a *Ad) Result(data interface{}) interface{} {
@@ -99,15 +97,4 @@ func (a *Ad) Joins(db *gorm.DB) *gorm.DB {
 	// groupName := TableName("ad_groups")
 	// db = db.Joins(fmt.Sprintf("left join (select `id` g_id,`name` group_name,`type` from `%s`) t3 on t3.`g_id`=`%s`.`group_id`", groupName, a.TableName()))
 	return db
-}
-
-// List 列表
-func (a *Ad) List(c *gin.Context) {
-	groupID := c.Query("group_id")
-	if groupID == "" {
-		utils.Error("请选择分组")
-	}
-	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(map[string]interface{}{
-		"group_id": groupID,
-	})))
 }

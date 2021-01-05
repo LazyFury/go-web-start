@@ -5,7 +5,7 @@ import (
 
 	"github.com/Treblex/go-web-start/server/model"
 	"github.com/Treblex/go-web-template/controller"
-	"github.com/Treblex/go-web-template/xmodel"
+	xmodel "github.com/Treblex/go-web-template/model"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

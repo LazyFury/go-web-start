@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 )
 
 // Feedback 客户意见反馈
@@ -40,7 +40,7 @@ func (f *Feedback) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ xmodel.Controller = &Feedback{}
+var _ model.Controller = &Feedback{}
 
 // TableName 表名
 func (f *Feedback) TableName() string {

@@ -2,13 +2,11 @@ package model
 
 import (
 	"fmt"
-	"net/http"
 	"reflect"
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/xmodel"
-	"github.com/gin-gonic/gin"
+	"github.com/Treblex/go-web-template/model"
 
 	"gorm.io/gorm"
 )
@@ -64,7 +62,7 @@ func (a *AdGroup) Result(data interface{}) interface{} {
 	return data
 }
 
-var _ xmodel.Controller = &AdGroup{}
+var _ model.Controller = &AdGroup{}
 
 // TableName TableName
 func (a *AdGroup) TableName() string {
@@ -76,92 +74,4 @@ func (a *AdGroup) Joins(db *gorm.DB) *gorm.DB {
 	ad := &Ad{}
 	db = db.Joins(fmt.Sprintf("left join (select count(id) `count`,`group_id` from `%s` where `deleted_at`  IS NULL  group by `group_id`) t1 on t1.`group_id`=`%s`.`id`", ad.TableName(), a.TableName()))
 	return db
-}
-
-// List 列表
-func (a *AdGroup) List(c *gin.Context) {
-	c.JSON(http.StatusOK, utils.JSONSuccess("", a.BaseControll.ListWithOutPaging(nil)))
-}
-
-// Detail 分组详情
-//func (a *AdGroup) Detail(c *gin.Context) {
-//	db := DB
-//	id := c.Param("id")
-//	if id == "" {
-//		utils.Error("参数错误")
-//	}
-//
-//	group := &AdGroup{}
-//	if db.Model(group).Where(map[string]interface{}{
-//		"id": id,
-//	}).First(group).Error != nil {
-//		utils.Error("广告位不存在")
-//	}
-//
-//	ad := &Ad{}
-//	ad.BaseControll.Model = ad
-//
-//	list, _ := ad.BaseControll.ListWithOutPaging(map[string]interface{}{
-//		"group_id": id,
-//	}).(*[]selectAds)
-//	count := len(*list)
-//	// fmt.Printf("%v\n\n", reflect.TypeOf(list).Elem().Kind())
-//	// fmt.Printf("%v\n\n", reflect.ValueOf(list).Elem())
-//
-//	result := &struct {
-//		*AdGroup
-//		*EmptySystemFiled
-//		Count int          `json:"count"`
-//		List  *[]selectAds `json:"list"`
-//	}{
-//		AdGroup: group,
-//		List:    list,
-//		Count:   count,
-//	}
-//
-//	c.JSON(http.StatusOK, utils.JSONSuccess("", result))
-//}
-
-// Add AdGroupd
-func (a *AdGroup) Add(c *gin.Context) {
-	adGroup := &AdGroup{}
-
-	if err := c.Bind(adGroup); err != nil {
-		utils.Error("参数错误")
-	}
-
-	adGroup.Name = strings.Trim(adGroup.Name, " ")
-	if adGroup.Name == "" {
-		utils.Error("分组标题不可空")
-	}
-
-	if a.BaseControll.HasOne(map[string]interface{}{
-		"name": adGroup.Name,
-	}) {
-		utils.Error("已存在相同的分类")
-	}
-
-	adGroup.Empty()
-	a.BaseControll.DoAdd(c, adGroup)
-}
-
-// Update Update
-func (a *AdGroup) Update(c *gin.Context) {
-	adGroup := &AdGroup{}
-
-	if err := c.Bind(adGroup); err != nil {
-		utils.Error("参数错误")
-	}
-
-	ad := &Ad{GroupID: adGroup.ID}
-	ads := []Ad{}
-	db := DB
-	if err := db.Table(ad.TableName()).Where(ad).Find(&ads).Error; err == nil {
-		if len(ads) > adGroup.MaxCount {
-			adGroup.MaxCount = len(ads)
-		}
-	}
-
-	adGroup.Empty()
-	a.BaseControll.DoUpdate(c, adGroup)
 }

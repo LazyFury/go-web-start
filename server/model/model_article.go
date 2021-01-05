@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-template/xmodel"
+	"github.com/Treblex/go-web-template/model"
 
 	"gorm.io/gorm"
 )
@@ -61,7 +61,7 @@ func (a *Articles) Objects() interface{} {
 	}{}
 }
 
-var _ xmodel.Controller = &Articles{}
+var _ model.Controller = &Articles{}
 
 // TableName 表名
 func (a *Articles) TableName() string {

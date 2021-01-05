@@ -4,11 +4,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/Treblex/go-web-start/server/config"
 	"github.com/Treblex/go-web-start/server/middleware"
 	"github.com/Treblex/go-web-start/server/model"
 	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-start/server/utils/sha"
 	"github.com/Treblex/go-web-template/tools"
+	"github.com/Treblex/simple-daily/utils/sha"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +19,7 @@ func login(g *gin.RouterGroup) {
 
 	login.POST("", doLogin)
 
-	login.POST("/reg", modelUser.RegController)
+	// login.POST("/reg", modelUser.RegController)
 
 	login.GET("/init_admin", initAdmin)
 
@@ -50,7 +51,7 @@ func doLogin(c *gin.Context) {
 	if err != nil {
 		utils.Error("用户不存在")
 	}
-	password := sha.EnCode(u.Password)
+	password := config.Global.Sha1.EnCode(u.Password)
 	if user.Password == password {
 		str, _ := middleware.CreateToken(user)
 		c.JSON(http.StatusOK, utils.JSONSuccess(
@@ -78,7 +79,7 @@ func initAdmin(c *gin.Context) {
 
 	a := &model.User{Name: "admin", IsAdmin: 1}
 	if findAdmin := db.Where(a).Find(a).RowsAffected; findAdmin >= 1 {
-		a.Password = sha.AesDecryptCFB(a.Password)
+		a.Password = config.Global.Sha1.AesDecryptCFB(a.Password)
 		c.JSON(http.StatusOK, utils.JSONSuccess("", a))
 		return
 	}
