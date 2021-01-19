@@ -100,8 +100,8 @@ func testPodcast(c *gin.Context) {
 			Author: "suke",
 			Type:   "serial",
 			Owner: owner{
-				Name:  "2568597007@qq.com",
-				Email: "suke@qq.com",
+				Name:  "小孩儿",
+				Email: "suke971219@gmail.com",
 			},
 			Image:    "http://wx2.sinaimg.cn/mw600/0085KTY1gy1ghkic07i5yj30qo0qo41n.jpg",
 			Explicit: false,
