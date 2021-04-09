@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>We've got some trouble | {{index .code}} - {{index .msg}}</title>
+    <title>We've got some trouble | {{.Code}} - {{.Message}}</title>
     <style type="text/css">
         /*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
         html {
@@ -317,7 +317,8 @@
 
 <body>
     <div class="cover">
-        <h1>{{index .msg}}</h1><small>Error {{index .code}}</small></h1>
+        <h1>{{index .Message}}</h1>
+        <small>Error {{index .Code}}</small></h1>
         <p class="lead">We've got some trouble</p>
     </div>
 <div>

@@ -7,7 +7,7 @@ import (
 	"reflect"
 )
 
-// JSONObject JSONObject
+// JSONObject json => sql text field
 type JSONObject struct {
 	JSON map[string]interface{} `gorm:"type:text"`
 }

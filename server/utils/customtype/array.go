@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Array json传数组类型
+// Array json传数组类型 Array => sql text "1,2,3,4" field
 type Array []string
 
 // UnmarshalJSON req.body []byte=>对象，记得调用json.Unmarshal要新建原始类型进行绑定，不如会死循环

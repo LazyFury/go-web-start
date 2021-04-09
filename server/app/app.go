@@ -1,9 +1,9 @@
 package app
 
 import (
+	"html/template"
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/router"
 	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-contrib/static"
@@ -16,11 +16,13 @@ func New() *gin.Engine {
 
 	g.Use(gin.Logger())
 	// g.Use(cors.Default())
-	g.Use(tools.Cors)
+	g.Use(tools.DefaultCors)
 
 	// 静态目录
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
 
+	html := template.Must(tools.ParseGlob(template.New("main"), "templates", "*.html"))
+	g.SetHTMLTemplate(html)
 	// recover panic
 	g.Use(gin.Recovery()) //保证panic时不cash
 
@@ -40,14 +42,15 @@ func New() *gin.Engine {
 	})
 
 	g.NoRoute(func(c *gin.Context) {
-		utils.Error(utils.NoRoute)
+		if c.Request.URL.Path != "/favicon.ico" {
+			utils.Error(utils.NoRoute)
+		}
 	})
 
+	// 移除多余斜杠 /api//v1/doSomething/ => /api/v1/doSomething
 	g.RemoveExtraSlash = true
+	// 重定向请求
 	g.RedirectTrailingSlash = true
-
-	// 注册路由
-	router.Start(g)
 
 	return g
 }

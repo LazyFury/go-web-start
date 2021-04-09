@@ -20,7 +20,7 @@
         encodeURIComponent(location.origin + "/api/v1/wechat/login");
     }
     function jsConfig() {
-      fetch("https://go.abadboy.cn/api/v1/wechat/js-api-config?url=" + window.location.href, {
+      fetch("/api/v1/wechat/js-api-config?url=" + window.location.href, {
         method: "GET",
       })
         .then((res) => res.json())

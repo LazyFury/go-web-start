@@ -20,18 +20,17 @@ func Error(err interface{}) {
 func Recover(c *gin.Context) {
 	if r := recover(); r != nil {
 		result := response.ParseError(r)
-
 		var code = http.StatusOK
 		// if http.StatusText(int(result.Code)) != "" {
 		// 	code = int(result.Code)
 		// }
 		//返回内容
-		// if ReqFromHTML(c) {
-		// 	c.HTML(code, "error.html", nil)
-		// } else {
-		// 	c.JSON(code, result)
-		// }
-		c.JSON(code, result)
+		if ReqFromHTML(c) {
+			c.HTML(code, "err/error.html", result)
+		} else {
+			c.JSON(code, result)
+		}
+		// c.JSON(code, result)
 		response.LogError(fmt.Sprintf("URL:%s ;\nErr: %v", c.Request.URL.RequestURI(), result))
 
 		// "打断response继续写入内容"
