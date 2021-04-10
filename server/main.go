@@ -6,7 +6,6 @@ import (
 	"github.com/lazyfury/go-web-start/server/app"
 	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/router"
 )
 
 func main() {
@@ -16,9 +15,6 @@ func main() {
 	if err := model.MysqlConn(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
 	}
-
-	// 注册路由
-	router.Start(g)
 
 	// 启动
 	err := g.Run(fmt.Sprintf(":%d", config.Global.Port))

@@ -2,8 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"runtime"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +10,10 @@ import (
 
 // Error Error
 func Error(err interface{}) {
-	log.Println(runtime.Caller(1))
+	_, file, line, ok := runtime.Caller(1)
+	if ok {
+		response.LogError(fmt.Sprintf("%s %d", file, line))
+	}
 	panic(err)
 }
 
@@ -20,10 +21,10 @@ func Error(err interface{}) {
 func Recover(c *gin.Context) {
 	if r := recover(); r != nil {
 		result := response.ParseError(r)
-		var code = http.StatusOK
-		// if http.StatusText(int(result.Code)) != "" {
-		// 	code = int(result.Code)
-		// }
+
+		var code = c.Writer.Status()
+		result.Code = response.ErrCode(code)
+
 		//返回内容
 		if ReqFromHTML(c) {
 			c.HTML(code, "err/error.html", result)
@@ -34,8 +35,6 @@ func Recover(c *gin.Context) {
 		response.LogError(fmt.Sprintf("URL:%s ;\nErr: %v", c.Request.URL.RequestURI(), result))
 
 		// "打断response继续写入内容"
-		// c.AbortWithStatus(http.StatusInternalServerError)
 		c.Abort()
-
 	}
 }

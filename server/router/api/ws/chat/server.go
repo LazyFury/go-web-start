@@ -17,6 +17,9 @@ var (
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
+		Error: func(w http.ResponseWriter, r *http.Request, status int, reason error) {
+			w.WriteHeader(status)
+		},
 	}
 	chat = NewChat()
 )
@@ -25,7 +28,7 @@ var (
 func WsServer(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		fmt.Print("upgrade:", err)
+		fmt.Print("升级ws连接错误:", err)
 		utils.Error(err)
 	}
 	defer ws.Close()

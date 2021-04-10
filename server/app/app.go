@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/router"
 	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/tools"
 )
@@ -18,11 +19,6 @@ func New() *gin.Engine {
 	// g.Use(cors.Default())
 	g.Use(tools.DefaultCors)
 
-	// 静态目录
-	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
-
-	html := template.Must(tools.ParseGlob(template.New("main"), "templates", "*.html"))
-	g.SetHTMLTemplate(html)
 	// recover panic
 	g.Use(gin.Recovery()) //保证panic时不cash
 
@@ -51,6 +47,15 @@ func New() *gin.Engine {
 	g.RemoveExtraSlash = true
 	// 重定向请求
 	g.RedirectTrailingSlash = true
+
+	// 静态目录
+	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
+
+	html := template.Must(tools.ParseGlob(template.New("main"), "templates", "*.html"))
+	g.SetHTMLTemplate(html)
+
+	// 注册路由
+	router.Start(g)
 
 	return g
 }
