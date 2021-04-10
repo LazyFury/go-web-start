@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"sync"
 
-	"github.com/Treblex/go-web-template/tools"
 	"github.com/gorilla/websocket"
+	"github.com/lazyfury/go-web-template/tools"
 )
 
 // BoradcastChan 广播消息

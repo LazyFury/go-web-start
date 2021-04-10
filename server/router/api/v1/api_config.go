@@ -3,9 +3,9 @@ package api
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/config"
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/config"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 func configRouter(g *gin.RouterGroup) {

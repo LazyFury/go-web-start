@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"runtime"
 
-	"github.com/Treblex/go-web-template/response"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 // Error Error

@@ -3,10 +3,10 @@ package controller
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-template/controller"
-	xmodel "github.com/Treblex/go-web-template/model"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-template/controller"
+	xmodel "github.com/lazyfury/go-web-template/model"
 	"gorm.io/gorm"
 )
 

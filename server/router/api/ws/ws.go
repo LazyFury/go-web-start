@@ -1,8 +1,8 @@
 package ws
 
 import (
-	"github.com/Treblex/go-web-start/server/router/api/ws/chat"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/router/api/ws/chat"
 )
 
 // Init Init

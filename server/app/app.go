@@ -4,10 +4,10 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/tools"
 )
 
 // New 初始化

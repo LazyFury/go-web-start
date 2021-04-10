@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/Treblex/go-web-template/model"
+	"github.com/lazyfury/go-web-template/model"
 
 	"gorm.io/gorm"
 )

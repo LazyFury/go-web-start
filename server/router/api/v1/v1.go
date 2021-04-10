@@ -3,13 +3,13 @@ package api
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/controller"
-	"github.com/Treblex/go-web-start/server/middleware"
-	"github.com/Treblex/go-web-start/server/router/api/wechat"
-	"github.com/Treblex/go-web-start/server/router/api/ws"
+	"github.com/lazyfury/go-web-start/server/controller"
+	"github.com/lazyfury/go-web-start/server/middleware"
+	"github.com/lazyfury/go-web-start/server/router/api/wechat"
+	"github.com/lazyfury/go-web-start/server/router/api/ws"
 
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 // Init  api Version 1.0 初始化

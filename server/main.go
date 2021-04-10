@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/Treblex/go-web-start/server/app"
-	"github.com/Treblex/go-web-start/server/config"
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-start/server/router"
+	"github.com/lazyfury/go-web-start/server/app"
+	"github.com/lazyfury/go-web-start/server/config"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-start/server/router"
 )
 
 func main() {

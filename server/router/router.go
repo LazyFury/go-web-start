@@ -3,10 +3,10 @@ package router
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/config"
-	"github.com/Treblex/go-web-start/server/router/api"
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/config"
+	"github.com/lazyfury/go-web-start/server/router/api"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 // Start 入口

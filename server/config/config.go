@@ -1,12 +1,12 @@
 package config
 
 import (
-	"github.com/Treblex/go-web-template/config"
-	"github.com/Treblex/go-web-template/tools/mail"
-	"github.com/Treblex/go-web-template/tools/mysql"
-	"github.com/Treblex/go-web-template/tools/sha"
-	"github.com/Treblex/go-web-template/tools/upload"
-	"github.com/Treblex/go-web-template/tools/wechat"
+	"github.com/lazyfury/go-web-template/config"
+	"github.com/lazyfury/go-web-template/tools/mail"
+	"github.com/lazyfury/go-web-template/tools/mysql"
+	"github.com/lazyfury/go-web-template/tools/sha"
+	"github.com/lazyfury/go-web-template/tools/upload"
+	"github.com/lazyfury/go-web-template/tools/wechat"
 )
 
 // Global 全局配置

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-template/tools/wechat"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-template/tools/wechat"
 )
 
 func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth, err error) {

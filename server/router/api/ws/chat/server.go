@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 var (

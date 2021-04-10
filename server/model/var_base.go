@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 // GetUserOrLogin GetUser

@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-web-start/server/config"
-	"github.com/Treblex/go-web-start/server/middleware"
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/config"
+	"github.com/lazyfury/go-web-start/server/middleware"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-start/server/utils/customtype"
+	"github.com/lazyfury/go-web-template/tools"
 )
 
 var code2SessionKeyURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"

@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-template/controller"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-template/controller"
 )
 
 // NewAdController NewAdController

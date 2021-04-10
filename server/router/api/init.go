@@ -1,9 +1,9 @@
 package api
 
 import (
-	v1 "github.com/Treblex/go-web-start/server/router/api/v1"
-	v2 "github.com/Treblex/go-web-start/server/router/api/v2"
 	"github.com/gin-gonic/gin"
+	v1 "github.com/lazyfury/go-web-start/server/router/api/v1"
+	v2 "github.com/lazyfury/go-web-start/server/router/api/v2"
 )
 
 // Init Init

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Treblex/go-web-start/server/utils"
-	"github.com/Treblex/go-web-template/model"
+	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/model"
 	"gorm.io/gorm"
 )
 

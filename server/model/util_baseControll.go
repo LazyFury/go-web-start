@@ -3,9 +3,9 @@ package model
 import (
 	"reflect"
 
-	"github.com/Treblex/go-web-template/model"
-	"github.com/Treblex/go-web-template/tools"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/tools"
 	"gorm.io/gorm"
 )
 

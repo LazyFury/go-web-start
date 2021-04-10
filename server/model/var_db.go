@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Treblex/go-web-start/server/config"
-	"github.com/Treblex/go-web-start/server/utils/customtype"
-	"github.com/Treblex/go-web-template/model"
+	"github.com/lazyfury/go-web-start/server/config"
+	"github.com/lazyfury/go-web-start/server/utils/customtype"
+	"github.com/lazyfury/go-web-template/model"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"
 )

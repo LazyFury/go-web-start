@@ -3,8 +3,8 @@ package v2
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 // Init 初始化

@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Treblex/go-web-start/server/model"
-	"github.com/Treblex/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-start/server/model"
+	"github.com/lazyfury/go-web-start/server/utils"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
