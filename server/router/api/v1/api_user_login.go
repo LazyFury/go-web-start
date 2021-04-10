@@ -10,7 +10,6 @@ import (
 	"github.com/lazyfury/go-web-start/server/model"
 	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/tools"
-	"github.com/lazyfury/simple-daily/utils/sha"
 )
 
 func login(g *gin.RouterGroup) {
@@ -87,13 +86,13 @@ func initAdmin(c *gin.Context) {
 
 	admin := &model.User{
 		Name:     "admin",
-		Password: sha.EnCode(pwd),
+		Password: config.Global.Sha1.EnCode(pwd),
 		IsAdmin:  1,
 	}
 
 	if err := db.Save(admin).Error; err != nil {
 		utils.Error(err)
 	}
-	admin.Password = sha.AesDecryptCFB(admin.Password)
+	admin.Password = config.Global.Sha1.AesDecryptCFB(admin.Password)
 	c.JSON(http.StatusOK, utils.JSONSuccess("", admin))
 }
