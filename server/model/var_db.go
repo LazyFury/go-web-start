@@ -38,7 +38,7 @@ var autoMigrate = []interface{}{
 	&MessageTemplate{},
 
 	// 订单
-	&Order{},
+	// &Order{},
 }
 
 // DB DB

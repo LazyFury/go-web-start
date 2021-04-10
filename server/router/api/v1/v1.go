@@ -3,19 +3,14 @@ package api
 import (
 	"net/http"
 
-	"github.com/Treblex/go-web-start/server/config"
 	"github.com/Treblex/go-web-start/server/controller"
 	"github.com/Treblex/go-web-start/server/middleware"
 	"github.com/Treblex/go-web-start/server/router/api/wechat"
 	"github.com/Treblex/go-web-start/server/router/api/ws"
-	"github.com/Treblex/go-web-template/tools/upload"
 
 	"github.com/Treblex/go-web-start/server/utils"
 	"github.com/gin-gonic/gin"
 )
-
-// var uploader = upload.NewEchoUploader()
-var aliUploader = upload.NewAliOssUploader(config.Global.AliOss)
 
 // Init  api Version 1.0 初始化
 func Init(g *gin.RouterGroup) {
@@ -25,27 +20,9 @@ func Init(g *gin.RouterGroup) {
 	//常用到资源整理到这里统一到api暴露处理，暂定根据methods get和other来处理权限
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("/", resources)
-	apiV1.POST("/upload", func(c *gin.Context) {
-		url, err := aliUploader.Default(c.Request)
-		if err != nil {
-			utils.Error(err)
-		}
-		c.JSON(http.StatusOK, utils.JSONSuccess("", url))
-	})
-	apiV1.POST("/upload-img", func(c *gin.Context) {
-		url, err := aliUploader.OnlyAcceptsExt(c.Request, upload.AcceptsImgExt, "image")
-		if err != nil {
-			utils.Error(err)
-		}
-		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
-	})
-	apiV1.POST("/upload-head-pic", func(c *gin.Context) {
-		url, err := aliUploader.Custom(c.Request, upload.AcceptsImgExt, "head_pic")
-		if err != nil {
-			utils.Error(err)
-		}
-		c.JSON(http.StatusOK, utils.JSONSuccess("上传成功", url))
-	})
+
+	InitUpload(apiV1)
+
 	// base
 	login(apiV1)
 	//文章
@@ -63,8 +40,6 @@ func Init(g *gin.RouterGroup) {
 	controller.NewAdGroupController().Install(apiV1, "/ad-groups")
 	controller.NewAdEventController().Install(apiV1, "/ad-events")
 
-	// 用户
-	user(apiV1)
 	// 意见反馈
 	controller.NewFeedbackController().Install(apiV1, "/feedbacks")
 	// 用户消息
@@ -72,7 +47,6 @@ func Init(g *gin.RouterGroup) {
 	controller.NewMessageTemplateController().Install(apiV1, "/message-templates")
 
 	wechat.Init(apiV1)
-
 	ws.Init(apiV1)
 
 	wehcatMini(apiV1)
