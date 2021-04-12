@@ -97,7 +97,9 @@ func userInfo(c *gin.Context) {
 // 换取微信网页登陆授权链接
 func wechatRedirect(c *gin.Context) {
 	host := "http://"
-
+	if c.Request.TLS != nil {
+		host = "https://"
+	}
 	host += c.Request.Host
 	redirectURI := host + "/api/v1/wechat/login"
 
@@ -108,7 +110,7 @@ func wechatRedirect(c *gin.Context) {
 
 	redirectURI = url.PathEscape(redirectURI)
 	urlStr := mp.LoginRedirect(redirectURI)
-	c.Redirect(http.StatusMovedPermanently, urlStr)
+	c.Redirect(http.StatusFound, urlStr)
 }
 
 // 换取微信分享 jsapi授权

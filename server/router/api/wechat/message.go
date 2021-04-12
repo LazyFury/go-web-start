@@ -73,13 +73,16 @@ type (
 func handleWechatMessage(c *gin.Context) {
 	data := messageXML{}
 	b, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		utils.Error("get req body err")
+	}
 	if err = xml.Unmarshal(b, &data); err != nil {
 		log.Printf("%+v\n", err)
 		utils.Error(err)
 	}
 	log.Println(data)
 	result := messageXML{FromUserName: data.ToUserName, ToUserName: data.FromUserName, MsgType: "text", Content: "你好", CreateTime: time.Now().Unix()}
-	b, err = xml.Marshal(&result)
+	b, _ = xml.Marshal(&result)
 	log.Println(string(b))
 	c.XML(http.StatusOK, b)
 }

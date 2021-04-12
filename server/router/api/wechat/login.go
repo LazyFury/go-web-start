@@ -15,8 +15,6 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 	wechatUser = wechatInfo
 	// 数据库
 	db := model.DB
-	//开启自动迁移模式
-	db.AutoMigrate(&model.WechatOauth{})
 
 	//使用唯一openid查询用户
 	if db.Model(wechatUser).Where(map[string]interface{}{
@@ -24,13 +22,11 @@ func wechatDoLogin(wechatInfo *model.WechatOauth) (wechatUser *model.WechatOauth
 	}).Error != nil {
 		fmt.Printf("没有微信用户账户，准备新建...")
 		//如不存在，新建用户
-		info := &model.WechatOauth{}
-		info, err = updateWechatInfo(wechatInfo, true)
+		wechatInfo = &model.WechatOauth{}
+		wechatInfo, err = updateWechatInfo(wechatInfo, true)
 		if err != nil {
 			return
 		}
-		wechatInfo = info
-
 		err = db.Create(wechatInfo).Error
 		if err != nil {
 			err = errors.New("创建微信账号失败")
