@@ -20,4 +20,5 @@ type configType struct {
 	WechatMini wechat.Mini       `json:"wechat_mini"`
 	AliOss     upload.AliOssConf `json:"ali_oss"` //阿里云oss
 	Sha1       sha.Sha1          `json:"sha1"`
+	SupportTls bool              `json:"support_tls"`
 }

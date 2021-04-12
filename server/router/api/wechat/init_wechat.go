@@ -97,7 +97,7 @@ func userInfo(c *gin.Context) {
 // 换取微信网页登陆授权链接
 func wechatRedirect(c *gin.Context) {
 	host := "http://"
-	if c.Request.TLS != nil {
+	if config.Global.SupportTls {
 		host = "https://"
 	}
 	host += c.Request.Host
@@ -123,7 +123,7 @@ func jsAPIConfig(c *gin.Context) {
 
 	conf, err := mp.JsAPIConfig(urlStr)
 	if err != nil {
-		utils.Error("配置错误")
+		utils.Error(err)
 	}
 	c.JSON(http.StatusOK, utils.JSONSuccess("请求成功", conf))
 }

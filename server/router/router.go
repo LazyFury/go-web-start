@@ -31,7 +31,7 @@ func Start(e *gin.Engine) {
 		}
 		err := config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
-			utils.Error("发送失败")
+			utils.Error(err)
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "发送成功"})
 	})
