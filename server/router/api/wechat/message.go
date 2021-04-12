@@ -74,7 +74,7 @@ func handleWechatMessage(c *gin.Context) {
 	data := messageXML{}
 	b, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		utils.Error("get req body err")
+		utils.Error(err)
 	}
 	if err = xml.Unmarshal(b, &data); err != nil {
 		log.Printf("%+v\n", err)
@@ -82,9 +82,9 @@ func handleWechatMessage(c *gin.Context) {
 	}
 	log.Println(data)
 	result := messageXML{FromUserName: data.ToUserName, ToUserName: data.FromUserName, MsgType: "text", Content: "你好", CreateTime: time.Now().Unix()}
-	b, _ = xml.Marshal(&result)
-	log.Println(string(b))
-	c.XML(http.StatusOK, b)
+	// b, _ = xml.Marshal(&result)
+	// log.Println(string(b))
+	c.XML(http.StatusOK, result)
 }
 
 func sendTemplateMsgHandler(c *gin.Context) {
