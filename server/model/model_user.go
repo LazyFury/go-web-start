@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-start/server/config"
-	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/types"
 	"github.com/lazyfury/go-web-template/tools/wechat"
 )
 
@@ -21,14 +21,14 @@ type UserID struct {
 // User 用户更新
 type User struct {
 	BaseControll
-	Password  string               `json:"password" gorm:"not null;type:text"`
-	Name      string               `json:"name" gorm:"unique;not null"`
-	Email     string               `json:"email"`
-	IP        string               `json:"ip"`
-	Ua        string               `json:"ua"`
-	LoginTime customtype.LocalTime `json:"login_time"`
-	Status    int                  `json:"status"`
-	IsAdmin   int                  `json:"is_admin" gorm:"default:0"`
+	Password  string          `json:"password" gorm:"not null;type:text"`
+	Name      string          `json:"name" gorm:"unique;not null"`
+	Email     string          `json:"email"`
+	IP        string          `json:"ip"`
+	Ua        string          `json:"ua"`
+	LoginTime types.LocalTime `json:"login_time"`
+	Status    int             `json:"status"`
+	IsAdmin   int             `json:"is_admin" gorm:"default:0"`
 }
 
 // WechatOauth 微信用户登陆
@@ -80,7 +80,7 @@ func (u *User) Add(c *gin.Context) {
 	ip := c.ClientIP()
 	user.IP = ip
 	user.Ua = ua
-	user.LoginTime = customtype.LocalTime{Time: time.Now()}
+	user.LoginTime = types.LocalTime{Time: time.Now()}
 	user.Status = 1
 
 }

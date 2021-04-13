@@ -13,9 +13,9 @@ import (
 	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/response"
 	"github.com/lazyfury/go-web-template/tools"
+	"github.com/lazyfury/go-web-template/tools/types"
 )
 
 var code2SessionKeyURL = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
@@ -125,7 +125,7 @@ func easyLogin(c *gin.Context) {
 	ip := c.ClientIP()
 	user.IP = ip
 	user.Ua = ua
-	user.LoginTime = customtype.LocalTime{Time: time.Now()}
+	user.LoginTime = types.LocalTime{Time: time.Now()}
 
 	if err := db.Table(user.TableName()).Create(&user).Error; err != nil {
 		response.Error("创建用户失败")

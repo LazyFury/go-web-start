@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/lazyfury/go-web-start/server/config"
-	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/tools/types"
 	// _ 数据库驱动
 	// _ "gorm.io/gorm/dialects/sqlite"
 )
@@ -46,7 +46,7 @@ var DB *model.GormDB = &model.GormDB{}
 
 // MysqlConn InitDB
 func MysqlConn(dsn string) (err error) {
-	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
+	fmt.Printf("数据库链接>>>准备>> %s \n", time.Now().Format(types.DefaultTimeLayout))
 	err = DB.ConnectMysql(dsn)
 	// db, err := gorm.Open("sqlite3", "config/database.db")
 	if err != nil {
@@ -59,7 +59,7 @@ func MysqlConn(dsn string) (err error) {
 
 	DB.AutoMigrate(autoMigrate...)
 
-	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(customtype.DefaultTimeLayout))
+	fmt.Printf("数据库链接>>>成功>> %s \n", time.Now().Format(types.DefaultTimeLayout))
 	return nil
 }
 

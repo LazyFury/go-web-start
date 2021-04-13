@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/model"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/types"
 	"gorm.io/gorm"
 )
 
@@ -30,12 +30,12 @@ const (
 // Message 客户意见反馈
 type Message struct {
 	BaseControll
-	FromUser   uint                  `json:"from_user_id" gorm:"column:from_user_id;not null;comment:'操作人id，点赞 评论我的人'"`
-	ToUser     uint                  `json:"to_user_id" gorm:"not null"`
-	TemplateID MsgType               `json:"template_id" gorm:"not null"`
-	Params     customtype.JSONObject `json:"params" gorm:"type:text;not null;comment:'定义参数 cover template'"`
-	URL        string                `json:"url"`
-	Status     MsgSendStatus         `json:"status" gorm:"default:1;not null"`
+	FromUser   uint             `json:"from_user_id" gorm:"column:from_user_id;not null;comment:'操作人id，点赞 评论我的人'"`
+	ToUser     uint             `json:"to_user_id" gorm:"not null"`
+	TemplateID MsgType          `json:"template_id" gorm:"not null"`
+	Params     types.JSONObject `json:"params" gorm:"type:text;not null;comment:'定义参数 cover template'"`
+	URL        string           `json:"url"`
+	Status     MsgSendStatus    `json:"status" gorm:"default:1;not null"`
 }
 
 // SelectMessage SelectMessage

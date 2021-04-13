@@ -1,6 +1,6 @@
 module github.com/lazyfury/go-web-start/server
 
-go 1.13
+go 1.16
 
 require (
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
@@ -13,4 +13,4 @@ require (
 	gorm.io/gorm v1.21.7
 )
 
-// replace github.com/lazyfury/go-web-template => ../../go-web-template
+replace github.com/lazyfury/go-web-template => ../../go-web-template

@@ -6,9 +6,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/model"
-
+	_types "github.com/lazyfury/go-web-template/tools/types"
 	"gorm.io/gorm"
 )
 
@@ -16,14 +15,14 @@ type (
 	// Articles 文章模型
 	Articles struct {
 		BaseControll
-		Title   string           `json:"title" gorm:"not null"`
-		Desc    string           `json:"desc"`
-		Author  string           `json:"author" gorm:"DEFAULT:'佚名'"`
-		Content string           `json:"content" gorm:"type:text"`
-		Email   string           `json:"email"`
-		Cover   string           `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
-		Tag     customtype.Array `json:"tag" gorm:"type:varchar(255);not null"`
-		CateID  uint             `json:"cate_id" gorm:"column:cate_id;not null"`
+		Title   string       `json:"title" gorm:"not null"`
+		Desc    string       `json:"desc"`
+		Author  string       `json:"author" gorm:"DEFAULT:'佚名'"`
+		Content string       `json:"content" gorm:"type:text"`
+		Email   string       `json:"email"`
+		Cover   string       `json:"cover" gorm:"DEFAULT:'/static/images/default.jpg'"`
+		Tag     _types.Array `json:"tag" gorm:"type:varchar(255);not null"`
+		CateID  uint         `json:"cate_id" gorm:"column:cate_id;not null"`
 		UserID
 	}
 )
