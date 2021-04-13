@@ -7,5 +7,5 @@ const (
 )
 
 var ErrCodeText = response.ErrorCodeTextInterface{
-	CustomErrCode: "custom err code",
+	CustomErrCode: "自定义错误码内容",
 }
