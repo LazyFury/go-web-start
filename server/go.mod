@@ -9,7 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.7.1
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/gorilla/websocket v1.4.2
-	github.com/lazyfury/go-web-template v1.0.12
+	github.com/lazyfury/go-web-template v1.0.13
 	gorm.io/gorm v1.21.7
 )
 
