@@ -28,6 +28,14 @@ func authWithFilter(userIDField string, someconfig ...string) controller.Auth {
 	}
 }
 
+func AdminAuth() controller.Auth {
+	return func(c *gin.Context, must bool) xmodel.Middleware {
+		return func(db *gorm.DB) *gorm.DB {
+			model.GetUserOrLogin(c)
+			return db
+		}
+	}
+}
 func justAuth() controller.Auth {
 	return func(c *gin.Context, must bool) xmodel.Middleware {
 		return func(db *gorm.DB) *gorm.DB {

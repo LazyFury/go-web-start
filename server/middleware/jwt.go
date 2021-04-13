@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/model"
 	"github.com/lazyfury/go-web-template/response"
 
@@ -51,9 +52,9 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 	c.Set("user", user)
 }
 
-const (
+var (
 	// SECRET SECRET
-	SECRET string = "asdhjsdhhdhdhdhsasd"
+	SECRET string = config.Global.Sha1.Key
 )
 
 func getToken(c *gin.Context) (token string, err error) {

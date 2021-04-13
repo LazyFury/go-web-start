@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -14,13 +15,11 @@ import (
 
 func login(g *gin.RouterGroup) {
 
-	login := g.Group("/login")
+	// login := g.Group("/login")
 
-	login.POST("", doLogin)
+	// login.POST("", doLogin)
 
-	// login.POST("/reg", modelUser.RegController)
-
-	login.GET("/init_admin", initAdmin)
+	// login.GET("/init_admin", initAdmin)
 
 }
 
@@ -46,10 +45,11 @@ func doLogin(c *gin.Context) {
 
 	user := model.User{Name: u.UserName}
 
-	err := user.HasUser()
-	if err != nil {
-		response.Error("用户不存在")
-	}
+	// err := user.HasUser()
+	// if err != nil {
+	// 	response.Error("用户不存在")
+	// }
+	log.Print(config.Global.Sha1)
 	password := config.Global.Sha1.EnCode(u.Password)
 	if user.Password == password {
 		str, _ := middleware.CreateToken(user)

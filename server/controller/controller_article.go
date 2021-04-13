@@ -11,7 +11,7 @@ import (
 // NewArticleController NewArticleController
 func NewArticleController() *ArticleController {
 	return &ArticleController{
-		Controller: &controller.Controller{
+		controller.Controller{
 			DB:    model.DB,
 			Model: &model.Articles{},
 			Auth:  defaultAuth(),
@@ -21,7 +21,7 @@ func NewArticleController() *ArticleController {
 
 // ArticleController ArticleController
 type ArticleController struct {
-	*controller.Controller
+	controller.Controller
 }
 
 // Install Install

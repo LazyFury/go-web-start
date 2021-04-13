@@ -25,7 +25,8 @@ func Init(g *gin.RouterGroup) {
 	InitUpload(apiV1)
 
 	// base
-	login(apiV1)
+	// login(apiV1)
+	controller.NewUserController().Install(apiV1, "/users")
 	//文章
 	controller.NewArticleController().Install(apiV1, "/articles")
 	controller.NewArticleRecController().Install(apiV1, "/article-recs")

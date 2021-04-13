@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/router"
 	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/response"
@@ -48,6 +49,7 @@ func New() *gin.Engine {
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
 
 	// 注册路由
+	g.Use(middleware.AuthOrNot)
 	router.Start(g)
 
 	// 注册html模板

@@ -29,9 +29,17 @@ func (a *AdEvent) Validator() error {
 		response.Error("仅支持英文字符串")
 	}
 
-	if DB.GetObjectOrNotFound(&AdEvent{}, map[string]interface{}{
+	// 不等于0时为编辑 否则为新增
+	if err := DB.GetObjectOrNotFound(&AdEvent{}, map[string]interface{}{
 		"event": a.Event,
-	}) == nil {
+	}, func(db *gorm.DB) *gorm.DB {
+		if a.ID == 0 {
+			return db
+		}
+		return db.Not(map[string]interface{}{
+			"id": a.ID,
+		})
+	}); err == nil {
 		response.Error("不可添加,已存在相同的事件")
 	}
 
