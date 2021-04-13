@@ -3,8 +3,8 @@ package model
 import (
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 // MessageTemplate MessageTemplate
@@ -17,11 +17,11 @@ type MessageTemplate struct {
 // Validator Validator
 func (m MessageTemplate) Validator() error {
 	if strings.Trim(m.Template, " ") == "" {
-		utils.Error("模版内容不可空")
+		response.Error("模版内容不可空")
 	}
 	m.Name = strings.Trim(m.Name, " ")
 	if m.Name == "" {
-		utils.Error("模版名称不可空")
+		response.Error("模版名称不可空")
 	}
 	return nil
 }

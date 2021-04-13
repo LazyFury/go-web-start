@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 var (
@@ -39,7 +39,7 @@ func signatureCheck(c *gin.Context) {
 		c.String(http.StatusOK, echostr)
 		return
 	}
-	c.JSON(http.StatusOK, utils.JSONError("解密失败", nil))
+	c.JSON(http.StatusOK, response.JSONError("解密失败", nil))
 }
 
 type (
@@ -74,11 +74,11 @@ func handleWechatMessage(c *gin.Context) {
 	data := messageXML{}
 	b, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 	if err = xml.Unmarshal(b, &data); err != nil {
 		log.Printf("%+v\n", err)
-		utils.Error(err)
+		response.Error(err)
 	}
 	log.Println(data)
 	result := messageXML{FromUserName: data.ToUserName, ToUserName: data.FromUserName, MsgType: "text", Content: "你好", CreateTime: time.Now().Unix()}
@@ -100,9 +100,9 @@ func sendTemplateMsgHandler(c *gin.Context) {
 		}}
 	data, err := sendTemplateMsg(post)
 	if err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
-	c.JSON(http.StatusOK, utils.JSONSuccess("发送成功", data))
+	c.JSON(http.StatusOK, response.JSONSuccess("发送成功", data))
 }
 
 func sendTemplateMsg(postData *templateMsg) (body *templateReturn, err error) {

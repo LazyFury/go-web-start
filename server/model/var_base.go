@@ -2,18 +2,18 @@ package model
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 // GetUserOrLogin GetUser
 func GetUserOrLogin(c *gin.Context) *User {
 	_user, exists := c.Get("user")
 	if !exists {
-		utils.Error(utils.JSON(utils.AuthedError, "请先登录1", nil))
+		response.Error(response.JSON(response.AuthedError, "请先登录1", nil))
 	}
 	user, ok := _user.(*User)
 	if !ok {
-		utils.Error(utils.JSON(utils.AuthedError, "请先登录", nil))
+		response.Error(response.JSON(response.AuthedError, "请先登录", nil))
 	}
 	return user
 }

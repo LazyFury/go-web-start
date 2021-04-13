@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -29,11 +29,11 @@ var _ model.Controller = &ArticlesTag{}
 // Validator Validator
 func (a *ArticlesTag) Validator() error {
 	if a.CateID == 0 {
-		utils.Error("请选择分类")
+		response.Error("请选择分类")
 	}
 	a.Val = strings.Trim(a.Val, " ")
 	if a.Val == "" {
-		utils.Error("请输入标签名称")
+		response.Error("请输入标签名称")
 	}
 	return nil
 }

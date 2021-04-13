@@ -13,8 +13,8 @@ import (
 	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-start/server/utils/customtype"
+	"github.com/lazyfury/go-web-template/response"
 	"github.com/lazyfury/go-web-template/tools"
 )
 
@@ -50,12 +50,12 @@ func sendMsg(c *gin.Context) {
 
 	var user = model.User{BaseControll: model.BaseControll{ID: auth.ID}}
 	if notfoundUser := db.Model(&user).Find(&user).Error != nil; notfoundUser {
-		utils.Error("没找到用户")
+		response.Error("没找到用户")
 	}
 
 	var miniUser = model.WechatMiniUser{UID: user.ID}
 	if notfoundUser := db.Model(&miniUser).Find(&miniUser).Error != nil; notfoundUser {
-		utils.Error("没找到用户")
+		response.Error("没找到用户")
 	}
 
 	err := mini.SendSubscribeMessage(miniUser.OpenID, "LEe5SuSVcBC2wei1XW9QwouVZ79T5p3DK-8QfA3ecxM", "https://wechat.com", map[string]interface{}{
@@ -76,15 +76,15 @@ func sendMsg(c *gin.Context) {
 		},
 	})
 	if err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
-	c.JSON(http.StatusOK, utils.JSONSuccess("", nil))
+	c.JSON(http.StatusOK, response.JSONSuccess("", nil))
 }
 
 func easyLogin(c *gin.Context) {
 	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		utils.Error("请输入js_code")
+		response.Error("请输入js_code")
 	}
 
 	// 请求微信服务器
@@ -92,18 +92,18 @@ func easyLogin(c *gin.Context) {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		utils.Error("获取失败")
+		response.Error("获取失败")
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		utils.Error("获取微信返回内容失败")
+		response.Error("获取微信返回内容失败")
 	}
 	// 获取session失败
 	if m.ErrCode != 0 {
-		utils.Error(utils.JSONError("", m))
+		response.Error(response.JSONError("", m))
 	}
 
 	db := model.DB
@@ -128,14 +128,14 @@ func easyLogin(c *gin.Context) {
 	user.LoginTime = customtype.LocalTime{Time: time.Now()}
 
 	if err := db.Table(user.TableName()).Create(&user).Error; err != nil {
-		utils.Error("创建用户失败")
+		response.Error("创建用户失败")
 	}
 
 	wechatUser.SessionKey = m.SessionKey
 	wechatUser.UID = user.ID
 	wechatUser.Unionid = m.Unionid
 	if err := db.Table(wechatUser.TableName()).Create(&wechatUser).Error; err != nil {
-		utils.Error("创建微信小程序用户失败")
+		response.Error("创建微信小程序用户失败")
 	}
 
 	getJWT(c, user)
@@ -144,23 +144,23 @@ func easyLogin(c *gin.Context) {
 
 func getJWT(c *gin.Context, user *model.User) {
 	str, _ := middleware.CreateToken(*user)
-	c.JSON(http.StatusOK, utils.JSONSuccess("", str))
+	c.JSON(http.StatusOK, response.JSONSuccess("", str))
 }
 
 func wechatMiniLogin(c *gin.Context) {
 	jsCode := c.Query("js_code")
 	if jsCode == "" {
-		utils.Error("请输入js_code")
+		response.Error("请输入js_code")
 	}
 
 	var param wechatLoginParams
 
 	if err := c.Bind(&param); err != nil {
-		utils.Error("参数错误")
+		response.Error("参数错误")
 	}
 
 	if param.EncryptedData == "" || param.Iv == "" {
-		utils.Error("请传入用户信息")
+		response.Error("请传入用户信息")
 	}
 
 	// 请求微信服务器
@@ -168,23 +168,23 @@ func wechatMiniLogin(c *gin.Context) {
 	// fmt.Println(url)
 	resp, err := http.Get(url)
 	if err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 
 	// 解码
 	var m code2SessionKey
 
 	if err := json.NewDecoder(resp.Body).Decode(&m); err != nil {
-		utils.Error(utils.JSONError("获取微信返回内容失败", err))
+		response.Error(response.JSONError("获取微信返回内容失败", err))
 	}
 
 	// 获取session失败
 	if m.ErrCode != 0 {
-		utils.Error(utils.JSONError(m.ErrMsg, m))
+		response.Error(response.JSONError(m.ErrMsg, m))
 	}
 
 	if m.SessionKey == "" {
-		utils.Error("获取session_key失败")
+		response.Error("获取session_key失败")
 	}
 
 	// baseDecode
@@ -198,10 +198,10 @@ func wechatMiniLogin(c *gin.Context) {
 	var info map[string]interface{}
 
 	if err := json.Unmarshal(result, &info); err != nil {
-		utils.Error("解码用户信息失败")
+		response.Error("解码用户信息失败")
 	}
 
-	c.JSON(http.StatusOK, utils.JSONSuccess("", info))
+	c.JSON(http.StatusOK, response.JSONSuccess("", info))
 }
 
 func wechatMiniDecoder(str string, key []byte, iv string) []byte {

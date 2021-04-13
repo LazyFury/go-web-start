@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -29,7 +29,7 @@ var _ model.Controller = &ArticlesCate{}
 func (a *ArticlesCate) Validator() error {
 	a.Name = strings.Trim(a.Name, " ")
 	if a.Name == "" {
-		utils.Error("分类名称不可空")
+		response.Error("分类名称不可空")
 	}
 	return nil
 }

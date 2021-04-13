@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +29,7 @@ type selectAdGroup struct {
 func (a *AdGroup) Validator() error {
 	a.Name = strings.Trim(a.Name, " ")
 	if a.Name == "" {
-		utils.Error("分组标题不可空")
+		response.Error("分组标题不可空")
 	}
 	return nil
 }

@@ -3,8 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/controller"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -43,7 +43,7 @@ func (a *ArticleController) ListPaging(c *gin.Context) {
 
 // ListAll ListAll
 func (a *ArticleController) ListAll(c *gin.Context) {
-	utils.Error(utils.NoRoute)
+	response.Error(response.NoRoute)
 }
 
 // NewArticleRecController NewArticleRecController
@@ -71,24 +71,24 @@ func (a *ArticleRecController) Install(g *gin.RouterGroup, path string) {
 func (a *ArticleRecController) Delete(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		utils.Error("请输入推荐位id")
+		response.Error("请输入推荐位id")
 	}
 
 	rec := model.ArticlesRec{}
 	if err := a.DB.GetObjectOrNotFound(&rec, map[string]interface{}{
 		"id": id,
 	}); err != nil {
-		utils.Error("推荐位不存在")
+		response.Error("推荐位不存在")
 	}
 
 	articles := []model.Articles{}
 	if err := a.DB.GetObjectsOrEmpty(&articles, nil, func(db *gorm.DB) *gorm.DB {
 		return db.Where("id in (?)", rec.IDs)
 	}).All(); err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 	if len(articles) > 0 {
-		utils.Error("该推荐位下有文章，不可删除")
+		response.Error("该推荐位下有文章，不可删除")
 	}
 	a.Controller.Delete(c)
 }
@@ -118,27 +118,27 @@ func (a *ArticleCategoryController) Install(g *gin.RouterGroup, path string) {
 func (a *ArticleCategoryController) Delete(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
-		utils.Error("请输入分类id")
+		response.Error("请输入分类id")
 	}
 
 	articles := []model.Articles{}
 	if err := a.DB.GetObjectsOrEmpty(&articles, map[string]interface{}{
 		"cate_id": id,
 	}).All(); err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 	if len(articles) > 0 {
-		utils.Error("该分类下有文章，不可删除")
+		response.Error("该分类下有文章，不可删除")
 	}
 
 	tags := []model.ArticlesTag{}
 	if err := a.DB.GetObjectsOrEmpty(&tags, map[string]interface{}{
 		"cate_id": id,
 	}).All(); err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 	if len(tags) > 0 {
-		utils.Error("该分类下有标签，不可删除")
+		response.Error("该分类下有标签，不可删除")
 	}
 	a.Controller.Delete(c)
 }

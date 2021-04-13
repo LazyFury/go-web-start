@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -22,17 +22,17 @@ func (a *AdEvent) Validator() error {
 
 	a.Event = strings.Trim(a.Event, " ")
 	if a.Event == "" {
-		utils.Error("event定义不可空")
+		response.Error("event定义不可空")
 	}
 
 	if match, _ := regexp.MatchString("^[A-Za-z]+$", a.Event); !match {
-		utils.Error("仅支持英文字符串")
+		response.Error("仅支持英文字符串")
 	}
 
 	if DB.GetObjectOrNotFound(&AdEvent{}, map[string]interface{}{
 		"event": a.Event,
 	}) == nil {
-		utils.Error("不可添加,已存在相同的事件")
+		response.Error("不可添加,已存在相同的事件")
 	}
 
 	return nil

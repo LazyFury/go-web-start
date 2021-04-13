@@ -8,7 +8,7 @@ import (
 	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/response"
 	"github.com/lazyfury/go-web-template/tools"
 )
 
@@ -31,35 +31,35 @@ func doLogin(c *gin.Context) {
 	}{}
 
 	if err := c.Bind(u); err != nil {
-		utils.Error("参数错误")
+		response.Error("参数错误")
 	}
 
 	u.UserName = strings.Trim(u.UserName, " ")
 	if u.UserName == "" {
-		utils.Error("用户昵称不可空")
+		response.Error("用户昵称不可空")
 	}
 
 	u.Password = strings.Trim(u.Password, " ")
 	if u.Password == "" {
-		utils.Error("用户密码不可空")
+		response.Error("用户密码不可空")
 	}
 
 	user := model.User{Name: u.UserName}
 
 	err := user.HasUser()
 	if err != nil {
-		utils.Error("用户不存在")
+		response.Error("用户不存在")
 	}
 	password := config.Global.Sha1.EnCode(u.Password)
 	if user.Password == password {
 		str, _ := middleware.CreateToken(user)
-		c.JSON(http.StatusOK, utils.JSONSuccess(
+		c.JSON(http.StatusOK, response.JSONSuccess(
 			"",
 			str,
 		))
 		return
 	}
-	utils.Error("密码错误")
+	response.Error("密码错误")
 }
 
 func initAdmin(c *gin.Context) {
@@ -67,19 +67,19 @@ func initAdmin(c *gin.Context) {
 	ip := c.ClientIP()
 	ip = strings.Split(ip, ":")[0]
 	if ip != "127.0.0.1" {
-		utils.Error(ip)
+		response.Error(ip)
 	}
 
 	secret := c.Query("secret")
 	if secret != "fqEeEPlgFECywkwqVMoCEmBzmRmFPZwt" {
-		utils.Error("密钥错误")
+		response.Error("密钥错误")
 	}
 	db := model.DB
 
 	a := &model.User{Name: "admin", IsAdmin: 1}
 	if findAdmin := db.Where(a).Find(a).RowsAffected; findAdmin >= 1 {
 		a.Password = config.Global.Sha1.AesDecryptCFB(a.Password)
-		c.JSON(http.StatusOK, utils.JSONSuccess("", a))
+		c.JSON(http.StatusOK, response.JSONSuccess("", a))
 		return
 	}
 	pwd := tools.RandStringBytes(16)
@@ -91,8 +91,8 @@ func initAdmin(c *gin.Context) {
 	}
 
 	if err := db.Save(admin).Error; err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 	admin.Password = config.Global.Sha1.AesDecryptCFB(admin.Password)
-	c.JSON(http.StatusOK, utils.JSONSuccess("", admin))
+	c.JSON(http.StatusOK, response.JSONSuccess("", admin))
 }

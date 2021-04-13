@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 var (
@@ -29,7 +29,7 @@ func WsServer(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		fmt.Print("升级ws连接错误:", err)
-		utils.Error(err)
+		response.Error(err)
 	}
 	defer ws.Close()
 

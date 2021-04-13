@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-start/server/utils/customtype"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -51,13 +51,13 @@ type SelectMessage struct {
 // Validator Validator
 func (m Message) Validator() error {
 	if m.ToUser == 0 {
-		utils.Error("接收者不可空")
+		response.Error("接收者不可空")
 	}
 	if m.FromUser == 0 {
-		utils.Error("发送者id不可空")
+		response.Error("发送者id不可空")
 	}
 	if m.TemplateID == 0 {
-		utils.Error("消息模版id不可空")
+		response.Error("消息模版id不可空")
 	}
 	return nil
 }

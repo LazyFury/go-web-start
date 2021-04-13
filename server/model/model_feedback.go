@@ -3,8 +3,8 @@ package model
 import (
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 )
 
 // Feedback 客户意见反馈
@@ -17,10 +17,10 @@ type Feedback struct {
 // Validator Validator
 func (f *Feedback) Validator() error {
 	if strings.Trim(f.Reason, " ") == "" {
-		utils.Error("请选择反馈原因")
+		response.Error("请选择反馈原因")
 	}
 	if strings.Trim(f.Content, " ") == "" {
-		utils.Error("请填写反馈描述")
+		response.Error("请填写反馈描述")
 	}
 	return nil
 }

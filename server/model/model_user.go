@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-start/server/config"
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-start/server/utils/customtype"
+	"github.com/lazyfury/go-web-template/response"
 	"github.com/lazyfury/go-web-template/tools/wechat"
 )
 
@@ -62,15 +62,15 @@ func (u *User) Add(c *gin.Context) {
 	user := &User{}
 
 	if err := c.Bind(user); err != nil {
-		utils.Error(utils.JSONError("参数错误", err))
+		response.Error(response.JSONError("参数错误", err))
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
 	if user.Name == "" {
-		utils.Error(utils.JSONError("用户名不可空", nil))
+		response.Error(response.JSONError("用户名不可空", nil))
 	}
 	if user.Password == "" {
-		utils.Error(utils.JSONError("用户密码不可空", nil))
+		response.Error(response.JSONError("用户密码不可空", nil))
 	}
 
 	user.Password = config.Global.Sha1.EnCode(user.Password)
@@ -90,13 +90,13 @@ func (u *User) Update(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(user); err != nil {
-		utils.Error(utils.JSONError("参数错误", err))
+		response.Error(response.JSONError("参数错误", err))
 	}
 
 	_u := &User{BaseControll: BaseControll{ID: uint(user.ID)}}
 	err := _u.HasUser()
 	if err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 
 	user.Name = strings.Trim(user.Name, " ")
@@ -125,20 +125,20 @@ func (u *User) Frozen(c *gin.Context) {
 	user := new(User)
 
 	if err := c.Bind(&user); err != nil {
-		utils.Error(err)
+		response.Error(err)
 	}
 
 	db := DB
 	row := db.Model(&User{BaseControll: BaseControll{ID: user.ID}}).Update("status", user.Status)
 	if row.Error != nil {
-		utils.Error("操作失败")
+		response.Error("操作失败")
 	}
 
 	if user.Status == 0 {
-		utils.Error("冻结用户")
+		response.Error("冻结用户")
 	}
 
-	c.JSON(http.StatusOK, utils.JSONSuccess("解冻用户", nil))
+	c.JSON(http.StatusOK, response.JSONSuccess("解冻用户", nil))
 }
 
 // HasUser 查找用户
@@ -158,10 +158,10 @@ func (u *User) RepeatOfEmail(c *gin.Context) {
 	user.Email = email
 	err := user.HasUser()
 	if err != nil {
-		c.JSON(http.StatusOK, utils.JSONSuccess("没有重复", nil))
+		c.JSON(http.StatusOK, response.JSONSuccess("没有重复", nil))
 		return
 	}
-	c.JSON(http.StatusOK, utils.JSON(utils.RepeatEmail, "", nil))
+	c.JSON(http.StatusOK, response.JSON(response.RepeatEmail, "", nil))
 }
 
 // RepeatOfName RepeatOfName
@@ -171,7 +171,7 @@ func (u *User) RepeatOfName(c *gin.Context) {
 	user.Name = name
 	err := user.HasUser()
 	if err != nil {
-		utils.Error("没有重复")
+		response.Error("没有重复")
 	}
-	c.JSON(http.StatusOK, utils.JSON(utils.RepeatUserName, "", nil))
+	c.JSON(http.StatusOK, response.JSON(response.RepeatUserName, "", nil))
 }

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/lazyfury/go-web-start/server/utils"
 	"github.com/lazyfury/go-web-template/model"
+	"github.com/lazyfury/go-web-template/response"
 	"gorm.io/gorm"
 )
 
@@ -43,11 +43,11 @@ func (a *Ad) Result(data interface{}) interface{} {
 func (a *Ad) Validator() error {
 	a.Title = strings.Trim(a.Title, " ")
 	if a.Title == "" {
-		utils.Error("广告位标题不可空")
+		response.Error("广告位标题不可空")
 	}
 
 	if a.EventID == 0 {
-		utils.Error("请选择广告位事件")
+		response.Error("请选择广告位事件")
 	}
 
 	if a.EventID > 0 {
@@ -55,19 +55,19 @@ func (a *Ad) Validator() error {
 		if err := DB.GetObjectOrNotFound(event, map[string]interface{}{
 			"id": a.EventID,
 		}); err != nil {
-			utils.Error("事件不存在")
+			response.Error("事件不存在")
 		}
 	}
 
 	if a.GroupID == 0 {
-		utils.Error("请选择广告位分组")
+		response.Error("请选择广告位分组")
 	}
 
 	adGourp := &AdGroup{}
 	if err := DB.GetObjectOrNotFound(adGourp, map[string]interface{}{
 		"id": a.GroupID,
 	}); err != nil {
-		utils.Error("分组不存在")
+		response.Error("分组不存在")
 	}
 	return nil
 }

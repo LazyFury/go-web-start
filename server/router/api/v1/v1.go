@@ -7,9 +7,9 @@ import (
 	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/router/api/wechat"
 	"github.com/lazyfury/go-web-start/server/router/api/ws"
+	"github.com/lazyfury/go-web-template/response"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lazyfury/go-web-start/server/utils"
 )
 
 // Init  api Version 1.0 初始化
@@ -73,7 +73,7 @@ func resources(c *gin.Context) {
 		{"广告", "/api/v1/ads", ""},
 	}
 
-	c.JSON(http.StatusOK, utils.JSONSuccess("", map[string]interface{}{
+	c.JSON(http.StatusOK, response.JSONSuccess("", map[string]interface{}{
 		"resources": res,
 	}))
 }

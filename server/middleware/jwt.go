@@ -8,19 +8,18 @@ import (
 	"time"
 
 	"github.com/lazyfury/go-web-start/server/model"
-	"github.com/lazyfury/go-web-start/server/utils"
+	"github.com/lazyfury/go-web-template/response"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
 func handleErr(c *gin.Context, err string) {
-	if utils.ReqFromHTML(c) {
+	if response.IsReqFromHTML(c) {
 		c.Redirect(http.StatusFound, "/login")
 		return
 	}
-	c.AbortWithStatusJSON(http.StatusForbidden, utils.JSON(utils.AuthedError, err, nil))
-	return
+	c.AbortWithStatusJSON(http.StatusForbidden, response.JSON(response.AuthedError, err, nil))
 }
 
 // Auth 必须登录 后台接口
