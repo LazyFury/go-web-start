@@ -34,7 +34,7 @@ function onrejectionhandled(err: any) {
 function interceptorsResponse(res: any) {
     // console.log(res);
     let data: any = res.data;
-    let success: boolean = data.code >= 1;
+    let success: boolean = data.code >= 200 && data.code < 300;
     let msg: string = data.message || '';
     const code: number = data.code;
     // let result = data;
