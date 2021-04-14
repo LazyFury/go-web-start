@@ -11,11 +11,7 @@ import (
 
 // Start 入口
 func Start(e *gin.Engine) {
-	// baseURl 默认值 / Group的url末尾有斜杠时 get post绑定路由时不要加斜杠  无法识别 //xx 类似 传递下一级group时没有这个问题
 	baseURL := config.Global.BaseURL
-	if baseURL == "/" {
-		baseURL = ""
-	}
 	g := e.Group(baseURL)
 
 	// 项目页面

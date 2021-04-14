@@ -22,8 +22,6 @@ func Init(g *gin.RouterGroup) {
 	//get 常用于获取列表 详情，不涉及更新和修改数据到方法
 	apiV1.GET("/", resources)
 
-	InitUpload(apiV1)
-
 	// base
 	// login(apiV1)
 	controller.NewUserController().Install(apiV1, "/users")
@@ -32,11 +30,7 @@ func Init(g *gin.RouterGroup) {
 	controller.NewArticleRecController().Install(apiV1, "/article-recs")
 	controller.NewArticleCategoryController().Install(apiV1, "/article-cates")
 	controller.NewArticleTagController().Install(apiV1, "/article-tags")
-	//商品
-	// product(apiV1)
-	// productCate(apiV1) //商品分类
-	// 订单
-	// order(apiV1)
+
 	// banner 广告位
 	controller.NewAdController().Install(apiV1, "/ads")
 	controller.NewAdGroupController().Install(apiV1, "/ad-groups")
@@ -44,12 +38,15 @@ func Init(g *gin.RouterGroup) {
 
 	// 意见反馈
 	controller.NewFeedbackController().Install(apiV1, "/feedbacks")
+
 	// 用户消息
 	controller.NewMessageController().Install(apiV1, "/messages")
 	controller.NewMessageTemplateController().Install(apiV1, "/message-templates")
 
 	wechat.Init(apiV1)
 	ws.Init(apiV1)
+
+	InitUpload(apiV1)
 
 	wehcatMini(apiV1)
 
