@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"regexp"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-start/server/config"
@@ -25,7 +26,16 @@ func Start(e *gin.Engine) {
 		if email == "" {
 			response.Error("发送邮箱不可空")
 		}
-		err := config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
+
+		re, err := regexp.Compile(`^.+?@[a-zA-Z0-9-_+=]{1,}\.[a-zA-Z]{2,}$`)
+		if err != nil {
+			response.Error(err)
+		}
+		if !re.MatchString(email) {
+			response.Error("不符合email格式")
+		}
+
+		err = config.Global.Mail.SendMail("消息通知", []string{email}, "madaksdjadsl<h1>测试邮件</h1>il")
 		if err != nil {
 			response.Error(err)
 		}

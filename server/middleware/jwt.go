@@ -54,7 +54,7 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 
 var (
 	// SECRET SECRET
-	SECRET string = config.Global.Sha1.Key
+	SECRET string = config.Global.Screct
 )
 
 func getToken(c *gin.Context) (token string, err error) {

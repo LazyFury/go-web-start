@@ -4,11 +4,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-template/model"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/crypto"
 	"github.com/lazyfury/go-web-template/tools/types"
 	"github.com/lazyfury/go-web-template/tools/wechat"
+
 	"gorm.io/gorm"
 )
 
@@ -53,7 +54,7 @@ func (u *User) Validator() error {
 		response.Error(response.JSONError("用户密码不可空", nil))
 	}
 
-	u.Password = config.Global.Sha1.EnCode(u.Password)
+	u.Password = crypto.SHA256String(u.Password)
 	u.LoginTime = types.LocalTime{Time: time.Now()}
 
 	// 查询重复的昵称
@@ -92,10 +93,6 @@ func (u *User) Object() interface{} {
 }
 func (u *User) Objects() interface{} {
 	return &[]showUser{}
-}
-
-func (u *User) Result(data interface{}) interface{} {
-	return data
 }
 
 // TableName 表名

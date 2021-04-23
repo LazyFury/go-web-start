@@ -15,6 +15,7 @@ import (
 	"github.com/lazyfury/go-web-start/server/model"
 	"github.com/lazyfury/go-web-template/response"
 	"github.com/lazyfury/go-web-template/tools"
+	"github.com/lazyfury/go-web-template/tools/crypto"
 	"github.com/lazyfury/go-web-template/tools/types"
 )
 
@@ -48,8 +49,10 @@ func sendMsg(c *gin.Context) {
 	auth := c.MustGet("user").(*model.User)
 	db := model.DB
 
-	var user = model.User{BaseControll: model.BaseControll{ID: auth.ID}}
-	if notfoundUser := db.Model(&user).Find(&user).Error != nil; notfoundUser {
+	var user = model.User{}
+	if notfoundUser := db.Model(&user).Find(map[string]interface{}{
+		"id": auth.ID,
+	}).Error != nil; notfoundUser {
 		response.Error("没找到用户")
 	}
 
@@ -119,7 +122,7 @@ func easyLogin(c *gin.Context) {
 	// }
 
 	// 注册
-	user := &model.User{Name: tools.RandStringBytes(6), Password: config.Global.Sha1.EnCode(tools.RandStringBytes(16))}
+	user := &model.User{Name: tools.RandStringBytes(6), Password: crypto.SHA256String(tools.RandStringBytes(16))}
 	req := c.Request
 	ua := req.UserAgent()
 	ip := c.ClientIP()

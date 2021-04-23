@@ -74,10 +74,12 @@ func userInfo(c *gin.Context) {
 	if newID < 1 {
 		response.Error("用户id不可为空")
 	}
-	user := &model.WechatOauth{BaseControll: model.BaseControll{ID: uint(newID)}}
+	user := &model.WechatOauth{}
 
 	db := model.DB
-	if db.Where(user).Find(user).Error != nil {
+	if db.Where(user).Find(map[string]interface{}{
+		"id": newID,
+	}).Error != nil {
 		response.Error("未找到用户")
 	}
 	// token := user.AccessToken

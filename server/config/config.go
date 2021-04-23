@@ -4,7 +4,6 @@ import (
 	"github.com/lazyfury/go-web-template/config"
 	"github.com/lazyfury/go-web-template/tools/mail"
 	"github.com/lazyfury/go-web-template/tools/mysql"
-	"github.com/lazyfury/go-web-template/tools/sha"
 	"github.com/lazyfury/go-web-template/tools/upload"
 	"github.com/lazyfury/go-web-template/tools/wechat"
 )
@@ -19,6 +18,7 @@ type configType struct {
 	WechatMP   wechat.MP         `json:"wechat"`
 	WechatMini wechat.Mini       `json:"wechat_mini"`
 	AliOss     upload.AliOssConf `json:"ali_oss"` //阿里云oss
-	Sha1       sha.Sha1          `json:"sha1"`
-	SupportTls bool              `json:"support_tls"`
+	// Sha1       sha.Sha1          `json:"sha1"`
+	SupportTls bool   `json:"support_tls"`
+	Screct     string `json:"screct"`
 }

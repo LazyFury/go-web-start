@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/lazyfury/go-web-start/server/config"
 	"github.com/lazyfury/go-web-start/server/middleware"
 	"github.com/lazyfury/go-web-start/server/model"
 	"github.com/lazyfury/go-web-template/controller"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools/crypto"
 	"github.com/lazyfury/go-web-template/tools/types"
 )
 
@@ -71,7 +71,7 @@ func (u *UserController) Login(c *gin.Context) {
 	}
 
 	// 比对密码
-	user.Password = config.Global.Sha1.EnCode(user.Password)
+	user.Password = crypto.SHA256String(user.Password)
 	if find.Password != user.Password {
 		response.Error(response.JSON(response.AuthedError, "用户密码错误", nil))
 	}

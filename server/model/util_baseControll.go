@@ -5,23 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lazyfury/go-web-template/model"
-	"github.com/lazyfury/go-web-template/tools"
-	"gorm.io/gorm"
 )
 
 // BaseControll 空方法用户数据模型继承方法
-type BaseControll model.Model
-
-// SetCode SetCode
-func (b *BaseControll) SetCode() (err error) {
-	_uuid, err := tools.UUID()
-	b.Code = _uuid
-	return
-}
-
-// Joins Joins
-func (b *BaseControll) Joins(db *gorm.DB) *gorm.DB {
-	return db
+type BaseControll struct {
+	*model.Model
 }
 
 // SetUser SetUser
