@@ -13,6 +13,7 @@ import (
 	"github.com/lazyfury/go-web-start/server/utils"
 	gowebtemplate "github.com/lazyfury/go-web-template"
 	"github.com/lazyfury/go-web-template/response"
+	"github.com/lazyfury/go-web-template/tools"
 	_template "github.com/lazyfury/go-web-template/tools/template"
 )
 
@@ -22,6 +23,17 @@ func main() {
 	if err := model.MysqlConn(config.Global.Mysql.ToString()); err != nil {
 		panic(err)
 	}
+
+	// 跨域配置
+	g.Use(func(c *gin.Context) {
+		tools.Cors(c, &tools.CorsConfig{
+			AllowOrigins:     []string{"*"},
+			AllowAnyOrigin:   true, //origin为*时自动覆盖为req.host
+			AllowCredentials: true,
+			AllowHeaders:     tools.DefaultAllowHeaders,
+			AllowMethods:     tools.DefaultAllowMethods,
+		})
+	})
 
 	// 静态目录
 	g.Use(static.Serve("/", static.LocalFile("wwwroot", false)))
