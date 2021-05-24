@@ -50,6 +50,7 @@ var AuthOrNot gin.HandlerFunc = func(c *gin.Context) {
 		return
 	}
 	c.Set("user", user)
+
 }
 
 var (
